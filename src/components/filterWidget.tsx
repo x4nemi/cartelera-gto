@@ -41,7 +41,7 @@ export const FilterWidget = () => {
                     <FilterIcon size={24} />
                     <h4 className="font-bold text-lg">Filtra los eventos</h4>
                 </div>
-                <Button color="danger" startContent={<XIcon size={17} />} variant="flat" size="sm" isDisabled={!isFiltered} onPress={cleanFilters}>
+                <Button color="danger" startContent={<XIcon size={17} />} variant="flat" size="sm" isDisabled={!isFiltered} hidden={!isFiltered} onPress={cleanFilters}>
                     Limpiar filtros
                 </Button>
             </CardHeader>
