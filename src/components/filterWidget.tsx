@@ -1,7 +1,9 @@
-import { Button, Card, CardBody, CardHeader, DateRangePicker, Divider } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader, DateRangePicker, Divider, Input } from "@heroui/react";
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import { useState } from "react";
-import { FilterIcon, XIcon } from "./icons";
+import { FilterIcon, SortIconAsc, XIcon } from "./icons";
+
+// const sortProperties = ['Fecha']
 
 export const FilterWidget = () => {
     //#region Fechas
@@ -34,6 +36,10 @@ export const FilterWidget = () => {
     }
     //#endregion
 
+    //#region Ordenar
+    const [isAscending, setIsAscending] = useState(true)
+    //#endregion
+
     return (
         <Card className="w-full">
             <CardHeader className="flex justify-between">
@@ -54,7 +60,32 @@ export const FilterWidget = () => {
             </CardBody>
             <Divider />
 
-            {/*  */}
+            {/* Ordenar */}
+            <CardBody>
+                <h3 className="text-sm text-default-500 mb-3">Ordenar:</h3>
+                <div className="flex items-center">
+
+                    <Button
+                        isIconOnly
+                        className="mr-2 transition-transform duration-300"
+                        variant="flat"
+                        size="lg"
+                        onPress={() => setIsAscending(!isAscending)}
+                        style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
+                    >
+                        <SortIconAsc size={17} />
+                    </Button>
+                    <Input
+                        isReadOnly
+                        // className="max-w-xs"
+                        size="lg"
+                        defaultValue="Fecha"
+                        // label="Email"
+                        // type="email"
+                        variant="bordered"
+                    />
+                </div>
+            </CardBody>
         </Card>
     );
 }
