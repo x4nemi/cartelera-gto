@@ -18,12 +18,14 @@ import {
 	HeartFilledIcon,
 } from "@/components/icons";
 import { Logo } from "@/components/icons";
+import { useState } from "react";
 
 export const Navbar = () => {
-
+	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	return (
-		<HeroUINavbar maxWidth="xl" position="sticky">
+		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+				<NavbarMenuToggle className="md:hidden" />
 				<NavbarBrand className="gap-3 max-w-fit">
 					<Link
 						className="flex justify-start items-center gap-1"
@@ -75,7 +77,6 @@ export const Navbar = () => {
 
 			<NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
 				<ThemeSwitch />
-				<NavbarMenuToggle />
 			</NavbarContent>
 
 			<NavbarMenu>
