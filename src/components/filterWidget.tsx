@@ -64,7 +64,6 @@ export const FilterWidget = () => {
             <CardBody>
                 <h3 className="text-sm text-default-500 mb-3">Ordenar:</h3>
                 <div className="flex items-center">
-
                     <Button
                         isIconOnly
                         className="mr-2 transition-transform duration-300"
@@ -72,16 +71,14 @@ export const FilterWidget = () => {
                         size="lg"
                         onPress={() => setIsAscending(!isAscending)}
                         style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
+                        color="secondary"
                     >
-                        <SortIconAsc size={17} />
+                        <SortIconAsc size={24} />
                     </Button>
                     <Input
                         isReadOnly
-                        // className="max-w-xs"
                         size="lg"
                         defaultValue="Fecha"
-                        // label="Email"
-                        // type="email"
                         variant="bordered"
                     />
                 </div>
