@@ -1,4 +1,4 @@
-import { Button, Card, CardFooter, CardHeader, Image } from "@heroui/react"
+import { Card, CardFooter, Image } from "@heroui/react"
 import { EventCardProps } from "./interfaces"
 
 export const EventCard = (props: EventCardProps) => {
