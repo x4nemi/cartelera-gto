@@ -32,7 +32,7 @@ export default function IndexPage() {
 	}, []);
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4 md:py-10">
+			<section className="flex flex-col items-center justify-center gap-4">
 				<div className="w-full justify-center">
 					<FilterWidget />
 				</div>

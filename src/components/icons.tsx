@@ -141,3 +141,8 @@ export const SearchIcon = (props: IconSvgProps) => (
     />
   </svg>
 );
+
+
+export const OneIcon = ({size = 24}) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 256 256"><path d="M148,48V208a12,12,0,0,1-24,0V69.19l-21.83,13.1A12,12,0,0,1,89.83,61.71l40-24A12,12,0,0,1,148,48Z" fill="currentColor"></path></svg>
+);
