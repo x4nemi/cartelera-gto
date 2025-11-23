@@ -11,12 +11,12 @@ export default function DefaultLayout({
 			<main className="container mx-auto max-w-7xl px-6 flex-grow pt-16">
 				{children}
 			</main>
-			{/* <footer className="w-full flex items-center justify-center py-3">
+			<footer className="w-full flex items-center justify-center py-6">
 				<div className="flex items-center gap-1 text-current">
-					<span className="text-xs">Hecho por cuevanences para </span>
-					<p className="text-xs text-secondary">cuevanences</p>
+					<span className="text-xs">Hecho por cuevanenses para </span>
+					<p className="text-xs text-secondary">cuevanenses</p>
 				</div>
-			</footer> */}
+			</footer>
 		</div>
 	);
 }
