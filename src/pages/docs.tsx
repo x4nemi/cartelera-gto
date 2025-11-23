@@ -34,10 +34,10 @@ export default function CreationPage() {
 					</p>
 					{
 						steps.map((step, _) => (
-							<Card className="mt-5 w-10/12 bg-pink-50 dark:bg-pink-800 border border-none h-96" shadow="none">
+							<Card className="mt-5 w-10/12 bg-pink-50 dark:bg-pink-950 border border-none h-96" shadow="none">
 								<CardBody>
 									<div className="flex flex-col gap-4 items-center justify-center h-full">
-										<Chip variant="flat" className="py-5 bg-pink-300 dark:bg-pink-500" size="lg">{step.icon}</Chip>
+										<Chip variant="flat" className="py-5 bg-pink-300 dark:bg-pink-600" size="lg">{step.icon}</Chip>
 										<h1 className="text-3xl tracking-tight">{step.title}</h1>
 										<span className="text-default-600 text-lg text-center mx-10">{step.description}</span>
 									</div>
