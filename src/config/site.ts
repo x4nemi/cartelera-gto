@@ -11,12 +11,12 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Creación",
-      href: "/docs",
+      label: "¿Cómo crear eventos?",
+      href: "/creacion",
     },
     {
-      label: "FAQ",
-      href: "/pricing",
+      label: "Publicar",
+      href: "/publicar",
     }
   ],
   links: {
