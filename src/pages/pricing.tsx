@@ -9,11 +9,11 @@ export default function DocsPage() {
 	const RadioCircle = ({ isSelected }: { isSelected: boolean }) => (
 		<div className={cn(
 			"w-5 h-5 rounded-full border-2 flex items-center justify-center",
-			isSelected ? "border-primary" : "border-default-300"
+			isSelected ? "border-secondary" : "border-default-300"
 		)}>
 			<div className={cn(
 				"w-2.5 h-2.5 rounded-full transition-colors",
-				isSelected ? "bg-primary" : "bg-transparent"
+				isSelected ? "bg-secondary" : "bg-transparent"
 			)} />
 		</div>
 	);
@@ -21,10 +21,10 @@ export default function DocsPage() {
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-				<div className="flex flex-col w-full max-w-2xl px-4">
+				<div className="flex flex-col w-full max-w-2xl px-2">
 					<h1 className={title({ class: "mb-4" })}>Publica un evento</h1>
 					<Card className="w-full">
-						<CardBody className="gap-2">
+						<CardBody className="px-1">
 							<Accordion 
 								showDivider={false}
 								selectionMode="single"
@@ -39,11 +39,11 @@ export default function DocsPage() {
 									title: "font-bold text-lg",
 									subtitle: "text-default-500",
 									trigger: cn(
-										"p-4 bg-content1 hover:bg-content2 rounded-lg border-2 border-transparent",
-										"data-[open=true]:border-primary data-[open=true]:rounded-b-none",
-										"flex items-center justify-between gap-4"
+										"p-4 bg-content1 hover:bg-content2 rounded-2xl border-2 border-transparent",
+										"data-[open=true]:border-secondary/30 data-[open=true]:rounded-b-none",
+										"flex items-center justify-between gap-4 transition-colors duration-250"
 									),
-									content: "px-4 pb-4 pt-2 border-2 border-t-0 border-primary rounded-b-lg",
+									content: "px-4 pb-4 pt-2 bg-foreground/5 border-2 border-t-0 border-secondary/30 rounded-b-3xl"
 								}}
 							>
 								<AccordionItem
