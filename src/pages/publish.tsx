@@ -23,7 +23,7 @@ export default function PublishPage() {
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
 				<div className="flex flex-col w-full max-w-2xl px-2">
 					<h1 className={title({ class: "mb-4" })}>Publica un evento</h1>
-					<Card className="w-full rounded-3xl">
+					<Card className="w-full rounded-3xl focus:ring-0" shadow="lg">
 						<CardBody className="px-1">
 							<Accordion 
 								showDivider={false}
@@ -36,15 +36,14 @@ export default function PublishPage() {
 								}}
 								itemClasses={{
 									base: "mb-2 w-full",
-									title: "font-bold text-lg ",
-									subtitle: "text-default-500",
-								    
+									title: "font-bold text-lg",
+									subtitle: "text-default-500 font-medium",
 									trigger: cn(
-										"p-4 bg-content1 hover:bg-content2 border-2 border-transparent rounded-2xl hover:border-secondary-200",
-										"data-[open=true]:border-secondary-200 data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
+										"p-4 bg-content1 hover:bg-content2 border-2 border-transparent rounded-2xl hover:border-secondary/30",
+										"data-[open=true]:border-secondary/30 data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
 										"flex items-center justify-between gap-4 duration-250 transition-all"
 									),
-									content: "px-4 pb-4 bg-gray border-2 border-t-0 border-secondary-200 rounded-b-2xl pt-5"
+									content: "px-4 pb-4 bg-gray border-2 border-t-0 border-secondary/30 rounded-b-2xl pt-5"
 								}}
 							>
 								<AccordionItem
@@ -53,8 +52,8 @@ export default function PublishPage() {
 									title={
 										<div className="flex items-center justify-between w-full">
 											<div className="flex flex-col items-start">
-												<span className="font-bold text-lg">Free</span>
-												<span className="text-sm text-default-500">Up to 20 items</span>
+												<span className="font-bold text-lg">Con un link de Instagram</span>
+												<span className="text-sm text-default-400">Requieres tener una cuenta pública</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "1"} />
 										</div>
@@ -68,8 +67,8 @@ export default function PublishPage() {
 									title={
 										<div className="flex items-center justify-between w-full">
 											<div className="flex flex-col items-start">
-												<span className="font-bold text-lg">Pro</span>
-												<span className="text-sm text-default-500">Unlimited items. $10 per month.</span>
+												<span className="font-bold text-lg">Desde cero</span>
+												<span className="text-sm text-default-400">Sube las imágenes y detalles de tu evento</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "2"} />
 										</div>
