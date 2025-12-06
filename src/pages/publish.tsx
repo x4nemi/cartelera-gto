@@ -3,7 +3,7 @@ import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, Card, CardBody, cn } from "@heroui/react";
 import { useState } from "react";
 
-export default function DocsPage() {
+export default function PublishPage() {
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
 	
 	const RadioCircle = ({ isSelected }: { isSelected: boolean }) => (
@@ -23,7 +23,7 @@ export default function DocsPage() {
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
 				<div className="flex flex-col w-full max-w-2xl px-2">
 					<h1 className={title({ class: "mb-4" })}>Publica un evento</h1>
-					<Card className="w-full">
+					<Card className="w-full rounded-3xl">
 						<CardBody className="px-1">
 							<Accordion 
 								showDivider={false}
@@ -32,18 +32,19 @@ export default function DocsPage() {
 								selectedKeys={selectedKey ? [selectedKey] : []}
 								onSelectionChange={(keys) => {
 									const key = Array.from(keys)[0] as string;
-									setSelectedKey(key === selectedKey ? null : key);
+									setSelectedKey(key === selectedKey ? key : key);
 								}}
 								itemClasses={{
 									base: "mb-2 w-full",
-									title: "font-bold text-lg",
+									title: "font-bold text-lg ",
 									subtitle: "text-default-500",
+								    
 									trigger: cn(
-										"p-4 bg-content1 hover:bg-content2 rounded-2xl border-2 border-transparent",
-										"data-[open=true]:border-secondary/30 data-[open=true]:rounded-b-none",
-										"flex items-center justify-between gap-4 transition-colors duration-250"
+										"p-4 bg-content1 hover:bg-content2 border-2 border-transparent rounded-2xl hover:border-secondary-200",
+										"data-[open=true]:border-secondary-200 data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
+										"flex items-center justify-between gap-4 duration-250 transition-all"
 									),
-									content: "px-4 pb-4 pt-2 bg-foreground/5 border-2 border-t-0 border-secondary/30 rounded-b-3xl"
+									content: "px-4 pb-4 bg-gray border-2 border-t-0 border-secondary-200 rounded-b-2xl pt-5"
 								}}
 							>
 								<AccordionItem
