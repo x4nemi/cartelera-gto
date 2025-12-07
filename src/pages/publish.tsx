@@ -1,11 +1,13 @@
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Card, CardBody, cn } from "@heroui/react";
-import { useState } from "react";
+import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input } from "@heroui/react";
+import { useRef, useState } from "react";
 
 export default function PublishPage() {
+
+	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
-	
+
 	const RadioCircle = ({ isSelected }: { isSelected: boolean }) => (
 		<div className={cn(
 			"w-5 h-5 rounded-full border-2 flex items-center justify-center",
@@ -17,7 +19,35 @@ export default function PublishPage() {
 			)} />
 		</div>
 	);
-	
+	//#endregion
+
+	//#region Instagram
+	const [link, setLink] = useState<string>("");
+	const [loading, setLoading] = useState(false);
+	const [isLinkValid, setIsLinkValid] = useState<boolean>(false);
+	const [isValidateButtonClicked, setIsValidateButtonClicked] = useState(false);
+
+	const IgInputRef = useRef<HTMLInputElement>(null);
+
+	const handleValidatingLink = async (inputLink: string) => {
+		setLoading(true);
+		setIsValidateButtonClicked(true);
+		// Simular validación con timeout
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+
+		// Aquí iría la lógica real de validación
+		const isValid = inputLink.startsWith("https://www.instagram.com/p/");
+
+		setIsLinkValid(isValid);
+		setLoading(false);
+
+		if (!isValid) {
+			IgInputRef.current?.focus();
+		}
+		
+	};
+	//#endregion
+
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -25,7 +55,7 @@ export default function PublishPage() {
 					<h1 className={title({ class: "mb-4" })}>Publica un evento</h1>
 					<Card className="w-full rounded-3xl focus:ring-0" shadow="lg">
 						<CardBody className="px-1">
-							<Accordion 
+							<Accordion
 								showDivider={false}
 								selectionMode="single"
 								hideIndicator
@@ -37,13 +67,13 @@ export default function PublishPage() {
 								itemClasses={{
 									base: "mb-2 w-full",
 									title: "font-bold text-lg",
-									subtitle: "text-default-500 font-medium",
+									subtitle: "text-default-400 font-medium",
 									trigger: cn(
 										"p-4 bg-content1 hover:bg-content2 border-2 border-transparent rounded-2xl hover:border-secondary/30",
 										"data-[open=true]:border-secondary/30 data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
-										"flex items-center justify-between gap-4 duration-250 transition-all"
+										"flex items-center justify-between gap-4 duration-250 transition-all data-[open=true]:bg-foreground/5 "
 									),
-									content: "px-4 pb-4 bg-gray border-2 border-t-0 border-secondary/30 rounded-b-2xl pt-5"
+									content: "px-4 py-4 bg-gray border-2 border-t-0 border-secondary/30 rounded-b-2xl"
 								}}
 							>
 								<AccordionItem
@@ -53,13 +83,45 @@ export default function PublishPage() {
 										<div className="flex items-center justify-between w-full">
 											<div className="flex flex-col items-start">
 												<span className="font-bold text-lg">Con un link de Instagram</span>
-												<span className="text-sm text-default-400">Requieres tener una cuenta pública</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "1"} />
 										</div>
 									}
+									subtitle="Usa el link de una publicación existente"
 								>
-									<p className="text-left">Content for free plan. You can add forms, buttons, or any other content here.</p>
+									<div className="flex flex-col gap-2">
+										<label className="text-sm font-medium text-foreground">Link de la publicación</label>
+										<div className="flex">
+											<Input 
+												placeholder="https://www.instagram.com/p/..." 
+												variant="bordered"
+												value={link} 
+												onChange={(e) => setLink(e.target.value)}
+												classNames={{
+													input: "text-sm",
+													inputWrapper: "h-12 rounded-r-none"
+												}}
+												onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
+												ref={IgInputRef}
+											/>
+											<Button 
+												color="secondary" 
+												variant="flat"
+												isLoading={loading}
+												isDisabled={link.length === 0}
+												onPress={() => handleValidatingLink(link)}
+												className="min-w-24 h-12 rounded-l-none"
+											>
+												Validar
+											</Button>
+										</div>
+										{isValidateButtonClicked && link.length > 0 && !loading && !isLinkValid && (
+											<p className="text-xs text-danger">Link inválido. Asegúrate de que sea una publicación pública de Instagram.</p>
+										)}
+										{isValidateButtonClicked && isLinkValid && (
+											<p className="text-xs text-success">Link válido</p>
+										)}
+									</div>
 								</AccordionItem>
 								<AccordionItem
 									key="2"
@@ -68,11 +130,11 @@ export default function PublishPage() {
 										<div className="flex items-center justify-between w-full">
 											<div className="flex flex-col items-start">
 												<span className="font-bold text-lg">Desde cero</span>
-												<span className="text-sm text-default-400">Sube las imágenes y detalles de tu evento</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "2"} />
 										</div>
 									}
+									subtitle="Sube las imágenes y detalles de tu evento"
 								>
 									<p className="text-left">Content for pro plan with all the details and features included.</p>
 								</AccordionItem>
