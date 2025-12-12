@@ -100,7 +100,7 @@ export default function PublishPage() {
 												onChange={(e) => setLink(e.target.value)}
 												classNames={{
 													input: "text-sm",
-													inputWrapper: "h-12 rounded-r-none"
+													inputWrapper: "h-12 rounded-r-none text-default-400",
 												}}
 												onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
 												ref={IgInputRef}

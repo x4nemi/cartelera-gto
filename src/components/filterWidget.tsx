@@ -56,7 +56,7 @@ export const FilterWidget = () => {
             {/* Calendario */}
             <CardBody>
                 <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                <DateRangePicker className="max-w-xs" variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} />
+                <DateRangePicker className="max-w-xs" classNames={{ inputWrapper: "bg-secondary/20 hover:bg-secondary/40" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="secondary" />
             </CardBody>
             <Divider />
 
