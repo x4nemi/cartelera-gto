@@ -1,3 +1,4 @@
+import { FileUploadButton } from "@/components/FileUploadButton";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input } from "@heroui/react";
@@ -80,14 +81,14 @@ export default function PublishPage() {
 									key="1"
 									aria-label="Free"
 									title={
-										<div className="flex items-center justify-between w-full">
+										<div className="flex items-center justify-between w-full px-1">
 											<div className="flex flex-col items-start">
 												<span className="font-bold text-lg">Con un link de Instagram</span>
+												<span className="text-default-400 font-medium text-sm">Publica un evento usando un link de Instagram</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "1"} />
 										</div>
 									}
-									subtitle="Usa el link de una publicación existente"
 								>
 									<div className="flex flex-col gap-2">
 										<label className="text-sm font-medium text-foreground">Link de la publicación</label>
@@ -116,25 +117,27 @@ export default function PublishPage() {
 											</Button>
 										</div>
 										{isValidateButtonClicked && link.length > 0 && !loading && !isLinkValid && (
-											<p className="text-xs text-danger">Link inválido. Asegúrate de que sea una publicación pública de Instagram.</p>
+											<p className="text-xs text-danger">Link inválido. Inténtalo de nuevo.</p>
 										)}
 										{isValidateButtonClicked && isLinkValid && (
 											<p className="text-xs text-success">Link válido</p>
 										)}
+
+										<FileUploadButton />
 									</div>
 								</AccordionItem>
 								<AccordionItem
 									key="2"
 									aria-label="Pro"
 									title={
-										<div className="flex items-center justify-between w-full">
+										<div className="flex items-center justify-between w-full px-1">
 											<div className="flex flex-col items-start">
 												<span className="font-bold text-lg">Desde cero</span>
+												<span className="text-default-400 font-medium text-sm">Sube las imágenes y detalles de tu evento</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "2"} />
 										</div>
 									}
-									subtitle="Sube las imágenes y detalles de tu evento"
 								>
 									<p className="text-left">Content for pro plan with all the details and features included.</p>
 								</AccordionItem>
