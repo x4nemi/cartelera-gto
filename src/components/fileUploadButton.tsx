@@ -1,3 +1,4 @@
+import { Image } from "@heroui/react"
 
 export const FileUploadButton = () => {
 	return (
@@ -9,13 +10,20 @@ export const FileUploadButton = () => {
 						htmlFor="file-upload"
 						className="relative cursor-pointer rounded-md bg-transparent font-semibold text-indigo-400 hover:text-indigo-300 transition-all duration-300"
 					>
-						<span>Upload a file</span>
+						<span>Elegir archivo</span>
 						<input id="file-upload" name="file-upload" type="file" className="sr-only" />
 					</label>
-					<p className="pl-1">or drag and drop</p>
+					<p className="pl-1">o arrastra y suelta</p>
 				</div>
-				<p className="text-xs/5 text-gray-400">PNG, JPG, GIF up to 10MB</p>
+				<p className="text-xs/5 text-gray-400">PNG, JPG, GIF hasta 10MB</p>
 			</div>
+			{/* <Image
+				isBlurred
+				alt="HeroUI Album Cover"
+				className="m-1"
+				src="https://heroui.com/images/album-cover.png"
+				width={240}
+			/> */}
 		</div>
 	)
 }

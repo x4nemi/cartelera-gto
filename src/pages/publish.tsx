@@ -1,7 +1,7 @@
 import { FileUploadButton } from "@/components/FileUploadButton";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input } from "@heroui/react";
+import { Accordion, AccordionItem, Button, Card, CardBody, cn, Image, Input, Link, User } from "@heroui/react";
 import { useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -45,7 +45,7 @@ export default function PublishPage() {
 		if (!isValid) {
 			IgInputRef.current?.focus();
 		}
-		
+
 	};
 	//#endregion
 
@@ -93,10 +93,10 @@ export default function PublishPage() {
 									<div className="flex flex-col gap-2">
 										<label className="text-sm font-medium text-foreground">Link de la publicación</label>
 										<div className="flex">
-											<Input 
-												placeholder="https://www.instagram.com/p/..." 
+											<Input
+												placeholder="https://www.instagram.com/p/..."
 												variant="bordered"
-												value={link} 
+												value={link}
 												onChange={(e) => setLink(e.target.value)}
 												classNames={{
 													input: "text-sm",
@@ -105,8 +105,8 @@ export default function PublishPage() {
 												onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
 												ref={IgInputRef}
 											/>
-											<Button 
-												color="secondary" 
+											<Button
+												color="secondary"
 												variant="flat"
 												isLoading={loading}
 												isDisabled={link.length === 0}
@@ -123,7 +123,33 @@ export default function PublishPage() {
 											<p className="text-xs text-success">Link válido</p>
 										)}
 
-										<FileUploadButton />
+										<div className="mt-2 flex flex-col rounded-xl p-3">
+											<div className="justify-between flex mb-2">
+												<User
+													avatarProps={{
+														src: ""
+													}}
+													description={
+														<Link isExternal href="https://x.com/jrgarciadev" size="sm">
+															@jrgarciadev
+														</Link>
+													}
+													name="Junior Garcia"
+												/>
+												<p className="text-sm font-medium text-foreground/40">Publicación encontrada</p>
+											</div>
+											<div className="gap-2 flex flex-col">
+
+												<Image
+													src="https://app.requestly.io/delay/1000/https://heroui.com/images/fruit-4.jpeg"
+													className="w-full"
+												/>
+												<Image
+													src="https://app.requestly.io/delay/1000/https://heroui.com/images/fruit-4.jpeg"
+													className="w-full"
+												/>
+											</div>
+										</div>
 									</div>
 								</AccordionItem>
 								<AccordionItem
@@ -139,7 +165,7 @@ export default function PublishPage() {
 										</div>
 									}
 								>
-									<p className="text-left">Content for pro plan with all the details and features included.</p>
+									<FileUploadButton />
 								</AccordionItem>
 							</Accordion>
 						</CardBody>
