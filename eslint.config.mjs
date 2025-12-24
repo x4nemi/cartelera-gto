@@ -100,7 +100,7 @@ export default defineConfig([
       "react-hooks/exhaustive-deps": "off",
       "jsx-a11y/click-events-have-key-events": "warn",
       "jsx-a11y/interactive-supports-focus": "warn",
-      "prettier/prettier": "warn",
+      "prettier/prettier": "off",
       "no-unused-vars": "off",
       "unused-imports/no-unused-vars": "off",
       "unused-imports/no-unused-imports": "warn",
@@ -114,46 +114,22 @@ export default defineConfig([
         },
       ],
 
-      "import/order": [
-        "warn",
-        {
-          groups: [
-            "type",
-            "builtin",
-            "object",
-            "external",
-            "internal",
-            "parent",
-            "sibling",
-            "index",
-          ],
-
-          pathGroups: [
-            {
-              pattern: "~/**",
-              group: "external",
-              position: "after",
-            },
-          ],
-
-          "newlines-between": "always",
-        },
-      ],
+      "import/order": "off",
 
       "react/self-closing-comp": "warn",
 
       "react/jsx-sort-props": [
         "warn",
         {
-          callbacksLast: true,
-          shorthandFirst: true,
-          noSortAlphabetically: false,
-          reservedFirst: true,
+          callbacksLast: false,
+          shorthandFirst: false,
+          noSortAlphabetically: true,
+          reservedFirst: false,
         },
       ],
 
       "padding-line-between-statements": [
-        "warn",
+        "off",
         {
           blankLine: "always",
           prev: "*",

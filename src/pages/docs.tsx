@@ -1,15 +1,23 @@
-import { IgIcon, MailBoxIcon, OneIcon, StarIcon, ThreeIcon, TwoIcon } from "@/components/icons";
-import { subtitle, title } from "@/components/primitives";
-import DefaultLayout from "@/layouts/default";
 import { Card, CardBody, Chip } from "@heroui/react";
 
+import {
+  IgIcon,
+  MailBoxIcon,
+  OneIcon,
+  StarIcon,
+  ThreeIcon,
+  TwoIcon,
+} from "@/components/icons";
+import { subtitle, title } from "@/components/primitives";
+import DefaultLayout from "@/layouts/default";
+
 export default function CreationPage() {
-	const steps = [
-		{
+const steps = [
+{
 			icon: <OneIcon size={26} />,
 			title: "Usuario de Instagram",
 			description: "Ten a la mano tu cuenta de Instagram o usa tu perfil personal.",
-			bgIcon: <IgIcon size={300} className="absolute text-pink-400 opacity-10 -left-20 -bottom-20" />
+            bgIcon: <IgIcon size={300} className="absolute text-pink-400 opacity-10 -left-20 -bottom-20" />
 		},
 		{
 			icon: <TwoIcon size={26} />,

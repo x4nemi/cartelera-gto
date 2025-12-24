@@ -1,7 +1,8 @@
-import { FileUploadButton } from "@/components/FileUploadButton";
+import { FileUploadButton } from "@/components/fileUploadButton";
+import { ImageItem } from "@/components/imageItem";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Button, Card, CardBody, cn, Image, Input, Link, User } from "@heroui/react";
+import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input, Link, User } from "@heroui/react";
 import { useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -91,9 +92,10 @@ export default function PublishPage() {
 									}
 								>
 									<div className="flex flex-col gap-2">
-										<label className="text-sm font-medium text-foreground">Link de la publicación</label>
+										<label htmlFor="instagram-link" className="text-sm font-medium text-foreground">Link de la publicación</label>
 										<div className="flex">
 											<Input
+												id="instagram-link"
 												placeholder="https://www.instagram.com/p/..."
 												variant="bordered"
 												value={link}
@@ -140,14 +142,8 @@ export default function PublishPage() {
 											</div>
 											<div className="gap-2 flex flex-col">
 
-												<Image
-													src="https://app.requestly.io/delay/1000/https://heroui.com/images/fruit-4.jpeg"
-													className="w-full"
-												/>
-												<Image
-													src="https://app.requestly.io/delay/1000/https://heroui.com/images/fruit-4.jpeg"
-													className="w-full"
-												/>
+												
+												<ImageItem />
 											</div>
 										</div>
 									</div>
