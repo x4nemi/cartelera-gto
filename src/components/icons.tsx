@@ -163,3 +163,14 @@ export const MailBoxIcon = ({size = 24, ...props}: IconSvgProps) => (
 export const StarIcon = ({size = 24, ...props}: IconSvgProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 256 256" {...props}><path d="M230.86,109.25,169.18,86.82,146.75,25.14a19.95,19.95,0,0,0-37.5,0L86.82,86.82,25.14,109.25a19.95,19.95,0,0,0,0,37.5l61.68,22.43,22.43,61.68a19.95,19.95,0,0,0,37.5,0l22.43-61.68,61.68-22.43a19.95,19.95,0,0,0,0-37.5Zm-75.14,39.29a12,12,0,0,0-7.18,7.18L128,212.21l-20.54-56.49a12,12,0,0,0-7.18-7.18L43.79,128l56.49-20.54a12,12,0,0,0,7.18-7.18L128,43.79l20.54,56.49a12,12,0,0,0,7.18,7.18L212.21,128Z" fill="currentColor"></path></svg>
 );
+
+export const CheckIcon: React.FC<IconSvgProps> = ({
+  size = 24, ...props}: IconSvgProps) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} {...props} viewBox="0 0 256 256"><path d="M246.15,65.46l-.07-.08L222.15,41.85a20,20,0,0,0-28.23-.05l-90,88.83L70.06,97.78a20,20,0,0,0-28.21.08l-24,24a20,20,0,0,0,0,28.26l71.62,72a20,20,0,0,0,28.29,0L246.15,93.74A20,20,0,0,0,246.15,65.46ZM103.61,202.33,37.64,136,56,117.61,95.65,156a12,12,0,0,0,16.78-.08L208,61.61l18.32,18Z" fill="currentColor"></path></svg>
+  );
+}
+
+export const FourIcon = ({size = 24, ...props}: IconSvgProps) => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} {...props} viewBox="0 0 256 256" {...props}><path d="M184,156H172V48a12,12,0,0,0-21.37-7.5l-96,120A12,12,0,0,0,64,180h84v28a12,12,0,0,0,24,0V180h12a12,12,0,0,0,0-24Zm-36,0H89l59-73.79Z" fill="currentColor"></path></svg>
+);
