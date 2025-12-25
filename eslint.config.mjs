@@ -116,7 +116,7 @@ export default defineConfig([
 
       "import/order": "off",
 
-      "react/self-closing-comp": "warn",
+      "react/self-closing-comp": "off",
 
       "react/jsx-sort-props": [
         "warn",

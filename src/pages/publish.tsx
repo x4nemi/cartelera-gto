@@ -2,7 +2,7 @@ import { FileUploadButton } from "@/components/fileUploadButton";
 import { ImageItem } from "@/components/imageItem";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input, Link, User } from "@heroui/react";
+import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input, Link, Textarea, User } from "@heroui/react";
 import { useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -97,7 +97,7 @@ export default function PublishPage() {
 											<Input
 												id="instagram-link"
 												placeholder="https://www.instagram.com/p/..."
-												variant="bordered"
+												// variant="bordered"
 												value={link}
 												onChange={(e) => setLink(e.target.value)}
 												classNames={{
@@ -141,10 +141,9 @@ export default function PublishPage() {
 												<p className="text-sm font-medium text-foreground/40">Publicación encontrada</p>
 											</div>
 											<div className="gap-2 flex flex-col">
-
-												
 												<ImageItem />
 											</div>
+											<Textarea className="w-full mt-3" label="Description" placeholder="Enter your description" />
 										</div>
 									</div>
 								</AccordionItem>

@@ -1,5 +1,5 @@
 import DefaultLayout from "@/layouts/default";
-import { FilterWidget } from "@/components/FilterWidget";
+import { FilterWidget } from "@/components/filterWidget";
 import { randomEvents } from "@/config/site";
 import { Wall } from "@/components/pinterestWall";
 import { EventCardProps } from "@/components/interfaces";
