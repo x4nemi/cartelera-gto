@@ -1,8 +1,9 @@
 import { FileUploadButton } from "@/components/fileUploadButton";
-import { ImageItem } from "@/components/imageItem";
+import { ImageGallery } from "@/components/imageGallery";
+// import { ImageItem } from "@/components/imageItem";
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input, Link, Textarea, User } from "@heroui/react";
+import { Accordion, AccordionItem, Button, Card, CardBody, Chip, cn, Input, Link, Textarea, User } from "@heroui/react";
 import { useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -48,6 +49,8 @@ export default function PublishPage() {
 		}
 
 	};
+
+	const [displayDescription, setDisplayDescription] = useState(true)
 	//#endregion
 
 	return (
@@ -141,9 +144,10 @@ export default function PublishPage() {
 												<p className="text-sm font-medium text-foreground/40">Publicación encontrada</p>
 											</div>
 											<div className="gap-2 flex flex-col">
-												<ImageItem />
+												<ImageGallery />
 											</div>
-											<Textarea className="w-full mt-3" label="Description" placeholder="Enter your description" />
+											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" defaultValue="lorem ipsum dolor sit amet | consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." disabled={!displayDescription} labelPlacement="outside"
+											endContent={<Chip color={displayDescription ? "primary" : "default"} variant={displayDescription ? "flat" : "faded"} className={`${displayDescription ? "bg-primary/10" : ""} cursor-pointer absolute text-xs top-1 right-1 rounded-lg`} size="sm" onClick={() => setDisplayDescription(!displayDescription)}>{displayDescription ? "Mostrar" : "Ocultar"}</Chip>} />
 										</div>
 									</div>
 								</AccordionItem>
