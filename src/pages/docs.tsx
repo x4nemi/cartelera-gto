@@ -1,4 +1,4 @@
-import { Card, CardBody, Chip } from "@heroui/react";
+import { Button, Card, CardBody, Chip, Link } from "@heroui/react";
 
 import {
 	CheckIcon,
@@ -6,6 +6,7 @@ import {
   IgIcon,
   MailBoxIcon,
   OneIcon,
+  RightArrowIcon,
   StarIcon,
   ThreeIcon,
   TwoIcon,
@@ -62,6 +63,11 @@ const steps = [
 							</Card>
 						))
 					}
+					<Link href="/user" className="w-10/12">
+					<Button className="mt-3 bg-pink-400 dark:bg-pink-600 w-full text-white" size="lg" endContent={<RightArrowIcon />}>
+					Empezar
+					</Button>
+					</Link>
 				</div>
 			</section>
 		</DefaultLayout>

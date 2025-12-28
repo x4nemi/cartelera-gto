@@ -174,3 +174,7 @@ export const CheckIcon: React.FC<IconSvgProps> = ({
 export const FourIcon = ({size = 24, ...props}: IconSvgProps) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} {...props} viewBox="0 0 256 256" {...props}><path d="M184,156H172V48a12,12,0,0,0-21.37-7.5l-96,120A12,12,0,0,0,64,180h84v28a12,12,0,0,0,24,0V180h12a12,12,0,0,0,0-24Zm-36,0H89l59-73.79Z" fill="currentColor"></path></svg>
 );
+
+export const RightArrowIcon = ({size = 24, ...props}: IconSvgProps) => (
+ <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} {...props} viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z" fill="currentColor"></path></svg>
+);
