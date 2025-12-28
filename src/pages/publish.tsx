@@ -146,7 +146,7 @@ export default function PublishPage() {
 											<div className="gap-2 flex flex-col">
 												<ImageGallery />
 											</div>
-											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" defaultValue="lorem ipsum dolor sit amet | consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." disabled={!displayDescription} labelPlacement="outside"
+											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" defaultValue="lorem ipsum dolor sit amet | consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." disabled={!displayDescription}
 											endContent={<Chip color={displayDescription ? "primary" : "default"} variant={displayDescription ? "flat" : "faded"} className={`${displayDescription ? "bg-primary/10" : ""} cursor-pointer absolute text-xs top-1 right-1 rounded-lg`} size="sm" onClick={() => setDisplayDescription(!displayDescription)}>{displayDescription ? "Mostrar" : "Ocultar"}</Chip>} />
 										</div>
 									</div>
