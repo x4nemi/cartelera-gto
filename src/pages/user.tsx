@@ -1,5 +1,6 @@
+import { CheckIcon } from '@/components/icons';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, CardHeader, Form, Input } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Divider, Alert } from '@heroui/react';
 import { useState } from 'react';
 
 export const UserPage = () => {
@@ -45,10 +46,26 @@ export const UserPage = () => {
                                 }
                             />
                             <Button type="submit" variant="flat" size='lg' className="w-32 h-12 rounded-l-none bg-pink-400 text-white">
-                                Validar
+                                Siguiente
                             </Button>
                         </div>
                     </Form>
+                    <Card shadow='sm' className='mt-5 rounded-xl'>
+                       <Alert hideIcon color="success" description='' title="Usuario encontrado" variant="faded" className='rounded-b-none p-0 pl-4' startContent={<CheckIcon size={15} />} />
+                        <CardBody>
+                            <User
+                                avatarProps={{
+                                    src: "https://avatars.githubusercontent.com/u/30373425?v=4",
+                                }}
+                                description={
+                                    <Link isExternal href="https://x.com/jrgarciadev" size="sm">
+                                        @jrgarciadev
+                                    </Link>
+                                }
+                                name="Junior Garcia"
+                            />
+                        </CardBody>
+                    </Card>
                 </CardBody>
             </Card>
         </DefaultLayout>
