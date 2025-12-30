@@ -5,7 +5,8 @@ import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Rad
 import { useState } from 'react';
 
 export const UserPage = () => {
-    const [errors, setErrors] = useState({})
+    const [errorsIg, setErrorsIg] = useState({})
+    const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -13,11 +14,45 @@ export const UserPage = () => {
         const data = Object.fromEntries(new FormData(e.currentTarget));
 
         if (!data.username) {
-            setErrors({ username: "Username is required" });
-
+            setErrorsIg({ username: "Username is required" });
             return;
         }
     };
+
+    const onCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const { address, facebook, whatsapp, website } = Object.fromEntries(new FormData(e.currentTarget));
+        
+        // validate fb link
+        const patterns = {
+            facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?$/,
+            whatsapp: /^\d{10,15}$/,
+            website: /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/
+        };
+
+        const newErrors: { [key: string]: string } = {};
+
+        if (facebook && !patterns.facebook.test(facebook as string)) {
+            newErrors.facebook = "Enlace de Facebook inválido";
+        }
+
+        if (whatsapp && !patterns.whatsapp.test(whatsapp as string)) {
+            newErrors.whatsapp = "Número de WhatsApp inválido";
+        }
+
+        if (website && !patterns.website.test(website as string)) {
+            newErrors.website = "Enlace de sitio web inválido";
+        }
+
+        setErrors(newErrors);
+
+        if (Object.keys(newErrors).length > 0) {
+            return;
+        }
+
+        // submit the form
+    }
     return (
         <DefaultLayout>
             <div className='flex justify-center'>
@@ -28,7 +63,7 @@ export const UserPage = () => {
                     <CardBody>
                         <Form
                             className="w-full flex flex-col gap-3"
-                            validationErrors={errors}
+                            validationErrors={errorsIg}
                             onSubmit={onSubmit}
                         >
                             <label htmlFor="username" className='text-lg'>Tu usuario de Instagram</label>
@@ -70,8 +105,8 @@ export const UserPage = () => {
                         </Card>
                         <Form
                             className="w-full flex flex-col gap-3 mt-5"
-                        // validationErrors={errors}
-                        // onSubmit={onSubmit}
+                            validationErrors={errors}
+                            onSubmit={onSubmit}
                         >
                             <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-xl' />
                             <span>Ubicación del local</span>
@@ -79,24 +114,31 @@ export const UserPage = () => {
                             
                             <div><span>Redes sociales</span></div>
                             <Input
+                                name='facebook'
                                 label='Facebook'
                                 type="text"
+                                isClearable
                                 placeholder='https://www.facebook.com/...'
                                 startContent={<FBIcon size={20} className="text-pink-300" />}
                             />
                             <Input
+                                name="whatsapp"
                                 label='WhatsApp'
-                                type="text"
+                                type="tel"
+                                isClearable
+                                maxLength={10}
                                 startContent={<div className='flex text-sm text-foreground/80 gap-1'><WAIcon size={20} className="text-pink-300" /> +52</div>}
                             />
                             <Input
+                                name="website"
                                 label='Sitio web'
                                 type="text"
+                                isClearable
                                 placeholder='https://www.tu-sitio.com'
                                 startContent={<GlobeIcon size={20} className="text-pink-300" />}
                             />
                             <Button type="submit" variant="flat" size='lg' className="w-full h-12 bg-pink-400 text-white mt-3">
-                                Guardar información
+                                Crear usuario
                             </Button>
                         </Form>
                     </CardBody>

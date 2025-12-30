@@ -61,6 +61,7 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
             placeholder="Ingresa el domicilio"
             type="text"
             value={place}
+            name="address"
             onChange={(e) => setPlace(e.target.value)}
             startContent={<MapPinIcon size={20} className="text-pink-300" />}
         />
