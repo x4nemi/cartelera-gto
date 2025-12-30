@@ -8,15 +8,9 @@ const API_KEY = "AIzaSyBxEe7cfg8hicepZeLZ8ZKFF9sQB5k9mKk"
 export const MapInput = () => {
     const [selectedPlace, setSelectedPlace] =
         useState<google.maps.places.PlaceResult | null>(null);
-
     return (
         <APIProvider apiKey={API_KEY}>
             <PlaceAutocomplete onPlaceSelect={setSelectedPlace} />
-            {selectedPlace && (
-                <p className="text-sm text-default-500 mt-2">
-                    {selectedPlace.formatted_address || selectedPlace.name}
-                </p>
-            )}
         </APIProvider>
     );
 };

@@ -14,7 +14,7 @@ export const UserPage = () => {
         const data = Object.fromEntries(new FormData(e.currentTarget));
 
         if (!data.username) {
-            setErrorsIg({ username: "Username is required" });
+            setErrorsIg({ username: "El usuario es requerido" });
             return;
         }
     };
@@ -22,26 +22,31 @@ export const UserPage = () => {
     const onCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const { address, facebook, whatsapp, website } = Object.fromEntries(new FormData(e.currentTarget));
+        setErrors({});
+
+        const data = Object.fromEntries(new FormData(e.currentTarget));
+        const { facebook, whatsapp, website } = data;
+        
+        // console.log('Form data:', { address, facebook, whatsapp, website });
         
         // validate fb link
         const patterns = {
             facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?$/,
-            whatsapp: /^\d{10,15}$/,
+            whatsapp: /^\d{10}$/,
             website: /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/
         };
 
         const newErrors: { [key: string]: string } = {};
 
-        if (facebook && !patterns.facebook.test(facebook as string)) {
+        if (facebook && facebook !== "" && !patterns.facebook.test(facebook as string)) {
             newErrors.facebook = "Enlace de Facebook inválido";
         }
 
-        if (whatsapp && !patterns.whatsapp.test(whatsapp as string)) {
-            newErrors.whatsapp = "Número de WhatsApp inválido";
+        if (whatsapp && whatsapp !== "" && !patterns.whatsapp.test(whatsapp as string)) {
+            newErrors.whatsapp = "Número de WhatsApp inválido (10 dígitos)";
         }
 
-        if (website && !patterns.website.test(website as string)) {
+        if (website && website !== "" && !patterns.website.test(website as string)) {
             newErrors.website = "Enlace de sitio web inválido";
         }
 
@@ -51,6 +56,7 @@ export const UserPage = () => {
             return;
         }
 
+        // console.log('Form is valid! Submitting...', data);
         // submit the form
     }
     return (
@@ -106,7 +112,7 @@ export const UserPage = () => {
                         <Form
                             className="w-full flex flex-col gap-3 mt-5"
                             validationErrors={errors}
-                            onSubmit={onSubmit}
+                            onSubmit={onCreateUser}
                         >
                             <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-xl' />
                             <span>Ubicación del local</span>
