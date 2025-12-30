@@ -62,7 +62,7 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
             type="text"
             value={place}
             onChange={(e) => setPlace(e.target.value)}
-            startContent={<MapPinIcon size={15} className="text-pink-300" />}
+            startContent={<MapPinIcon size={20} className="text-pink-300" />}
         />
     );
 };
