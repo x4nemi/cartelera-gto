@@ -1,6 +1,7 @@
 import { CheckIcon } from '@/components/icons';
+import { MapInput } from '@/components/map';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Divider, Alert } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, RadioGroup, Radio } from '@heroui/react';
 import { useState } from 'react';
 
 export const UserPage = () => {
@@ -67,6 +68,23 @@ export const UserPage = () => {
                                 />
                             </CardBody>
                         </Card>
+                        <Form
+                            className="w-full flex flex-col gap-3"
+                        // validationErrors={errors}
+                        // onSubmit={onSubmit}
+                        >
+
+                            <RadioGroup color="warning" label="¿Tienes un local establecido para tus eventos?" className='mt-3' orientation='horizontal'>
+                                <Radio value="si">
+                                    Sí
+                                </Radio>
+                                <Radio value="no">
+                                    No
+                                </Radio>
+                            </RadioGroup>
+                            <Input placeholder="Ingresa el domicilio" type="text" />
+                            <MapInput />
+                        </Form>
                     </CardBody>
                 </Card>
             </div>
