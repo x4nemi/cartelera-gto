@@ -30,9 +30,8 @@ export const Wall = ({ cardsData = [] }: { cardsData?: EventCardProps[] }) => {
     
     // Calcular el número de columnas basado en el ancho de la ventana
     const numColumns = useMemo(() => {
-        if (windowWidth >= 1536) return 3;        // 2xl
-        else if (windowWidth >= 1024) return 2;   // xl
-        else return 1;                            // lg, md, sm
+        if (windowWidth >= 768) return 3;  
+        else return 2;
     }, [windowWidth]);
     
     // Distribuir las tarjetas en columnas usando useMemo
@@ -46,7 +45,7 @@ export const Wall = ({ cardsData = [] }: { cardsData?: EventCardProps[] }) => {
 
     return (
         <div className="container mx-auto">
-            <div className='grid xl:grid-cols-2 2xl:grid-cols-3 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-3'>
+            <div className='grid xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-3'>
                 <div className='flex flex-col gap-3'>
                     {column1.map((card, index) => (
                         <div key={`col1-${index}`} className="card-wrapper">
