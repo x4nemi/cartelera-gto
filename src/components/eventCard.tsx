@@ -1,31 +1,31 @@
-import { Card, CardFooter, Image } from "@heroui/react"
+import { Avatar, Card, CardFooter, Image } from "@heroui/react"
 import { EventCardProps } from "./interfaces"
 
 export const EventCard = (props: EventCardProps) => {
 	return (
-		// the footer is hidden, but when 
-		<Card isFooterBlurred className="group">
+		<Card className="group rounded-3xl" shadow="lg">
 			<Image
 				removeWrapper
 				alt="Card example background"
-				className="z-0 w-full h-full"
+				className="z-0 w-full h-full rounded-b-none"
 				src={props.image}
 			/>
-			<CardFooter className="absolute bg-pink-300/10 bottom-0 rounded-2xl z-10 justify-between p-4 w-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:bg-pink-300/40 group-hover:border-2 group-hover:border-slate-50/20">
-				<div className="flex justify-between w-full items-center">
-					<div>
-						<h4 className="text-white text-2xl font-bold">{props.title}</h4>
-						{/* <h4 className="text-neutral-200 font-medium text-lg sm:text-xl">{props.title}</h4> */}
-						{/* <span className="flex"> */}
-						<p className="text-neutral-100 sm:text-lg font-bold">Lugar</p>
-						<p className="text-neutral-50">{props.location}</p>
-						<p className="text-neutral-100 sm:text-lg font-bold">Día y hora</p>
-						<p className="text-neutral-50">{props.date} - {props.hour} hrs</p>
+			<CardFooter className="flex justify-between">
+				<div className="flex gap-2">
+					<Avatar
+						isBordered
+						radius="full"
+						size="md"
+						src="https://heroui.com/avatars/avatar-1.png"
+					/>
+					<div className="flex flex-col gap-1 items-start justify-center">
+						<h4 className="text-xs md:text-md font-semibold leading-none text-default-600">Zoey Lang</h4>
+						<h5 className="text-xs md:text-md tracking-tight text-default-400">@casacuevano</h5>
 					</div>
-					{/* <div>
-						<p className="text-neutral-200 text-tiny sm:text-lg">Día: {props.date}</p>
-						<p className="text-neutral-200 text-tiny sm:text-lg">Hora: {props.hour}</p>
-					</div> */}
+				</div>
+				<div className="text-right">
+				<p className="text-xs md:text-md">Martes 6 de enero,2026</p>
+				<p className="text-xs md:text-md">20:00 hrs</p>
 				</div>
 			</CardFooter>
 		</Card>
