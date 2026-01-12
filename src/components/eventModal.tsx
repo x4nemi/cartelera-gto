@@ -3,7 +3,7 @@ import { EventCardProps } from "./interfaces"
 
 export const EventModal = ({props, isOpen, onClose = () => {}}: {props: EventCardProps, isOpen: boolean, onClose: () => void}) => {
     return (
-        <Modal backdrop='blur' isOpen={isOpen} onClose={onClose}>
+        <Modal backdrop='blur' placement="center" isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           {(onClose) => (
             <>

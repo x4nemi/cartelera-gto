@@ -24,101 +24,31 @@ export const siteConfig = {
   },
 };
 
+/*
+Scenarios of users:
+1. The user has an Instagram account, a place to host the event, facebook page, whatsapp, and website.
+*/
+
 export const randomEvents: EventCardProps[] = [
   {
     title: "Concierto de Rock en el Teatro Juárez",
     date: "2025-11-25",
     hour: "20:00",
-    location: "Teatro Juárez",
-    description: "Disfruta de una noche llena de energía con las mejores bandas de rock locales e internacionales.",
     image: '/bordado.jpg',
+    username: "rockfan123",
   },
   {
     title: "Feria del Libro Guanajuato 2025",
     date: "2025-11-28",
     hour: "10:00",
-    location: "Centro de Convenciones",
-    description: "Explora una amplia variedad de libros, participa en charlas con autores y disfruta de actividades culturales.",
     image: `/nocherock.jpg`,
+    username: "booklover",
   },
   {
     title: "Exposición de Arte Contemporáneo",
     date: "2026-01-23",
     hour: "18:00",
-    location: "Museo de Arte Moderno",
-    description: "Sumérgete en el mundo del arte contemporáneo con obras de artistas emergentes y consagrados.",
     image: `/patronaje.jpg`,
-  },
-  {
-    title: "Concierto de Rock en el Teatro Juárez",
-    date: "2025-11-25",
-    hour: "20:00",
-    location: "Teatro Juárez",
-    description: "Disfruta de una noche llena de energía con las mejores bandas de rock locales e internacionales.",
-    image: '/bordado.jpg',
-  },
-  {
-    title: "Feria del Libro Guanajuato 2025",
-    date: "2025-11-28",
-    hour: "10:00",
-    location: "Centro de Convenciones",
-    description: "Explora una amplia variedad de libros, participa en charlas con autores y disfruta de actividades culturales.",
-    image: `/nocherock.jpg`,
-  },
-  {
-    title: "Exposición de Arte Contemporáneo",
-    date: "2026-01-23",
-    hour: "18:00",
-    location: "Museo de Arte Moderno",
-    description: "Sumérgete en el mundo del arte contemporáneo con obras de artistas emergentes y consagrados.",
-    image: `/patronaje.jpg`,
-  },
-  {
-    title: "Concierto de Rock en el Teatro Juárez",
-    date: "2025-11-25",
-    hour: "20:00",
-    location: "Teatro Juárez",
-    description: "Disfruta de una noche llena de energía con las mejores bandas de rock locales e internacionales.",
-    image: '/bordado.jpg',
-  },
-  {
-    title: "Feria del Libro Guanajuato 2025",
-    date: "2025-11-28",
-    hour: "10:00",
-    location: "Centro de Convenciones",
-    description: "Explora una amplia variedad de libros, participa en charlas con autores y disfruta de actividades culturales.",
-    image: `/nocherock.jpg`,
-  },
-  {
-    title: "Exposición de Arte Contemporáneo",
-    date: "2026-01-23",
-    hour: "18:00",
-    location: "Museo de Arte Moderno",
-    description: "Sumérgete en el mundo del arte contemporáneo con obras de artistas emergentes y consagrados.",
-    image: `/patronaje.jpg`,
-  },
-  {
-    title: "Concierto de Rock en el Teatro Juárez",
-    date: "2025-11-25",
-    hour: "20:00",
-    location: "Teatro Juárez",
-    description: "Disfruta de una noche llena de energía con las mejores bandas de rock locales e internacionales.",
-    image: '/bordado.jpg',
-  },
-  {
-    title: "Feria del Libro Guanajuato 2025",
-    date: "2025-11-28",
-    hour: "10:00",
-    location: "Centro de Convenciones",
-    description: "Explora una amplia variedad de libros, participa en charlas con autores y disfruta de actividades culturales.",
-    image: `/nocherock.jpg`,
-  },
-  {
-    title: "Exposición de Arte Contemporáneo",
-    date: "2026-01-23",
-    hour: "18:00",
-    location: "Museo de Arte Moderno",
-    description: "Sumérgete en el mundo del arte contemporáneo con obras de artistas emergentes y consagrados.",
-    image: `/patronaje.jpg`,
+    username: "artenthusiast",
   },
 ];
