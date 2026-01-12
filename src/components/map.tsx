@@ -3,7 +3,7 @@ import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { Input } from '@heroui/react';
 import { MapPinIcon } from './icons';
 
-const API_KEY = "AIzaSyBxEe7cfg8hicepZeLZ8ZKFF9sQB5k9mKk"
+const API_KEY = "AIzaSyBEd2m5iFKbezLl97qbCKv3YrOIIFHa65U"
 
 export const MapInput = () => {
     const [selectedPlace, setSelectedPlace] =

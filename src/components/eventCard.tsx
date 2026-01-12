@@ -3,7 +3,7 @@ import { EventCardProps } from "./interfaces"
 
 export const EventCard = (props: EventCardProps) => {
 	return (
-		<Card className="group rounded-3xl" shadow="lg">
+		<Card className="group rounded-3xl" shadow="lg" isPressable>
 			<Image
 				removeWrapper
 				alt="Card example background"
