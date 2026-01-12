@@ -4,6 +4,8 @@ export interface EventCardProps {
 	hour: string;
 	image: string;
 	username?: string;
+	user?: UserProfileProps;
+	description?: string;
 }
 
 export interface UserProfileProps {
