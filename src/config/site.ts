@@ -31,60 +31,154 @@ Scenarios of users:
 
 export const randomEvents: EventCardProps[] = [
   {
-    title: "Concierto de Rock en el Teatro Juárez",
-    date: "2025-11-25",
-    hour: "20:00",
-    image: '/bordado.jpg',
-    username: "rockfan123",
+    title: "🦕✨ Dino Taller de Crochet ✨🧶",
+    description: `🦕✨ Dino Taller de Crochet ✨🧶
+
+¿Te imaginas tejer tu propio dinosaurio punto a punto?
+Este taller está pensado para crear con calma, aprender y disfrutar del proceso, sin importar si estás empezando o si ya sabes lo básico.
+
+📅 Inicia: 19 de enero
+🗓 Lunes
+⏰ 5:00 a 7:00 pm
+⏳ Duración: 7 semanas
+📍 Centro Cultural Casa Cuévano
+(Campanero 6, 2º piso) @casacuevano
+
+💰 Costo: $500 por el taller completo
+🧶 Materiales no incluidos
+
+Durante el taller aprenderás las bases necesarias para desarrollar tu amigurumi de dinosaurio de principio a fin, en un ambiente relajado y creativo 🌿
+
+📩 Inscripciones abiertas
+WhatsApp: 417 177 5592
+
+Tejer también puede ser una forma de volver a jugar 🦖💫`,
+    date: "2026-01-19",
+    hour: "17:00",
+    image: '/aracne/dinosaurio.png',
+    username: "aracne_crochet_gto",
     user: {
-      name: "Casa Cuevano",
-      username: "casacuevano",
-      avatarUrl: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+      name: "Aracne Crochet🧶",
+      username: "aracne_crochet_gto",
+      avatarUrl: "/logos/aracnelogo.png",
       location: "Guanajuato, México",
       bio: "Espacio cultural dedicado a promover el arte y la música en Guanajuato.",
       socialLinks: {
-        instagram: "https://instagram.com/casacuevano",
-        facebook: "https://facebook.com/casacuevano",
-        whatsapp: "https://wa.me/5212345678900",
-        website: "https://casacuevano.com",
+        instagram: "https://instagram.com/aracne_crochet_gto"
       }
     }
   },
   {
-    title: "Feria del Libro Guanajuato 2025",
-    date: "2025-11-28",
-    hour: "10:00",
-    image: `/nocherock.jpg`,
-    username: "booklover",
+    title: "🦕✨ Dino Taller de Crochet ✨🧶",
+    description: `🧶✨ Taller de Amigurumis en De la Niebla Café ✨🧶
+
+Si siempre has querido aprender a tejer amigurumis (o retomar el crochet con calma), este taller es para ti 🤍
+Un espacio para crear, aprender y pasar un rato bonito entre café y estambres.
+
+📅 Sábados y domingos
+⏰ 12:00 a 14:00 hrs
+📍 De la Niebla Café
+Sangre de Cristo #9 Int. 1, Zona Centro, Guanajuato
+
+💰 Costo mensual: $350
+☕ + consumo mínimo de $50
+
+No necesitas experiencia previa, vamos paso a paso y a tu ritmo 🧵
+Ideal para principiantes y para quienes quieren seguir practicando.
+
+📩 Inscripciones e informes por DM o WhatsApp
+417 177 5592
+
+Te esperamos para tejer juntxs 🕷️🖤`,
+    date: "2026-01-10",
+    hour: "12:00",
+    image: '/aracne/taller.png',
+    username: "aracne_crochet_gto",
     user: {
-      name: "Biblioteca Central",
-      username: "bibliotecacentral",
-      avatarUrl: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+      name: "Aracne Crochet🧶",
+      username: "aracne_crochet_gto",
+      avatarUrl: "/logos/aracnelogo.png",
+      location: "Guanajuato, México",
+      bio: "Espacio cultural dedicado a promover el arte y la música en Guanajuato.",
+      socialLinks: {
+        instagram: "https://instagram.com/aracne_crochet_gto"
+      }
+    }
+  },
+  {
+    title: "El Brutalista",
+    description: "🎬 Cine en Casa Cuévano · 💰 $30",
+    date: "2026-01-15",
+    hour: "10:00",
+    image: `/cuevano/brutalista.png`,
+    username: "casacuevano",
+    user: {
+      name: "Casa Cuévano",
+      username: "casacuevano",
+      avatarUrl: "logos/cuevano.png",
       location: "Guanajuato, México",
       bio: "Fomentando la lectura y el conocimiento en la comunidad.",
       socialLinks: {
-        instagram: "https://instagram.com/bibliotecacentral",
-        facebook: "https://facebook.com/bibliotecacentral",
-        website: "https://bibliotecacentral.gob.mx",
+        instagram: "https://instagram.com/casacuevano",
       }
     }
   },
   {
     title: "Exposición de Arte Contemporáneo",
-    date: "2026-01-23",
-    hour: "18:00",
-    image: `/patronaje.jpg`,
-    username: "artenthusiast",
+    description: `🏺 Manos y Memoria
+Cerámica viva en Casa Cuévano
+📅 Sáb 17 · 🕙 10:00 a.m. – 2:30 p.m.
+💰 $980 · 👥 Cupo limitado
+🤝 A Mano en un Hornito`,
+    date: "2026-01-17",
+    hour: "10:00",
+    image: `/cuevano/ceramica.png`,
+    username: "casacuevano",
     user: {
-      name: "Galería de Arte Moderno",
-      username: "galeriamoderno",
-      avatarUrl: "https://i.pravatar.cc/150?u=a04258114e29026702d",
-      // location: "Guanajuato, México",
-      bio: "Exhibiendo lo mejor del arte contemporáneo local e internacional.",
+      name: "Casa Cuévano",
+      username: "casacuevano",
+      avatarUrl: "logos/cuevano.png",
+      location: "Guanajuato, México",
+      bio: "Fomentando la lectura y el conocimiento en la comunidad.",
       socialLinks: {
-        instagram: "https://instagram.com/galeriamoderno",
-        facebook: "https://facebook.com/galeriamoderno",
-        whatsapp: "https://wa.me/5210987654321",
+        instagram: "https://instagram.com/casacuevano",
+      }
+    }
+  },
+  {
+    title: "",
+    description: `Ven a hacerle ropita a tu #ternurin / #chafarin de la mano de lx maestrx @mermaid_motel_r este viernes 30 de enero en @mylovelystoremx
+Cupo limitado, Aparta tu lugar! 👗`,
+    date: "2026-01-30",
+    hour: "",
+    image: `/mylovely/ternurin.png`,
+    username: "mylovelystoremx",
+    user: {
+      name: "My Lovely Store",
+      username: "mylovelystoremx",
+      avatarUrl: "logos/mylovely.png",
+      location: "Guanajuato, México",
+      socialLinks: {
+        instagram: "https://instagram.com/mylovelystoremx",
+      }
+    }
+  },
+  {
+    title: "",
+    description: `TALLER ACTUALÍZA-TE este 2026✨
+Taller de #collage sobre un calendario en @mylovelystoremx jueves 15 de enero de 4 a 7 pm
+Cupo limitado, costo del taller $80 incluye materiales ✂️`,
+    date: "2026-01-15",
+    hour: "16:00",
+    image: `/mylovely/actualizate.png`,
+    username: "mylovelystoremx",
+    user: {
+      name: "My Lovely Store",
+      username: "mylovelystoremx",
+      avatarUrl: "logos/mylovely.png",
+      location: "Guanajuato, México",
+      socialLinks: {
+        instagram: "https://instagram.com/mylovelystoremx",
       }
     }
   },

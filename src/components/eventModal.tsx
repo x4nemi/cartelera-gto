@@ -2,6 +2,8 @@ import { Alert, Button, Image, Link, Modal, ModalBody, ModalContent, ModalFooter
 import { EventCardProps } from "./interfaces"
 import { FBIcon, GlobeIcon, IgIcon, MapPinIcon, WAIcon } from "./icons";
 
+const animatedClasses = "transition-all duration-200 ease-in-out hover:-translate-y-1";
+
 export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: EventCardProps, isOpen: boolean, onClose: () => void }) => {
 
     const socialLinks = props.user?.socialLinks;
@@ -13,32 +15,32 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
         website: GlobeIcon
     }
     return (
-        <Modal backdrop='blur' placement="center" scrollBehavior="inside" isOpen={isOpen} onClose={onClose} closeButton={false} className="w-fit max-w-[95vw] max-h-[95vh] m-4">
+        <Modal backdrop='blur' placement="center" scrollBehavior="inside" isOpen={isOpen} onClose={onClose} closeButton={false} className="w-fit lg:max-w-[50vw] max-w-[95vw] max-h-[95vh] m-4">
             <ModalContent className="rounded-3xl">
-                <ModalBody className="my-5 flex flex-col -mb-1">
+                <ModalBody className="my-5 flex flex-col -mb-1 gap-1">
                     <div className="shrink-0 self-center">
                         <Image
                             removeWrapper
                             alt="Card example background"
-                            className="max-h-[75vh] rounded-lg rounded-b-none"
+                            className="max-h-[75vh] rounded-xl"
                             src={props.image}
                         />
                     </div>
-                    <div className="flex flex-col self-center w-full -mt-3 mb-5">
+                    <div className="flex flex-col self-center w-full mb-5">
                         <Alert variant="bordered" startContent={
                             <User
                                 avatarProps={{
-                                    src: "https://i.pravatar.cc/150?u=a04258114e29026702d",
+                                    src: props.user?.avatarUrl || "/default-avatar.png",
                                     className: "w-12 h-12"
                                 }}
-                                description="@username"
-                                name="Jane Doe"
+                                // description={"@" + (props.username || "janedoe")}
+                                name={props.user?.name || "Jane Doe"}
                             />
-                        } endContent={<div className="gap-2 flex flex-wrap justify-end">
+                        } endContent={<div className="gap-1 flex flex-wrap justify-end">
                             {props.user?.location &&
                                 <Button
                                     startContent={<MapPinIcon size={24} />}
-                                    isIconOnly size="lg"
+                                    isIconOnly size="lg" color="secondary" variant="flat" className={animatedClasses}
                                 ></Button>
                             }
                             {
@@ -47,15 +49,16 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
                                     return value ? (
                                         <Button
                                             key={key}
-                                            color="default"
+                                            color="secondary"
                                             as={Link}
                                             size="lg"
-
+                                            variant="flat"
                                             isIconOnly
                                             startContent={<IconComponent size={24} />}
                                             href={value}
                                             target="_blank"
                                             rel="noopener noreferrer"
+                                            className={animatedClasses}
                                         />
                                     ) : null;
                                 })
