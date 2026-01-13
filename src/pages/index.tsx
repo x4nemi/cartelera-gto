@@ -4,6 +4,8 @@ import { randomEvents } from "@/config/site";
 import { Wall } from "@/components/pinterestWall";
 import { EventCardProps } from "@/components/interfaces";
 import { useEffect, useState } from "react";
+import { Alert } from "@heroui/react";
+import { SmileyIcon } from "@/components/icons";
 
 export default function IndexPage() {
 	const [months, setMonths] = useState<string[]>([]);
@@ -32,8 +34,9 @@ export default function IndexPage() {
 	}, []);
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4">
+			<section className="flex flex-col items-center justify-center gap-4 -mt-10">
 				<div className="w-full justify-center">
+					<Alert title="¡Bienvenido a Cartelera Guanajuato!" variant="faded" className="mb-4" icon={<SmileyIcon size={30} />} description="Explora los eventos de marcas locales en Guanajuato." isClosable color="primary" />
 					<FilterWidget />
 				</div>
 

@@ -66,7 +66,7 @@ export const EventCard = (props: EventCardProps) => {
 				{hasSpecificDate &&
 					<Dropdown placement="bottom-end" size="sm">
 						<DropdownTrigger>
-							<Button variant="solid" size="sm" className="absolute mt-1 ml-1 rounded-tl-[16px] opacity-0 group-hover:opacity-100 transition-opacity duration-300" startContent={<CalendarIcon size={16} />} isIconOnly></Button>
+							<Button variant="solid" size="sm" className="absolute mt-1 ml-1 rounded-tl-[16px] opacity-0 group-hover:opacity-100 transition-opacity duration-300" startContent={<CalendarIcon size={16} />} >{props.date + ", " + props.hour + "hrs"}</Button>
 						</DropdownTrigger>
 						<DropdownMenu aria-label="Static Actions">
 							{calendarOptions.map(({ Title, Url }) => {
