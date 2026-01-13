@@ -1,4 +1,4 @@
-import { Button, Card, CardFooter, CardHeader, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Link } from "@heroui/react"
+import { Button, Card, CardFooter, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, Link } from "@heroui/react"
 import { EventCardProps } from "./interfaces"
 import { EventModal } from "./eventModal"
 import { useState } from "react"
@@ -36,7 +36,7 @@ export const EventCard = (props: EventCardProps) => {
 
 	return (
 		<>
-			<Card className="group p-1 rounded-3xl" shadow="lg">
+			<Card className="group p-1 rounded-3xl" shadow="lg" isPressable onPress={() => setOpenInfoModal(true)}>
 
 				<Image
 					removeWrapper
