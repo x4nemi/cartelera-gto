@@ -36,14 +36,22 @@ export const EventCard = (props: EventCardProps) => {
 
 	return (
 		<>
-			<Card className="group p-1 rounded-3xl" shadow="lg" isPressable onPress={() => setOpenInfoModal(true)}>
-
-				<Image
-					removeWrapper
-					alt="Card example background"
-					className="z-0 w-full h-full rounded-[20px] object-cover"
-					src={props.image}
-				/>
+			<Card className="group p-1 rounded-3xl" shadow="lg">
+				<div 
+					className="cursor-pointer" 
+					onClick={() => setOpenInfoModal(true)}
+					role="button"
+					tabIndex={0}
+					aria-label={`Ver detalles de ${props.title}`}
+					onKeyDown={(e) => e.key === 'Enter' && setOpenInfoModal(true)}
+				>
+					<Image
+						removeWrapper
+						alt="Card example background"
+						className="z-0 w-full h-full rounded-[20px] object-cover"
+						src={props.image}
+					/>
+				</div>
 				<CardFooter className="absolute p-2 bottom-0 left-0 right-0 bg-opacity-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-between items-center gap-2">
 					<Button
 						className="rounded-bl-[16px] w-full"

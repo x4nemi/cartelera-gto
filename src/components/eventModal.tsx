@@ -41,6 +41,7 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
                                 <Button
                                     startContent={<MapPinIcon size={24} />}
                                     isIconOnly size="lg" color="secondary" variant="flat" className={animatedClasses}
+                                    aria-label="Ver ubicación"
                                 ></Button>
                             }
                             {
@@ -54,6 +55,7 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
                                             size="lg"
                                             variant="flat"
                                             isIconOnly
+                                            aria-label={key}
                                             startContent={<IconComponent size={24} />}
                                             href={value}
                                             target="_blank"

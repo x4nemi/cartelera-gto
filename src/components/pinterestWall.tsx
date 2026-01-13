@@ -41,7 +41,7 @@ export const Wall = ({ cardsData = [] }: { cardsData?: EventCardProps[] }) => {
             column2: cardsData.filter((_, index) => index % numColumns === 1),
             column3: cardsData.filter((_, index) => index % numColumns === 2)
         };
-    }, [numColumns]);
+    }, [numColumns, cardsData]);
 
     return (
         <div className="container mx-auto">

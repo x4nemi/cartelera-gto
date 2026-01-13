@@ -5,7 +5,7 @@ import { FilterIcon, SortIconAsc, XIcon } from "./icons";
 
 // const sortProperties = ['Fecha']
 
-export const FilterWidget = () => {
+export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boolean, setIsAscending: (value: boolean) => void }) => {
     //#region Fechas
     const minDate = new CalendarDate(2025, 11, 17);
 
@@ -37,7 +37,6 @@ export const FilterWidget = () => {
     //#endregion
 
     //#region Ordenar
-    const [isAscending, setIsAscending] = useState(true)
     //#endregion
 
     return (
@@ -56,7 +55,7 @@ export const FilterWidget = () => {
             {/* Calendario */}
             <CardBody>
                 <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                <DateRangePicker className="max-w-xs" classNames={{ inputWrapper: "bg-secondary/20 hover:bg-secondary/40" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="secondary" />
+                <DateRangePicker label="Rango de fechas" className="max-w-xs" classNames={{ inputWrapper: "bg-secondary/20 hover:bg-secondary/40" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="secondary" />
             </CardBody>
             <Divider />
 
@@ -66,6 +65,7 @@ export const FilterWidget = () => {
                 <div className="flex items-center">
                     <Button
                         isIconOnly
+                        aria-label={isAscending ? "Ordenar descendente" : "Ordenar ascendente"}
                         className="mr-2 transition-transform duration-300"
                         variant="flat"
                         size="lg"
@@ -80,6 +80,7 @@ export const FilterWidget = () => {
                         size="lg"
                         defaultValue="Fecha"
                         variant="bordered"
+                        label="Ordenar por"
                     />
                 </div>
             </CardBody>

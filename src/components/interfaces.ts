@@ -6,6 +6,7 @@ export interface EventCardProps {
 	username?: string;
 	user?: UserProfileProps;
 	description?: string;
+	isRecurrent?: boolean;
 }
 
 export interface UserProfileProps {

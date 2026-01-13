@@ -94,6 +94,7 @@ Te esperamos para tejer juntxs 🕷️🖤`,
     hour: "12:00",
     image: '/aracne/taller.png',
     username: "aracne_crochet_gto",
+    isRecurrent: true,
     user: {
       name: "Aracne Crochet🧶",
       username: "aracne_crochet_gto",
@@ -101,7 +102,8 @@ Te esperamos para tejer juntxs 🕷️🖤`,
       location: "Guanajuato, México",
       bio: "Espacio cultural dedicado a promover el arte y la música en Guanajuato.",
       socialLinks: {
-        instagram: "https://instagram.com/aracne_crochet_gto"
+        instagram: "https://instagram.com/aracne_crochet_gto",
+        whatsapp: "https://wa.me/524171775592",
       }
     }
   },
@@ -179,6 +181,35 @@ Cupo limitado, costo del taller $80 incluye materiales ✂️`,
       location: "Guanajuato, México",
       socialLinks: {
         instagram: "https://instagram.com/mylovelystoremx",
+      }
+    }
+  },
+  {
+    title: "",
+    description: `Clases matutinas de ritmos latinos 🔥
+
+🗓️ A partir del martes 13 de enero
+🕐 Los martes y jueves 10:30 am a 12 pm
+💵 $500 mensuales
+
+Mándanos un mensajito para agendar una clase muestra sin costo ✨
+
+¡ Baila, disfruta y aprende los pasos básicos de salsa, bachata, merengue y más en un ambiente divertido !
+
+Imparte Dayana Pérez
+Maestra cubana, con Licenciatura en instructor de artes y Maestría en Desarrollo Docente. Cuenta con 18 años de experiencia en la docencia y vida artística.`,
+    date: "2026-01-13",
+    hour: "10:30",
+    isRecurrent: true,
+    image: `Telpochcalli/ritmos.png`,
+    username: "telpochcalligto",
+    user: {
+      name: "Telpochcalli",
+      username: "telpochcalligto",
+      avatarUrl: "telpochcalli/ritmos.png",
+      location: "Guanajuato, México",
+      socialLinks: {
+        instagram: "https://instagram.com/telpochcalligto",
       }
     }
   },
