@@ -13,19 +13,18 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
         website: GlobeIcon
     }
     return (
-        <Modal backdrop='blur' placement="center" scrollBehavior="inside" isOpen={isOpen} onClose={onClose} closeButton={false} size="5xl" hideCloseButton>
-            <ModalContent>
-                <ModalBody className="mt-10 flex flex-col md:flex-row gap-">
-                    <div className="grow-2">
-
+        <Modal backdrop='blur' placement="center" scrollBehavior="inside" isOpen={isOpen} onClose={onClose} closeButton={false} className="w-fit max-w-[95vw] max-h-[95vh] m-4">
+            <ModalContent className="rounded-3xl">
+                <ModalBody className="my-5 flex flex-col -mb-1">
+                    <div className="shrink-0 self-center">
                         <Image
                             removeWrapper
                             alt="Card example background"
-                            className=" w-full rounded-lg"
+                            className="max-h-[75vh] rounded-lg rounded-b-none"
                             src={props.image}
                         />
                     </div>
-                    <div className="grow-1 flex flex-col gap-3 md:self-start">
+                    <div className="flex flex-col self-center w-full -mt-3 mb-5">
                         <Alert variant="bordered" startContent={
                             <User
                                 avatarProps={{
@@ -35,7 +34,7 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
                                 description="@username"
                                 name="Jane Doe"
                             />
-                        } endContent={<div className="gap-2 flex md:flex-wrap justify-end">
+                        } endContent={<div className="gap-2 flex flex-wrap justify-end">
                             {props.user?.location &&
                                 <Button
                                     startContent={<MapPinIcon size={24} />}
@@ -61,15 +60,11 @@ export const EventModal = ({ props, isOpen, onClose = () => { } }: { props: Even
                                     ) : null;
                                 })
                             }
-                        </div>} hideIcon />
-                        <Alert hideIcon title="Detalles del evento" variant="faded" description={props.description || "Sin descripción disponible."} />
+                        </div>} hideIcon className="rounded-b-none"/>
+                        <Alert hideIcon title="Detalles del evento" variant="faded" description={props.description || "Sin descripción disponible."} className="rounded-t-none"/>
                     </div>
                 </ModalBody>
-                <ModalFooter>
-                    <Button color="danger" variant="flat" onPress={onClose}>
-                        Cerrar
-                    </Button>
-                </ModalFooter>
+                <ModalFooter></ModalFooter>
             </ModalContent>
         </Modal>
     )
