@@ -29,7 +29,7 @@ export const EventCard = (props: EventCardProps) => {
 					aria-label={`Ver detalles de ${props.title}`}
 					onKeyDown={(e) => e.key === 'Enter' && setOpenInfoModal(true)}
 				>
-					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} />
+					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} isCardEvent />
 				</div>
 				<CardFooter className="absolute p-2 bottom-0 left-0 right-0 bg-opacity-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-between items-center gap-2">
 					<Button

@@ -47,7 +47,7 @@ export default function IndexPage() {
 				{
 					months.map((month) => (
 						<div key={month}>
-							<h2 key={month} className="w-full text-2xl font-bold mt-2">
+							<h2 className="w-full text-2xl font-bold my-2">
 								{month.charAt(0).toUpperCase() + month.slice(1)}
 							</h2>
 							<Wall cardsData={splitEventsByMonth(orderedEvents, month)} key={`wall-${month}`} />

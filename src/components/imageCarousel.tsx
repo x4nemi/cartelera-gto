@@ -6,7 +6,7 @@ interface ImageCarouselProps {
     images: string[]
 }
 
-export const ImageCarousel = ({ images, className }: ImageCarouselProps & { className?: string }) => {
+export const ImageCarousel = ({ images, className, isCardEvent }: ImageCarouselProps & { className?: string, isCardEvent?: boolean }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const touchStartX = useRef(0)
     const touchEndX = useRef(0)
@@ -41,7 +41,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps & { clas
     if (!images || images.length === 0) return null
 
     return (
-        <div className={`relative overflow-hidden rounded-2xl mx-auto ${className || ''}`}>
+        <div className={`relative overflow-hidden rounded-2xl mx-auto ${className || ''} group`}>
             {/* Images container */}
             <div
                 className="flex transition-transform duration-300 ease-out items-center"
@@ -68,7 +68,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps & { clas
                     <Button
                         isIconOnly
                         variant="flat"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/50 z-10"
+                        className={`absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/50 z-10 ${isCardEvent ? 'opacity-0 group-hover:opacity-100 transition-opacity' : ''}`}
                         size="sm"
                         onPress={goToPrevious}
                         aria-label="Imagen anterior"
@@ -78,7 +78,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps & { clas
                     <Button
                         isIconOnly
                         variant="flat"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/50 z-10"
+                        className={`absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-black/50 z-10 ${isCardEvent ? 'opacity-0 group-hover:opacity-100 transition-opacity' : ''}`}
                         size="sm"
                         onPress={goToNext}
                         aria-label="Imagen siguiente"
@@ -90,7 +90,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps & { clas
 
             {/* Dots indicator */}
             {images.length > 1 && (
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                <div className={`absolute bottom-3  left-1/2 -translate-x-1/2 flex gap-1.5 z-10 ${isCardEvent ? 'group-hover:bottom-10 transition-all delay-75' : ''}`}>
                     {images.map((_, index) => (
                         <button
                             key={index}
