@@ -3,22 +3,12 @@ import { FilterWidget } from "@/components/filterWidget";
 import { randomEvents } from "@/config/site";
 import { Wall } from "@/components/pinterestWall";
 import { EventCardProps } from "@/components/interfaces";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Alert } from "@heroui/react";
 import { SmileyIcon } from "@/components/icons";
 
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
-
-	const getMonths = (randomEvents: EventCardProps[]) => {
-		const monthsSet = new Set<string>();
-		randomEvents.forEach((event) => {
-			const eventDate = new Date(event.date);
-			const monthYear = eventDate.toLocaleString('es-MX', { month: 'long', year: 'numeric' });
-			monthsSet.add(monthYear);
-		});
-		return Array.from(monthsSet)
-	}
 
 	const splitEventsByMonth = (events: EventCardProps[], month: string) => {
 		return events.filter((event) => {

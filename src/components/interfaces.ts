@@ -7,6 +7,7 @@ export interface EventCardProps {
 	user?: UserProfileProps;
 	description?: string;
 	isRecurrent?: boolean;
+	isCalendarEvent?: boolean;
 }
 
 export interface UserProfileProps {
