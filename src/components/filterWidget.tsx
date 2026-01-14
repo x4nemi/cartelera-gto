@@ -51,38 +51,41 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                 </Button>
             </CardHeader>
             <Divider />
+            <CardBody className="w-full flex flex-col md:flex-row md:gap-4 p-0">
 
-            {/* Calendario */}
-            <CardBody>
-                <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                <DateRangePicker label="Rango de fechas" className="max-w-xs" classNames={{ inputWrapper: "bg-secondary/20 hover:bg-secondary/40" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="secondary" />
-            </CardBody>
-            <Divider />
+                {/* Calendario */}
+                <CardBody>
+                    <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
+                    <DateRangePicker label="Rango de fechas" className="max-w-xs" classNames={{ inputWrapper: "bg-secondary/20 hover:bg-secondary/40" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="secondary" />
+                </CardBody>
+                <Divider orientation="horizontal" className=" md:hidden" />
+                <Divider orientation="vertical" className="hidden h-auto md:block" />
 
-            {/* Ordenar */}
-            <CardBody>
-                <h3 className="text-sm text-default-500 mb-3">Ordenar:</h3>
-                <div className="flex items-center">
-                    <Button
-                        isIconOnly
-                        aria-label={isAscending ? "Ordenar descendente" : "Ordenar ascendente"}
-                        className="mr-2 transition-transform duration-300"
-                        variant="flat"
-                        size="lg"
-                        onPress={() => setIsAscending(!isAscending)}
-                        style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
-                        color="secondary"
-                    >
-                        <SortIconAsc size={24} />
-                    </Button>
-                    <Input
-                        isReadOnly
-                        size="lg"
-                        defaultValue="Fecha"
-                        variant="bordered"
-                        label="Ordenar por"
-                    />
-                </div>
+                {/* Ordenar */}
+                <CardBody>
+                    <h3 className="text-sm text-default-500 mb-3">Ordenar:</h3>
+                    <div className="flex items-center gap-2">
+                        <Input
+                            isReadOnly
+                            size="lg"
+                            defaultValue="Fecha"
+                            variant="bordered"
+                            label=""
+                        />
+                        <Button
+                            isIconOnly
+                            aria-label={isAscending ? "Ordenar descendente" : "Ordenar ascendente"}
+                            className="transition-transform duration-300"
+                            variant="flat"
+                            size="lg"
+                            onPress={() => setIsAscending(!isAscending)}
+                            style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
+                            color="secondary"
+                        >
+                            <SortIconAsc size={24} />
+                        </Button>
+                    </div>
+                </CardBody>
             </CardBody>
         </Card>
     );
