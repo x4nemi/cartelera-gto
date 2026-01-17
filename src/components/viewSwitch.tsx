@@ -27,7 +27,7 @@ export const ViewSwitch = () => {
     
   return (
      <div className="flex flex-col gap-2">
-        <Button variant='bordered' color='secondary' className='mx-auto' startContent={isSelected ? <CalendarIcon /> : <EventIcon />} onPress={handleSelect}>{isSelected ? "Calendario" : "Eventos"}</Button>
+        <Button variant='flat' color='secondary' className={!isSelected ? "pr-7" : ""} startContent={isSelected ? <CalendarIcon /> : <EventIcon />} onPress={handleSelect}>{isSelected ? "Calendario" : "Eventos"}</Button>
     </div>
   )
 }
