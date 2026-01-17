@@ -11,7 +11,7 @@ export const EventCard = (props: EventCardProps) => {
 			new Date(props.date).toLocaleDateString('es-MX', {
 				day: 'numeric',
 				month: 'long',
-			}) + ", " + props.hour + " hrs";
+			}) + (props.hour ? ", " + props.hour + " hrs" : "");
 
 	//#region Calendar
 	
