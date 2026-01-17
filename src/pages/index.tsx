@@ -39,7 +39,7 @@ export default function IndexPage() {
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-center justify-center gap-4 -mt-10">
-				<div className="w-full justify-center">
+				<div className="container mx-auto justify-center transition-all duration-300">
 					<Alert title="¡Bienvenido a Cartelera Guanajuato!" variant="faded" className="mb-4" icon={<SmileyIcon size={30} />} description="Explora los eventos de marcas locales en Guanajuato." isClosable color="primary" />
 					<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder} />
 				</div>
