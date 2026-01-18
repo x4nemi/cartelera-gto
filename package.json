@@ -29,6 +29,7 @@
     "@tailwindcss/postcss": "4.1.11",
     "@tailwindcss/vite": "4.1.11",
     "@vis.gl/react-google-maps": "^1.7.1",
+    "apify-client": "^2.21.0",
     "clsx": "2.1.1",
     "framer-motion": "11.18.2",
     "react": "18.3.1",

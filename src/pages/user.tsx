@@ -1,8 +1,19 @@
 import { CheckIcon, FBIcon, GlobeIcon, WAIcon } from '@/components/icons';
 import { MapInput } from '@/components/map';
+import { createUser } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
 import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from '@heroui/react';
 import { useState } from 'react';
+
+interface UserProps {
+    id?: string;
+    username: string;
+    fullName?: string;
+    profilePicUrl?: string;
+    profilePicUrlHD?: string;
+    biography?: string;
+    latestPosts?: object[];
+}
 
 export const UserPage = () => {
     //#region Form states and handlers
@@ -12,7 +23,9 @@ export const UserPage = () => {
     const [validating, setValidating] = useState(false)
     const [isUserFound, setIsUserFound] = useState(false)
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const [user, setUser] = useState<UserProps | null>(null)
+
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setValidating(true);
 
@@ -24,11 +37,30 @@ export const UserPage = () => {
             return
         }
 
-        // wait 5 seconds to simulate api call
-        setTimeout(() => {
-            setValidating(false);
-            setIsUserFound(true);
-        }, 5000);
+        try {
+            // Prepare Actor input
+            const input = {
+                "usernames": [
+                    data.username as string
+                ],
+                "includeAboutSection": false
+            };
+
+            const run = await createUser(data.username as string);
+
+            if (run) {
+                setUser(run);
+                setIsUserFound(true);
+                setErrorsIg({});
+            } else {
+                setErrorsIg({ username: "Usuario no encontrado" });
+            }
+        } catch (error) {
+            console.error('Error validating Instagram user:', error);
+            setErrorsIg({ username: "Error al validar usuario" });
+        }
+      
+        setValidating(false);
     };
 
     const onCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
@@ -144,15 +176,15 @@ export const UserPage = () => {
                                         <CardBody>
                                             <User
                                                 avatarProps={{
-                                                    src: "https://avatars.githubusercontent.com/u/30373425?v=4",
+                                                    src: user?.profilePicUrl || "/default-avatar.png",
                                                     size: 'lg'
                                                 }}
                                                 description={
-                                                    <Link isExternal href="https://x.com/jrgarciadev" size="sm" color='foreground'>
-                                                        @jrgarciadev
+                                                    <Link isExternal href={`https://x.com/${user?.username}`} size="sm" color='foreground'>
+                                                        @{user?.username}
                                                     </Link>
                                                 }
-                                                name="Junior Garcia"
+                                                name={user?.fullName || " "}
                                             />
                                         </CardBody>
                                     </Card>
