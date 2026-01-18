@@ -3,7 +3,10 @@ import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { Input } from '@heroui/react';
 import { MapPinIcon } from './icons';
 
-const API_KEY = "AIzaSyBEd2m5iFKbezLl97qbCKv3YrOIIFHa65U"
+// Get API key from runtime config (Azure) or build-time env (local dev)
+const API_KEY = window.APP_CONFIG?.GOOGLE_MAPS_API_KEY?.startsWith('%%') 
+    ? import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
+    : window.APP_CONFIG?.GOOGLE_MAPS_API_KEY || import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""
 
 export const MapInput = () => {
     const [selectedPlace, setSelectedPlace] =
