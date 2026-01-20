@@ -2,10 +2,11 @@ import { Button, Card, CardBody, CardHeader, DateRangePicker, Divider, Input } f
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import { useState } from "react";
 import { FilterIcon, SortIconAsc, XIcon } from "./icons";
+import { ViewSwitch } from "./viewSwitch";
 
 // const sortProperties = ['Fecha']
 
-export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boolean, setIsAscending: (value: boolean) => void }) => {
+export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsEventsView }: { isAscending: boolean, setIsAscending: (value: boolean) => void, isEventsView: boolean, setIsEventsView: (value: boolean) => void }) => {
     //#region Fechas
     const minDate = new CalendarDate(2025, 11, 17);
 
@@ -46,6 +47,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                     <FilterIcon size={24} />
                     <h4 className="font-bold text-lg">Filtra los eventos</h4>
                 </div>
+                <ViewSwitch isEventsView={isEventsView} setIsEventsView={setIsEventsView} />
                 <Button color="danger" startContent={<XIcon size={17} />} variant="flat" size="sm" isDisabled={!isFiltered} hidden={!isFiltered} onPress={cleanFilters}>
                     Limpiar filtros
                 </Button>

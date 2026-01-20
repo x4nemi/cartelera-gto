@@ -19,11 +19,9 @@ import {
 } from "@/components/icons";
 import { Logo } from "@/components/icons";
 import { useState } from "react";
-import { ViewSwitch } from "./viewSwitch";
 
 export const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
-	const path = typeof window !== 'undefined' ? window.location.pathname : '/';
 	return (
 		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -62,11 +60,6 @@ export const Navbar = () => {
 				className="hidden sm:flex basis-1/5 sm:basis-full"
 				justify="end"
 			>
-				{path === "/" &&
-					<NavbarItem className="flex gap-2">
-						<ViewSwitch />
-					</NavbarItem>
-				}
 				<NavbarItem className="hidden sm:flex gap-2">
 					<ThemeSwitch />
 				</NavbarItem>
@@ -85,7 +78,6 @@ export const Navbar = () => {
 			</NavbarContent>
 
 			<NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-				<ViewSwitch />
 				<ThemeSwitch />
 			</NavbarContent>
 

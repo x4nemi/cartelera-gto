@@ -213,4 +213,67 @@ Maestra cubana, con Licenciatura en instructor de artes y Maestría en Desarroll
       }
     }
   },
+  {
+    title: "",
+    description: `✨ Agenda cultural · Enero en Casa Cuévano ✨
+
+Enero continúa en Casa Cuévano con una programación que cruza arte, cine, literatura, música, oficios y comunidad 💛
+
+Aquí te compartimos lo que sucede este mes 👇
+
+⸻
+🃏📖 Taller de Poesía Arcana
+Tarot, lenguaje poético y simbolismo
+📅 Mar 20 y 27 (ene) · 3 y 10 (feb) · 🕔 5:00 p.m.
+💰 $500 · 🎓 Estudiantes $250 · 👥 Cupo limitado
+🤝 Narrativa Arcana + Verónica Taltos
+@narrativa_arcana @veronicaposadavj
+
+⸻
+🎬 Cine en Casa Cuévano · 💰 $30
+🎥 El brutalista — Jue 15 · 6 pm
+🎥 Una batalla tras otra — Mar 20 · 7 pm
+🎥 Amores materialistas — Mié 21 · 8 pm
+🎥 Frankenstein — Lun 26 · 7 pm
+🎥 Soy Frankelda — Mié 28 · 8 pm
+
+⸻
+🎶 Dueto Cantares
+Música folklórica mexicana
+📅 Vie 16 · 🕖 7:00 p.m.
+💛 Cooperación voluntaria
+@enelram.mar
+
+⸻
+🏺 Manos y Memoria
+Cerámica viva en Casa Cuévano
+📅 Sáb 17 · 🕙 10:00 a.m. – 2:30 p.m.
+💰 $980 · 👥 Cupo limitado
+🤝 A Mano en un Hornito
+@amanoenunhornito @sofiamaassg
+
+⸻
+🧶 Taller de tejido
+Amigurumis de dinosaurios
+📅 Lunes del 19 de enero al 2 de marzo · 🕔 5:00 p.m.
+💰 $500 (no incluye materiales)
+🤝 Aracne Crochet
+@aracne_crochet_gto
+`,
+    date: "2026-01-15",
+    hour: "18:00",
+    image: `/cuevano/calendario.png`,
+    username: "casacuevano",
+    isCalendarEvent: true,
+    user: {
+      name: "Casa Cuévano",
+      username: "casacuevano",
+      avatarUrl: "logos/cuevano.png",
+      location: "Guanajuato, México",
+      bio: "Fomentando la lectura y el conocimiento en la comunidad.",
+      socialLinks: {
+        instagram: "https://instagram.com/casacuevano",
+      }
+    }
+  }
 ];
