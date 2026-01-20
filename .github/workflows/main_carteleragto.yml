@@ -29,6 +29,11 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      - name: Prepare deployment package
+        run: |
+          cp server.js dist/
+          cd dist && npm init -y && npm install express --save
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
