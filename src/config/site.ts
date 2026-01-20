@@ -20,7 +20,7 @@ export const siteConfig = {
     }
   ],
   links: {
-    sponsor: "https://patreon.com/jrgarciadev",
+    sponsor: "https://www.paypal.com/donate/?hosted_button_id=C42HWJ5ZQW3WN",
   },
 };
 

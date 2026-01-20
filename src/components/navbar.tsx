@@ -35,7 +35,9 @@ export const Navbar = () => {
 						href="/"
 					>
 						<Logo />
-						<p className="font-bold text-inherit">Cartelera Cuévano</p>
+						<p className="font-bold text-inherit text-lg hidden md:block">
+							{siteConfig.name}
+						</p>
 					</Link>
 				</NavbarBrand>
 				<div className="hidden lg:flex gap-4 justify-start ml-2">
@@ -104,6 +106,11 @@ export const Navbar = () => {
 							</Link>
 						</NavbarMenuItem>
 					))}
+					<NavbarMenuItem>
+						<Link color="foreground" href={siteConfig.links.sponsor} size="lg" isExternal>
+							<HeartFilledIcon className="text-danger mr-1" /> Donar
+						</Link>
+					</NavbarMenuItem>
 				</div>
 			</NavbarMenu>
 		</HeroUINavbar>
