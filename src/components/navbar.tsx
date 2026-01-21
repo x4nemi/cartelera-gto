@@ -33,7 +33,7 @@ export const Navbar = () => {
 						href="/"
 					>
 						<Logo />
-						<p className="font-bold text-inherit text-lg hidden md:block">
+						<p className="font-bold text-inherit text-lg">
 							{siteConfig.name}
 						</p>
 					</Link>
