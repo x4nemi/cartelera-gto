@@ -2,6 +2,7 @@ import { FileUploadButton } from "@/components/fileUploadButton";
 import { ImageGallery } from "@/components/imageGallery";
 // import { ImageItem } from "@/components/imageItem";
 import { title } from "@/components/primitives";
+import CustomRadioGroup from "@/components/RadioGroup";
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, Button, Card, CardBody, Chip, cn, Input, Link, Textarea, User } from "@heroui/react";
 import { useRef, useState } from "react";
@@ -57,6 +58,7 @@ export default function PublishPage() {
 		<DefaultLayout>
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
 				<div className="flex flex-col w-full max-w-2xl px-2">
+					<CustomRadioGroup />
 					<h1 className={title({ class: "mb-4" })}>Publica un evento</h1>
 					<Card className="w-full rounded-3xl focus:ring-0" shadow="lg">
 						<CardBody className="px-1">
