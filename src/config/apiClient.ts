@@ -4,6 +4,7 @@ const APIFY_BASE_URL = "https://api.apify.com/v2";
 
 // Azure Function URL for image uploads
 const AZURE_FUNCTION_URL = import.meta.env.VITE_AZURE_FUNCTION_URL || "";
+const AZURE_FUNCTION_KEY = import.meta.env.VITE_AZURE_FUNCTION_KEY || "";
 
 export const ApifyAPI = {
     async runActor(actorId: string, input: object) {
@@ -67,7 +68,7 @@ export const AzureStorageAPI = {
             throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
         }
 
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/uploadImage`, {
+        const response = await fetch(`${AZURE_FUNCTION_URL}/api/uploadImage?code=${AZURE_FUNCTION_KEY}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -137,7 +138,7 @@ export const KustoAPI = {
             }
         }
 
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/insertUser`, {
+        const response = await fetch(`${AZURE_FUNCTION_URL}/api/insertUser?code=${AZURE_FUNCTION_KEY}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -172,7 +173,7 @@ export const KustoAPI = {
             throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
         }
 
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/getUser?username=${encodeURIComponent(username)}`, {
+        const response = await fetch(`${AZURE_FUNCTION_URL}/api/getUser?username=${encodeURIComponent(username)}&code=${AZURE_FUNCTION_KEY}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -203,9 +204,8 @@ async (username: string) => {
 
     // If not found, run Apify actor to get user data
     const input = {
-        "username": username,
-        "includePosts": true,
-        "includeAboutSection": false
+        "usernames": [username],
+        "resultsLimit": 1
     };
 
     const run = await ApifyAPI.runActor("dSCLg0C3YEZ83HzYX", input);
