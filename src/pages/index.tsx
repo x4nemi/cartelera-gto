@@ -4,8 +4,6 @@ import { randomEvents } from "@/config/site";
 import { Wall } from "@/components/pinterestWall";
 import { EventCardProps } from "@/components/interfaces";
 import { useMemo, useState, useRef, useEffect } from "react";
-import { Alert } from "@heroui/react";
-import { SmileyIcon } from "@/components/icons";
 import { CalendarCard } from "@/components/calendarCard";
 import { FilterDrawer } from "@/components/filterDrawer";
 export default function IndexPage() {
@@ -69,7 +67,6 @@ export default function IndexPage() {
 		<DefaultLayout>
 			<section className="flex flex-col items-center justify-center gap-4 -mt-10 relative">
 				<div className="container mx-auto justify-center transition-all duration-300">
-					<Alert title="¡Bienvenido a Cartelera Guanajuato!" variant="faded" className="mb-4" icon={<SmileyIcon size={30} />} description="Explora los eventos de marcas locales en Guanajuato." isClosable color="primary" />
 					<div ref={filterWidgetRef}>
 						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder} isEventsView={isEventsView} setIsEventsView={setIsEventsView} />
 					</div>
