@@ -2,7 +2,7 @@ import { CheckIcon, FBIcon, GlobeIcon, WAIcon, XIcon } from '@/components/icons'
 import { MapInput } from '@/components/map';
 import { createUser } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, CardFooter } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, CardFooter, addToast } from '@heroui/react';
 import { useState } from 'react';
 
 interface UserProps {
@@ -44,6 +44,14 @@ export const UserPage = () => {
                 setUser(run);
                 setIsUserFound(true);
                 setErrorsIg({});
+                addToast({
+                    title: "Usuario encontrado",
+                    description: `Hemos encontrado el usuario @${run.username}.`,
+                    timeout: 10000,
+                    variant: "flat",
+                    color: "success",
+                    size: "md"
+                });
             } else {
                 setErrorsIg({ username: "Usuario no encontrado" });
             }
@@ -182,7 +190,6 @@ export const UserPage = () => {
                         {isUserFound && !validating && (
                             <>
                                 <Card shadow='sm' className='rounded-xl mb-5'>
-                                    <Alert hideIcon color="success" description='' title="Usuario encontrado" variant="faded" className='rounded-b-none p-0 pl-4' startContent={<CheckIcon size={15} />} />
                                     <CardBody>
                                         <User
                                             avatarProps={{
@@ -203,7 +210,7 @@ export const UserPage = () => {
                                     validationErrors={errors}
                                     onSubmit={onCreateUser}
                                 >
-                                    <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-xl' />
+                                    <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-xl' classNames={{iconWrapper:"animate-bounce"}} />
                                     <span>Ubicación del local</span>
                                     <MapInput />
 
