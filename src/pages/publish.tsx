@@ -2,7 +2,7 @@ import { FileUploadButton } from "@/components/fileUploadButton";
 import { ImageGallery } from "@/components/imageGallery";
 // import { ImageItem } from "@/components/imageItem";
 import { title } from "@/components/primitives";
-import CustomRadioGroup from "@/components/RadioGroup";
+import CustomRadioGroup from "@/components/radioGroup";
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, Button, Card, CardBody, Chip, cn, Input, Link, Textarea, User } from "@heroui/react";
 import { useRef, useState } from "react";
