@@ -1,4 +1,4 @@
-import { CheckIcon, FBIcon, GlobeIcon, WAIcon, XIcon } from '@/components/icons';
+import { FBIcon, GlobeIcon, WAIcon, XIcon } from '@/components/icons';
 import { MapInput } from '@/components/map';
 import { createUser } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
@@ -129,7 +129,7 @@ export const UserPage = () => {
     return (
         <DefaultLayout>
             <div className={`flex justify-center items-center ${!isUserFound ? "min-h-[70vh] px-4 py-8" : ""} transition-all duration-300`}>
-                <Card className='md:w-lg w-full p-5 -mt-10 '>
+                <Card className='md:w-lg w-full p-5 -mt-10 rounded-3xl '>
                     <CardHeader>
                         <h4 className="font-bold text-xl">Crea tu usuario</h4>
                     </CardHeader>
@@ -148,7 +148,7 @@ export const UserPage = () => {
                                         labelPlacement="outside"
                                         name="username"
                                         classNames={{
-                                            inputWrapper: "h-12 rounded-r-none",
+                                            inputWrapper: "h-12 rounded-2xl rounded-r-none",
                                         }}
                                         placeholder="tu_usuario"
                                         startContent={
@@ -166,7 +166,7 @@ export const UserPage = () => {
 
                         {/* Loading state */}
                         {validating && (
-                            <Card shadow='sm' className='rounded-xl'>
+                            <Card shadow='sm' className='rounded-2xl'>
                                 <Alert hideIcon color="primary" description='' title="Buscando usuario..." variant="faded" className='rounded-b-none p-0 pl-4' />
                                 <CardBody className="flex justify-center items-center">
                                     <div className="w-xs flex items-center justify-center gap-3">
@@ -189,7 +189,7 @@ export const UserPage = () => {
                         {/* User found - shows at top */}
                         {isUserFound && !validating && (
                             <>
-                                <Card shadow='sm' className='rounded-xl mb-5'>
+                                <Card shadow='sm' className='rounded-2xl mb-3 bg-content2 border-2 border-default'>
                                     <CardBody>
                                         <User
                                             avatarProps={{
@@ -210,7 +210,7 @@ export const UserPage = () => {
                                     validationErrors={errors}
                                     onSubmit={onCreateUser}
                                 >
-                                    <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-xl' classNames={{iconWrapper:"animate-bounce"}} />
+                                    <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-2xl' classNames={{iconWrapper:"animate-bounce"}} />
                                     <span>Ubicación del local</span>
                                     <MapInput />
 
@@ -221,6 +221,7 @@ export const UserPage = () => {
                                         type="text"
                                         isClearable
                                         placeholder='https://www.facebook.com/...'
+                                        classNames={{inputWrapper:"rounded-2xl"}}
                                         startContent={<FBIcon size={20} className="text-indigo-300" />}
                                     />
                                     <Input
@@ -229,6 +230,7 @@ export const UserPage = () => {
                                         type="tel"
                                         isClearable
                                         maxLength={10}
+                                        classNames={{inputWrapper:"rounded-2xl"}}
                                         startContent={<div className='flex text-sm text-foreground/80 gap-1'><WAIcon size={20} className="text-indigo-300" /> +52</div>}
                                     />
                                     <Input
@@ -237,11 +239,12 @@ export const UserPage = () => {
                                         type="text"
                                         isClearable
                                         placeholder='https://www.tu-sitio.com'
+                                        classNames={{inputWrapper:"rounded-2xl"}}
                                         startContent={<GlobeIcon size={20} className="text-indigo-300" />}
                                     />
                                     <div className='flex gap-3 w-full'>
-                                        <Button color="danger" variant='bordered' className='h-12 px-8' onPress={() => setOpenModal(true)}>Cancelar</Button>
-                                        <Button type="submit" variant="flat" size='lg' className="w-full h-12 bg-indigo-400 text-white">
+                                        <Button color="danger" variant='bordered' className='h-12 px-8 rounded-2xl' onPress={() => setOpenModal(true)}>Cancelar</Button>
+                                        <Button type="submit" variant="flat" size='lg' className="w-full h-12 bg-indigo-400 text-white rounded-2xl">
                                             Crear usuario
                                         </Button>
                                     </div>
@@ -252,7 +255,7 @@ export const UserPage = () => {
                 </Card>
             </div>
 
-            <Modal isOpen={openModal} backdrop='blur' onOpenChange={setOpenModal}>
+            <Modal isOpen={openModal} backdrop='blur' onOpenChange={setOpenModal} className='rounded-3xl'>
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -261,10 +264,10 @@ export const UserPage = () => {
                                 Si cancelas, se perderán los datos ingresados.
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onCancel}>
+                                <Button color="danger" variant="light" className='rounded-2xl' onPress={onCancel}>
                                     Sí, cancelar
                                 </Button>
-                                <Button color="primary" onPress={onClose}>
+                                <Button color="primary" className='rounded-2xl' onPress={onClose}>
                                     No
                                 </Button>
                             </ModalFooter>
