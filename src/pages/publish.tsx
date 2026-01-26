@@ -58,8 +58,9 @@ export default function PublishPage() {
 		<DefaultLayout>
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
 				<div className="flex flex-col w-full max-w-2xl px-2">
-					<CustomRadioGroup />
 					<h1 className={title({ class: "mb-4" })}>Publica un evento</h1>
+					<CustomRadioGroup />
+					<h3 className="font-medium text-foreground/80 mt-6 mb-2">¿Cómo deseas publicar tu evento?</h3>
 					<Card className="w-full rounded-3xl focus:ring-0" shadow="lg">
 						<CardBody className="px-1">
 							<Accordion
@@ -72,11 +73,9 @@ export default function PublishPage() {
 									setSelectedKey(key === selectedKey ? key : key);
 								}}
 								itemClasses={{
-									base: "mb-2 w-full",
-									title: "font-bold text-lg",
-									subtitle: "text-default-400 font-medium",
+									base: "w-full mb-2",
 									trigger: cn(
-										"p-4 bg-content1 hover:bg-content2 border-2 border-transparent rounded-2xl hover:border-secondary/30",
+										"p-4 bg-content1 hover:bg-content2 border-2 border-default rounded-2xl hover:border-secondary/30 ",
 										"data-[open=true]:border-secondary/30 data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
 										"flex items-center justify-between gap-4 duration-250 transition-all data-[open=true]:bg-foreground/5 "
 									),
@@ -89,8 +88,8 @@ export default function PublishPage() {
 									title={
 										<div className="flex items-center justify-between w-full px-1">
 											<div className="flex flex-col items-start">
-												<span className="font-bold text-lg">Con un link de Instagram</span>
-												<span className="text-default-400 font-medium text-sm">Publica un evento usando un link de Instagram</span>
+												<span className="font-bold text-md">Con un link de Instagram</span>
+												<span className="text-default-400 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "1"} />
 										</div>
@@ -159,12 +158,13 @@ export default function PublishPage() {
 									title={
 										<div className="flex items-center justify-between w-full px-1">
 											<div className="flex flex-col items-start">
-												<span className="font-bold text-lg">Desde cero</span>
-												<span className="text-default-400 font-medium text-sm">Sube las imágenes y detalles de tu evento</span>
+												<span className="font-bold text-md">Desde cero</span>
+												<span className="text-default-400 font-medium text-sm italic">Sube tus propias imágenes y detalles</span>
 											</div>
 											<RadioCircle isSelected={selectedKey === "2"} />
 										</div>
 									}
+									className="mb-0"
 								>
 									<FileUploadButton />
 								</AccordionItem>
