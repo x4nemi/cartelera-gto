@@ -13,7 +13,7 @@ export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeo
                     "data-[selected=true]:border-secondary border-default justify-center text-center data-[selected=true]:bg-violet-100 data-[selected=true]:dark:bg-violet-800/20 transition-all duration-200",
                 ),
                 wrapper: "hidden",
-                description: "text-sm text-default-400 mt-1 italic",
+                description: "text-sm text-default-400 mt-0.5 italic",
             }}
         >
             {children}
@@ -22,7 +22,7 @@ export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeo
 };
 
 const CustomRadioGroup = () => {
-    const [value, setValue] = useState("Evento");
+    const [value, setValue] = useState("");
     return (
         <RadioGroup className="w-full flex-row" orientation="horizontal" description="" value={value} onValueChange={setValue}>
             <h1 className="text-foreground font-medium mb-2">¿Qué tipo de publicación deseas hacer?</h1>

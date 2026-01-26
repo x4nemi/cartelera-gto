@@ -1,13 +1,7 @@
 import { useState } from "react"
 import { ImageItem } from "./imageItem"
 
-
-const images = [
-    { src: "/bordado.jpg" },
-    { src: "/patronaje.jpg" },
-    { src: "/nocherock.jpg" },
-]
-export const ImageGallery = () => {
+export const ImageGallery = ({ images }: { images: { src: string }[] }) => {
     const [imageOrder, setImageOrder] = useState(images)
 
     // if the image is selected, then it will be the last in the array
@@ -30,7 +24,7 @@ export const ImageGallery = () => {
     }
     
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
+        images.length > 1 ? <div className="grid grid-cols-2 md:grid-cols-3 gap-2 w-full">
             {
                 images.map((image, index) => (
                     <div key={index} className="cols-span-1">
@@ -39,6 +33,8 @@ export const ImageGallery = () => {
                 ))
             }
 
-        </div>
+        </div> : (images.length === 1 ? <div className="w-full">
+            <ImageItem src={images[0].src} number={1} onSelect={() => { }} />
+        </div> : <p className="text-default-400 italic">No se encontraron imágenes.</p>)
     )
 }
