@@ -25,13 +25,12 @@ export const Navbar = () => {
 	const menuBox = useRef<HTMLDivElement>(null);
 	const navMobileRef = useRef<HTMLDivElement>(null);
 
-	// if it clicks in the menu toggle, it will close the menu
 	const handleMenuToggle = () => {
 		setIsMenuOpen(!isMenuOpen)
 	}
 
 	const handleClickOutside = (event: MouseEvent) => {
-        if (menuBox.current && !menuBox.current.contains(event.target as Node) && navMobileRef.current && !navMobileRef.current.contains(event.target as Node)) {
+        if (menuBox.current && !menuBox.current.contains(event.target as Node) && navMobileRef.current?.firstChild && !navMobileRef.current?.firstChild.contains(event.target as Node)) {
             setIsMenuOpen(false);
         }
     };
@@ -106,7 +105,7 @@ export const Navbar = () => {
 					<Card shadow="none" className="rounded-3xl border-2 border-default opacity-95" ref={menuBox}>
 						{
 							siteConfig.navItems.map((item, index) => (
-								<Button variant="solid" key={item.href} onPress={handleMenuToggle} className={` ${index === 0 ? "" : " rounded-t-none"} rounded-b-none r w-full text-start dark:bg-content2 bg-content1 border-b-2 border-default`} size="lg">
+								<Button variant="solid" key={item.href} onPress={handleMenuToggle} href={item.href} as={Link} className={` ${index === 0 ? "" : " rounded-t-none"} rounded-b-none r w-full text-start dark:bg-content2 bg-content1 border-b-2 border-default`} size="lg">
 									<Link
 										className={clsx(
 											linkStyles({ color: "foreground" }),
