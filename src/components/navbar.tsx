@@ -6,8 +6,7 @@ import {
 	NavbarContent,
 	NavbarItem,
 	NavbarMenuToggle,
-	NavbarMenu,
-	NavbarMenuItem,
+	NavbarMenu
 } from "@heroui/navbar";
 import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
@@ -18,18 +17,33 @@ import {
 	HeartFilledIcon,
 } from "@/components/icons";
 import { Logo } from "@/components/icons";
-import { useState } from "react";
-import { Card, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
+import { useEffect, useRef, useState } from "react";
+import { Card } from "@heroui/react";
 
 export const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
+	const menuBox = useRef<HTMLDivElement>(null);
+	const navMobileRef = useRef<HTMLDivElement>(null);
 
 	// if it clicks in the menu toggle, it will close the menu
 	const handleMenuToggle = () => {
 		setIsMenuOpen(!isMenuOpen)
 	}
+
+	const handleClickOutside = (event: MouseEvent) => {
+        if (menuBox.current && !menuBox.current.contains(event.target as Node) && navMobileRef.current && !navMobileRef.current.contains(event.target as Node)) {
+            setIsMenuOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside, true);
+        return () => {
+            document.removeEventListener('click', handleClickOutside, true);
+        };
+    }, []);
 	return (
-		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "backdrop-blur-xs bg-content1/20" }}>
+		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "backdrop-blur-sm bg-secondary/2" }} ref={navMobileRef}>
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 				<NavbarMenuToggle className="md:hidden" />
 				<NavbarBrand className="gap-3 max-w-fit">
@@ -89,10 +103,10 @@ export const Navbar = () => {
 
 			<NavbarMenu style={{ height: "64px" }}>
 				<div className="mx-4 mt-2 flex flex-col gap-2">
-					<Card shadow="none" className="rounded-3xl border-2 border-default">
+					<Card shadow="none" className="rounded-3xl border-2 border-default opacity-95" ref={menuBox}>
 						{
 							siteConfig.navItems.map((item, index) => (
-								<Button variant="solid" key={item.href} onPress={handleMenuToggle} className={` ${index === 0 ? "" : " rounded-t-none" } rounded-b-none r w-full text-start bg-content2 border-b-2 border-default`} size="lg">
+								<Button variant="solid" key={item.href} onPress={handleMenuToggle} className={` ${index === 0 ? "" : " rounded-t-none"} rounded-b-none r w-full text-start dark:bg-content2 bg-content1 border-b-2 border-default`} size="lg">
 									<Link
 										className={clsx(
 											linkStyles({ color: "foreground" }),
@@ -106,7 +120,7 @@ export const Navbar = () => {
 								</Button>
 							))
 						}
-						<Button variant="solid" onPress={handleMenuToggle} className={` rounded-t-none w-full text-start bg-content2`} size="lg" startContent={<HeartFilledIcon className="text-danger animate-pulse -mr-1.5" />}>
+						<Button variant="solid" onPress={handleMenuToggle} className={` rounded-t-none w-full text-start dark:bg-content2 bg-content1`} size="lg" startContent={<HeartFilledIcon className="text-danger animate-pulse -mr-1.5" />}>
 							<Link
 								className={clsx(
 									linkStyles({ color: "foreground" }),
