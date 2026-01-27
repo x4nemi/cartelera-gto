@@ -1,4 +1,4 @@
-import { Button, Card, CardFooter, CardHeader, Link } from "@heroui/react"
+import { Avatar, Button, Card, CardFooter, CardHeader, Link } from "@heroui/react"
 import { EventCardProps } from "./interfaces"
 import { EventModal } from "./eventModal"
 import { useState } from "react"
@@ -29,12 +29,12 @@ export const EventCard = (props: EventCardProps) => {
 
 	return (
 		<>
-			<Card className="group p-1 rounded-3xl" shadow="lg">
+			<Card className="group p-1 rounded-[20px]" shadow="lg">
 				<CardHeader className="py-0 pb-1 px-0.5 flex justify-between text-foreground/60 text-xs font-semibold">
-					<div className={postProperties[props.type || "event"].className + " p-1.5 pl-2 py-1 rounded-tr-md rounded-tl-[20px] rounded-b-md text-tiny px-1  border-1"}>{postProperties[props.type || "event"].title}</div>
-					<div className="flex border-1 border-default-200/50  text-center rounded-tl-md rounded-tr-[20px] rounded-b-md">
-						<div className="text-tiny bg-default-100 px-1 py-1 text-default-500 h-full">{month}</div>
-						<div className="flex items-center justify-center font-semibold text-tiny text-default-500 px-1 pr-2">
+					<div className={postProperties[props.type || "event"].className + " p-1.5 pl-2 py-1 rounded-tr-md rounded-tl-[16px] rounded-b-md text-[10px] px-1 border-1"}>{postProperties[props.type || "event"].title}</div>
+					<div className="flex border-1 border-default-200/50 text-center rounded-tl-md rounded-tr-[16px] rounded-b-md">
+						<div className="text-[10px] bg-default-100 px-1 py-1 text-default-500 h-full">{month}</div>
+						<div className="flex items-center justify-center font-semibold text-[10px] font-mono text-default-500 px-1 pr-2">
 							{day}
 						</div>
 					</div>
@@ -49,24 +49,15 @@ export const EventCard = (props: EventCardProps) => {
 				>
 					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} isCardEvent className="rounded-md" />
 				</div>
-				<CardFooter className="absolute p-2 bottom-0 left-0 right-0 bg-opacity-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-between items-center gap-2">
-					<Button
-						className="rounded-bl-[16px] w-full"
-						color="default"
-						onPress={() => setOpenInfoModal(true)}
-						size="sm"
-					>
-						Información
-					</Button>
-					<Button
-						color="secondary"
-						className="w-full rounded-br-[16px]"
-						showAnchorIcon
-						as={Link}
-						size="sm"
-					>
-						Sitio
-					</Button>
+				<CardFooter className="p-0 pt-1 flex justify-between items-center">
+					<div className="flex h-full">
+						<Avatar src={props.user?.avatarUrl} alt={props.user?.name || props.username} size="sm" classNames={{base:"rounded-bl-[16px] rounded-t-md rounded-br-md"}} />
+						<div className="flex flex-col ml-2 justify-center">
+							<p className="font-semibold text-foreground text-[10px] leading-tight">{props.user?.name || props.username}</p>
+							<p className="text-[10px] text-foreground/60 leading-tight">@{props.user?.username || props.username}</p>
+						</div>
+					</div>
+					<Button as={Link} showAnchorIcon size="sm" className="rounded-br-[16px] rounded-t-md rounded-bl-md" isIconOnly></Button>
 				</CardFooter>
 			</Card>
 			<EventModal props={props} isOpen={openInfoModal} onClose={() => setOpenInfoModal(false)} />

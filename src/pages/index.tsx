@@ -65,7 +65,7 @@ export default function IndexPage() {
 
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4 -mt-10 relative">
+			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 -mt-10 relative">
 				<div className="container mx-auto justify-center transition-all duration-300">
 					<div ref={filterWidgetRef}>
 						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder} isEventsView={isEventsView} setIsEventsView={setIsEventsView} />
