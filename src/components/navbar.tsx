@@ -1,4 +1,4 @@
-import { Button } from "@heroui/button";
+import { Button, ButtonGroup } from "@heroui/button";
 import { Link } from "@heroui/link";
 import {
 	Navbar as HeroUINavbar,
@@ -19,12 +19,17 @@ import {
 } from "@/components/icons";
 import { Logo } from "@/components/icons";
 import { useState } from "react";
-import { Card, Divider } from "@heroui/react";
+import { Card, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
 
 export const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+	// if it clicks in the menu toggle, it will close the menu
+	const handleMenuToggle = () => {
+		setIsMenuOpen(!isMenuOpen)
+	}
 	return (
-		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "backdrop-blur-xs bg-content1/20" }}>
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 				<NavbarMenuToggle className="md:hidden" />
 				<NavbarBrand className="gap-3 max-w-fit">
@@ -82,33 +87,37 @@ export const Navbar = () => {
 				<ThemeSwitch />
 			</NavbarContent>
 
-			   <NavbarMenu style={{height: "64px"}}>
+			<NavbarMenu style={{ height: "64px" }}>
 				<div className="mx-4 mt-2 flex flex-col gap-2">
-					<Card className="bg-content2 border-2 border-default" shadow="none">
-						{siteConfig.navItems.map((item, index) => (
-							<div key={`${item}-${index}`}>
-							<NavbarMenuItem>
-								<Link
-									color={
-										index === 0
-										? "primary"
-										: "foreground"
-									}
-									href={item.href}
-									size="lg"
-									className="pl-4 py-2"
+					<Card shadow="none" className="rounded-3xl border-2 border-default">
+						{
+							siteConfig.navItems.map((item, index) => (
+								<Button variant="solid" key={item.href} onPress={handleMenuToggle} className={` ${index === 0 ? "" : " rounded-t-none" } rounded-b-none r w-full text-start bg-content2 border-b-2 border-default`} size="lg">
+									<Link
+										className={clsx(
+											linkStyles({ color: "foreground" }),
+											"data-[active=true]:text-primary data-[active=true]:font-medium",
+										)}
+										color="foreground"
+										href={item.href}
 									>
-									{item.label}
-								</Link>
-							</NavbarMenuItem>
-							<Divider className="" />
-									</div>
-						))}
-						<NavbarMenuItem>
-							<Link color="foreground" href={siteConfig.links.sponsor} size="lg" isExternal className=" ml-4 mt-3">
-								<HeartFilledIcon className="text-danger mr-1" /> Donar
+										{item.label}
+									</Link>
+								</Button>
+							))
+						}
+						<Button variant="solid" onPress={handleMenuToggle} className={` rounded-t-none w-full text-start bg-content2`} size="lg" startContent={<HeartFilledIcon className="text-danger animate-pulse -mr-1.5" />}>
+							<Link
+								className={clsx(
+									linkStyles({ color: "foreground" }),
+									"data-[active=true]:text-primary data-[active=true]:font-medium",
+								)}
+								color="foreground"
+								href={siteConfig.links.sponsor}
+							>
+								Donar
 							</Link>
-						</NavbarMenuItem>
+						</Button>
 					</Card>
 				</div>
 			</NavbarMenu>
