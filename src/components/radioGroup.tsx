@@ -1,5 +1,5 @@
 import { RadioGroup, Radio, cn } from "@heroui/react";
-import { CalendarFilledIcon, CalendarIcon, EventFilledIcon, EventIcon } from "./icons";
+import { CalendarFilledIcon, CalendarIcon, EventFilledIcon, EventIcon, LoopFilledIcon, LoopIcon } from "./icons";
 import { useState } from "react";
 export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeof Radio>) => {
 
@@ -13,7 +13,7 @@ export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeo
                     "data-[selected=true]:border-secondary border-default justify-center text-center data-[selected=true]:bg-violet-100 data-[selected=true]:dark:bg-violet-800/20 transition-all duration-200",
                 ),
                 wrapper: "hidden",
-                description: "text-sm text-default-400 mt-0.5 italic",
+                description: "sm:text-xs text-default-400 mt-0.5 italic",
             }}
         >
             {children}
@@ -30,15 +30,23 @@ const CustomRadioGroup = () => {
                 <CustomRadio description="Es un evento o un taller" value="Evento" className="flex-1" >
                     <div className="flex flex-col justify-center items-center gap-1">
                         {value !== "Evento" ? <EventIcon size={26} color="bg-secondary" /> : <EventFilledIcon size={26} />}
-                        <p className="font-bold">
+                        <p className="font-bold sm:text-xs">
                             Evento
+                        </p>
+                    </div>
+                </CustomRadio>
+                <CustomRadio description="Es un evento recurrente" value="Taller" className="flex-1" >
+                    <div className="flex flex-col justify-center items-center gap-1">
+                        {value !== "Taller" ? <LoopIcon size={26} color="bg-secondary" /> : <LoopFilledIcon size={26} />}
+                        <p className="font-bold sm:text-xs">
+                            Taller / Curso
                         </p>
                     </div>
                 </CustomRadio>
                 <CustomRadio description="Contiene varios eventos" value="Calendario" className="flex-1" >
                     <div className="flex flex-col justify-center items-center gap-1">
                         {value !== "Calendario" ? <CalendarIcon size={26} color="bg-secondary" /> : <CalendarFilledIcon size={26} />}
-                        <p className="font-bold">
+                        <p className="font-bold sm:text-xs">
                             Calendario
                         </p>
                     </div>

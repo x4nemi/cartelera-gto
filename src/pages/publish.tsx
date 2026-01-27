@@ -1,10 +1,10 @@
 import { FileUploadButton } from "@/components/fileUploadButton";
 import { ImageGallery } from "@/components/imageGallery";
 import { title } from "@/components/primitives";
-import { CosmosAPI, createPost, PostData } from '@/config/apiClient';
+import { createPost, PostData } from '@/config/apiClient';
 import CustomRadioGroup from "@/components/radioGroup";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Button, Card, CardBody, cn, Input, Link, Textarea, User } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, Button, Card, CardBody, cn, Input, Link, Textarea, User } from "@heroui/react";
 import { useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -54,6 +54,13 @@ export default function PublishPage() {
 			if (eventData) {
 				setPostData(eventData);
 				setIsLinkValid(true);
+				addToast({
+					title: "Link válido",
+					description: "Se han extraído los datos de la publicación.",
+					color: "success",
+					timeout: 8000,
+					variant: "flat"
+				})
 			} else {
 				setIsLinkValid(false);
 			}
@@ -69,126 +76,125 @@ export default function PublishPage() {
 
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col w-full max-w-2xl px-2 -mt-10">
-				<h1 className={title({ class: "mb-4 flex items-center gap-2 text-2xl" })}>
-					<span className="relative flex size-3">
-						<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
-						<span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
-					</span>
-					Crea tu publicación</h1>
-				<CustomRadioGroup />
-				<h3 className="font-medium text-foreground mt-6 mb-2">¿Cómo deseas publicarlo?</h3>
-				<Card className="w-full rounded-3xl focus:ring-0" shadow="lg">
-					<CardBody className="px-1">
-						<Accordion
-							showDivider={false}
-							selectionMode="single"
-							hideIndicator
-							selectedKeys={selectedKey ? [selectedKey] : []}
-							onSelectionChange={(keys) => {
-								const key = Array.from(keys)[0] as string;
-								setSelectedKey(key === selectedKey ? key : key);
-							}}
-							itemClasses={{
-								base: "w-full mb-2",
-								trigger: cn(
-									"p-4 bg-content1 hover:bg-content2 border-2 border-default rounded-2xl hover:border-secondary/30 ",
-									"data-[open=true]:border-secondary data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
-									"flex items-center justify-between gap-4 duration-250 transition-all data-[open=true]:bg-violet-100 data-[open=true]:dark:bg-violet-800/20"
-								),
-								content: "px-4 py-4 bg-gray border-2 border-t-0 border-secondary rounded-b-2xl"
-							}}
-						>
-							<AccordionItem
-								key="1"
-								aria-label="Free"
-								title={
-									<div className="flex items-center justify-between w-full px-1">
-										<div className="flex flex-col items-start">
-											<span className="font-bold text-md">Con un link de Instagram</span>
-											<span className="text-default-400 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento</span>
-										</div>
-										<RadioCircle isSelected={selectedKey === "1"} />
-									</div>
-								}
+			<section className="flex flex-col items-center justify-center gap-4 -mt-10">
+				<div className="flex flex-col w-full max-w-2xl px-2">
+					<h1 className={title({ class: "mb-4 flex items-center gap-2 text-4xl" })}>
+						<span className="relative flex size-3">
+							<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
+							<span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
+						</span>
+						Crea tu publicación</h1>
+					<CustomRadioGroup />
+					<h3 className="font-medium text-foreground mt-6 mb-2">¿Cómo deseas publicarlo?</h3>
+					<Card className="w-full rounded-3xl focus:ring-0" shadow="lg">
+						<CardBody className="px-1">
+							<Accordion
+								showDivider={false}
+								selectionMode="single"
+								hideIndicator
+								selectedKeys={selectedKey ? [selectedKey] : []}
+								onSelectionChange={(keys) => {
+									const key = Array.from(keys)[0] as string;
+									setSelectedKey(key === selectedKey ? key : key);
+								}}
+								itemClasses={{
+									base: "w-full mb-2",
+									trigger: cn(
+										"p-4 bg-content1 hover:bg-content2 border-2 border-default rounded-2xl hover:border-secondary/30 ",
+										"data-[open=true]:border-secondary data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
+										"flex items-center justify-between gap-4 duration-250 transition-all data-[open=true]:bg-violet-100 data-[open=true]:dark:bg-violet-800/20"
+									),
+									content: "px-4 py-4 bg-gray border-2 border-t-0 border-secondary rounded-b-2xl"
+								}}
 							>
-								<div className="flex flex-col gap-2">
-									<label htmlFor="instagram-link" className="text-sm font-medium text-foreground">Link de la publicación</label>
-									<div className="flex">
-										<Input
-											id="instagram-link"
-											placeholder="https://www.instagram.com/p/..."
-											// variant="bordered"
-											value={link}
-											onChange={(e) => setLink(e.target.value)}
-											classNames={{
-												input: "text-sm",
-												inputWrapper: "h-12 rounded-r-none text-default-400",
-											}}
-											onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
-											ref={IgInputRef}
-										/>
-										<Button
-											color="secondary"
-											variant="flat"
-											isLoading={loading}
-											isDisabled={link.length === 0}
-											onPress={() => handleValidatingLink(link)}
-											className="min-w-24 h-12 rounded-l-none"
-										>
-											Validar
-										</Button>
-									</div>
-									{isValidateButtonClicked && link.length > 0 && !loading && !isLinkValid && (
-										<p className="text-xs text-danger">Link inválido. Inténtalo de nuevo.</p>
-									)}
-									{isValidateButtonClicked && isLinkValid && (
-										<p className="text-xs text-success">Link válido</p>
-									)}
+								<AccordionItem
+									key="1"
+									aria-label="Free"
+									title={
+										<div className="flex items-center justify-between w-full px-1">
+											<div className="flex flex-col items-start">
+												<span className="font-bold text-md">Con un link de Instagram</span>
+												<span className="text-default-400 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento</span>
+											</div>
+											<RadioCircle isSelected={selectedKey === "1"} />
+										</div>
+									}
+								>
+									<div className="flex flex-col gap-2">
+										<label htmlFor="instagram-link" className="text-sm font-medium text-foreground">Link de la publicación</label>
+										<div className="flex">
+											<Input
+												id="instagram-link"
+												placeholder="https://www.instagram.com/p/..."
+												// variant="bordered"
+												value={link}
+												onChange={(e) => setLink(e.target.value)}
+												classNames={{
+													input: "text-sm",
+													inputWrapper: "h-12 rounded-r-none text-default-400",
+												}}
+												onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
+												ref={IgInputRef}
+											/>
+											<Button
+												color="secondary"
+												variant="flat"
+												isLoading={loading}
+												isDisabled={link.length === 0}
+												onPress={() => handleValidatingLink(link)}
+												className="min-w-24 h-12 rounded-l-none"
+											>
+												Validar
+											</Button>
+										</div>
+										{isValidateButtonClicked && link.length > 0 && !loading && !isLinkValid && (
+											<p className="text-xs text-danger">Link inválido. Inténtalo de nuevo.</p>
+										)}
 
-									{isLinkValid && (
-										<div className="mt-2 flex flex-col rounded-xl p-3">
-											<div className="justify-between flex mb-2">
-												<User
-													avatarProps={{
-														src: postData?.ownerProfilePicUrl || "",
-													}}
-													description={
-														<Link isExternal href={"https://www.instagram.com/" + postData?.ownerUsername} size="sm">
-															@{postData?.ownerUsername}
-														</Link>
-													}
-													name={postData?.ownerFullName || ""}
-												/>
-												<p className="text-sm font-medium text-foreground/40">Publicación encontrada</p>
+										{isLinkValid && (
+											<div className="mt-2 flex flex-col rounded-xl p-3">
+												<div className="justify-between flex mb-2">
+													<User
+														avatarProps={{
+															src: postData?.ownerProfilePicUrl || "",
+														}}
+														description={
+															<Link isExternal href={"https://www.instagram.com/" + postData?.ownerUsername} size="sm">
+																@{postData?.ownerUsername}
+															</Link>
+														}
+														name={postData?.ownerFullName || ""}
+													/>
+													<p className="text-sm font-medium text-foreground/40">Publicación encontrada</p>
+												</div>
+												<div className="gap-2 flex flex-col">
+													<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
+												</div>
+												<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} />
 											</div>
-											<div className="gap-2 flex flex-col">
-												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
-											</div>
-											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} />
-										</div>
-									)}
-								</div>
-							</AccordionItem>
-							<AccordionItem
-								key="2"
-								aria-label="Pro"
-								title={
-									<div className="flex items-center justify-between w-full px-1">
-										<div className="flex flex-col items-start">
-											<span className="font-bold text-md">Desde cero</span>
-											<span className="text-default-400 font-medium text-sm italic">Sube tus propias imágenes y detalles</span>
-										</div>
-										<RadioCircle isSelected={selectedKey === "2"} />
+										)}
 									</div>
-								}
-								className="mb-0"
-							>
-								<FileUploadButton />
-							</AccordionItem>
-						</Accordion>
-					</CardBody>
-				</Card>
+								</AccordionItem>
+								<AccordionItem
+									key="2"
+									aria-label="Pro"
+									title={
+										<div className="flex items-center justify-between w-full px-1">
+											<div className="flex flex-col items-start">
+												<span className="font-bold text-md">Desde cero</span>
+												<span className="text-default-400 font-medium text-sm italic">Sube tus propias imágenes y detalles</span>
+											</div>
+											<RadioCircle isSelected={selectedKey === "2"} />
+										</div>
+									}
+									className="mb-0"
+								>
+									<FileUploadButton />
+								</AccordionItem>
+							</Accordion>
+						</CardBody>
+					</Card>
+				</div>
 			</section>
 		</DefaultLayout>
 	);

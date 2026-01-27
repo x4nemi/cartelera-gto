@@ -19,6 +19,7 @@ import {
 } from "@/components/icons";
 import { Logo } from "@/components/icons";
 import { useState } from "react";
+import { Card, Divider } from "@heroui/react";
 
 export const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -68,7 +69,7 @@ export const Navbar = () => {
 						isExternal
 						as={Link}
 						className="text-sm font-normal text-default-600 bg-default-100"
-						// href={siteConfig.links.sponsor}
+						href={siteConfig.links.sponsor}
 						startContent={<HeartFilledIcon className="text-danger" />}
 						variant="flat"
 					>
@@ -81,28 +82,34 @@ export const Navbar = () => {
 				<ThemeSwitch />
 			</NavbarContent>
 
-			<NavbarMenu>
+			   <NavbarMenu style={{height: "64px"}}>
 				<div className="mx-4 mt-2 flex flex-col gap-2">
-					{siteConfig.navItems.map((item, index) => (
-						<NavbarMenuItem key={`${item}-${index}`}>
-							<Link
-								color={
-									index === 0
+					<Card className="bg-content2 border-2 border-default" shadow="none">
+						{siteConfig.navItems.map((item, index) => (
+							<div key={`${item}-${index}`}>
+							<NavbarMenuItem>
+								<Link
+									color={
+										index === 0
 										? "primary"
 										: "foreground"
-								}
-								href={item.href}
-								size="lg"
-							>
-								{item.label}
+									}
+									href={item.href}
+									size="lg"
+									className="pl-4 py-2"
+									>
+									{item.label}
+								</Link>
+							</NavbarMenuItem>
+							<Divider className="" />
+									</div>
+						))}
+						<NavbarMenuItem>
+							<Link color="foreground" href={siteConfig.links.sponsor} size="lg" isExternal className=" ml-4 mt-3">
+								<HeartFilledIcon className="text-danger mr-1" /> Donar
 							</Link>
 						</NavbarMenuItem>
-					))}
-					<NavbarMenuItem>
-						<Link color="foreground" href={siteConfig.links.sponsor} size="lg" isExternal>
-							<HeartFilledIcon className="text-danger mr-1" /> Donar
-						</Link>
-					</NavbarMenuItem>
+					</Card>
 				</div>
 			</NavbarMenu>
 		</HeroUINavbar>
