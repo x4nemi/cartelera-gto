@@ -8,6 +8,7 @@ export interface EventCardProps {
 	description?: string;
 	isRecurrent?: boolean;
 	isCalendarEvent?: boolean;
+	type?: "event" | "workshop" | "calendar";
 }
 
 export interface UserProfileProps {
