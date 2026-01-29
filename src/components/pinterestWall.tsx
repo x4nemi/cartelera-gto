@@ -45,7 +45,7 @@ export const Wall = ({ cardsData = [] }: { cardsData?: EventCardProps[] }) => {
 
     return (
         <div className="container mx-auto">
-            <div className='grid xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-3'>
+            <div className='grid xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-3 max-sm:gap-1.5'>
                 <div className='flex flex-col gap-3'>
                     {column1.map((card, index) => (
                         <div key={`col1-${index}`} className="card-wrapper">
