@@ -102,7 +102,7 @@ export const Navbar = () => {
 
 			<NavbarMenu style={{ height: "64px" }}>
 				<div className="mx-4 mt-2 flex flex-col gap-2">
-					<Card shadow="none" className="rounded-3xl border-2 border-default opacity-95" ref={menuBox}>
+					<Card shadow="none" className="rounded-3xl border-2 border-default opacity-90" ref={menuBox}>
 						{
 							siteConfig.navItems.map((item, index) => (
 								<Button variant="solid" key={item.href} onPress={handleMenuToggle} href={item.href} as={Link} className={` ${index === 0 ? "" : " rounded-t-none"} rounded-b-none r w-full text-start dark:bg-content2 bg-content1 border-b-2 border-default`} size="lg">

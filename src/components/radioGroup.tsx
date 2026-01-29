@@ -13,7 +13,7 @@ export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeo
                     "data-[selected=true]:border-secondary border-default justify-center text-center data-[selected=true]:bg-violet-100 data-[selected=true]:dark:bg-violet-800/20 transition-all duration-200",
                 ),
                 wrapper: "hidden",
-                description: "sm:text-xs text-default-400 mt-0.5 italic",
+                description: "text-default-400 mt-0.5 italic",
             }}
         >
             {children}
@@ -25,28 +25,28 @@ const CustomRadioGroup = () => {
     const [value, setValue] = useState("");
     return (
         <RadioGroup className="w-full flex-row" orientation="horizontal" description="" value={value} onValueChange={setValue}>
-            <h1 className="text-foreground font-medium mb-2">¿Qué tipo de publicación deseas hacer?</h1>
-            <div className="flex flex-row gap-2 w-full">
-                <CustomRadio description="Es un evento o un taller" value="Evento" className="flex-1" >
+            <h1 className="text-foreground font-medium mb-2 text-lg">¿Qué tipo de publicación deseas hacer?</h1>
+            <div className="flex md:flex-row flex-col md:gap-2 gap-1 w-full">
+                <CustomRadio description="Es un evento o un taller" value="Evento" className="md:flex-1 w-full" >
                     <div className="flex flex-col justify-center items-center gap-1">
                         {value !== "Evento" ? <EventIcon size={26} color="bg-secondary" /> : <EventFilledIcon size={26} />}
-                        <p className="font-bold sm:text-xs">
+                        <p className="font-bold">
                             Evento
                         </p>
                     </div>
                 </CustomRadio>
-                <CustomRadio description="Es un evento recurrente" value="Taller" className="flex-1" >
+                <CustomRadio description="Es un evento recurrente" value="Taller" className="md:flex-1 w-full" >
                     <div className="flex flex-col justify-center items-center gap-1">
                         {value !== "Taller" ? <LoopIcon size={26} color="bg-secondary" /> : <LoopFilledIcon size={26} />}
-                        <p className="font-bold sm:text-xs">
+                        <p className="font-bold">
                             Taller / Curso
                         </p>
                     </div>
                 </CustomRadio>
-                <CustomRadio description="Contiene varios eventos" value="Calendario" className="flex-1" >
+                <CustomRadio description="Contiene varios eventos" value="Calendario" className="md:flex-1 w-full" >
                     <div className="flex flex-col justify-center items-center gap-1">
                         {value !== "Calendario" ? <CalendarIcon size={26} color="bg-secondary" /> : <CalendarFilledIcon size={26} />}
-                        <p className="font-bold sm:text-xs">
+                        <p className="font-bold">
                             Calendario
                         </p>
                     </div>
