@@ -32,12 +32,12 @@ export const EventCard = (props: EventCardProps) => {
 
 	return (
 		<>
-			<Card className="group p-1 rounded-[20px]" shadow="lg">
-				<CardHeader className="py-0 pb-1 px-0.5 flex justify-between text-foreground/60 text-xs font-semibold">
+			<Card className="group p-1 rounded-[20px]" shadow="lg" isPressable isHoverable>
+				<CardHeader className="py-0 pb-1 px-0 flex justify-between text-foreground/60 text-xs font-semibold">
 					{/* <div className={postProperties[props.type || "event"].className + " p-1.5 pl-2 py-1 rounded-tr-md rounded-tl-[16px] rounded-b-md text-[10px] px-1 border-1"}>{postProperties[props.type || "event"].title}</div> */}
-					<div className="flex border-1 border-default-200/50 text-center rounded-tr-md rounded-tl-[16px] rounded-b-md">
+					<div className="flex flex-row border-1 border-default-200/50 text-center rounded-tr-md rounded-tl-[16px] rounded-b-md">
 						<div className="text-[13px] p-2 pb-1 text-default-500">{month}</div>
-						<div className="flex items-center bg-content2 justify-center font-semibold text-[12px] font-mono text-default-500 p-2">
+						<div className="flex items-center bg-content2 justify-center font-semibold text-[12px] font-mono text-default-500 p-2 rounded-r-md">
 							{day}
 						</div>
 					</div>
@@ -51,7 +51,7 @@ export const EventCard = (props: EventCardProps) => {
 					aria-label={`Ver detalles de ${props.title}`}
 					onKeyDown={(e) => e.key === 'Enter' && setOpenInfoModal(true)}
 				>
-					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} isCardEvent className="rounded-md" />
+					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} isCardEvent className="rounded-b-[16px] rounded-t-md" />
 				</div>
 				{/* <CardFooter className="p-0 pt-1 flex justify-between items-center">
 					<div className="flex h-full">
