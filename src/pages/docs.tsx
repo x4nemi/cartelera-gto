@@ -43,15 +43,15 @@ const steps = [
 	];
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4">
-				<div className="flex flex-col max-w-3xl text-center justify-center items-center">
+			<section className="flex flex-col items-center justify-center gap-4 w-full">
+				<div className="flex flex-col max-w-3xl w-full text-center justify-center items-center">
 					<h1 className={title()}>¿Te interesa publicar un evento?</h1>
 					<p className={subtitle()}>
 						Sigue estos pasos
 					</p>
 					{
 						steps.map((step, _) => (
-							<Card className="mt-5 w-10/12 bg-pink-50 dark:bg-pink-950 border border-none h-96" shadow="none" key={_}>
+							<Card className="mt-5 w-full bg-pink-50 dark:bg-pink-950 border border-none h-96" shadow="none" key={_}>
 								<CardBody>
 									<div className="flex flex-col gap-4 items-center justify-center h-full">
 										<Chip variant="flat" className="py-5 bg-pink-300 dark:bg-pink-600" size="lg">{step.icon}</Chip>

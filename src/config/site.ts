@@ -10,10 +10,10 @@ export const siteConfig = {
       label: "Inicio",
       href: "/",
     },
-    {
-      label: "¿Cómo crear eventos?",
-      href: "/creacion",
-    },
+    // {
+    //   label: "¿Cómo crear eventos?",
+    //   href: "/creacion",
+    // },
     {
       label: "Publicar",
       href: "/publicar",
