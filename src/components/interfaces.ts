@@ -1,4 +1,5 @@
 export interface EventCardProps {
+	id: string;
 	title: string;
 	date: string;
 	hour: string;

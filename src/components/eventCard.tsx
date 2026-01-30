@@ -1,28 +1,30 @@
-import { Avatar, Button, Card, CardFooter, CardHeader, Link } from "@heroui/react"
+import { Button, Card, CardHeader, Link } from "@heroui/react"
 import { EventCardProps } from "./interfaces"
 import { EventModal } from "./eventModal"
 import { useState } from "react"
 import { ImageCarousel } from "./imageCarousel"
+import { useNavigate } from "react-router-dom"
 
 const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
-const postProperties = {
-	event: {
-		title: "Evento",
-		className: "bg-primary-50 text-primary-700 border-primary-100 dark:bg-primary-300/20 dark:text-primary-600 dark:border-none"
-	},
-	workshop: {
-		title: "Taller / Curso",
-		className: "bg-secondary-50 text-secondary-700 border-secondary-100 dark:bg-secondary-300/20 dark:text-secondary-600 dark:border-none"
-	},
-	calendar: {
-		title: "Calendario",
-		className: "bg-lime-50 text-lime-700 border-lime-100 dark:bg-lime-300/20 dark:text-lime-300 dark:border-none"
-	},
-}
+// const postProperties = {
+// 	event: {
+// 		title: "Evento",
+// 		className: "bg-primary-50 text-primary-700 border-primary-100 dark:bg-primary-300/20 dark:text-primary-600 dark:border-none"
+// 	},
+// 	workshop: {
+// 		title: "Taller / Curso",
+// 		className: "bg-secondary-50 text-secondary-700 border-secondary-100 dark:bg-secondary-300/20 dark:text-secondary-600 dark:border-none"
+// 	},
+// 	calendar: {
+// 		title: "Calendario",
+// 		className: "bg-lime-50 text-lime-700 border-lime-100 dark:bg-lime-300/20 dark:text-lime-300 dark:border-none"
+// 	},
+// }
 
 export const EventCard = (props: EventCardProps) => {
 	const [openInfoModal, setOpenInfoModal] = useState(false)
+	const navigate = useNavigate();
 	const eventDate = new Date(props.date);
 	const month = months[eventDate.getMonth()];
 	const day = eventDate.getDate();
@@ -32,7 +34,7 @@ export const EventCard = (props: EventCardProps) => {
 
 	return (
 		<>
-			<Card className="group p-1 rounded-[20px]" shadow="lg" isPressable isHoverable>
+			<Card className="group p-1 rounded-[20px]" shadow="lg" isPressable isHoverable onClick={() => navigate(`/evento/${props.id}`)}>
 				<CardHeader className="py-0 pb-1 px-0 flex justify-between text-foreground/60 text-xs font-semibold">
 					{/* <div className={postProperties[props.type || "event"].className + " p-1.5 pl-2 py-1 rounded-tr-md rounded-tl-[16px] rounded-b-md text-[10px] px-1 border-1"}>{postProperties[props.type || "event"].title}</div> */}
 					<div className="flex flex-row border-1 border-default-200/50 text-center rounded-tr-md rounded-tl-[16px] rounded-b-md">
@@ -44,12 +46,12 @@ export const EventCard = (props: EventCardProps) => {
 					<Button as={Link} showAnchorIcon size="sm" className="rounded-tr-[16px] rounded-b-md rounded-tl-md">Ir al sitio</Button>
 				</CardHeader>
 				<div
-					className="cursor-pointer"
-					onClick={() => setOpenInfoModal(true)}
+					// className="cursnavigate(`/evento/${props.id}`)}
 					role="button"
 					tabIndex={0}
 					aria-label={`Ver detalles de ${props.title}`}
-					onKeyDown={(e) => e.key === 'Enter' && setOpenInfoModal(true)}
+					// onKeyDown={(e) => e.key === 'Enter' && navigate(`/evento/${props.id}`
+					// onKeyDown={(e) => e.key === 'Enter' && setOpenInfoModal(true)}
 				>
 					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} isCardEvent className="rounded-b-[16px] rounded-t-md" />
 				</div>

@@ -41,7 +41,7 @@ export const ImageCarousel = ({ images, className, isCardEvent }: ImageCarouselP
     if (!images || images.length === 0) return null
 
     return (
-        <div className={`relative overflow-hidden rounded-2xl mx-auto ${className || ''} group`}>
+        <div className={`relative overflow-hidden ${className || ''} group`}>
             {/* Images container */}
             <div
                 className="flex transition-transform duration-300 ease-out items-center"
@@ -90,16 +90,15 @@ export const ImageCarousel = ({ images, className, isCardEvent }: ImageCarouselP
 
             {/* Dots indicator */}
             {images.length > 1 && (
-                <div className={`absolute bottom-3  left-1/2 -translate-x-1/2 flex gap-1.5 z-10 ${isCardEvent ? 'group-hover:bottom-10 transition-all delay-75' : ''}`}>
+                <div className={`absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10`}>
                     {images.map((_, index) => (
                         <button
                             key={index}
-                            className={`w-2 h-2 rounded-full transition-all ${
+                            className={`w-2 h-2 rounded-full transition-all delay-150 ${
                                 index === currentIndex
                                     ? 'bg-white w-4'
                                     : 'bg-white/50 hover:bg-white/75'
                             }`}
-                            onClick={() => setCurrentIndex(index)}
                             aria-label={`Ir a imagen ${index + 1}`}
                         />
                     ))}

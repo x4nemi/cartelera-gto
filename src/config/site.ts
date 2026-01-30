@@ -31,6 +31,7 @@ Scenarios of users:
 
 export const randomEvents: EventCardProps[] = [
   {
+    id: "dino-taller-crochet-2026-01-19",
     title: "🦕✨ Dino Taller de Crochet ✨🧶",
     description: `🦕✨ Dino Taller de Crochet ✨🧶
 
@@ -70,6 +71,7 @@ Tejer también puede ser una forma de volver a jugar 🦖💫`,
     }
   },
   {
+    id: "taller-amigurumis-niebla-cafe-2026-01-10",
     title: "🦕✨ Dino Taller de Crochet ✨🧶",
     description: `🧶✨ Taller de Amigurumis en De la Niebla Café ✨🧶
 
@@ -110,6 +112,7 @@ Te esperamos para tejer juntxs 🕷️🖤`,
     }
   },
   {
+    id: "el-brutalista-2026-01-15",
     title: "El Brutalista",
     description: "🎬 Cine en Casa Cuévano · 💰 $30",
     date: "2026-01-15",
@@ -129,6 +132,7 @@ Te esperamos para tejer juntxs 🕷️🖤`,
     }
   },
   {
+    id: "exposicion-arte-contemporaneo-2026-01-17",
     title: "Exposición de Arte Contemporáneo",
     description: `🏺 Manos y Memoria
 Cerámica viva en Casa Cuévano
@@ -151,6 +155,7 @@ Cerámica viva en Casa Cuévano
     }
   },
   {
+    id: "ternurin-ropita-2026-01-30",
     title: "",
     description: `Ven a hacerle ropita a tu #ternurin / #chafarin de la mano de lx maestrx @mermaid_motel_r este viernes 30 de enero en @mylovelystoremx
 Cupo limitado, Aparta tu lugar! 👗`,
@@ -170,6 +175,7 @@ Cupo limitado, Aparta tu lugar! 👗`,
     }
   },
   {
+    id: "taller-actualizate-2026-01-15",
     title: "",
     description: `TALLER ACTUALÍZA-TE este 2026✨
 Taller de #collage sobre un calendario en @mylovelystoremx jueves 15 de enero de 4 a 7 pm
@@ -190,6 +196,7 @@ Cupo limitado, costo del taller $80 incluye materiales ✂️`,
     }
   },
   {
+    id: "ritmos-latinos-2026-01-13",
     title: "",
     description: `Clases matutinas de ritmos latinos 🔥
 
@@ -220,6 +227,7 @@ Maestra cubana, con Licenciatura en instructor de artes y Maestría en Desarroll
     }
   },
   {
+    id: "agenda-cultural-casa-cuevano-2026-01",
     title: "",
     description: `✨ Agenda cultural · Enero en Casa Cuévano ✨
 
