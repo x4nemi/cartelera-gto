@@ -8,7 +8,6 @@ export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
 	const [isEventsView, setIsEventsView] = useState(true)
 
-
 	const splitEventsByMonth = (events: EventCardProps[], month: string) => {
 		return events.filter((event) => {
 			const eventDate = new Date(event.date);
@@ -36,7 +35,7 @@ export default function IndexPage() {
 	}, [orderedEvents]);
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 -mt-10 relative">
+			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 -mt-10 relative mx-2">
 				<div className="container mx-auto justify-center transition-all duration-300">
 					<div>
 						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder} isEventsView={isEventsView} setIsEventsView={setIsEventsView} />
