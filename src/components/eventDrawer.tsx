@@ -5,10 +5,7 @@ import {
     DrawerBody,
     DrawerFooter,
     Button,
-    Link,
     Tooltip,
-    Avatar,
-    AvatarGroup,
     User,
 } from "@heroui/react";
 import { ImageCarousel } from "./imageCarousel";
