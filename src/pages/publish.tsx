@@ -4,31 +4,39 @@ import { title } from "@/components/primitives";
 import { createPost, PostData } from '@/config/apiClient';
 import CustomRadioGroup from "@/components/radioGroup";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Button, cn, Input, Link, Textarea, User } from "@heroui/react";
-import { useRef, useState } from "react";
+import { Accordion, AccordionItem, addToast, Alert, Button, Calendar, calendar, Card, CardBody, cn, Input, Link, Tab, Tabs, Textarea, TimeInput, User } from "@heroui/react";
+import { useEffect, useRef, useState } from "react";
+import { CalendarIcon, EventIcon, LoopIcon } from "@/components/icons";
+
+let tabs = [
+	{
+		label: "Evento",
+		icon: <EventIcon size={26} color="bg-secondary" />,
+		content: "Es un evento o un taller",
+		calendar: <Calendar aria-label="Date (Visible Month)" visibleMonths={2} />
+	},
+	{
+		label: "Taller / Curso",
+		icon: <LoopIcon size={26} color="bg-secondary" />,
+		content: "Es un evento recurrente",
+	},
+	{
+		label: "Calendario",
+		icon: <CalendarIcon size={26} color="bg-secondary" />,
+		content: "Contiene varios eventos",
+	},
+];
 
 export default function PublishPage() {
 
 	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
-
-	const RadioCircle = ({ isSelected }: { isSelected: boolean }) => (
-		<div className={cn(
-			"w-5 h-5 rounded-full border-2 flex items-center justify-center",
-			isSelected ? "border-secondary" : "border-default-300"
-		)}>
-			<div className={cn(
-				"w-2.5 h-2.5 rounded-full transition-colors",
-				isSelected ? "bg-secondary" : "bg-transparent"
-			)} />
-		</div>
-	);
 	//#endregion
 
 	//#region Instagram
 	const [link, setLink] = useState<string>("");
 	const [loading, setLoading] = useState(false);
-	const [isLinkValid, setIsLinkValid] = useState<boolean>(false);
+	const [isLinkValid, setIsLinkValid] = useState<boolean>();
 	const [isValidateButtonClicked, setIsValidateButtonClicked] = useState(false);
 	const [postData, setPostData] = useState<PostData | null>(null);
 
@@ -61,6 +69,9 @@ export default function PublishPage() {
 					timeout: 8000,
 					variant: "flat"
 				})
+
+				const draftData = { ...eventData, selectedKey };
+				localStorage.setItem("draftPostData", JSON.stringify(draftData));
 			} else {
 				setIsLinkValid(false);
 			}
@@ -72,6 +83,17 @@ export default function PublishPage() {
 		}
 	};
 
+	useEffect(() => {
+		// Load draft post data from localStorage if available
+		const draftData = localStorage.getItem("draftPostData");
+		if (draftData) {
+			setPostData(JSON.parse(draftData));
+			setIsLinkValid(true);
+			setSelectedKey(JSON.parse(draftData).selectedKey || null);
+			setLink(JSON.parse(draftData).postLink || "");
+		}
+	}, []);
+
 	//#endregion
 
 	return (
@@ -80,11 +102,10 @@ export default function PublishPage() {
 				<div className="flex flex-col w-full max-w-3xl px-2">
 					<h1 className={title({ class: "mb-4 flex items-center gap-2 text-3xl" })}>
 						<span className="relative flex size-3">
-							<span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75"></span>
-							<span className="relative inline-flex size-3 rounded-full bg-sky-500"></span>
+							<span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isLinkValid ? "bg-amber-400" : "bg-sky-400"}`}></span>
+							<span className={`relative inline-flex size-3 rounded-full ${isLinkValid ? "bg-amber-500" : "bg-sky-500"}`}></span>
 						</span>
 						Crea tu publicación</h1>
-					<CustomRadioGroup />
 					<h3 className="font-medium text-foreground mt-6 mb-2 text-lg">¿Cómo deseas publicarlo?</h3>
 					<div className="w-full" >
 						<Accordion
@@ -97,7 +118,7 @@ export default function PublishPage() {
 								const key = Array.from(keys)[0] as string;
 								setSelectedKey(key === selectedKey ? key : key);
 							}}
-							style={{paddingLeft:0, paddingRight:0}}
+							style={{ paddingLeft: 0, paddingRight: 0 }}
 							itemClasses={{
 								base: "mb-2",
 								trigger: cn(
@@ -117,7 +138,6 @@ export default function PublishPage() {
 											<span className="font-bold text-md">Con un link de Instagram</span>
 											<span className="text-default-400 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento</span>
 										</div>
-										<RadioCircle isSelected={selectedKey === "1"} />
 									</div>
 								}
 							>
@@ -172,6 +192,8 @@ export default function PublishPage() {
 												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
 											</div>
 											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} />
+											<p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación</p>
+											{/* <CustomRadioGroup /> */}
 										</div>
 									)}
 								</div>
@@ -185,7 +207,6 @@ export default function PublishPage() {
 											<span className="font-bold text-md">Desde cero</span>
 											<span className="text-default-400 font-medium text-sm italic">Sube tus propias imágenes y detalles</span>
 										</div>
-										<RadioCircle isSelected={selectedKey === "2"} />
 									</div>
 								}
 								className="mb-0"
@@ -194,6 +215,32 @@ export default function PublishPage() {
 							</AccordionItem>
 						</Accordion>
 					</div>
+					{isLinkValid &&
+						<>
+							<h3 className="font-medium text-foreground mt-4 mb-2 text-lg">¿Qué tipo de publicación deseas hacer?</h3>
+
+							<Tabs title="Elige los días del evento" variant="bordered"  isVertical color="secondary" size="lg">
+								{tabs.map((tab, index) => (
+									<Tab
+										key={index}
+										title={tab.label}
+									>
+										<Card>
+											<CardBody>
+												<Alert variant="faded" description={tab.content} hideIconWrapper color="primary" className="p-0 text-center" classNames={{iconWrapper:"-mr-2"}} icon={tab.icon}/>
+												{tab.calendar && (<div className="mt-2 px-2">
+													<p className="text-sm font-medium text-foreground mt-1">Elige los días del evento</p>
+													{tab.calendar}
+												</div>
+												)}
+												<TimeInput label="Event Time" />
+											</CardBody>
+										</Card>
+									</Tab>
+								))}
+							</Tabs>
+						</>
+					}
 				</div>
 			</section>
 		</DefaultLayout>

@@ -1,6 +1,7 @@
 import { RadioGroup, Radio, cn } from "@heroui/react";
 import { CalendarFilledIcon, CalendarIcon, EventFilledIcon, EventIcon, LoopFilledIcon, LoopIcon } from "./icons";
 import { useState } from "react";
+
 export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeof Radio>) => {
 
     return (
@@ -21,36 +22,33 @@ export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeo
     );
 };
 
+const postsTypes = [{
+    value: "Evento", label: "Evento", description: "Es un evento o un taller", icon: <EventIcon size={26} color="bg-secondary" />, selectedIcon: <EventFilledIcon size={26} />
+}, {
+    value: "Taller", label: "Taller / Curso", description: "Es un evento recurrente", icon: <LoopIcon size={26} color="bg-secondary" />, selectedIcon: <LoopFilledIcon size={26} />
+}, {
+    value: "Calendario", label: "Calendario", description: "Contiene varios eventos", icon: <CalendarIcon size={26} color="bg-secondary" />, selectedIcon: <CalendarFilledIcon size={26} />
+}];
+
 const CustomRadioGroup = () => {
     const [value, setValue] = useState("");
     return (
-        <RadioGroup className="w-full flex-row" orientation="horizontal" description="" value={value} onValueChange={setValue}>
-            <h1 className="text-foreground font-medium mb-2 text-lg">¿Qué tipo de publicación deseas hacer?</h1>
+        <RadioGroup className="flex" orientation="horizontal" description="" value={value} onValueChange={setValue}>
+            {/* <h1 className="text-foreground font-medium mb-2 text-lg">¿Qué tipo de publicación deseas hacer?</h1> */}
             <div className="flex md:flex-row flex-col md:gap-2 gap-1 w-full">
-                <CustomRadio description="Es un evento o un taller" value="Evento" className="md:flex-1 w-full" >
-                    <div className="flex flex-col justify-center items-center gap-1">
-                        {value !== "Evento" ? <EventIcon size={26} color="bg-secondary" /> : <EventFilledIcon size={26} />}
-                        <p className="font-bold">
-                            Evento
-                        </p>
-                    </div>
-                </CustomRadio>
-                <CustomRadio description="Es un evento recurrente" value="Taller" className="md:flex-1 w-full" >
-                    <div className="flex flex-col justify-center items-center gap-1">
-                        {value !== "Taller" ? <LoopIcon size={26} color="bg-secondary" /> : <LoopFilledIcon size={26} />}
-                        <p className="font-bold">
-                            Taller / Curso
-                        </p>
-                    </div>
-                </CustomRadio>
-                <CustomRadio description="Contiene varios eventos" value="Calendario" className="md:flex-1 w-full" >
-                    <div className="flex flex-col justify-center items-center gap-1">
-                        {value !== "Calendario" ? <CalendarIcon size={26} color="bg-secondary" /> : <CalendarFilledIcon size={26} />}
-                        <p className="font-bold">
-                            Calendario
-                        </p>
-                    </div>
-                </CustomRadio>
+                {
+                    postsTypes.map((postType) => (
+                        <CustomRadio key={postType.value} value={postType.value} className="md:flex-1 w-full justify-start" >
+                            <div className="flex flex-col text-start">
+                                <p className="font-bold flex gap-1 items-center">
+                                    {value !== postType.value ? postType.icon : postType.selectedIcon}
+                                    {postType.label}
+                                </p>
+                                <p className="text-default-400 mt-0.5 italic text-sm">{postType.description}</p>
+                            </div>
+                        </CustomRadio>
+                    ))
+                }
             </div>
         </RadioGroup>
     );
