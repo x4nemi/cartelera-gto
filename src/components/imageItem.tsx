@@ -6,7 +6,7 @@ export const ImageItem = ({ src = "/bordado.jpg", number = 1, onSelect = () => {
     const [selected, setSelected] = useState(true)
 
     const imageRef = useRef<HTMLImageElement>(null)
-
+    const fallbackSrc = "https://app.requestly.io/delay/100/"
 
     useEffect(() => {
         if (imageRef.current?.complete) {
@@ -20,14 +20,14 @@ export const ImageItem = ({ src = "/bordado.jpg", number = 1, onSelect = () => {
         onSelect()
     }
     return (
-        <div className={`${selected ? "ring-3 ring-primary" : ""} rounded-xl`} onClick={handleSelect} role="button">
+        <div className={`${selected ? "ring-2 ring-primary" : ""} rounded-xl`} onClick={handleSelect} role="button">
             <div className="relative">
                 {selected && <Button className="absolute top-1 right-1 z-50" isIconOnly color={selected ? "primary" : "default"} onClick={handleSelect} aria-label={`Imagen ${number} seleccionada`}>{Math.max(number, 1)}</Button>}
             </div>
             <Image
                 ref={imageRef}
                 alt="Evento imagen"
-                src={src}
+                src={fallbackSrc + src}
                 className="w-full aspect-square object-cover rounded-xl"
             />
         </div>

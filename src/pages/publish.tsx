@@ -2,33 +2,11 @@ import { FileUploadButton } from "@/components/fileUploadButton";
 import { ImageGallery } from "@/components/imageGallery";
 import { title } from "@/components/primitives";
 import { createPost, PostData } from '@/config/apiClient';
-import CustomRadioGroup from "@/components/radioGroup";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Alert, Button, Calendar, calendar, Card, CardBody, cn, Input, Link, Tab, Tabs, Textarea, TimeInput, User } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, Button, Card, cn, Input, Link, Textarea, User } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
-import { CalendarIcon, EventIcon, LoopIcon } from "@/components/icons";
-
-let tabs = [
-	{
-		label: "Evento",
-		icon: <EventIcon size={26} color="bg-secondary" />,
-		content: "Es un evento o un taller",
-		calendar: <Calendar aria-label="Date (Visible Month)" visibleMonths={2} />
-	},
-	{
-		label: "Taller / Curso",
-		icon: <LoopIcon size={26} color="bg-secondary" />,
-		content: "Es un evento recurrente",
-	},
-	{
-		label: "Calendario",
-		icon: <CalendarIcon size={26} color="bg-secondary" />,
-		content: "Contiene varios eventos",
-	},
-];
 
 export default function PublishPage() {
-
 	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
 	//#endregion
@@ -36,7 +14,7 @@ export default function PublishPage() {
 	//#region Instagram
 	const [link, setLink] = useState<string>("");
 	const [loading, setLoading] = useState(false);
-	const [isLinkValid, setIsLinkValid] = useState<boolean>();
+	const [isLinkValid, setIsLinkValid] = useState<boolean>(true);
 	const [isValidateButtonClicked, setIsValidateButtonClicked] = useState(false);
 	const [postData, setPostData] = useState<PostData | null>(null);
 
@@ -75,8 +53,7 @@ export default function PublishPage() {
 			} else {
 				setIsLinkValid(false);
 			}
-		} catch (error) {
-			console.error("Error fetching post data:", error);
+		} catch {
 			setIsLinkValid(false);
 		} finally {
 			setLoading(false);
@@ -90,7 +67,7 @@ export default function PublishPage() {
 			setPostData(JSON.parse(draftData));
 			setIsLinkValid(true);
 			setSelectedKey(JSON.parse(draftData).selectedKey || null);
-			setLink(JSON.parse(draftData).postLink || "");
+			setLink(JSON.parse(draftData).url || "");
 		}
 	}, []);
 
@@ -152,12 +129,14 @@ export default function PublishPage() {
 											onChange={(e) => setLink(e.target.value)}
 											classNames={{
 												input: "text-sm",
-												inputWrapper: "h-12 rounded-r-none text-default-400",
+												inputWrapper: `h-12 ${!isLinkValid ? "rounded-r-none text-default-400" : ""}`,
 											}}
+											isClearable={isLinkValid}
 											onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
 											ref={IgInputRef}
+											readOnly={isLinkValid}
 										/>
-										<Button
+										{!isLinkValid && <Button
 											color="secondary"
 											variant="flat"
 											isLoading={loading}
@@ -166,15 +145,18 @@ export default function PublishPage() {
 											className="min-w-24 h-12 rounded-l-none"
 										>
 											Validar
-										</Button>
+										</Button>}
 									</div>
 									{isValidateButtonClicked && link.length > 0 && !loading && !isLinkValid && (
 										<p className="text-xs text-danger">Link inválido. Inténtalo de nuevo.</p>
 									)}
 
 									{isLinkValid && (
-										<div className="mt-2 flex flex-col rounded-xl p-3">
-											<div className="justify-between flex mb-2">
+										<div className="mt-2 flex flex-col rounded-xl ">
+											<p className="text-sm font-medium text-foreground-500 mb-2">Publicación encontrada</p>
+
+											<Card className="flex flex-col justify-start mb-2 bg-content2 p-4 gap-2" shadow="none">
+												<p className="text-small text-foreground-700  mb-2">Usuario</p>
 												<User
 													avatarProps={{
 														src: postData?.ownerProfilePicUrl || "",
@@ -184,16 +166,18 @@ export default function PublishPage() {
 															@{postData?.ownerUsername}
 														</Link>
 													}
+													className="self-start ml-3"
 													name={postData?.ownerFullName || ""}
 												/>
-												<p className="text-sm font-medium text-foreground/40">Publicación encontrada</p>
-											</div>
-											<div className="gap-2 flex flex-col">
-												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
-											</div>
-											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} />
-											<p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación</p>
-											{/* <CustomRadioGroup /> */}
+												{/* </div> */}
+												<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} labelPlacement="outside" />
+
+												<p className="text-small text-foreground-700  mb-2">Imágenes</p>
+												<div className="gap-2 flex flex-col">
+													<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
+												</div>
+											</Card>
+											<p className="text-sm font-medium text-foreground">¿Hasta qué día te gustaría que se publique tu evento?</p>
 										</div>
 									)}
 								</div>
@@ -215,32 +199,6 @@ export default function PublishPage() {
 							</AccordionItem>
 						</Accordion>
 					</div>
-					{isLinkValid &&
-						<>
-							<h3 className="font-medium text-foreground mt-4 mb-2 text-lg">¿Qué tipo de publicación deseas hacer?</h3>
-
-							<Tabs title="Elige los días del evento" variant="bordered"  isVertical color="secondary" size="lg">
-								{tabs.map((tab, index) => (
-									<Tab
-										key={index}
-										title={tab.label}
-									>
-										<Card>
-											<CardBody>
-												<Alert variant="faded" description={tab.content} hideIconWrapper color="primary" className="p-0 text-center" classNames={{iconWrapper:"-mr-2"}} icon={tab.icon}/>
-												{tab.calendar && (<div className="mt-2 px-2">
-													<p className="text-sm font-medium text-foreground mt-1">Elige los días del evento</p>
-													{tab.calendar}
-												</div>
-												)}
-												<TimeInput label="Event Time" />
-											</CardBody>
-										</Card>
-									</Tab>
-								))}
-							</Tabs>
-						</>
-					}
 				</div>
 			</section>
 		</DefaultLayout>
