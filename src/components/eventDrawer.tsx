@@ -9,14 +9,13 @@ import {
     User,
 } from "@heroui/react";
 import { ImageCarousel } from "./imageCarousel";
-import { EventCardProps } from "./interfaces";
 import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
 
 const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
-    const { _id, dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
+    const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
     // const { socialLinks } = user || {};
     const dayName = new Date(
         dates && dates.length > 0
