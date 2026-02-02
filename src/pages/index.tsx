@@ -2,32 +2,48 @@ import DefaultLayout from "@/layouts/default";
 import { FilterWidget } from "@/components/filterWidget";
 import { randomEvents } from "@/config/site";
 import { Wall } from "@/components/pinterestWall";
-import { EventCardProps } from "@/components/interfaces";
 import { useMemo, useState } from "react";
+import { PostData } from "@/config/apiClient";
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
 	const [isEventsView, setIsEventsView] = useState(true)
 
-	const splitEventsByMonth = (events: EventCardProps[], month: string) => {
+	const orderedEvents = useMemo(() => {
+		return [...randomEvents].sort((a, b) => {
+			const dateA = a.dates && a.dates.length > 0
+				? Math.min(...a.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
+				: new Date().getTime();
+			const dateB = b.dates && b.dates.length > 0
+				? Math.min(...b.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
+				: new Date().getTime();
+			return isAscendingOrder ? dateA - dateB : dateB - dateA;
+		});
+	}, [isAscendingOrder]);
+
+	const splitEventsByMonth = (events: PostData[], month: string) => {
 		return events.filter((event) => {
-			const eventDate = new Date(event.date);
+			const eventDate = new Date(// get the first date after today if exists, else the first date
+				event.dates && event.dates.length > 0
+					? Math.min(
+						...event.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime())
+					)
+					: new Date().getTime()
+			);
 			const eventMonthYear = eventDate.toLocaleString('es-MX', { month: 'long', year: 'numeric' });
 			return eventMonthYear === month;
 		});
 	}
 
-	const orderedEvents = useMemo(() => {
-		return [...randomEvents].filter(event => !event.isCalendarEvent).sort((a, b) => {
-			const dateA = new Date(a.date);
-			const dateB = new Date(b.date);
-			return isAscendingOrder ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
-		});
-	}, [isAscendingOrder]);
-
 	const months = useMemo(() => {
 		const monthsSet = new Set<string>();
-		orderedEvents.forEach((event) => {
-			const eventDate = new Date(event.date);
+		orderedEvents.forEach((event : PostData) => {
+			const eventDate = new Date(// get the first date after today if exists, else the first date
+				event.dates && event.dates.length > 0
+					? Math.min(
+						...event.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime())
+					)
+					: new Date().getTime()
+			);
 			const monthYear = eventDate.toLocaleString('es-MX', { month: 'long', year: 'numeric' });
 			monthsSet.add(monthYear);
 		});

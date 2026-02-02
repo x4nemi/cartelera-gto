@@ -1,3 +1,5 @@
+import { DateValue } from "@heroui/react";
+
 // Apify REST API client for browser
 const APIFY_TOKEN = import.meta.env.VITE_APIFY_TOKEN;
 const APIFY_BASE_URL = "https://api.apify.com/v2";
@@ -125,6 +127,8 @@ export interface PostData {
     timestamp?: string;
     createdAt?: string;
     updatedAt?: string;
+    dates?: DateValue[];
+    isDraft?: boolean;
 }
 
 export interface PaginatedResponse<T> {
@@ -414,7 +418,8 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         ownerUsername: postData.ownerUsername,
         ownerFullName: postData.ownerFullName,
         ownerProfilePicUrl: ownerProfilePicUrl,
-        timestamp: postData.timestamp
+        timestamp: postData.timestamp,
+        isDraft: true
     };
 
     const result = await CosmosAPI.insertEvent(postToInsert);
@@ -425,4 +430,14 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
 
     // Return the post data we inserted
     return postToInsert;
+}
+
+export const updatePost = async (postData: PostData): Promise<PostData> => {
+    const result = await CosmosAPI.insertEvent(postData);
+
+    if (!result.success) {
+        throw new Error("Error updating post in database");
+    }
+
+    return postData;
 }

@@ -6,3 +6,26 @@
 @theme {
     --font-sans: 'Nunito Sans', sans-serif;
 }
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: #C8E2FB;
+    background-image: url('/mountains2.png');
+    background-position: left -100px bottom -100px;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: calc(90vh) ;
+    font-family: var(--font-sans);
+}
+
+
+
+#root {
+    min-height: 100vh;
+}

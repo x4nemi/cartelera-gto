@@ -1,9 +1,10 @@
+import { DatesWidget } from "@/components/draft/datesWidget";
 import { FileUploadButton } from "@/components/fileUploadButton";
 import { ImageGallery } from "@/components/imageGallery";
 import { title } from "@/components/primitives";
-import { createPost, PostData } from '@/config/apiClient';
+import { createPost, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Button, Card, cn, Input, Link, Textarea, User } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, Button, Card, cn, DateValue, Input, Link, Textarea, User } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -60,6 +61,44 @@ export default function PublishPage() {
 		}
 	};
 
+	const handlePublishPost = async () => {
+		if (!postData) return;
+
+		try {
+			const postDataToPublish = {
+				...postData,
+				isDraft: false,
+				dates: selectedDates,
+			};
+
+			const publishedPost = await updatePost(postDataToPublish);
+
+			if (publishedPost) {
+				addToast({
+					title: "Publicación exitosa",
+					description: "Tu evento ha sido publicado correctamente.",
+					color: "success",
+					timeout: 8000,
+					variant: "flat"
+				});
+
+				// Clear draft data from localStorage
+				localStorage.removeItem("draftPostData");
+			} else {
+				addToast({
+					title: "Error al publicar",
+					description: "Hubo un problema al publicar tu evento. Inténtalo de nuevo.",
+					color: "danger",
+					timeout: 8000,
+					variant: "flat"
+				});
+			}
+
+		} catch (error) {
+			console.error("Error publishing post:", error);
+		}
+	}
+
 	useEffect(() => {
 		// Load draft post data from localStorage if available
 		const draftData = localStorage.getItem("draftPostData");
@@ -71,6 +110,10 @@ export default function PublishPage() {
 		}
 	}, []);
 
+	//#endregion
+
+	//#region selected dates
+	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
 	//#endregion
 
 	return (
@@ -170,14 +213,17 @@ export default function PublishPage() {
 													name={postData?.ownerFullName || ""}
 												/>
 												{/* </div> */}
-												<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} labelPlacement="outside" />
+												<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} labelPlacement="outside" variant="bordered" />
 
-												<p className="text-small text-foreground-700  mb-2">Imágenes</p>
+												<p className="text-small text-foreground-700 mt-3 mb-1">Imágenes</p>
 												<div className="gap-2 flex flex-col">
 													<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
 												</div>
 											</Card>
-											<p className="text-sm font-medium text-foreground">¿Hasta qué día te gustaría que se publique tu evento?</p>
+											<DatesWidget selectedDays={selectedDates} onChange={setSelectedDates} />
+
+											{/* <ButtonGroup> */}
+
 										</div>
 									)}
 								</div>
@@ -198,6 +244,10 @@ export default function PublishPage() {
 								<FileUploadButton />
 							</AccordionItem>
 						</Accordion>
+						<div className="flex w-full justify-end gap-2 mt-3">
+							<Button size="lg" color="danger" variant="bordered">Cancelar</Button>
+							<Button className="" size="lg" color="primary" variant="solid" onPress={handlePublishPost}>Crear evento</Button>
+						</div>
 					</div>
 				</div>
 			</section>

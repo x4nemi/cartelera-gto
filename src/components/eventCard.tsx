@@ -1,36 +1,40 @@
-import { Button, Card, CardHeader, Link, useDisclosure } from "@heroui/react"
-import { EventCardProps } from "./interfaces"
-import { ImageCarousel } from "./imageCarousel"
+import { Card, CardBody, CardHeader, Image, useDisclosure } from "@heroui/react"
 import { EventDrawer } from "./eventDrawer"
+import { PostData } from "@/config/apiClient"
 
-const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+const months = ["Enero", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
-export const EventCard = (props: EventCardProps) => {
-	const eventDate = new Date(props.date);
+export const EventCard = (props: PostData) => {
+	const eventDate = // get the first date after today if exists, else the first date
+		props.dates && props.dates.length > 0
+			? new Date(
+				Math.min(
+					...props.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime())
+				)
+			)
+			: new Date();
 	const month = months[eventDate.getMonth()];
 	const day = eventDate.getDate();
-	
+
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const isMobile = window.innerWidth < 768;
 	return (
 		<>
-			<Card className="group p-1 rounded-[20px]" shadow="lg" isPressable isHoverable onClick={onOpen}>
-				<CardHeader className="py-0 pb-1 px-0 flex justify-between text-foreground/60 text-xs font-semibold">
-					<div className="flex flex-row border-1 border-default-200/50 text-center rounded-tr-md rounded-tl-[16px] rounded-b-md">
-						<div className="max-md:text-[12px] md:text-[14px] p-2 pb-1 text-default-500">{month}</div>
-						<div className="flex items-center bg-content2 justify-center font-semibold max-md:text-[11px] md:text-[13px] font-mono text-default-500 p-2 rounded-r-md">
-							{day}
-						</div>
+			<Card className="rounded-3xl" isPressable onClick={onOpen} isFooterBlurred>
+				<CardHeader className="absolute top-1 right-1 z-10 bg-content2/70 backdrop-blur-md p-0 w-auto flex flex-row border border-default-200/50 text-center rounded-tl-md rounded-tr-[20px] rounded-b-md">
+					<div className="max-md:text-[12px] md:text-[14px] p-1 pl-2 text-default-500">{month}</div>
+					<div className="flex items-center bg-content2 justify-center font-semibold max-md:text-[11px] md:text-[13px] font-mono text-default-500 p-2 pt-2 rounded-tl-[5px] rounded-tr-[19px] rounded-b-[5px]">
+						{day}
 					</div>
-					<Button as={Link} showAnchorIcon size="sm" className="rounded-tr-[16px] rounded-b-md rounded-tl-md transition-all duration-200 text-[14px]" isIconOnly={isMobile}>{isMobile ? "" : "Ir al sitio"}</Button>
 				</CardHeader>
-				<div
-					role="button"
-					tabIndex={0}
-					aria-label={`Ver detalles de ${props.title}`}
-				>
-					<ImageCarousel images={[...props.image ? [props.image, props.image] : []].flat()} isCardEvent className="rounded-b-[16px] rounded-t-md" />
-				</div>
+
+				<CardBody className="overflow-visible p-0">
+					<Image
+						removeWrapper
+						alt="Card background"
+						className="z-0 w-full h-full object-cover rounded-3xl"
+						src={props.displayUrl}
+					/>
+				</CardBody>
 			</Card>
 			<EventDrawer isOpen={isOpen} onOpenChange={onOpenChange} cardProps={props} />
 		</>
