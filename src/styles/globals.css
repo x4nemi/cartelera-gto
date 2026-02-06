@@ -20,8 +20,14 @@ body {
     background-position: left -100px bottom -100px;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: calc(90vh) ;
+    background-size: calc(90vh);
     font-family: var(--font-sans);
+}
+
+.dark body {
+    background-color: #000;
+    background-image: url('/darkbg.jpg');
+    background-position: right -50px bottom -50px;
 }
 
 
