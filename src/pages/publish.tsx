@@ -127,7 +127,7 @@ export default function PublishPage() {
 						</span>
 						Crea tu publicación</h1>
 					<h3 className="font-medium text-foreground mt-6 mb-2 text-lg">¿Cómo deseas publicarlo?</h3>
-					<div className="w-full" >
+					<div className="w-full">
 						<Accordion
 							showDivider={false}
 							selectionMode="single"
@@ -142,11 +142,11 @@ export default function PublishPage() {
 							itemClasses={{
 								base: "mb-2",
 								trigger: cn(
-									"p-4 bg-content1 hover:bg-content2 border-2 border-default rounded-2xl hover:border-default-400",
-									"data-[open=true]:border-secondary data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
-									"flex items-center justify-between gap-4 duration-250 transition-all data-[open=true]:bg-violet-100 data-[open=true]:dark:bg-violet-800/20"
+									"p-4 bg-background/70 hover:bg-content2 border-2 border-primary-500 rounded-2xl hover:border-primary-400",
+									" data-[open=true]:rounded-b-none data-[open=true]:bg-gray",
+									"flex items-center justify-between gap-4 duration-250 transition-all backdrop-blur-md"
 								),
-								content: "px-4 py-4 bg-gray border-2 border-t-0 border-secondary rounded-b-2xl"
+								content: "px-4 py-4 bg-gray border-2 border-t-0  rounded-b-2xl bg-background/70 backdrop-blur-md border-primary-500",
 							}}
 						>
 							<AccordionItem
@@ -167,20 +167,19 @@ export default function PublishPage() {
 										<Input
 											id="instagram-link"
 											placeholder="https://www.instagram.com/p/..."
-											// variant="bordered"
 											value={link}
 											onChange={(e) => setLink(e.target.value)}
 											classNames={{
 												input: "text-sm",
-												inputWrapper: `h-12 ${!isLinkValid ? "rounded-r-none text-default-400" : ""}`,
+												inputWrapper: `h-12 ${isLinkValid ? "rounded-r-none text-default-400" : ""}`,
 											}}
 											isClearable={isLinkValid}
 											onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
 											ref={IgInputRef}
 											readOnly={isLinkValid}
 										/>
-										{!isLinkValid && <Button
-											color="secondary"
+										{isLinkValid && <Button
+											color="primary"
 											variant="flat"
 											isLoading={loading}
 											isDisabled={link.length === 0}

@@ -56,7 +56,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                 {/* Calendario */}
                 <CardBody>
                     <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                    <DateRangePicker label="" className="max-w-xs" variant="bordered" size="lg" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="primary" />
+                    <DateRangePicker label="" className="max-w-xs" variant="flat" size="lg" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="primary" />
                 </CardBody>
                 <Divider orientation="horizontal" className=" md:hidden" />
                 <Divider orientation="vertical" className="hidden h-auto md:block" />
@@ -69,7 +69,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                             isReadOnly
                             size="lg"
                             defaultValue="Fecha"
-                            variant="bordered"
+                            variant="flat"
                             label=""
                         />
                         <Button

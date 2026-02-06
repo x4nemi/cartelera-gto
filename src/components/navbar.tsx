@@ -13,9 +13,6 @@ import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
-import {
-	HeartFilledIcon,
-} from "@/components/icons";
 import { Logo } from "@/components/icons";
 import { useEffect, useRef, useState } from "react";
 import { Card } from "@heroui/react";
@@ -82,7 +79,7 @@ export const Navbar = () => {
 				<NavbarItem className="hidden sm:flex gap-2">
 					<ThemeSwitch />
 				</NavbarItem>
-				<NavbarItem className="hidden md:flex">
+				{/* <NavbarItem className="hidden md:flex">
 					<Button
 						isExternal
 						as={Link}
@@ -93,7 +90,7 @@ export const Navbar = () => {
 					>
 						Donar
 					</Button>
-				</NavbarItem>
+				</NavbarItem> */}
 			</NavbarContent>
 
 			<NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
@@ -119,7 +116,7 @@ export const Navbar = () => {
 								</Button>
 							))
 						}
-						<Button variant="solid" onPress={handleMenuToggle} className={` rounded-t-none w-full text-start dark:bg-content2 bg-content1`} size="lg" startContent={<HeartFilledIcon className="text-danger animate-pulse -mr-1.5" />}>
+						{/* <Button variant="solid" onPress={handleMenuToggle} className={` rounded-t-none w-full text-start dark:bg-content2 bg-content1`} size="lg" startContent={<HeartFilledIcon className="text-danger animate-pulse -mr-1.5" />}>
 							<Link
 								className={clsx(
 									linkStyles({ color: "foreground" }),
@@ -130,7 +127,7 @@ export const Navbar = () => {
 							>
 								Donar
 							</Link>
-						</Button>
+						</Button> */}
 					</Card>
 				</div>
 			</NavbarMenu>

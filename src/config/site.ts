@@ -1,4 +1,3 @@
-import { EventCardProps } from "@/components/interfaces";
 import { PostData } from "./apiClient";
 import { parseDate } from "@internationalized/date";
 
