@@ -41,8 +41,8 @@ export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsE
     //#endregion
 
     return (
-        <Card className="w-full">
-            <CardHeader className="flex justify-between">
+        <Card className="w-full backdrop-blur-sm bg-background/60" >
+            <CardHeader className="flex justify-between ">
                 <div className="flex items-center gap-2">
                     <FilterIcon size={24} />
                     <h4 className="font-bold text-lg">Filtra los eventos</h4>
@@ -58,7 +58,7 @@ export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsE
                 {/* Calendario */}
                 <CardBody>
                     <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                    <DateRangePicker label="Rango de fechas" className="max-w-xs" classNames={{ inputWrapper: "bg-secondary/20 hover:bg-secondary/40" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="secondary" />
+                    <DateRangePicker label="Rango de fechas" className="max-w-xs" classNames={{ inputWrapper: "text-white" }} variant="flat" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="default"  />
                 </CardBody>
                 <Divider orientation="horizontal" className=" md:hidden" />
                 <Divider orientation="vertical" className="hidden h-auto md:block" />
