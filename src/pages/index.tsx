@@ -6,7 +6,6 @@ import { useMemo, useState } from "react";
 import { PostData } from "@/config/apiClient";
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
-	const [isEventsView, setIsEventsView] = useState(true)
 
 	const orderedEvents = useMemo(() => {
 		return [...randomEvents].sort((a, b) => {
@@ -54,7 +53,7 @@ export default function IndexPage() {
 			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 -mt-10 relative mx-2">
 				<div className="container mx-auto justify-center transition-all duration-300">
 					<div>
-						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder} isEventsView={isEventsView} setIsEventsView={setIsEventsView} />
+						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder}/>
 					</div>
 
 				</div>
