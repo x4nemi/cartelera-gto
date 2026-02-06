@@ -2,11 +2,10 @@ import { Button, Card, CardBody, CardHeader, DateRangePicker, Divider, Input } f
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import { useState } from "react";
 import { FilterIcon, SortIconAsc, XIcon } from "./icons";
-import { ViewSwitch } from "./viewSwitch";
 
 // const sortProperties = ['Fecha']
 
-export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsEventsView }: { isAscending: boolean, setIsAscending: (value: boolean) => void, isEventsView: boolean, setIsEventsView: (value: boolean) => void }) => {
+export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boolean, setIsAscending: (value: boolean) => void }) => {
     //#region Fechas
     const minDate = new CalendarDate(2025, 11, 17);
 
@@ -47,7 +46,6 @@ export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsE
                     <FilterIcon size={24} />
                     <h4 className="font-bold text-lg">Filtra los eventos</h4>
                 </div>
-                <ViewSwitch isEventsView={isEventsView} setIsEventsView={setIsEventsView} />
                 <Button color="danger" startContent={<XIcon size={17} />} variant="flat" size="sm" isDisabled={!isFiltered} hidden={!isFiltered} onPress={cleanFilters}>
                     Limpiar filtros
                 </Button>
@@ -58,7 +56,7 @@ export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsE
                 {/* Calendario */}
                 <CardBody>
                     <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                    <DateRangePicker label="" className="max-w-xs" variant="bordered" size="lg" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="default"  />
+                    <DateRangePicker label="" className="max-w-xs" variant="bordered" size="lg" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="primary" />
                 </CardBody>
                 <Divider orientation="horizontal" className=" md:hidden" />
                 <Divider orientation="vertical" className="hidden h-auto md:block" />
@@ -82,7 +80,7 @@ export const FilterWidget = ({ isAscending, setIsAscending, isEventsView, setIsE
                             size="lg"
                             onPress={() => setIsAscending(!isAscending)}
                             style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
-                            color="secondary"
+                            color="primary"
                         >
                             <SortIconAsc size={24} />
                         </Button>
