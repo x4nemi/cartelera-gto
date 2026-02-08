@@ -1,8 +1,7 @@
-import { DatesWidget } from "@/components/draft/datesWidget";
+import { EventDates } from "@/components/draft/tabs";
 import { FileUploadButton } from "@/components/fileUploadButton";
-import { IgIcon, ImagesIcon } from "@/components/icons";
+import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { ImageGallery } from "@/components/imageGallery";
-import { title } from "@/components/primitives";
 import { createPost, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, addToast, Button, Card, cn, DateValue, Input, Link, Textarea, User } from "@heroui/react";
@@ -115,6 +114,9 @@ export default function PublishPage() {
 
 	//#region selected dates
 	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
+	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
+	const [until, setUntil] = useState<DateValue | null>(null);
+	const [dateRange, setDateRange] = useState<{ start: DateValue | null, end: DateValue | null }>({ start: null, end: null });
 	//#endregion
 
 	return (
@@ -160,7 +162,7 @@ export default function PublishPage() {
 									</div>
 								</div>
 							}
-							startContent={<IgIcon size={26} />}
+							startContent={selectedKey === "1" ? <IGFilledIcon size={26} /> : <IgIcon size={26} />}
 							classNames={{base:"backdrop-blur-sm mb-2 "}}
 						>
 							<div className="flex flex-col gap-2">
@@ -175,7 +177,7 @@ export default function PublishPage() {
 											input: "text-sm",
 											inputWrapper: `h-12 ${!isLinkValid ? "rounded-r-none text-default-400" : ""}`,
 										}}
-										isClearable={!isLinkValid}
+										isClearable={!isLinkValid && !loading}
 										onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
 										ref={IgInputRef}
 										readOnly={isLinkValid}
@@ -220,7 +222,8 @@ export default function PublishPage() {
 												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
 											</div>
 										</Card>
-										<DatesWidget selectedDays={selectedDates} onChange={setSelectedDates} />
+										<EventDates selectedDays={selectedDates} setSelectedDays={setSelectedDates} workshopDays={workshopDays} setWorkshopDays={setWorkshopDays} until={until} setUntil={setUntil} dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }} setDateRange={setDateRange} />
+										{/* <DatesWidget selectedDays={selectedDates} onChange={setSelectedDates} /> */}
 									</div>
 								)}
 							</div>
@@ -237,7 +240,8 @@ export default function PublishPage() {
 								</div>
 							}
 							className="mb-0"
-							startContent={<ImagesIcon size={26} />}
+							startContent={selectedKey === "2" ? <ImagesFilledIcon size={26} /> : <ImagesIcon size={26} />}
+							isDisabled={isLinkValid}
 						>
 							<FileUploadButton />
 						</AccordionItem>
