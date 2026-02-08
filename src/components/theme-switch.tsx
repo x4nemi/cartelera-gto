@@ -44,6 +44,15 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         metaThemeColor.setAttribute("content", "#000000");
       }
     }
+
+    const htmlElement = document.querySelectorAll("apple-mobile-web-app-status-bar-style, meta[name='theme-color']");
+    htmlElement.forEach((element) => {
+      if (theme === "light") {
+        element.setAttribute("content", "#C8E2FB");
+      } else {
+        element.setAttribute("content", "#000000");
+      }
+    });
   }, [theme]);
 
   // Prevent Hydration Mismatch
