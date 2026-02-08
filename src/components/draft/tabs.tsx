@@ -17,8 +17,8 @@ const tabs = [
         label: "Taller / Curso",
         icon: <LoopIcon size={26} color="bg-secondary" />,
         content: "Es un evento recurrente",
-        coso: (selectedDays: string[], onChange: (days: string[]) => void, until: DateValue | null, setUntil: (date: DateValue | null) => void) => (
-            <WorkshopCalendar days={selectedDays} onChange={onChange} until={until} setUntil={setUntil} />
+        coso: (selectedDays: string[], onChange: (days: string[]) => void, until: DateValue | null, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void) => (
+            <WorkshopCalendar days={selectedDays} onChange={onChange} until={until} setUntil={setUntil} every={every} setEvery={setEvery} />
         )
     },
     {
@@ -29,7 +29,7 @@ const tabs = [
     },
 ];
 
-export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWorkshopDays, until, setUntil, dateRange, setDateRange }: { selectedDays: DateValue[], setSelectedDays: (days: DateValue[]) => void, workshopDays: string[], setWorkshopDays: (days: string[]) => void, until: DateValue | null, setUntil: (date: DateValue | null) => void, dateRange: { start?: DateValue | undefined, end?: DateValue }, setDateRange: (range: { start: DateValue | null, end: DateValue | null }) => void }) => {
+export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWorkshopDays, until, setUntil, every, setEvery, dateRange, setDateRange }: { selectedDays: DateValue[], setSelectedDays: (days: DateValue[]) => void, workshopDays: string[], setWorkshopDays: (days: string[]) => void, until: DateValue | null, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void, dateRange: { start?: DateValue | undefined, end?: DateValue }, setDateRange: (range: { start: DateValue | null, end: DateValue | null }) => void }) => {
     return (
         <>
             <p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación:</p>
@@ -46,7 +46,7 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
                                 <Alert variant="flat" description={tab.content} hideIconWrapper color="primary" className="p-0 text-center" classNames={{ iconWrapper: "-mr-2" }} icon={tab.icon} />
                                 {tab.calendar && (tab.calendar(selectedDays, setSelectedDays)
                                 )}
-                                {tab.coso && (tab.coso(workshopDays, setWorkshopDays, until, setUntil))}
+                                {tab.coso && (tab.coso(workshopDays, setWorkshopDays, until, setUntil, every, setEvery))}
                                 {tab.months && tab.months(dateRange, setDateRange)}
                             </CardBody>
                         </Card>

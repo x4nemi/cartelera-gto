@@ -2,6 +2,7 @@ import { EventDates } from "@/components/draft/tabs";
 import { FileUploadButton } from "@/components/fileUploadButton";
 import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { ImageGallery } from "@/components/imageGallery";
+import { CancelModal } from "@/components/modal/cancelModal";
 import { createPost, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, addToast, Button, Card, cn, DateValue, Input, Link, Textarea, User } from "@heroui/react";
@@ -10,6 +11,21 @@ import { useEffect, useRef, useState } from "react";
 export default function PublishPage() {
 	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
+	const [openCancelModal, setOpenCancelModal] = useState(false);
+
+	const handleCancel = () => {
+		setOpenCancelModal(false);
+		setSelectedKey(null);
+		setLink("");
+		setIsLinkValid(false);
+		setPostData(null);
+		setSelectedDates([]);
+		setWorkshopDays([]);
+		setUntil(null);
+		setDateRange({ start: null, end: null });
+		localStorage.removeItem("draftPostData");
+	}
+
 	//#endregion
 
 	//#region Instagram
@@ -115,8 +131,11 @@ export default function PublishPage() {
 	//#region selected dates
 	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
 	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
+	const [every, setEvery] = useState<number>(1);
 	const [until, setUntil] = useState<DateValue | null>(null);
 	const [dateRange, setDateRange] = useState<{ start: DateValue | null, end: DateValue | null }>({ start: null, end: null });
+
+	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
 	//#endregion
 
 	return (
@@ -227,7 +246,7 @@ export default function PublishPage() {
 												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
 											</div>
 										</Card>
-										<EventDates selectedDays={selectedDates} setSelectedDays={setSelectedDates} workshopDays={workshopDays} setWorkshopDays={setWorkshopDays} until={until} setUntil={setUntil} dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }} setDateRange={setDateRange} />
+										<EventDates selectedDays={selectedDates} setSelectedDays={setSelectedDates} workshopDays={workshopDays} setWorkshopDays={setWorkshopDays} until={until} setUntil={setUntil} dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }} setDateRange={setDateRange} every={every} setEvery={setEvery} />
 										{/* <DatesWidget selectedDays={selectedDates} onChange={setSelectedDates} /> */}
 									</div>
 								)}
@@ -251,12 +270,13 @@ export default function PublishPage() {
 							<FileUploadButton />
 						</AccordionItem>
 					</Accordion>
-					{selectedDates.length > 0 && <div className="flex w-full justify-end gap-2 mt-3">
-						<Button size="lg" color="danger" variant="bordered">Cancelar</Button>
+					{hasSelectedDates && <div className="flex w-full justify-end gap-2 mt-3">
+						<Button size="lg" color="danger" variant="bordered" onPress={() => setOpenCancelModal(true)}>Cancelar</Button>
 						<Button className="" size="lg" color="primary" variant="solid" onPress={handlePublishPost}>Crear evento</Button>
 					</div>}
 				</div>
 			</section>
+			<CancelModal openModal={openCancelModal} setOpenModal={setOpenCancelModal} onCancel={handleCancel} />
 		</DefaultLayout>
 	);
 }

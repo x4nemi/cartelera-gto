@@ -1,7 +1,7 @@
 import { DatePicker, DateValue, Input, Select, SelectItem } from '@heroui/react'
 import { getLocalTimeZone, today } from '@internationalized/date';
 
-export const WorkshopCalendar = ({ days, onChange, until, setUntil }: { days: string[]; until: DateValue | null; onChange: (days: string[]) => void, setUntil: (date: DateValue | null) => void }) => {
+export const WorkshopCalendar = ({ days, onChange, until, setUntil, every, setEvery }: { days: string[]; until: DateValue | null; onChange: (days: string[]) => void, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void }) => {
     const daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
     const validate = (value: string) => {
@@ -34,7 +34,9 @@ export const WorkshopCalendar = ({ days, onChange, until, setUntil }: { days: st
                     min={1}
                     max={10}
                     className='w-20'
+                    value={every.toString()}
                     validate={validate}
+                    onChange={(e) => setEvery(Number(e.target.value))}
                 />
                 <p>semana(s)</p>
             </div>
