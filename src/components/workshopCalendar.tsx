@@ -49,6 +49,7 @@ export const WorkshopCalendar = ({ days, onChange, until, setUntil }: { days: st
                     onChange={setUntil}
                 />
             </div>
+            <p className='text-danger italic mt-4 text-sm text-center'>Nota: Si hay una fecha límite de inscripción, entonces selecciónala en &quot;Hasta&quot;. Ya que si seleccionas una fecha posterior, el evento se seguirá viendo en la plataforma.</p>
         </div>
     )
 }
