@@ -29,7 +29,7 @@ const tabs = [
     },
 ];
 
-export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWorkshopDays, until, setUntil, every, setEvery, dateRange, setDateRange }: { selectedDays: DateValue[], setSelectedDays: (days: DateValue[]) => void, workshopDays: string[], setWorkshopDays: (days: string[]) => void, until: DateValue | null, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void, dateRange: { start?: DateValue | undefined, end?: DateValue }, setDateRange: (range: { start: DateValue | null, end: DateValue | null }) => void }) => {
+export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWorkshopDays, until, setUntil, every, setEvery, dateRange, setDateRange, setType }: { selectedDays: DateValue[], setSelectedDays: (days: DateValue[]) => void, workshopDays: string[], setWorkshopDays: (days: string[]) => void, until: DateValue | null, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void, dateRange: { start?: DateValue | undefined, end?: DateValue }, setDateRange: (range: { start: DateValue | null, end: DateValue | null }) => void, setType: (type: "event" | "workshop" | "calendar" | "draft") => void }) => {
     return (
         <>
             <p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación:</p>
@@ -40,6 +40,12 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
                         title={tab.label}
                         className="w-full"
                         titleValue="hola"
+                        onChange={() => {
+                            if (index === 0) setType("event");
+                            else if (index === 1) setType("workshop");
+                            else if (index === 2) setType("calendar");
+                            else setType("draft");
+                        }}
                     >
                         <Card shadow="none">
                             <CardBody className="w-full flex bg-content1">

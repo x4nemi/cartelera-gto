@@ -6,21 +6,21 @@ import { useMemo, useState } from "react";
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
 
-	const orderedEvents = useMemo(() => {
-		return [...randomEvents].sort((a, b) => {
-			const dateA = a.dates && a.dates.length > 0
-				? Math.min(...a.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
-				: new Date().getTime();
-			const dateB = b.dates && b.dates.length > 0
-				? Math.min(...b.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
-				: new Date().getTime();
-			return isAscendingOrder ? dateA - dateB : dateB - dateA;
-		});
-	}, [isAscendingOrder]);
+	// const orderedEvents = useMemo(() => {
+	// 	return [...randomEvents].sort((a, b) => {
+	// 		const dateA = a.dates && a.dates.length > 0
+	// 			? Math.min(...a.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
+	// 			: new Date().getTime();
+	// 		const dateB = b.dates && b.dates.length > 0
+	// 			? Math.min(...b.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
+	// 			: new Date().getTime();
+	// 		return isAscendingOrder ? dateA - dateB : dateB - dateA;
+	// 	});
+	// }, [isAscendingOrder]);
 	
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 mt-5 relative mx-2">
+			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 mt-5 relative md:mx-auto mx-5">
 				<div className="container mx-auto justify-center transition-all duration-300">
 					<div>
 						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder}/>
@@ -28,7 +28,7 @@ export default function IndexPage() {
 
 				</div>
 
-				<Wall cardsData={orderedEvents} />
+				<Wall cardsData={randomEvents} />
 			</section>
 		</DefaultLayout>
 	);

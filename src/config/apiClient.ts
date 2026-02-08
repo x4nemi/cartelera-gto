@@ -127,8 +127,8 @@ export interface PostData {
     timestamp?: string;
     createdAt?: string;
     updatedAt?: string;
-    dates?: DateValue[];
-    isDraft?: boolean;
+    dates?: EventDate | WorkshopDate | DateRange | null;
+    type?: "event" | "workshop" | "calendar" | "draft";
 }
 
 export interface PaginatedResponse<T> {
@@ -141,6 +141,20 @@ export interface PaginatedResponse<T> {
         hasNextPage: boolean;
         hasPrevPage: boolean;
     };
+}
+
+export interface EventDate {
+  dates: DateValue[];
+}
+
+export interface WorkshopDate {
+  workshopDays: string[];
+  until: DateValue | null;
+  every: number;
+}
+
+export interface DateRange {
+  dateRange: { start: DateValue | null; end: DateValue | null };
 }
 
 // Cosmos DB API for user and event management
@@ -419,7 +433,8 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         ownerFullName: postData.ownerFullName,
         ownerProfilePicUrl: ownerProfilePicUrl,
         timestamp: postData.timestamp,
-        isDraft: true
+        type: "draft"
+
     };
 
     const result = await CosmosAPI.insertEvent(postToInsert);

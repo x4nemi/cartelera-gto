@@ -3,8 +3,9 @@ import { FileUploadButton } from "@/components/fileUploadButton";
 import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { ImageGallery } from "@/components/imageGallery";
 import { CancelModal } from "@/components/modal/cancelModal";
-import { createPost, PostData, updatePost } from '@/config/apiClient';
+import { createPost, DateRange, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
+import { EventDate, WorkshopDate } from "@/types";
 import { Accordion, AccordionItem, addToast, Button, Card, cn, DateValue, Input, Link, Textarea, User } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 
@@ -12,6 +13,7 @@ export default function PublishPage() {
 	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
 	const [openCancelModal, setOpenCancelModal] = useState(false);
+	const [isPublishing, setIsPublishing] = useState(false);
 
 	const handleCancel = () => {
 		setOpenCancelModal(false);
@@ -81,10 +83,13 @@ export default function PublishPage() {
 		if (!postData) return;
 
 		try {
+			const dates = type === "event" ? finalEventDates : (type === "workshop" ? finalWorkshopDates : finalDateRange);
+			
 			const postDataToPublish = {
 				...postData,
 				isDraft: false,
-				dates: selectedDates,
+				type: type,
+				dates: dates || null
 			};
 
 			const publishedPost = await updatePost(postDataToPublish);
@@ -100,6 +105,7 @@ export default function PublishPage() {
 
 				// Clear draft data from localStorage
 				localStorage.removeItem("draftPostData");
+				localStorage.removeItem("datesInfo");
 			} else {
 				addToast({
 					title: "Error al publicar",
@@ -124,6 +130,23 @@ export default function PublishPage() {
 			setSelectedKey(JSON.parse(draftData).selectedKey || null);
 			setLink(JSON.parse(draftData).url || "");
 		}
+
+		const datesInfo = localStorage.getItem("datesInfo");
+		if (datesInfo) {
+			const parsedDatesInfo = JSON.parse(datesInfo);
+			if (parsedDatesInfo.dates) {
+				setSelectedDates(parsedDatesInfo.dates);
+				setType("event");
+			} else if (parsedDatesInfo.workshopDays) {
+				setWorkshopDays(parsedDatesInfo.workshopDays);
+				setUntil(parsedDatesInfo.until);
+				setEvery(parsedDatesInfo.every);
+				setType("workshop");
+			} else if (parsedDatesInfo.start && parsedDatesInfo.end) {
+				setDateRange({ start: parsedDatesInfo.start, end: parsedDatesInfo.end });
+				setType("calendar");
+			}
+		}
 	}, []);
 
 	//#endregion
@@ -135,7 +158,29 @@ export default function PublishPage() {
 	const [until, setUntil] = useState<DateValue | null>(null);
 	const [dateRange, setDateRange] = useState<{ start: DateValue | null, end: DateValue | null }>({ start: null, end: null });
 
+	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">("draft");
+
+	const [finalEventDates, setFinalEventDates] = useState<EventDate | null>(null);
+	const [finalWorkshopDates, setFinalWorkshopDates] = useState<WorkshopDate | null>(null);
+	const [finalDateRange, setFinalDateRange] = useState<DateRange | null>(null);
+
+
 	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
+
+	useEffect(() => {
+		if(type === "event") {
+			setFinalEventDates({ dates: selectedDates });
+			localStorage.setItem("datesInfo", JSON.stringify({ dates: selectedDates }));
+		}
+		if(type === "workshop") {
+			setFinalWorkshopDates({ workshopDays, until, every });
+			localStorage.setItem("datesInfo", JSON.stringify({ workshopDays, until, every }));
+		}
+		if(type === "calendar") {
+			setFinalDateRange({ dateRange: { start: dateRange.start, end: dateRange.end } });
+			localStorage.setItem("datesInfo", JSON.stringify(dateRange));
+		}
+	}, [selectedDates, workshopDays, until, every, dateRange, type]);
 	//#endregion
 
 	return (
@@ -246,8 +291,7 @@ export default function PublishPage() {
 												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
 											</div>
 										</Card>
-										<EventDates selectedDays={selectedDates} setSelectedDays={setSelectedDates} workshopDays={workshopDays} setWorkshopDays={setWorkshopDays} until={until} setUntil={setUntil} dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }} setDateRange={setDateRange} every={every} setEvery={setEvery} />
-										{/* <DatesWidget selectedDays={selectedDates} onChange={setSelectedDates} /> */}
+										<EventDates selectedDays={selectedDates} setSelectedDays={setSelectedDates} workshopDays={workshopDays} setWorkshopDays={setWorkshopDays} until={until} setUntil={setUntil} dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }} setDateRange={setDateRange} every={every} setEvery={setEvery} setType={setType} />
 									</div>
 								)}
 							</div>

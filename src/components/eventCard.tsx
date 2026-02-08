@@ -2,19 +2,33 @@ import { Card, CardBody, CardHeader, Image, useDisclosure } from "@heroui/react"
 import { EventDrawer } from "./eventDrawer"
 import { PostData } from "@/config/apiClient"
 
-const months = ["Enero", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
 export const EventCard = (props: PostData) => {
-	const eventDate = // get the first date after today if exists, else the first date
-		props.dates && props.dates.length > 0
-			? new Date(
-				Math.min(
-					...props.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime())
-				)
-			)
-			: new Date();
-	const month = months[eventDate.getMonth()];
-	const day = eventDate.getDate();
+	const today = new Date();
+	const eventDate = () => {
+		if (props.dates && "dates" in props.dates && props.dates.dates.length > 0) {
+			// return the most recent date after today, if there are multiple dates
+			const futureDates = props.dates.dates.filter(date => new Date(date.toString()) >= today);
+			if (futureDates.length > 0) {
+				return new Date(futureDates[0].toString());
+			}
+		} else if (props.dates && "workshopDays" in props.dates && props.dates.workshopDays.length > 0) {
+			// return the most recent date after today, if there are multiple workshop days
+			const futureWorkshopDates = props.dates.workshopDays.filter(date => new Date(date.toString()) >= today);
+			if (futureWorkshopDates.length > 0) {
+				return new Date(futureWorkshopDates[0].toString());
+			}
+		} else if (props.dates && "dateRange" in props.dates && props.dates.dateRange.start) {
+			// max between today and the start of the date range
+			const startDate = new Date(props.dates.dateRange.start.toString());
+			return startDate >= today ? startDate : today;
+		}
+		return today; // default to today if no dates are available
+	}
+		
+	const month = months[eventDate().getMonth()];
+	const day = eventDate().getDate();
 
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	return (
