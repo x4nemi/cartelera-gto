@@ -35,9 +35,19 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
     setIsMounted(true);
   }, [isMounted]);
 
+  useEffect(() => {
+    const metaThemeColor = document.getElementById("meta-theme-color") as HTMLMetaElement | null;
+    if (metaThemeColor) {
+      if (theme === "light") {
+        metaThemeColor.setAttribute("content", "#C8E2FB");
+      } else {
+        metaThemeColor.setAttribute("content", "#000000");
+      }
+    }
+  }, [theme]);
+
   // Prevent Hydration Mismatch
   if (!isMounted) return <div className="w-6 h-6" />;
-
   return (
     <Component
       aria-label={isSelected ? "Switch to dark mode" : "Switch to light mode"}
