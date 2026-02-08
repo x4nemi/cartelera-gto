@@ -119,14 +119,14 @@ export default function PublishPage() {
 
 	return (
 		<DefaultLayout>
-			<section className={`flex flex-col justify-center gap-4 flex-grow max-w-3xl w-full mx-auto px-2" + ${selectedKey !== null ? " mt-10" : " mt-20"}`}>
-				<h1 className={title({ class: "flex items-center gap-2 text-2xl"})}>
+			<section className={`flex flex-col justify-center gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2" + ${selectedKey !== null ? " mt-10" : " mt-20"} mx-4`}>
+				<h1 className="text-3xl font-bold flex items-center gap-2 text-foreground md:text-4xl lg:text-5xl">
 					<span className="relative flex size-3">
 						<span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isLinkValid ? "bg-amber-400" : "bg-sky-400"}`}></span>
 						<span className={`relative inline-flex size-3 rounded-full ${isLinkValid ? "bg-amber-500" : "bg-sky-500"}`}></span>
 					</span>
 					Crea tu publicación</h1>
-				<h3 className="font-semibold text-foreground mt-1 text-lg">¿Cómo deseas publicarlo?</h3>
+				<h3 className="font-semibold text-foreground text-lg">¿Cómo deseas publicarlo?</h3>
 				<div className="w-full">
 					<Accordion
 						showDivider={false}
