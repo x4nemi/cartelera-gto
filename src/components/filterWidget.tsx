@@ -40,7 +40,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
     //#endregion
 
     return (
-        <Card className="w-full backdrop-blur-sm bg-background/60" >
+        <Card className="w-full bg-content1" >
             <CardHeader className="flex justify-between ">
                 <div className="flex items-center gap-2">
                     <FilterIcon size={24} />
@@ -56,7 +56,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                 {/* Calendario */}
                 <CardBody>
                     <h3 className="text-sm text-default-500 mb-3">Elige rango de fechas:</h3>
-                    <DateRangePicker label="" className="max-w-xs" variant="flat" size="lg" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="primary" />
+                    <DateRangePicker label="" className="max-w-xs" variant="flat" size="sm" defaultValue={{ start: startDate, end: endDate }} minValue={minDate} visibleMonths={endDate?.month !== startDate?.month ? 2 : 1} onChange={onRangeChange} value={{ start: startDate, end: endDate }} color="primary" />
                 </CardBody>
                 <Divider orientation="horizontal" className=" md:hidden" />
                 <Divider orientation="vertical" className="hidden h-auto md:block" />
@@ -67,7 +67,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                     <div className="flex items-center gap-2">
                         <Input
                             isReadOnly
-                            size="lg"
+                            size="sm"
                             defaultValue="Fecha"
                             variant="flat"
                             label=""
@@ -77,7 +77,7 @@ export const FilterWidget = ({ isAscending, setIsAscending }: { isAscending: boo
                             aria-label={isAscending ? "Ordenar descendente" : "Ordenar ascendente"}
                             className="transition-transform duration-300"
                             variant="flat"
-                            size="lg"
+                            size="sm"
                             onPress={() => setIsAscending(!isAscending)}
                             style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
                             color="primary"
