@@ -164,6 +164,11 @@ export default function PublishPage() {
 							}
 							startContent={selectedKey === "1" ? <IGFilledIcon size={26} /> : <IgIcon size={26} />}
 							classNames={{base:"backdrop-blur-sm mb-2 "}}
+							onPress={() => {
+								if (selectedKey === "1" && isLinkValid) {
+									setSelectedKey("1");
+								}
+							}}
 						>
 							<div className="flex flex-col gap-2">
 								<label htmlFor="instagram-link" className="text-sm font-medium text-foreground">Link de la publicación</label>
@@ -241,7 +246,7 @@ export default function PublishPage() {
 							}
 							className="mb-0"
 							startContent={selectedKey === "2" ? <ImagesFilledIcon size={26} /> : <ImagesIcon size={26} />}
-							isDisabled={isLinkValid}
+							hidden={isLinkValid}
 						>
 							<FileUploadButton />
 						</AccordionItem>
