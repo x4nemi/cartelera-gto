@@ -1,5 +1,6 @@
 import { DatesWidget } from "@/components/draft/datesWidget";
 import { FileUploadButton } from "@/components/fileUploadButton";
+import { IgIcon, ImagesIcon } from "@/components/icons";
 import { ImageGallery } from "@/components/imageGallery";
 import { title } from "@/components/primitives";
 import { createPost, PostData, updatePost } from '@/config/apiClient';
@@ -15,7 +16,7 @@ export default function PublishPage() {
 	//#region Instagram
 	const [link, setLink] = useState<string>("");
 	const [loading, setLoading] = useState(false);
-	const [isLinkValid, setIsLinkValid] = useState<boolean>(true);
+	const [isLinkValid, setIsLinkValid] = useState<boolean>(false);
 	const [isValidateButtonClicked, setIsValidateButtonClicked] = useState(false);
 	const [postData, setPostData] = useState<PostData | null>(null);
 
@@ -118,8 +119,8 @@ export default function PublishPage() {
 
 	return (
 		<DefaultLayout>
-			<section className={`flex flex-col justify-center gap-4 flex-grow max-w-3xl w-full mx-auto px-2" + ${selectedKey ? " mt-10" : " mt-20"}`}>
-				<h1 className={title({ class: "mb-2 flex items-center gap-2 text-2xl"})}>
+			<section className={`flex flex-col justify-center gap-4 flex-grow max-w-3xl w-full mx-auto px-2" + ${selectedKey !== null ? " mt-10" : " mt-20"}`}>
+				<h1 className={title({ class: "flex items-center gap-2 text-2xl"})}>
 					<span className="relative flex size-3">
 						<span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isLinkValid ? "bg-amber-400" : "bg-sky-400"}`}></span>
 						<span className={`relative inline-flex size-3 rounded-full ${isLinkValid ? "bg-amber-500" : "bg-sky-500"}`}></span>
@@ -155,10 +156,11 @@ export default function PublishPage() {
 								<div className="flex items-center justify-between w-full">
 									<div className="flex flex-col items-start">
 										<span className="font-bold text-md">Con un link de Instagram</span>
-										<span className="text-default-600 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento</span>
+										<span className="text-default-600 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento. Tu cuenta debe ser pública.</span>
 									</div>
 								</div>
 							}
+							startContent={<IgIcon size={26} />}
 							classNames={{base:"backdrop-blur-sm mb-2 "}}
 						>
 							<div className="flex flex-col gap-2">
@@ -171,14 +173,14 @@ export default function PublishPage() {
 										onChange={(e) => setLink(e.target.value)}
 										classNames={{
 											input: "text-sm",
-											inputWrapper: `h-12 ${isLinkValid ? "rounded-r-none text-default-400" : ""}`,
+											inputWrapper: `h-12 ${!isLinkValid ? "rounded-r-none text-default-400" : ""}`,
 										}}
-										isClearable={isLinkValid}
+										isClearable={!isLinkValid}
 										onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
 										ref={IgInputRef}
 										readOnly={isLinkValid}
 									/>
-									{isLinkValid && <Button
+									{!isLinkValid && <Button
 										color="primary"
 										variant="flat"
 										isLoading={loading}
@@ -230,19 +232,20 @@ export default function PublishPage() {
 								<div className="flex items-center justify-between w-full">
 									<div className="flex flex-col items-start ">
 										<span className="font-bold text-md">Desde cero</span>
-										<span className="text-default-700 font-medium text-sm italic">Sube tus propias imágenes y detalles</span>
+										<span className="text-default-700 font-medium text-sm italic">Sube tus propias imágenes y detalles.</span>
 									</div>
 								</div>
 							}
 							className="mb-0"
+							startContent={<ImagesIcon size={26} />}
 						>
 							<FileUploadButton />
 						</AccordionItem>
 					</Accordion>
-					<div className="flex w-full justify-end gap-2 mt-3">
+					{selectedDates.length > 0 && <div className="flex w-full justify-end gap-2 mt-3">
 						<Button size="lg" color="danger" variant="bordered">Cancelar</Button>
 						<Button className="" size="lg" color="primary" variant="solid" onPress={handlePublishPost}>Crear evento</Button>
-					</div>
+					</div>}
 				</div>
 			</section>
 		</DefaultLayout>
