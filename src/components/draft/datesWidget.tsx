@@ -38,17 +38,6 @@ export const DatesWidget = ({ selectedDays, onChange }: {
                 {
                     widgetIds.map((widgetId, index) => (
                         <div className="flex gap-1 transition-all duration-200" key={widgetId}>
-                            <ButtonGroup className="rounded-none">
-                                {//only show add button on the last widget and when there is a selected date
-                                    (index === widgetIds.length - 1) && selectedDays && selectedDays[index] && <Button isIconOnly onPress={addNewWidget} color="primary" variant="flat"><PlusIcon size={18} /></Button>
-                                }
-                                {//show remove button if there is more than one widget and not on the last empty widget
-                                    widgetIds.length > 1 && selectedDays && selectedDays[index] &&
-                                    <Button isIconOnly variant="flat" onPress={() => {
-                                        addOrRemoveDate(null, widgetId);
-                                    }} className="rounded-l-none" color={"danger"}><MinusIcon size={18} /></Button>
-                                }
-                            </ButtonGroup>
                             <DatePicker
                                 hideTimeZone
                                 showMonthAndYearPickers
@@ -63,7 +52,17 @@ export const DatesWidget = ({ selectedDays, onChange }: {
                                     return false;
                                 }}
                             />
-
+                            <ButtonGroup className="rounded-none">
+                                {//only show add button on the last widget and when there is a selected date
+                                    (index === widgetIds.length - 1) && selectedDays && selectedDays[index] && <Button isIconOnly onPress={addNewWidget} color="primary" variant="flat"><PlusIcon size={18} /></Button>
+                                }
+                                {//show remove button if there is more than one widget and not on the last empty widget
+                                    widgetIds.length > 1 && selectedDays && selectedDays[index] &&
+                                    <Button isIconOnly variant="flat" onPress={() => {
+                                        addOrRemoveDate(null, widgetId);
+                                    }} className="rounded-l-none" color={"danger"}><MinusIcon size={18} /></Button>
+                                }
+                            </ButtonGroup>
                         </div>
                     ))
                 }
