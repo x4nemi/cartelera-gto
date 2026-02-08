@@ -12,9 +12,9 @@ export default function DefaultLayout({
 				{children}
 			</main>
 			<footer className="w-full flex items-center justify-center py-6">
-				<div className="flex items-center gap-1 text-current">
-					<span className="text-xs">Hecho por cuevanenses para </span>
-					<p className="text-xs text-secondary">cuevanenses</p>
+				<div className="flex items-center gap-1 text-current italic">
+					<span className="text-sm">Hecho por cuevanenses para </span>
+					<p className="text-sm text-primary">cuevanenses</p>
 				</div>
 			</footer>
 		</div>
