@@ -1,12 +1,11 @@
-import { EventDates } from "@/components/draft/tabs";
 import { FileUploadButton } from "@/components/fileUploadButton";
 import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
-import { ImageGallery } from "@/components/imageGallery";
 import { CancelModal } from "@/components/modal/cancelModal";
+import { InstagramLinkInput, InstagramPostPreview, PublishActions } from "@/components/publish";
 import { createPost, DateRange, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
 import { EventDate, WorkshopDate } from "@/types";
-import { Accordion, AccordionItem, addToast, Button, Card, cn, DateValue, Input, Link, Textarea, User } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, cn, DateValue } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 
 export default function PublishPage() {
@@ -234,67 +233,32 @@ export default function PublishPage() {
 								}
 							}}
 						>
-							<div className="flex flex-col gap-2">
-								<label htmlFor="instagram-link" className="text-sm font-medium text-foreground">Link de la publicación</label>
-								<div className="flex">
-									<Input
-										id="instagram-link"
-										placeholder="https://www.instagram.com/p/..."
-										value={link}
-										onChange={(e) => setLink(e.target.value)}
-										classNames={{
-											input: "text-sm",
-											inputWrapper: `h-12 ${!isLinkValid ? "rounded-r-none text-default-400" : ""}`,
-										}}
-										isClearable={!isLinkValid && !loading}
-										onClear={() => { setIsValidateButtonClicked(false); setLink("") }}
-										ref={IgInputRef}
-										readOnly={isLinkValid}
-									/>
-									{!isLinkValid && <Button
-										color="primary"
-										variant="flat"
-										isLoading={loading}
-										isDisabled={link.length === 0}
-										onPress={() => handleValidatingLink(link)}
-										className="min-w-24 h-12 rounded-l-none"
-									>
-										Validar
-									</Button>}
-								</div>
-								{isValidateButtonClicked && link.length > 0 && !loading && !isLinkValid && (
-									<p className="text-xs text-danger">Link inválido. Inténtalo de nuevo.</p>
-								)}
-
-								{isLinkValid && (
-									<div className="mt-2 flex flex-col rounded-xl ">
-										<p className="text-sm font-medium text-foreground-500 mb-2">Publicación encontrada</p>
-
-										<Card className="flex flex-col justify-start mb-2 bg-content2 p-4 gap-2" shadow="none">
-											<p className="text-small text-foreground-700  mb-2">Usuario</p>
-											<User
-												avatarProps={{
-													src: postData?.ownerProfilePicUrl || "",
-												}}
-												description={
-													<Link isExternal href={"https://www.instagram.com/" + postData?.ownerUsername} size="sm">
-														@{postData?.ownerUsername}
-													</Link>
-												}
-												className="self-start ml-3"
-												name={postData?.ownerFullName || ""}
-											/>
-											<Textarea className="w-full mt-3" label="Descripción" placeholder="Describe tu evento aquí" value={postData?.caption || ""} labelPlacement="outside" variant="bordered" />
-
-											<p className="text-small text-foreground-700 mt-3 mb-1">Imágenes</p>
-											<div className="gap-2 flex flex-col">
-												<ImageGallery images={postData?.images?.map(url => ({ src: url })) || (postData?.displayUrl ? [{ src: postData.displayUrl }] : [])} />
-											</div>
-										</Card>
-										<EventDates selectedDays={selectedDates} setSelectedDays={setSelectedDates} workshopDays={workshopDays} setWorkshopDays={setWorkshopDays} until={until} setUntil={setUntil} dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }} setDateRange={setDateRange} every={every} setEvery={setEvery} setType={setType} />
-									</div>
-								)}
-							</div>
+							<InstagramLinkInput
+								link={link}
+								setLink={setLink}
+								loading={loading}
+								isLinkValid={isLinkValid}
+								isValidateButtonClicked={isValidateButtonClicked}
+								setIsValidateButtonClicked={setIsValidateButtonClicked}
+								onValidate={handleValidatingLink}
+								inputRef={IgInputRef}
+							/>
+							{isLinkValid && (
+								<InstagramPostPreview
+									postData={postData}
+									selectedDates={selectedDates}
+									setSelectedDates={setSelectedDates}
+									workshopDays={workshopDays}
+									setWorkshopDays={setWorkshopDays}
+									until={until}
+									setUntil={setUntil}
+									dateRange={dateRange}
+									setDateRange={setDateRange}
+									every={every}
+									setEvery={setEvery}
+									setType={setType}
+								/>
+							)}
 						</AccordionItem>
 						<AccordionItem
 							key="2"
@@ -314,10 +278,12 @@ export default function PublishPage() {
 							<FileUploadButton />
 						</AccordionItem>
 					</Accordion>
-					{hasSelectedDates && <div className="flex w-full justify-end gap-2 mt-3">
-						<Button size="lg" color="danger" variant="bordered" onPress={() => setOpenCancelModal(true)}>Cancelar</Button>
-						<Button className="" size="lg" color="primary" variant="solid" onPress={handlePublishPost}>Crear evento</Button>
-					</div>}
+					{hasSelectedDates && (
+						<PublishActions
+							onCancel={() => setOpenCancelModal(true)}
+							onPublish={handlePublishPost}
+						/>
+					)}
 				</div>
 			</section>
 			<CancelModal openModal={openCancelModal} setOpenModal={setOpenCancelModal} onCancel={handleCancel} />
