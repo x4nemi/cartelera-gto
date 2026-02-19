@@ -17,17 +17,18 @@ const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
     // const { socialLinks } = user || {};
+    const eventDates = dates && 'dates' in dates ? dates.dates : [];
     const dayName = new Date(
-        dates && dates.length > 0
+        eventDates.length > 0
             ? Math.min(
-                ...dates.map(date => new Date(date.year, date.month - 1, date.day).getTime())
+                ...eventDates.map((date) => new Date(date.year, date.month - 1, date.day).getTime())
             )
             : new Date().getTime()
     ).toLocaleDateString('es-MX', { weekday: 'long' });
     const formattedDate = new Date(
-        dates && dates.length > 0
+        eventDates.length > 0
             ? Math.min(
-                ...dates.map(date => new Date(date.year, date.month - 1, date.day).getTime())
+                ...eventDates.map((date) => new Date(date.year, date.month - 1, date.day).getTime())
             )
             : new Date().getTime()
     ).toLocaleDateString('es-MX', {

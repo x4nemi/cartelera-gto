@@ -73,7 +73,7 @@ Durante el taller aprenderás las bases necesarias para desarrollar tu amigurumi
 WhatsApp: 417 177 5592
 
 Tejer también puede ser una forma de volver a jugar 🦖💫`,
-    dates: [parseDate("2026-01-19")],
+    dates: { dates: [parseDate("2026-01-19")] },
     displayUrl: '/aracne/dinosaurio.png',
     images: ['/aracne/dinosaurio.png'],
     ownerUsername: "aracne_crochet_gto",
@@ -103,7 +103,7 @@ Ideal para principiantes y para quienes quieren seguir practicando.
 417 177 5592
 
 Te esperamos para tejer juntxs 🕷️🖤`,
-    dates: [parseDate("2026-01-10")],
+    dates: { dates: [parseDate("2026-01-10")] },
     displayUrl: '/aracne/taller.png',
     images: ['/aracne/taller.png'],
     ownerUsername: "aracne_crochet_gto",
@@ -114,7 +114,7 @@ Te esperamos para tejer juntxs 🕷️🖤`,
     _id: "el-brutalista-2026-01-15",
     shortCode: "el-brutalista-2026-01-15",
     caption: "🎬 Cine en Casa Cuévano · 💰 $30",
-    dates: [parseDate("2026-01-15")],
+    dates: { dates: [parseDate("2026-01-15")] },
     displayUrl: `/cuevano/brutalista.png`,
     ownerUsername: "casacuevano",
     ownerFullName: "Casa Cuévano",
@@ -128,7 +128,7 @@ Cerámica viva en Casa Cuévano
 📅 Sáb 17 · 🕙 10:00 a.m. – 2:30 p.m.
 💰 $980 · 👥 Cupo limitado
 🤝 A Mano en un Hornito`,
-    dates: [parseDate("2026-01-17")],
+    dates: { dates: [parseDate("2026-01-17")] },
     displayUrl: `/cuevano/ceramica.png`,
     ownerUsername: "casacuevano",
     ownerFullName: "Casa Cuévano",
@@ -139,7 +139,7 @@ Cerámica viva en Casa Cuévano
     shortCode: "ternurin-ropita-2026-01-30",  
     caption: `Ven a hacerle ropita a tu #ternurin / #chafarin de la mano de lx maestrx @mermaid_motel_r este viernes 30 de enero en @mylovelystoremx
 Cupo limitado, Aparta tu lugar! 👗`,
-    dates: parseDate("2026-01-30") ? [parseDate("2026-01-30")] : [],
+    dates: { dates: parseDate("2026-01-30") ? [parseDate("2026-01-30")] : [] },
     displayUrl: `/mylovely/ternurin.png`,
     ownerUsername: "mylovelystoremx",
     ownerFullName: "My Lovely Store",
