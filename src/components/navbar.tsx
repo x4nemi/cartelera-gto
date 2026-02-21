@@ -41,7 +41,7 @@ export const Navbar = () => {
         };
     }, []);
 	return (
-		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!bg-transparent !shadow-none !p-0", base:`w-10/12 self-center mt-3  bg-content1 transition-all duration-300 ${isMenuOpen ? "rounded-t-4xl rounded-b-none" : "rounded-4xl"}` }} ref={navMobileRef}>
+		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!bg-transparent !shadow-none !p-0", base:`w-10/12 self-center mt-3  bg-content1/80 transition-all duration-300 ${isMenuOpen ? "rounded-t-4xl rounded-b-none" : "rounded-4xl backdrop-blur-sm"}` }} ref={navMobileRef}>
 			<NavbarMenuToggle className="md:hidden"  />
 			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 				<NavbarBrand className="gap-3 max-w-fit sm:self-center">
