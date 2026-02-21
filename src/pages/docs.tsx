@@ -55,6 +55,10 @@ export default function CreationPage() {
 		setTopIndex(0);
 	}
 
+	function hasReachedEnd() {
+		return topIndex >= steps.length - 1;
+	}
+
 	// Cards visible in the stack (top card + up to 2 behind it for depth)
 	const visibleCards = steps
 		.map((step, i) => ({ step, i }))
@@ -75,9 +79,11 @@ export default function CreationPage() {
 						onClick={// Dismiss top card on click, or reset stack if on last card
 							topIndex >= steps.length - 1 ? reset : dismissTop
 						}
-						onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") {
-							topIndex >= steps.length - 1 ? reset : dismissTop();
-						}}}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" || e.key === " ") {
+								topIndex >= steps.length - 1 ? reset : dismissTop();
+							}
+						}}
 					>
 						<AnimatePresence>
 							{visibleCards.map(({ step, i }) => {
@@ -125,15 +131,29 @@ export default function CreationPage() {
 						</AnimatePresence>
 					</div>
 
-					<p className="text-default-400 text-sm mb-3 select-none">
+					<p className="text-default-500 text-sm mb-3 select-none">
 						Toca para continuar · {topIndex + 1} / {steps.length}
 					</p>
 
-					<Link href="/user" className="w-10/12">
-						<Button color="primary" fullWidth size="lg" endContent={<RightArrowIcon />}>
-							Empezar
-						</Button>
-					</Link>
+					{
+						hasReachedEnd() &&
+						<motion.div
+							initial={{ opacity: 0, scale: 0 }}
+							animate={{ opacity: 1, scale: 1 }}
+							transition={{
+								duration: 0.4,
+								scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+							}}
+							className="w-full"
+						>
+							<Link href="/user" >
+								<Button color="primary" fullWidth size="lg" endContent={<RightArrowIcon />}>
+									Empezar
+								</Button>
+							</Link>
+						</motion.div>
+
+					}
 				</div>
 			</section>
 		</DefaultLayout>
