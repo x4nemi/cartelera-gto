@@ -1,8 +1,8 @@
-import { FBIcon, GlobeIcon, WAIcon, XIcon } from '@/components/icons';
+import { FBIcon, GlobeIcon, WAIcon } from '@/components/icons';
 import { MapInput } from '@/components/map';
 import { createUser } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, CardFooter, addToast } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
 import { useState } from 'react';
 
 interface UserProps {
@@ -71,8 +71,6 @@ export const UserPage = () => {
         const data = Object.fromEntries(new FormData(e.currentTarget));
         const { facebook, whatsapp, website } = data;
 
-        // console.log('Form data:', { address, facebook, whatsapp, website });
-
         // validate fb link
         const patterns = {
             facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?$/,
@@ -99,9 +97,6 @@ export const UserPage = () => {
         if (Object.keys(newErrors).length > 0) {
             return;
         }
-
-        // console.log('Form is valid! Submitting...', data);
-        // submit the form
     }
     //#endregion
 
@@ -166,9 +161,8 @@ export const UserPage = () => {
 
                         {/* Loading state */}
                         {validating && (
-                            <Card shadow='sm' className='rounded-2xl'>
-                                <Alert hideIcon color="primary" description='' title="Buscando usuario..." variant="faded" className='rounded-b-none p-0 pl-4' />
-                                <CardBody className="flex justify-center items-center">
+                            <Card shadow='none'>
+                                <CardBody className="flex justify-center items-center py-5">
                                     <div className="w-xs flex items-center justify-center gap-3">
                                         <div>
                                             <Skeleton className="flex rounded-full w-12 h-12" />
@@ -179,17 +173,17 @@ export const UserPage = () => {
                                         </div>
                                     </div>
                                 </CardBody>
-                                <CardFooter className='justify-end'>
-                                    <Button color="danger" variant='flat' size="sm" onPress={onCancel
+                                {/* <CardFooter className='justify-end'>
+                                    <Button color="danger" variant='flat' onPress={onCancel
                                     }><XIcon size={14} />Cancelar</Button>
-                                </CardFooter>
+                                </CardFooter> */}
                             </Card>
                         )}
 
                         {/* User found - shows at top */}
                         {isUserFound && !validating && (
                             <>
-                                <Card shadow='none' className='rounded-2xl mb-3 bg-primary/20 border-none border-primary-300'>
+                                <Card shadow='none' className='rounded-2xl mb-3'>
                                     <CardBody>
                                         <User
                                             avatarProps={{
