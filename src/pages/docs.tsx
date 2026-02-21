@@ -13,7 +13,7 @@ import {
 	ThreeIcon,
 	TwoIcon,
 } from "@/components/icons";
-import { subtitle, title } from "@/components/primitives";
+import { subtitle } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 
 const steps = [
@@ -46,12 +46,14 @@ const steps = [
 export default function CreationPage() {
 	const [topIndex, setTopIndex] = useState(0);
 
-	function dismissTop() {
+	function dismissTop(e: React.MouseEvent | React.KeyboardEvent) {
+		e.preventDefault();
 		if (topIndex >= steps.length - 1) return;
 		setTopIndex((prev) => prev + 1);
 	}
 
-	function reset() {
+	function reset(e: React.MouseEvent | React.KeyboardEvent) {
+		e.preventDefault();
 		setTopIndex(0);
 	}
 
@@ -67,21 +69,25 @@ export default function CreationPage() {
 
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4 w-full mt-10">
+			<section className="flex flex-col items-center justify-center gap-4 w-full mt-10 mx-2 mb-20">
 				<div className="flex flex-col max-w-3xl w-full text-center justify-center items-center">
-					<h1 className={title()}>¿Te interesa publicar un evento?</h1>
+					<h1 className="md:text-5xl text-4xl font-semibold">¿Te interesa publicar un evento?</h1>
 					<p className={subtitle()}>Sigue estos pasos</p>
+
+					<p className="text-default-500 text-sm  mt-4 select-none">
+						Toca para continuar · {topIndex + 1} / {steps.length}
+					</p>
 					<div
 						className="relative w-full mt-5 cursor-pointer"
-						style={{ height: 420 }}
+						style={{ height: 420, WebkitTapHighlightColor: "transparent" }}
 						role="button"
 						tabIndex={0}
-						onClick={// Dismiss top card on click, or reset stack if on last card
-							topIndex >= steps.length - 1 ? reset : dismissTop
-						}
+						onClick={(e) => {
+							topIndex >= steps.length - 1 ? reset(e) : dismissTop(e);
+						}}
 						onKeyDown={(e) => {
 							if (e.key === "Enter" || e.key === " ") {
-								topIndex >= steps.length - 1 ? reset : dismissTop();
+								topIndex >= steps.length - 1 ? reset(e) : dismissTop(e);
 							}
 						}}
 					>
@@ -91,7 +97,7 @@ export default function CreationPage() {
 								return (
 									<motion.div
 										key={i}
-										className="absolute inset-0 w-full"
+										className="absolute inset-0 w-full will-change-transform"
 										style={{ zIndex: steps.length - i }}
 										initial={{ scale: 1 - depth * 0.05, y: depth * 14, opacity: depth > 1 ? 0 : 1 }}
 										animate={{
@@ -101,15 +107,14 @@ export default function CreationPage() {
 											transition: { type: "spring", visualDuration: 0.4, bounce: 0.25 },
 										}}
 										exit={{
-											y: 600,
-											x: -30,
-											rotate: -12,
+											y: 40,
+											scale: 0.92,
 											opacity: 0,
-											transition: { duration: 0.5, ease: [0.32, 0, 0.67, 0] },
+											transition: { duration: 0.35, ease: "easeIn" },
 										}}
 									>
 										<Card
-											className="w-full bg-content1/70 backdrop-blur-md border border-default h-96 overflow-hidden "
+											className="w-full bg-content1/70 backdrop-blur-md border border-default h-96 overflow-hidden"
 											shadow="none"
 										>
 											<CardBody>
@@ -117,7 +122,7 @@ export default function CreationPage() {
 													<Chip variant="flat" className="py-5" color="primary" size="lg">
 														{step.icon}
 													</Chip>
-													<h1 className="text-3xl tracking-tight text-center">{step.title}</h1>
+													<h1 className="text-3xl tracking-tight text-center font-semibold">{step.title}</h1>
 													<span className="text-default-600 text-lg text-center mx-10">
 														{step.description}
 													</span>
@@ -130,11 +135,6 @@ export default function CreationPage() {
 							})}
 						</AnimatePresence>
 					</div>
-
-					<p className="text-default-500 text-sm mb-3 select-none">
-						Toca para continuar · {topIndex + 1} / {steps.length}
-					</p>
-
 					{
 						hasReachedEnd() &&
 						<motion.div

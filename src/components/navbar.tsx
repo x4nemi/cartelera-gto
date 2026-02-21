@@ -15,12 +15,14 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Card } from "@heroui/react";
 
 export const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 	const menuBox = useRef<HTMLDivElement>(null);
 	const navMobileRef = useRef<HTMLDivElement>(null);
+	const location = useLocation();
 
 	const handleMenuToggle = () => {
 		setIsMenuOpen(!isMenuOpen)
@@ -56,7 +58,7 @@ export const Navbar = () => {
 				</NavbarBrand>
 				<div className="hidden lg:flex gap-4 justify-start ml-2">
 					{siteConfig.navItems.map((item) => (
-						<NavbarItem key={item.href}>
+						<NavbarItem key={item.href} isActive={location.pathname === item.href}>
 							<Link
 								className={clsx(
 									linkStyles({ color: "foreground" }),
