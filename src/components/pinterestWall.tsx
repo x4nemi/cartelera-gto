@@ -45,23 +45,23 @@ export const Wall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {
     }, [numColumns, cardsData]);
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-1">
             <div className='grid xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-3 max-sm:gap-1.5'>
-                <div className='flex flex-col gap-4'>
+                <div className='flex flex-col gap-3 max-sm:gap-1.5'>
                     {column1.map((card, index) => (
                         <div key={`col1-${index}`} className="card-wrapper">
                             <EventCard {...card} />
                         </div>
                     ))}
                 </div>
-                {numColumns > 1 && <div className='flex flex-col gap-4'>
+                {numColumns > 1 && <div className='flex flex-col gap-3 max-sm:gap-1.5'>
                     {column2.map((card, index) => (
                         <div key={`col2-${index}`} className="card-wrapper">
                             <EventCard {...card} />
                         </div>
                     ))}
                 </div>}
-                {numColumns > 2 && <div className='flex flex-col gap-4'>
+                {numColumns > 2 && <div className='flex flex-col gap-3 max-sm:gap-1.5'>
                     {column3.map((card, index) => (
                         <div key={`col3-${index}`} className="card-wrapper">
                             <EventCard {...card} />
