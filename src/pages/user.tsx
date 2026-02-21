@@ -153,11 +153,11 @@ export const UserPage = () => {
                                         placeholder="tu_usuario"
                                         startContent={
                                             <div className="pointer-events-none flex items-center">
-                                                <span className=" text-xl text-indigo-300">@</span>
+                                                <span className=" text-xl text-primary">@</span>
                                             </div>
                                         }
                                     />
-                                    <Button type="submit" variant="flat" size='lg' className="w-min-32 h-12 rounded-l-none bg-indigo-400 text-white" isLoading={validating} isIconOnly={validating}>
+                                    <Button type="submit" variant="flat" size='lg' className="w-min-32 h-12 rounded-l-none" color="primary" isLoading={validating} isIconOnly={validating}>
                                         {validating ? "" : "Siguiente"}
                                     </Button>
                                 </div>
@@ -189,7 +189,7 @@ export const UserPage = () => {
                         {/* User found - shows at top */}
                         {isUserFound && !validating && (
                             <>
-                                <Card shadow='sm' className='rounded-2xl mb-3 bg-content2 border-2 border-default'>
+                                <Card shadow='none' className='rounded-2xl mb-3 bg-primary/20 border-none border-primary-300'>
                                     <CardBody>
                                         <User
                                             avatarProps={{
@@ -197,7 +197,7 @@ export const UserPage = () => {
                                                 size: 'lg'
                                             }}
                                             description={
-                                                <Link isExternal href={`https://instagram.com/${user?.username}`} size="sm" color='foreground'>
+                                                <Link isExternal href={`https://instagram.com/${user?.username}`} size="sm"  className='font-semibold'>
                                                     @{user?.username}
                                                 </Link>
                                             }
@@ -210,7 +210,6 @@ export const UserPage = () => {
                                     validationErrors={errors}
                                     onSubmit={onCreateUser}
                                 >
-                                    <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-2xl' classNames={{iconWrapper:"animate-bounce"}} />
                                     <span>Ubicación del local</span>
                                     <MapInput />
 
@@ -222,7 +221,7 @@ export const UserPage = () => {
                                         isClearable
                                         placeholder='https://www.facebook.com/...'
                                         classNames={{inputWrapper:"rounded-2xl"}}
-                                        startContent={<FBIcon size={20} className="text-indigo-300" />}
+                                        startContent={<FBIcon size={20} className="text-primary" />}
                                     />
                                     <Input
                                         name="whatsapp"
@@ -231,7 +230,7 @@ export const UserPage = () => {
                                         isClearable
                                         maxLength={10}
                                         classNames={{inputWrapper:"rounded-2xl"}}
-                                        startContent={<div className='flex text-sm text-foreground/80 gap-1'><WAIcon size={20} className="text-indigo-300" /> +52</div>}
+                                        startContent={<div className='flex text-sm text-foreground/80 gap-1'><WAIcon size={20} className="text-primary" /> +52</div>}
                                     />
                                     <Input
                                         name="website"
@@ -240,11 +239,12 @@ export const UserPage = () => {
                                         isClearable
                                         placeholder='https://www.tu-sitio.com'
                                         classNames={{inputWrapper:"rounded-2xl"}}
-                                        startContent={<GlobeIcon size={20} className="text-indigo-300" />}
+                                        startContent={<GlobeIcon size={20} className="text-primary" />}
                                     />
+                                    <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-2xl' classNames={{iconWrapper:"animate-bounce"}} />
                                     <div className='flex gap-3 w-full'>
                                         <Button color="danger" variant='bordered' className='h-12 px-8 rounded-2xl' onPress={() => setOpenModal(true)}>Cancelar</Button>
-                                        <Button type="submit" variant="flat" size='lg' className="w-full h-12 bg-indigo-400 text-white rounded-2xl">
+                                        <Button type="submit" variant="flat" size='lg' className="w-full h-12 rounded-2xl" color='primary'>
                                             Crear usuario
                                         </Button>
                                     </div>

@@ -61,7 +61,7 @@ const PlaceAutocomplete = ({ onPlaceSelect }: PlaceAutocompleteProps) => {
             name="address"
             onChange={(e) => setPlace(e.target.value)}
             classNames={{inputWrapper:"rounded-2xl"}}
-            startContent={<MapPinIcon size={20} className="text-indigo-300" />}
+            startContent={<MapPinIcon size={20} className="text-primary" />}
         />
     );
 };
