@@ -20,7 +20,7 @@ const steps = [
 	{
 		icon: <OneIcon size={26} />,
 		title: "Usuario de Instagram",
-		description: "Ten a la mano tu cuenta de Instagram o usa tu perfil personal.",
+		description: "Ten a la mano tu cuenta de Instagram. Debe ser pública.",
 		bgIcon: <IgIcon size={300} className="absolute text-primary-400 opacity-10 -left-20 -bottom-20" />,
 	},
 	{

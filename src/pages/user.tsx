@@ -193,6 +193,7 @@ export const UserPage = () => {
                                                     size="lg"
                                                     labelPlacement="outside"
                                                     name="username"
+                                                    autoComplete="off"
                                                     classNames={{
                                                         inputWrapper: "h-12 rounded-2xl rounded-r-none",
                                                     }}

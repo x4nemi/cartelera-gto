@@ -24,7 +24,6 @@ export default function PublishPage() {
 		setWorkshopDays([]);
 		setUntil(null);
 		setDateRange({ start: null, end: null });
-		localStorage.removeItem("draftPostData");
 	}
 
 	//#endregion
@@ -65,9 +64,6 @@ export default function PublishPage() {
 					timeout: 8000,
 					variant: "flat"
 				})
-
-				const draftData = { ...eventData, selectedKey };
-				localStorage.setItem("draftPostData", JSON.stringify(draftData));
 			} else {
 				setIsLinkValid(false);
 			}
@@ -101,10 +97,6 @@ export default function PublishPage() {
 					timeout: 8000,
 					variant: "flat"
 				});
-
-				// Clear draft data from localStorage
-				localStorage.removeItem("draftPostData");
-				localStorage.removeItem("datesInfo");
 			} else {
 				addToast({
 					title: "Error al publicar",
@@ -119,35 +111,6 @@ export default function PublishPage() {
 			console.error("Error publishing post:", error);
 		}
 	}
-
-	useEffect(() => {
-		// Load draft post data from localStorage if available
-		const draftData = localStorage.getItem("draftPostData");
-		if (draftData) {
-			setPostData(JSON.parse(draftData));
-			setIsLinkValid(true);
-			setSelectedKey(JSON.parse(draftData).selectedKey || null);
-			setLink(JSON.parse(draftData).url || "");
-		}
-
-		const datesInfo = localStorage.getItem("datesInfo");
-		if (datesInfo) {
-			const parsedDatesInfo = JSON.parse(datesInfo);
-			if (parsedDatesInfo.dates) {
-				setSelectedDates(parsedDatesInfo.dates);
-				setType("event");
-			} else if (parsedDatesInfo.workshopDays) {
-				setWorkshopDays(parsedDatesInfo.workshopDays);
-				setUntil(parsedDatesInfo.until);
-				setEvery(parsedDatesInfo.every);
-				setType("workshop");
-			} else if (parsedDatesInfo.start && parsedDatesInfo.end) {
-				setDateRange({ start: parsedDatesInfo.start, end: parsedDatesInfo.end });
-				setType("calendar");
-			}
-		}
-	}, []);
-
 	//#endregion
 
 	//#region selected dates
@@ -169,22 +132,19 @@ export default function PublishPage() {
 	useEffect(() => {
 		if(type === "event") {
 			setFinalEventDates({ dates: selectedDates });
-			localStorage.setItem("datesInfo", JSON.stringify({ dates: selectedDates }));
 		}
 		if(type === "workshop") {
 			setFinalWorkshopDates({ workshopDays, until, every });
-			localStorage.setItem("datesInfo", JSON.stringify({ workshopDays, until, every }));
 		}
 		if(type === "calendar") {
 			setFinalDateRange({ dateRange: { start: dateRange.start, end: dateRange.end } });
-			localStorage.setItem("datesInfo", JSON.stringify(dateRange));
 		}
 	}, [selectedDates, workshopDays, until, every, dateRange, type]);
 	//#endregion
 
 	return (
 		<DefaultLayout>
-			<section className={`flex flex-col justify-center gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2" + ${selectedKey !== null ? " mt-10" : " mt-20"} mx-4`}>
+			<section className={`flex flex-col mt-10 gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 mx-4`}>
 				<h1 className="text-3xl font-bold flex items-center gap-2 text-foreground md:text-4xl lg:text-5xl">
 					<span className="relative flex size-3">
 						<span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isLinkValid ? "bg-amber-400" : "bg-sky-400"}`}></span>
