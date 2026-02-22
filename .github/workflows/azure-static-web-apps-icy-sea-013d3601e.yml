@@ -29,7 +29,7 @@ jobs:
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
-          api_location: "azure-functions" # Api source code path - SWA manages the functions
+          api_location: "" # Api source code path - linked backend handles /api/*
           output_location: "dist" # Built app content directory - optional (Vite default)
           ###### End of Repository/Build Configurations ######
 
