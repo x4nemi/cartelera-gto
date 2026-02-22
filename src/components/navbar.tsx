@@ -5,8 +5,7 @@ import {
 	NavbarBrand,
 	NavbarContent,
 	NavbarItem,
-	NavbarMenuToggle,
-	NavbarMenu
+	NavbarMenuToggle
 } from "@heroui/navbar";
 import { link as linkStyles } from "@heroui/theme";
 import clsx from "clsx";
@@ -16,7 +15,7 @@ import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Card } from "@heroui/react";
+import { motion, AnimatePresence } from "motion/react";
 
 export const Navbar = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -41,70 +40,27 @@ export const Navbar = () => {
         };
     }, []);
 	return (
-		<HeroUINavbar maxWidth="xl" position="sticky" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!bg-transparent !shadow-none !p-0", base:`w-10/12 self-center mt-3  bg-content1/80 transition-all duration-300 ${isMenuOpen ? "rounded-t-4xl rounded-b-none" : "rounded-4xl backdrop-blur-sm"}` }} ref={navMobileRef}>
-			<NavbarMenuToggle className="md:hidden"  />
-			<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
-				<NavbarBrand className="gap-3 max-w-fit sm:self-center">
-					<Link
-						className="flex justify-start items-center gap-1"
-						color="foreground"
-						href="/"
-					>
-						<Logo />
-						<p className="font-bold text-inherit text-lg max-md:text-sm">
-							{siteConfig.name}
-						</p>
-					</Link>
-				</NavbarBrand>
-				<div className="hidden lg:flex gap-4 justify-start ml-2">
-					{siteConfig.navItems.map((item) => (
-						<NavbarItem key={item.href} isActive={location.pathname === item.href}>
+		<>
+		<div className="sticky top-0 z-50 flex justify-center px-[8.33%] mt-3" ref={navMobileRef}>
+			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
+				<HeroUINavbar maxWidth="xl" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "!bg-transparent !shadow-none !rounded-none w-full", wrapper: "!px-4" }}>
+					<NavbarMenuToggle className="md:hidden" />
+					<NavbarContent className="sm:basis-full" justify="start">
+						<NavbarBrand className="gap-3 max-w-fit sm:self-center">
 							<Link
-								className={clsx(
-									linkStyles({ color: "foreground" }),
-									"data-[active=true]:text-primary data-[active=true]:font-medium",
-								)}
+								className="flex justify-start items-center gap-1"
 								color="foreground"
-								href={item.href}
+								href="/"
 							>
-								{item.label}
+								<Logo />
+								<p className="font-bold text-inherit text-lg max-md:text-sm">
+									{siteConfig.name}
+								</p>
 							</Link>
-						</NavbarItem>
-					))}
-				</div>
-			</NavbarContent>
-
-			<NavbarContent
-				className="hidden sm:flex basis-1/5 sm:basis-full"
-				justify="end"
-			>
-				<NavbarItem className="hidden sm:flex gap-2">
-					<ThemeSwitch />
-				</NavbarItem>
-				{/* <NavbarItem className="hidden md:flex">
-					<Button
-						isExternal
-						as={Link}
-						className="text-sm font-normal text-default-600 bg-default-100"
-						href={siteConfig.links.sponsor}
-						startContent={<HeartFilledIcon className="text-danger" />}
-						variant="flat"
-					>
-						Donar
-					</Button>
-				</NavbarItem> */}
-			</NavbarContent>
-
-			<NavbarContent className="sm:hidden basis-1" justify="end">
-				<ThemeSwitch />
-			</NavbarContent>
-
-			<NavbarMenu className="!mt-0 !pt-0">
-				<div className="flex flex-col" ref={menuBox}>
-					<Card shadow="none" className="rounded-none rounded-b-4xl overflow-hidden bg-content1 w-10/12 self-center">
-						{
-							siteConfig.navItems.map((item, index) => (
-								<Button variant="solid" key={item.href} onPress={handleMenuToggle} href={item.href} as={Link} className={` ${index === 0 ? "" : " rounded-t-none"} rounded-b-none r w-full text-start dark:bg-content2 bg-content1`} size="lg">
+						</NavbarBrand>
+						<div className="hidden md:flex gap-4 justify-start ml-2">
+							{siteConfig.navItems.map((item) => (
+								<NavbarItem key={item.href} isActive={location.pathname === item.href}>
 									<Link
 										className={clsx(
 											linkStyles({ color: "foreground" }),
@@ -115,24 +71,77 @@ export const Navbar = () => {
 									>
 										{item.label}
 									</Link>
-								</Button>
-							))
-						}
-						{/* <Button variant="solid" onPress={handleMenuToggle} className={` rounded-t-none w-full text-start dark:bg-content2 bg-content1`} size="lg" startContent={<HeartFilledIcon className="text-danger animate-pulse -mr-1.5" />}>
-							<Link
-								className={clsx(
-									linkStyles({ color: "foreground" }),
-									"data-[active=true]:text-primary data-[active=true]:font-medium",
-								)}
-								color="foreground"
-								href={siteConfig.links.sponsor}
-							>
-								Donar
-							</Link>
-						</Button> */}
-					</Card>
-				</div>
-			</NavbarMenu>
-		</HeroUINavbar>
+								</NavbarItem>
+							))}
+						</div>
+					</NavbarContent>
+
+					<NavbarContent
+						className="hidden sm:flex basis-1/5 sm:basis-full"
+						justify="end"
+					>
+						<NavbarItem className="hidden sm:flex gap-2">
+							<ThemeSwitch />
+						</NavbarItem>
+					</NavbarContent>
+
+					<NavbarContent className="sm:hidden basis-1" justify="end">
+						<ThemeSwitch />
+					</NavbarContent>
+				</HeroUINavbar>
+
+				{/* Menu items inside the same rounded container */}
+				<AnimatePresence>
+					{isMenuOpen && (
+						<motion.div
+							ref={menuBox}
+							initial={{ height: 0 }}
+							animate={{ height: "auto" }}
+							exit={{ height: 0 }}
+							transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+							className="overflow-hidden"
+						>
+							{siteConfig.navItems.map((item, index) => (
+								<motion.div
+									key={item.href}
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									transition={{ delay: 0.1 + index * 0.05, duration: 0.2 }}
+								>
+									<Button variant="solid" onPress={handleMenuToggle} href={item.href} as={Link} className="rounded-none py-2 w-full text-start bg-content1 hover:bg-content2" size="lg">
+										<Link
+											className={clsx(
+												linkStyles({ color: "foreground" }),
+												"hover:text-primary transition-colors duration-200",
+											)}
+											color="foreground"
+											href={item.href}
+											size="lg"
+										>
+											{item.label}
+										</Link>
+									</Button>
+								</motion.div>
+							))}
+						</motion.div>
+					)}
+				</AnimatePresence>
+			</div>
+		</div>
+
+		{/* Blurred backdrop overlay */}
+		<AnimatePresence>
+			{isMenuOpen && (
+				<motion.div
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ duration: 0.2 }}
+					className="fixed inset-0 z-40 backdrop-blur-sm bg-black/20"
+					onClick={() => setIsMenuOpen(false)}
+				/>
+			)}
+		</AnimatePresence>
+		</>
 	);
 };
