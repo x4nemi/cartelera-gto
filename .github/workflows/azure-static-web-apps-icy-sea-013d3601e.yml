@@ -29,13 +29,9 @@ jobs:
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/" # App source code path
-          api_location: "" # Api source code path - optional
+          api_location: "azure-functions" # Api source code path - SWA manages the functions
           output_location: "dist" # Built app content directory - optional (Vite default)
           ###### End of Repository/Build Configurations ######
-        env:
-          VITE_APIFY_TOKEN: ${{ secrets.VITE_APIFY_TOKEN }}
-          VITE_AZURE_FUNCTION_URL: ${{ secrets.VITE_AZURE_FUNCTION_URL }}
-          VITE_AZURE_FUNCTION_KEY: ${{ secrets.VITE_AZURE_FUNCTION_KEY }}
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'

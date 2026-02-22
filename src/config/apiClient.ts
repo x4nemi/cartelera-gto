@@ -1,21 +1,13 @@
 import { DateValue } from "@heroui/react";
 
-// Apify REST API client for browser
-const APIFY_TOKEN = import.meta.env.VITE_APIFY_TOKEN;
-const APIFY_BASE_URL = "https://api.apify.com/v2";
-
-// Azure Function URL for image uploads
-const AZURE_FUNCTION_URL = import.meta.env.VITE_AZURE_FUNCTION_URL || "";
-const AZURE_FUNCTION_KEY = encodeURIComponent(import.meta.env.VITE_AZURE_FUNCTION_KEY || "");
-
 export const ApifyAPI = {
     async runActor(actorId: string, input: object) {
-        const response = await fetch(`${APIFY_BASE_URL}/acts/${actorId}/runs?token=${APIFY_TOKEN}`, {
+        const response = await fetch(`/api/runApifyActor`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(input),
+            body: JSON.stringify({ actorId, input }),
         });
 
         if (!response.ok) {
@@ -27,7 +19,7 @@ export const ApifyAPI = {
     },
 
     async getDatasetItems(datasetId: string) {
-        const response = await fetch(`${APIFY_BASE_URL}/datasets/${datasetId}/items?token=${APIFY_TOKEN}`);
+        const response = await fetch(`/api/getApifyDataset?datasetId=${encodeURIComponent(datasetId)}`);
 
         if (!response.ok) {
             throw new Error(`Failed to get dataset: ${response.statusText}`);
@@ -40,7 +32,7 @@ export const ApifyAPI = {
         const startTime = Date.now();
         
         while (Date.now() - startTime < maxWaitSeconds * 1000) {
-            const response = await fetch(`${APIFY_BASE_URL}/acts/${actorId}/runs/${runId}?token=${APIFY_TOKEN}`);
+            const response = await fetch(`/api/getApifyRun?actorId=${encodeURIComponent(actorId)}&runId=${encodeURIComponent(runId)}`);
             const data = await response.json();
             
             if (data.data.status === "SUCCEEDED") {
@@ -66,11 +58,7 @@ export const AzureStorageAPI = {
      * @returns The new Azure Blob Storage URL
      */
     async uploadImageFromUrl(imageUrl: string, filename: string): Promise<string> {
-        if (!AZURE_FUNCTION_URL) {
-            throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
-        }
-
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/uploadImage?code=${AZURE_FUNCTION_KEY}`, {
+        const response = await fetch(`/api/uploadImage`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -165,10 +153,6 @@ export const CosmosAPI = {
      * Insert or update a user in the database
      */
     async insertUser(userData: UserData): Promise<{ success: boolean; username: string; posts?: { created: number; updated: number } }> {
-        if (!AZURE_FUNCTION_URL) {
-            throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
-        }
-
         // Try to upload profile image to Azure Storage (optional - may fail due to Instagram rate limits)
         if (userData.profilePicUrl) {
             try {
@@ -189,7 +173,7 @@ export const CosmosAPI = {
             }
         }
 
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/insertUser?code=${AZURE_FUNCTION_KEY}`, {
+        const response = await fetch(`/api/insertUser`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -209,11 +193,7 @@ export const CosmosAPI = {
      * Get a user by username
      */
     async getUser(username: string): Promise<UserData | null> {
-        if (!AZURE_FUNCTION_URL) {
-            throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
-        }
-
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/getUser?username=${encodeURIComponent(username)}&code=${AZURE_FUNCTION_KEY}`, {
+        const response = await fetch(`/api/getUser?username=${encodeURIComponent(username)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -236,11 +216,7 @@ export const CosmosAPI = {
      * Insert or update an event/post (upsert)
      */
     async insertEvent(eventData: PostData): Promise<{ success: boolean; shortCode: string; isNew?: boolean }> {
-        if (!AZURE_FUNCTION_URL) {
-            throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
-        }
-
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/insertEvent?code=${AZURE_FUNCTION_KEY}`, {
+        const response = await fetch(`/api/insertEvent`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -260,11 +236,7 @@ export const CosmosAPI = {
      * Get a single event by shortCode
      */
     async getEvent(shortCode: string): Promise<PostData | null> {
-        if (!AZURE_FUNCTION_URL) {
-            throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
-        }
-
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/getEvent?shortCode=${encodeURIComponent(shortCode)}&code=${AZURE_FUNCTION_KEY}`, {
+        const response = await fetch(`/api/getEvent?shortCode=${encodeURIComponent(shortCode)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -291,17 +263,12 @@ export const CosmosAPI = {
         limit?: number;
         ownerUsername?: string;
     } = {}): Promise<PaginatedResponse<PostData>> {
-        if (!AZURE_FUNCTION_URL) {
-            throw new Error("Azure Function URL not configured. Set VITE_AZURE_FUNCTION_URL in .env.local");
-        }
-
         const params = new URLSearchParams();
-        params.append("code", AZURE_FUNCTION_KEY);
         if (options.page) params.append("page", options.page.toString());
         if (options.limit) params.append("limit", options.limit.toString());
         if (options.ownerUsername) params.append("ownerUsername", options.ownerUsername);
 
-        const response = await fetch(`${AZURE_FUNCTION_URL}/api/getEvents?${params.toString()}`, {
+        const response = await fetch(`/api/getEvents?${params.toString()}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
