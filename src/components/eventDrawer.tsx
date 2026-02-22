@@ -7,16 +7,15 @@ import {
     Button,
     Tooltip,
     User,
+    Link,
 } from "@heroui/react";
 import { ImageCarousel } from "./imageCarousel";
 import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
-
-const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+import { CalendarIcon } from "./icons";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
-    // const { socialLinks } = user || {};
     const eventDates = dates && 'dates' in dates ? dates.dates : [];
     const dayName = new Date(
         eventDates.length > 0
@@ -74,7 +73,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                                     </svg>
                                 </Button>
                             </Tooltip>
-                            <div className="w-full flex justify-start gap-2">
+                            <div className="w-full flex justify-end gap-2">
                                 <Button
                                     className="font-medium text-small text-default-500"
                                     endContent={
@@ -94,45 +93,11 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                                     }
                                     size="sm"
                                     variant="flat"
+                                    as={Link}
+                                    href={cardProps.url}
                                 >
                                     Página del evento
                                 </Button>
-                            </div>
-                            <div className="flex gap-1 items-center">
-                                <Tooltip content="Anterior">
-                                    <Button isIconOnly className="text-default-500" size="sm" variant="flat">
-                                        <svg
-                                            fill="none"
-                                            height="16"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            viewBox="0 0 24 24"
-                                            width="16"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path d="m18 15-6-6-6 6" />
-                                        </svg>
-                                    </Button>
-                                </Tooltip>
-                                <Tooltip content="Siguiente">
-                                    <Button isIconOnly className="text-default-500" size="sm" variant="flat">
-                                        <svg
-                                            fill="none"
-                                            height="16"
-                                            stroke="currentColor"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            viewBox="0 0 24 24"
-                                            width="16"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path d="m6 9 6 6 6-6" />
-                                        </svg>
-                                    </Button>
-                                </Tooltip>
                             </div>
                         </DrawerHeader>
                         <DrawerBody className="pt-16">
@@ -142,18 +107,9 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                             <div className="flex flex-col gap-2">
                                 <div className=" flex flex-col gap-3">
                                     <div className="flex gap-3 items-center">
-                                        <div className="flex-none border-1 border-default-200/50 rounded-small text-center w-11 overflow-hidden">
-                                            <div className="text-tiny bg-default-100 py-0.5 text-default-500">{months[new Date(dayName).getMonth()]}</div>
-                                            <div className="flex items-center justify-center font-semibold text-medium h-6 text-default-500">
-                                                {new Date(dayName).getDate()}
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-0.5">
-                                            <p className="text-medium text-foreground font-medium">
-                                                {dayName}, {formattedDate}
-                                            </p>
-                                            {/* <p className="text-small text-default-500">{hour} hrs</p> */}
-                                        </div>
+                                        <p className="text-small text-foreground-500 font-medium">
+                                            <CalendarIcon className="inline mr-1" /> {dayName}, {formattedDate}
+                                        </p>
                                     </div>
 
                                     <div className="flex flex-col mt-4 gap-3 items-start">
@@ -166,7 +122,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                             </div>
                         </DrawerBody>
                         <DrawerFooter className="flex flex-col gap-1 border-t border-default-200/50 bg-content2">
-                            <User name={ownerFullName} description={ownerUsername} avatarProps={{src: ownerProfilePicUrl}} />
+                            <User name={ownerFullName} description={ownerUsername} avatarProps={{ src: ownerProfilePicUrl }} />
                         </DrawerFooter>
                     </>
                 )}
