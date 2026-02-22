@@ -1,6 +1,5 @@
-import { FBIcon, GlobeIcon, WAIcon } from '@/components/icons';
-import { MapInput } from '@/components/map';
-import { createUser } from '@/config/apiClient';
+import { FBIcon, GlobeIcon, SmileyIcon, WAIcon } from '@/components/icons';
+import { createUser, updateUser } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
 import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
@@ -23,6 +22,7 @@ export const UserPage = () => {
 
     const [validating, setValidating] = useState(false)
     const [isUserFound, setIsUserFound] = useState(false)
+    const [isUserCreated, setIsUserCreated] = useState(false)
 
     const [user, setUser] = useState<UserProps | null>(null)
 
@@ -60,11 +60,11 @@ export const UserPage = () => {
             console.error('Error validating Instagram user:', error);
             setErrorsIg({ username: "Error al validar usuario" });
         }
-                      
+
         setValidating(false);
     };
 
-    const onCreateUser = (e: React.FormEvent<HTMLFormElement>) => {
+    const onCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setErrors({});
@@ -93,11 +93,53 @@ export const UserPage = () => {
             newErrors.website = "Enlace de sitio web inválido";
         }
 
-        setErrors(newErrors);
+        newErrors && setErrors(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             return;
         }
+
+        const externalUrls = [];
+
+        if (facebook) {
+            externalUrls.push({ type: "facebook", url: facebook as string });
+        }
+        if (whatsapp) {
+            externalUrls.push({ type: "whatsapp", url: `https://wa.me/52${whatsapp}` });
+        }
+        if (website) {
+            externalUrls.push({ type: "website", url: website as string });
+        }
+
+        const userData = {
+            ...user,
+            externalUrls
+        } as UserProps;
+
+        var userResult: UserProps | null = null;
+        try {
+            userResult = await updateUser(userData);
+        } catch (error) {
+            addToast({
+                title: "Error al crear usuario",
+                description: "No se pudo crear el usuario. Inténtalo de nuevo.",
+                timeout: 10000,
+                variant: "flat",
+                color: "danger",
+                size: "md"
+            });
+            return;
+        }
+
+        addToast({
+            title: "Usuario creado",
+            description: `El usuario @${userResult?.username} ha sido creado exitosamente.`,
+            timeout: 10000,
+            variant: "flat",
+            color: "success",
+            size: "md"
+        });
+        setIsUserCreated(true);
     }
     //#endregion
 
@@ -105,7 +147,7 @@ export const UserPage = () => {
     const [openModal, setOpenModal] = useState(false)
 
     const onCancel = () => {
-        if(validating) {
+        if (validating) {
             // cancel request if form is being cancelled during validation
             setValidating(false);
             setErrorsIg({});
@@ -210,7 +252,7 @@ export const UserPage = () => {
 
                             {/* Form that appears below the user card */}
                             <AnimatePresence>
-                                {isUserFound && !validating && (
+                                {isUserFound && !validating && !isUserCreated && (
                                     <motion.div
                                         key="details-form"
                                         initial={{ opacity: 0, y: 30 }}
@@ -222,17 +264,14 @@ export const UserPage = () => {
                                             validationErrors={errors}
                                             onSubmit={onCreateUser}
                                         >
-                                            <span>Ubicación del local</span>
-                                            <MapInput />
-
-                                            <div><span>Redes sociales del local</span></div>
+                                            <div><span>Redes sociales</span></div>
                                             <Input
                                                 name='facebook'
                                                 label='Facebook'
                                                 type="text"
                                                 isClearable
                                                 placeholder='https://www.facebook.com/...'
-                                                classNames={{inputWrapper:"rounded-2xl"}}
+                                                classNames={{ inputWrapper: "rounded-2xl" }}
                                                 startContent={<FBIcon size={20} className="text-primary" />}
                                             />
                                             <Input
@@ -241,7 +280,7 @@ export const UserPage = () => {
                                                 type="tel"
                                                 isClearable
                                                 maxLength={10}
-                                                classNames={{inputWrapper:"rounded-2xl"}}
+                                                classNames={{ inputWrapper: "rounded-2xl" }}
                                                 startContent={<div className='flex text-sm text-foreground/80 gap-1'><WAIcon size={20} className="text-primary" /> +52</div>}
                                             />
                                             <Input
@@ -250,10 +289,10 @@ export const UserPage = () => {
                                                 type="text"
                                                 isClearable
                                                 placeholder='https://www.tu-sitio.com'
-                                                classNames={{inputWrapper:"rounded-2xl"}}
+                                                classNames={{ inputWrapper: "rounded-2xl" }}
                                                 startContent={<GlobeIcon size={20} className="text-primary" />}
                                             />
-                                            <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-2xl' classNames={{iconWrapper:"animate-bounce"}} />
+                                            <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-2xl' classNames={{ iconWrapper: "animate-bounce" }} />
                                             <div className='flex gap-3 w-full'>
                                                 <Button color="danger" variant='bordered' className='h-12 px-8 rounded-2xl' onPress={() => setOpenModal(true)}>Cancelar</Button>
                                                 <Button type="submit" variant="flat" size='lg' className="w-full h-12 rounded-2xl" color='primary'>
@@ -264,6 +303,21 @@ export const UserPage = () => {
                                     </motion.div>
                                 )}
                             </AnimatePresence>
+
+                            {/* Form that appears below the user card */}
+                            <AnimatePresence>
+                                {isUserCreated && (
+                                    <motion.div
+                                        key="details-form"
+                                        initial={{ opacity: 0, y: 30 }}
+                                        animate={{ opacity: 1, y: 0, transition: { type: 'spring', visualDuration: 0.5, bounce: 0.2, delay: 0.15 } }}
+                                        exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
+                                    >
+                                        <Alert color='primary' variant='faded' title="Tu perfil se creó correctamente, ¿ahora qué sigue?" description={`Te llegará un link a tu perfil de Instagram para que puedas empezar a publicar eventos.`} className='rounded-2xl' startContent={<SmileyIcon size={30} className="text-primary" />} hideIcon />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+
                         </LayoutGroup>
                     </CardBody>
                 </Card>

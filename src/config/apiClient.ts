@@ -112,6 +112,8 @@ export interface UserData {
     profilePicUrlHD?: string;
     createdAt?: string;
     updatedAt?: string;
+    isDraft?: boolean;
+    socialLinks?: { type: string; url: string }[];
 }
 
 export interface PostData {
@@ -350,7 +352,8 @@ export const createUser = async (username: string): Promise<UserData> => {
         biography: userData.biography,
         externalUrls: userData.externalUrls || [],
         profilePicUrl: userData.profilePicUrl,
-        profilePicUrlHD: userData.profilePicUrlHD
+        profilePicUrlHD: userData.profilePicUrlHD,
+        isDraft: true
     };
 
     const result = await CosmosAPI.insertUser(userToInsert);
@@ -362,6 +365,16 @@ export const createUser = async (username: string): Promise<UserData> => {
     // Return the user data we inserted
     return userToInsert;
 };
+
+export const updateUser = async (userData: UserData): Promise<UserData> => {
+    const result = await CosmosAPI.insertUser(userData);
+
+    if (!result.success) {
+        throw new Error("Error updating user in database");
+    }
+
+    return userData;
+}
 
 export const createPost = async (IgLink: string): Promise<PostData> => {
     // Extract shortcode from Instagram link
