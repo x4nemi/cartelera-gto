@@ -67,7 +67,7 @@ export const PublishedPost = () => {
             <section className="flex flex-col md:flex-row mt-10 md:gap-3 gap-1 md:mx-auto px-2 mx-4 items-center">
                 <Card className="rounded-3xl" shadow="none">
                     <CardBody className="overflow-visible p-0">
-                        <ImageCarousel images={post.images || []} />
+                        <ImageCarousel images={post.images || []} className="max-h-[70vh]" />
                     </CardBody>
                 </Card>
                 <div className="flex flex-col md:gap-3 gap-1 justify-center">
