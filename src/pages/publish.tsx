@@ -2,11 +2,12 @@ import { FileUploadButton } from "@/components/fileUploadButton";
 import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { CancelModal } from "@/components/modal/cancelModal";
 import { InstagramLinkInput, InstagramPostPreview, PublishActions } from "@/components/publish";
-import { createPost, DateRange, PostData, updatePost } from '@/config/apiClient';
+import { createPost, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
-import { EventDate, WorkshopDate } from "@/types";
-import { Accordion, AccordionItem, addToast, cn, DateValue } from "@heroui/react";
-import { useEffect, useRef, useState } from "react";
+import { Accordion, AccordionItem, addToast, Button, cn, DateValue } from "@heroui/react";
+import { getLocalTimeZone } from "@internationalized/date";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function PublishPage() {
 	//#region Selected dates
@@ -18,27 +19,70 @@ export default function PublishPage() {
 
 	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">("event");
 
-	const [finalEventDates, setFinalEventDates] = useState<EventDate | null>(null);
-	const [finalWorkshopDates, setFinalWorkshopDates] = useState<WorkshopDate | null>(null);
-	const [finalDateRange, setFinalDateRange] = useState<DateRange | null>(null);
-
-
 	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
 
-	useEffect(() => {
-		if(type === "event") {
-			setFinalEventDates({ dates: selectedDates });
-		}
-		if(type === "workshop") {
-			setFinalWorkshopDates({ workshopDays, until, every });
-		}
-		if(type === "calendar") {
-			setFinalDateRange({ dateRange: { start: dateRange.start, end: dateRange.end } });
-		}
-	}, [selectedDates, workshopDays, until, every, dateRange, type]);
-	//#endregion
+	/**
+	 * Converts all date selections into a flat sorted list of ISO date strings.
+	 * - Event: uses the directly selected DateValue[]
+	 * - Workshop: expands recurring weekdays (every N weeks) until the end date
+	 * - Calendar: expands the date range into every day between start and end
+	 */
+	const computeFlatDates = (): string[] => {
+		const tz = getLocalTimeZone();
 
-	console.log(finalDateRange, finalEventDates, workshopDays);
+		if (type === "event") {
+			return selectedDates
+				.map(d => d.toDate(tz).toISOString().split("T")[0])
+				.sort();
+		}
+
+		if (type === "workshop" && workshopDays.length > 0 && until) {
+			// workshopDays are indices like "0"=Lunes, "1"=Martes, etc.
+			// Map to JS weekday: Lunes=1, Martes=2, ..., Domingo=0
+			const dayMap: Record<string, number> = { "0": 1, "1": 2, "2": 3, "3": 4, "4": 5, "5": 6, "6": 0 };
+			const targetDays = workshopDays.map(d => dayMap[d]);
+			const endDate = until.toDate(tz);
+			const dates: string[] = [];
+			const cursor = new Date();
+			cursor.setHours(0, 0, 0, 0);
+
+			while (cursor <= endDate) {
+				if (targetDays.includes(cursor.getDay())) {
+					dates.push(cursor.toISOString().split("T")[0]);
+				}
+				cursor.setDate(cursor.getDate() + 1);
+			}
+
+			// If every > 1, keep only every Nth occurrence per weekday
+			if (every > 1) {
+				const countPerDay: Record<number, number> = {};
+				return dates.filter(dateStr => {
+					const day = new Date(dateStr).getDay();
+					countPerDay[day] = (countPerDay[day] || 0) + 1;
+					return (countPerDay[day] - 1) % every === 0;
+				});
+			}
+
+			return dates;
+		}
+
+		if (type === "calendar" && dateRange.start && dateRange.end) {
+			const start = dateRange.start.toDate(tz);
+			const end = dateRange.end.toDate(tz);
+			const dates: string[] = [];
+			const cursor = new Date(start);
+
+			while (cursor <= end) {
+				dates.push(cursor.toISOString().split("T")[0]);
+				cursor.setDate(cursor.getDate() + 1);
+			}
+
+			return dates;
+		}
+
+		return [];
+	};
+	//#endregion
 	
 	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -67,6 +111,8 @@ export default function PublishPage() {
 	const [postData, setPostData] = useState<PostData | null>(null);
 
 	const IgInputRef = useRef<HTMLInputElement>(null);
+
+	const navigate = useNavigate();
 
 	const handleValidatingLink = async (inputLink: string) => {
 		setLoading(true);
@@ -108,14 +154,16 @@ export default function PublishPage() {
 	const handlePublishPost = async () => {
 		if (!postData) return;
 
+		setIsPublishing(true);
+
 		try {
-			const dates = type === "event" ? finalEventDates : (type === "workshop" ? finalWorkshopDates : finalDateRange);
+			const dates = computeFlatDates();
 			
 			const postDataToPublish = {
 				...postData,
 				isDraft: false,
 				type: type,
-				dates: dates || null
+				dates: dates.length > 0 ? dates : null
 			};
 
 			const publishedPost = await updatePost(postDataToPublish);
@@ -128,6 +176,8 @@ export default function PublishPage() {
 					timeout: 8000,
 					variant: "flat"
 				});
+				setIsPublishing(false);
+				navigate(`/completado/${publishedPost.shortCode}`);
 			} else {
 				addToast({
 					title: "Error al publicar",
@@ -140,6 +190,8 @@ export default function PublishPage() {
 
 		} catch (error) {
 			console.error("Error publishing post:", error);
+		} finally {
+			setIsPublishing(false);
 		}
 	}
 	//#endregion
@@ -241,11 +293,12 @@ export default function PublishPage() {
 							<FileUploadButton />
 						</AccordionItem>
 					</Accordion>
-					{hasSelectedDates && (
+					{hasSelectedDates ? (
 						<PublishActions
 							onCancel={() => setOpenCancelModal(true)}
 							onPublish={handlePublishPost}
-						/>
+							isPublishing={isPublishing}
+						/>) : (<Button color="danger" variant="bordered" className="w-full mt-4" >Cancelar</Button>
 					)}
 				</div>
 			</section>

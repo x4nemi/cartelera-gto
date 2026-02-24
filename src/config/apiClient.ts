@@ -1,5 +1,3 @@
-import { DateValue } from "@heroui/react";
-
 export const ApifyAPI = {
     async runActor(actorId: string, input: object) {
         const response = await fetch(`/api/runApifyActor`, {
@@ -117,7 +115,7 @@ export interface PostData {
     timestamp?: string;
     createdAt?: string;
     updatedAt?: string;
-    dates?: EventDate | WorkshopDate | DateRange | null;
+    dates?: string[] | null;
     type?: "event" | "workshop" | "calendar" | "draft";
 }
 
@@ -131,20 +129,6 @@ export interface PaginatedResponse<T> {
         hasNextPage: boolean;
         hasPrevPage: boolean;
     };
-}
-
-export interface EventDate {
-  dates: DateValue[];
-}
-
-export interface WorkshopDate {
-  workshopDays: string[];
-  until: DateValue | null;
-  every: number;
-}
-
-export interface DateRange {
-  dateRange: { start: DateValue | null; end: DateValue | null };
 }
 
 // Cosmos DB API for user and event management

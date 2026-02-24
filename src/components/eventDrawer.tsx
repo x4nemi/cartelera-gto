@@ -16,21 +16,12 @@ import { CalendarIcon } from "./icons";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
-    const eventDates = dates && 'dates' in dates ? dates.dates : [];
-    const dayName = new Date(
-        eventDates.length > 0
-            ? Math.min(
-                ...eventDates.map((date) => new Date(date.year, date.month - 1, date.day).getTime())
-            )
-            : new Date().getTime()
-    ).toLocaleDateString('es-MX', { weekday: 'long' });
-    const formattedDate = new Date(
-        eventDates.length > 0
-            ? Math.min(
-                ...eventDates.map((date) => new Date(date.year, date.month - 1, date.day).getTime())
-            )
-            : new Date().getTime()
-    ).toLocaleDateString('es-MX', {
+    const eventDates = Array.isArray(dates) ? dates : [];
+    const nextDate = eventDates.length > 0
+        ? new Date(eventDates.sort()[0])
+        : new Date();
+    const dayName = nextDate.toLocaleDateString('es-MX', { weekday: 'long' });
+    const formattedDate = nextDate.toLocaleDateString('es-MX', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -122,7 +113,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                             </div>
                         </DrawerBody>
                         <DrawerFooter className="flex flex-col gap-1 border-t border-default-200/50 bg-content2">
-                            <User name={ownerFullName} description={ownerUsername} avatarProps={{ src: ownerProfilePicUrl }} />
+                            <User name={ownerFullName} description={"@" + ownerUsername} avatarProps={{ src: ownerProfilePicUrl }} />
                         </DrawerFooter>
                     </>
                 )}

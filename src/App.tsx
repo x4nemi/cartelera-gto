@@ -6,6 +6,7 @@ import { UserPage } from "./pages/user";
 import { addToast } from "@heroui/react";
 import { SmileyFilledIcon, XIcon } from "./components/icons";
 import CreationPage from "./pages/docs";
+import { PublishedPost } from "./pages/publishedPost";
 
 function App() {
 	const isFirstTime = !localStorage.getItem("hasVisitedBefore");
@@ -36,6 +37,7 @@ function App() {
 			<Route element={<CreationPage />} path="/creacion" />
 			<Route element={<PublishPage />} path="/publicar" />
 			<Route element={<UserPage />} path="/user" />
+			<Route element={<PublishedPost  />} path="/completado/:id" />
 		</Routes>
 	);
 }

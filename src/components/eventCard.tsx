@@ -6,25 +6,20 @@ const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "
 
 export const EventCard = (props: PostData) => {
 	const today = new Date();
+	today.setHours(0, 0, 0, 0);
 	const eventDate = () => {
-		if (props.dates && "dates" in props.dates && props.dates.dates.length > 0) {
-			// return the most recent date after today, if there are multiple dates
-			const futureDates = props.dates.dates.filter(date => new Date(date.toString()) >= today);
+		if (Array.isArray(props.dates) && props.dates.length > 0) {
+			const futureDates = props.dates
+				.map(d => new Date(d))
+				.filter(d => d >= today)
+				.sort((a, b) => a.getTime() - b.getTime());
 			if (futureDates.length > 0) {
-				return new Date(futureDates[0].toString());
+				return futureDates[0];
 			}
-		} else if (props.dates && "workshopDays" in props.dates && props.dates.workshopDays.length > 0) {
-			// return the most recent date after today, if there are multiple workshop days
-			const futureWorkshopDates = props.dates.workshopDays.filter(date => new Date(date.toString()) >= today);
-			if (futureWorkshopDates.length > 0) {
-				return new Date(futureWorkshopDates[0].toString());
-			}
-		} else if (props.dates && "dateRange" in props.dates && props.dates.dateRange.start) {
-			// max between today and the start of the date range
-			const startDate = new Date(props.dates.dateRange.start.toString());
-			return startDate >= today ? startDate : today;
+			// If no future dates, return the last date
+			return new Date(props.dates.sort()[props.dates.length - 1]);
 		}
-		return today; // default to today if no dates are available
+		return today;
 	}
 		
 	const month = months[eventDate().getMonth()];
