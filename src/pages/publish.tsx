@@ -9,6 +9,37 @@ import { Accordion, AccordionItem, addToast, cn, DateValue } from "@heroui/react
 import { useEffect, useRef, useState } from "react";
 
 export default function PublishPage() {
+	//#region Selected dates
+	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
+	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
+	const [every, setEvery] = useState<number>(1);
+	const [until, setUntil] = useState<DateValue | null>(null);
+	const [dateRange, setDateRange] = useState<{ start: DateValue | null, end: DateValue | null }>({ start: null, end: null });
+
+	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">("event");
+
+	const [finalEventDates, setFinalEventDates] = useState<EventDate | null>(null);
+	const [finalWorkshopDates, setFinalWorkshopDates] = useState<WorkshopDate | null>(null);
+	const [finalDateRange, setFinalDateRange] = useState<DateRange | null>(null);
+
+
+	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
+
+	useEffect(() => {
+		if(type === "event") {
+			setFinalEventDates({ dates: selectedDates });
+		}
+		if(type === "workshop") {
+			setFinalWorkshopDates({ workshopDays, until, every });
+		}
+		if(type === "calendar") {
+			setFinalDateRange({ dateRange: { start: dateRange.start, end: dateRange.end } });
+		}
+	}, [selectedDates, workshopDays, until, every, dateRange, type]);
+	//#endregion
+
+	console.log(finalDateRange, finalEventDates, workshopDays);
+	
 	//#region Radio selection
 	const [selectedKey, setSelectedKey] = useState<string | null>(null);
 	const [openCancelModal, setOpenCancelModal] = useState(false);
@@ -113,34 +144,6 @@ export default function PublishPage() {
 	}
 	//#endregion
 
-	//#region selected dates
-	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
-	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
-	const [every, setEvery] = useState<number>(1);
-	const [until, setUntil] = useState<DateValue | null>(null);
-	const [dateRange, setDateRange] = useState<{ start: DateValue | null, end: DateValue | null }>({ start: null, end: null });
-
-	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">("draft");
-
-	const [finalEventDates, setFinalEventDates] = useState<EventDate | null>(null);
-	const [finalWorkshopDates, setFinalWorkshopDates] = useState<WorkshopDate | null>(null);
-	const [finalDateRange, setFinalDateRange] = useState<DateRange | null>(null);
-
-
-	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
-
-	useEffect(() => {
-		if(type === "event") {
-			setFinalEventDates({ dates: selectedDates });
-		}
-		if(type === "workshop") {
-			setFinalWorkshopDates({ workshopDays, until, every });
-		}
-		if(type === "calendar") {
-			setFinalDateRange({ dateRange: { start: dateRange.start, end: dateRange.end } });
-		}
-	}, [selectedDates, workshopDays, until, every, dateRange, type]);
-	//#endregion
 
 	return (
 		<DefaultLayout>

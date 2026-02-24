@@ -33,19 +33,21 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
     return (
         <>
             <p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación:</p>
-            <Tabs title="Elige los días del evento" variant="solid" color="primary" size="lg">
+            <Tabs title="Elige los días del evento" variant="solid" color="primary" size="lg"
+                onSelectionChange={(key) => {
+                    const index = Number(key);
+                    if (index === 0) setType("event");
+                    else if (index === 1) setType("workshop");
+                    else if (index === 2) setType("calendar");
+                    else setType("draft");
+                }}
+            >
                 {tabs.map((tab, index) => (
                     <Tab
                         key={index}
                         title={tab.label}
                         className="w-full"
                         titleValue="hola"
-                        onChange={() => {
-                            if (index === 0) setType("event");
-                            else if (index === 1) setType("workshop");
-                            else if (index === 2) setType("calendar");
-                            else setType("draft");
-                        }}
                     >
                         <Card shadow="none">
                             <CardBody className="w-full flex bg-content1">
