@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
 import { EventCard } from './eventCard';
-import { EventCardProps } from './interfaces';
 import { PostData } from '@/config/apiClient';
 
 export const Wall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {

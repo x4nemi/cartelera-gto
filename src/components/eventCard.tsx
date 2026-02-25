@@ -8,18 +8,14 @@ export const EventCard = (props: PostData) => {
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
 	const eventDate = () => {
-		if (Array.isArray(props.dates) && props.dates.length > 0) {
-			const futureDates = props.dates
-				.map(d => new Date(d))
-				.filter(d => d >= today)
-				.sort((a, b) => a.getTime() - b.getTime());
-			if (futureDates.length > 0) {
-				return futureDates[0];
-			}
-			// If no future dates, return the last date
-			return new Date(props.dates.sort()[props.dates.length - 1]);
+		if (props.dates && props.dates.length > 0) {
+			//get the closest date to today
+			const sortedDates = props.dates
+				.map(date => new Date(date))
+				.sort((a, b) => Math.abs(a.getTime() - today.getTime()) - Math.abs(b.getTime() - today.getTime()));
+			return sortedDates[0];
 		}
-		return today;
+		return new Date();
 	}
 		
 	const month = months[eventDate().getMonth()];

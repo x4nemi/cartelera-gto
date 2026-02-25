@@ -73,11 +73,11 @@ Durante el taller aprenderás las bases necesarias para desarrollar tu amigurumi
 WhatsApp: 417 177 5592
 
 Tejer también puede ser una forma de volver a jugar 🦖💫`,
-    dates: ["2026-01-19"],
-    displayUrl: '/aracne/dinosaurio.png',
-    images: ['/aracne/dinosaurio.png'],
+    dates: ["2026-02-27", "2026-03-06"],
+    displayUrl: 'https://cartelerasa.blob.core.windows.net/images/1771897892372-DUb-SOZiTc__image_1.jpg',
+    images: ["https://cartelerasa.blob.core.windows.net/images/1771897892372-DUb-SOZiTc__image_1.jpg"],
     ownerUsername: "aracne_crochet_gto",
     ownerFullName: "Aracne Crochet🧶",
-    ownerProfilePicUrl: "/logos/aracnelogo.png",
+    ownerProfilePicUrl: "https://cartelerasa.blob.core.windows.net/images/1771895353042-escarola.gto_profile.jpg",
   },
 ]

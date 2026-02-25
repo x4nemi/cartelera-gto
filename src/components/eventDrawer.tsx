@@ -8,6 +8,7 @@ import {
     Tooltip,
     User,
     Link,
+    ScrollShadow,
 } from "@heroui/react";
 import { ImageCarousel } from "./imageCarousel";
 import { randomEvents } from "@/config/site";
@@ -17,15 +18,21 @@ import { CalendarIcon } from "./icons";
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
     const eventDates = Array.isArray(dates) ? dates : [];
-    const nextDate = eventDates.length > 0
-        ? new Date(eventDates.sort()[0])
-        : new Date();
-    const dayName = nextDate.toLocaleDateString('es-MX', { weekday: 'long' });
-    const formattedDate = nextDate.toLocaleDateString('es-MX', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+
+    const allDates = eventDates.map(date => {
+        // only show the dates that are in the future or today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const eventDate = new Date(date);
+        eventDate.setHours(0, 0, 0, 0);
+        if (eventDate < today) {
+            return null;
+        }
+        const dayName = new Date(date).toLocaleDateString("es-MX", { weekday: "long" });
+        const formattedDate = new Date(date).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
+        return `${dayName}, ${formattedDate}`;
+    }).join("|");
+
     return (
         <Drawer
             hideCloseButton
@@ -35,12 +42,12 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
             }}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
-            size="sm"
+            size="lg"
         >
             <DrawerContent>
                 {(onClose) => (
                     <>
-                        <DrawerHeader className="absolute top-0 inset-x-0 z-50 flex flex-row gap-2 px-2 py-2 border-b border-default-200/50 justify-between bg-content1/50 backdrop-saturate-150 backdrop-blur-lg">
+                        <DrawerHeader className="absolute top-0 inset-x-0 z-50 flex flex-row gap-2 px-2 border-b border-default-200/50 justify-between bg-content1/50 backdrop-saturate-150 backdrop-blur-lg">
                             <Tooltip content="Cerrar">
                                 <Button
                                     isIconOnly
@@ -97,13 +104,17 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                             </div>
                             <div className="flex flex-col gap-2">
                                 <div className=" flex flex-col gap-3">
-                                    <div className="flex gap-3 items-center">
-                                        <p className="text-small text-foreground-500 font-medium">
-                                            <CalendarIcon className="inline mr-1" /> {dayName}, {formattedDate}
-                                        </p>
-                                    </div>
+                                    <ScrollShadow hideScrollBar className="w-full h-max-[100px]">
+                                        {
+                                            allDates.split("|").map((date, index) => (
+                                                <p key={index} className="text-small text-foreground-500 font-medium">
+                                                    <CalendarIcon className="inline mr-1" /> {date}
+                                                </p>
+                                            ))
+                                        }
+                                    </ScrollShadow>
 
-                                    <div className="flex flex-col mt-4 gap-3 items-start">
+                                    <div className="flex flex-col mt-2 gap-3 items-start">
                                         <span className="text-medium font-medium">Acerca de este evento</span>
                                         <div className="text-medium text-default-500 flex flex-col gap-2">
                                             <p>{caption}</p>

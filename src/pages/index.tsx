@@ -3,20 +3,21 @@ import { FilterWidget } from "@/components/filterWidget";
 import { randomEvents } from "@/config/site";
 import { Wall } from "@/components/pinterestWall";
 import { useMemo, useState } from "react";
+
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
 
-	// const orderedEvents = useMemo(() => {
-	// 	return [...randomEvents].sort((a, b) => {
-	// 		const dateA = a.dates && a.dates.length > 0
-	// 			? Math.min(...a.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
-	// 			: new Date().getTime();
-	// 		const dateB = b.dates && b.dates.length > 0
-	// 			? Math.min(...b.dates.map(date => new Date(date.year, date.month - 1, date.day).getTime()))
-	// 			: new Date().getTime();
-	// 		return isAscendingOrder ? dateA - dateB : dateB - dateA;
-	// 	});
-	// }, [isAscendingOrder]);
+	const orderedEvents = useMemo(() => {
+		return [...randomEvents].sort((a, b) => {
+			const dateA = a.dates && a.dates.length > 0
+				? Math.min(...a.dates.map(date => new Date(date).getTime()))
+				: 0;
+			const dateB = b.dates && b.dates.length > 0
+				? Math.min(...b.dates.map(date => new Date(date).getTime()))
+				: 0;
+			return isAscendingOrder ? dateA - dateB : dateB - dateA;
+		});
+	}, [isAscendingOrder]);
 	
 	return (
 		<DefaultLayout>
@@ -28,7 +29,7 @@ export default function IndexPage() {
 
 				</div>
 
-				<Wall cardsData={randomEvents} />
+				<Wall cardsData={orderedEvents} />
 			</section>
 		</DefaultLayout>
 	);
