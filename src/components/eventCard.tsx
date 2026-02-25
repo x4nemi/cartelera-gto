@@ -24,7 +24,7 @@ export const EventCard = (props: PostData) => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	return (
 		<>
-			<Card className="rounded-3xl" isPressable onClick={onOpen} isFooterBlurred>
+			<Card className="rounded-3xl" isPressable onClick={onOpen} shadow="none">
 				<CardHeader className="absolute top-1 right-1 z-10 bg-content2/70 backdrop-blur-md p-0 w-auto flex flex-row border border-default-200/50 text-center rounded-tl-md rounded-tr-[20px] rounded-b-md">
 					<div className="max-md:text-[12px] md:text-[14px] p-1 pl-2 text-default-500">{month}</div>
 					<div className="flex items-center bg-content2 justify-center font-semibold max-md:text-[11px] md:text-[13px] font-mono text-default-500 p-2 pt-2 rounded-tl-[5px] rounded-tr-[19px] rounded-b-[5px]">
