@@ -2,7 +2,8 @@ import { Card, CardBody, CardHeader, Image, useDisclosure } from "@heroui/react"
 import { EventDrawer } from "./eventDrawer"
 import { PostData } from "@/config/apiClient"
 
-const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
+const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
 
 export const EventCard = (props: PostData) => {
 	const today = new Date();
@@ -18,17 +19,20 @@ export const EventCard = (props: PostData) => {
 		return new Date();
 	}
 		
-	const month = months[eventDate().getMonth()];
-	const day = eventDate().getDate();
+	const date = eventDate();
+	const month = months[date.getMonth()];
+	const day = date.getDate();
+	const weekday = weekdays[date.getDay()];
 
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	return (
 		<>
 			<Card className="rounded-3xl" isPressable onClick={onOpen} shadow="none">
-				<CardHeader className="absolute top-1 right-1 z-10 bg-content2/70 backdrop-blur-md p-0 w-auto flex flex-row border border-default-200/50 text-center rounded-tl-md rounded-tr-[20px] rounded-b-md">
-					<div className="max-md:text-[12px] md:text-[14px] p-1 pl-2 text-default-500">{month}</div>
-					<div className="flex items-center bg-content2 justify-center font-semibold max-md:text-[11px] md:text-[13px] font-mono text-default-500 p-2 pt-2 rounded-tl-[5px] rounded-tr-[19px] rounded-b-[5px]">
-						{day}
+				<CardHeader className="absolute top-2 right-2 z-10 p-0 w-auto flex flex-col items-center overflow-hidden rounded-xl border border-content1" style={{ width: 50 }}>
+					<div className="w-full bg-foreground text-white dark:text-black text-[11px] font-bold tracking-wider text-center pt-0.5">{month}</div>
+					<div className="flex flex-col items-center bg-content1 w-full py-1">
+						<span className="text-xl font-semibold leading-tight text-foreground">{day}</span>
+						<span className="text-[11px] text-default-500">{weekday}</span>
 					</div>
 				</CardHeader>
 

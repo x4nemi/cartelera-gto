@@ -21,13 +21,10 @@ export default function IndexPage() {
 	
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center md:gap-4 gap-2 mt-5 relative md:mx-auto mx-1">
-				<div className="container justify-center transition-all duration-300">
-					{/* <div>
-						<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder}/>
-					</div> */}
-
-				</div>
+			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
+				{/* <div className="container justify-center transition-all duration-300">
+					<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder}/>
+				</div> */}
 
 				<Wall cardsData={orderedEvents} />
 			</section>

@@ -28,11 +28,12 @@ export const Wall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {
         };
     }, []); // Sin dependencias - solo se ejecuta al montar
     
-    // Calcular el número de columnas basado en el ancho de la ventana
+    // Calcular el número de columnas basado en el ancho de la ventana y cantidad de items
     const numColumns = useMemo(() => {
+        if (cardsData.length === 1) return 1;
         if (windowWidth >= 768) return 3;  
         else return 2;
-    }, [windowWidth]);
+    }, [windowWidth, cardsData.length]);
     
     // Distribuir las tarjetas en columnas usando useMemo
     const { column1, column2, column3 } = useMemo(() => {
@@ -44,8 +45,8 @@ export const Wall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {
     }, [numColumns, cardsData]);
 
     return (
-        <div className="container mx-1">
-            <div className='grid xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2 gap-3 max-sm:gap-1.5'>
+        <div className="w-full px-3 max-sm:px-1.5">
+            <div className={`grid gap-3 max-sm:gap-1.5 ${numColumns === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2'}`}>
                 <div className='flex flex-col gap-3 max-sm:gap-1.5'>
                     {column1.map((card, index) => (
                         <div key={`col1-${index}`} className="card-wrapper">
