@@ -8,6 +8,7 @@ import {
 	IgIcon,
 	MailBoxIcon,
 	OneIcon,
+	RetryIcon,
 	RightArrowIcon,
 	StarIcon,
 	ThreeIcon,
@@ -78,11 +79,12 @@ export default function CreationPage() {
 						Toca para continuar · {topIndex + 1} / {steps.length}
 					</p>
 					<div
-						className="relative w-full mt-5 cursor-pointer"
+						className={`relative w-full mt-5 ${hasReachedEnd() ? "cursor-default" : "cursor-pointer"}`}
 						style={{ height: 420, WebkitTapHighlightColor: "transparent" }}
 						role="button"
 						tabIndex={0}
 						onClick={(e) => {
+							if (hasReachedEnd()) return;
 							topIndex >= steps.length - 1 ? reset(e) : dismissTop(e);
 						}}
 						onKeyDown={(e) => {
@@ -144,8 +146,9 @@ export default function CreationPage() {
 								duration: 0.4,
 								scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
 							}}
-							className="w-full"
+							className="w-full items-center justify-center flex gap-3"
 						>
+							<Button isIconOnly color="warning" onClick={reset} className="rounded-full" size="lg"><RetryIcon size={24} /></Button>
 							<Link href="/user" >
 								<Button color="primary" fullWidth size="lg" endContent={<RightArrowIcon />}>
 									Empezar
