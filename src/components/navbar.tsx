@@ -1,4 +1,3 @@
-import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 import {
 	Navbar as HeroUINavbar,
@@ -45,8 +44,8 @@ export const Navbar = () => {
 			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
 				<HeroUINavbar maxWidth="xl" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "!bg-transparent !shadow-none !rounded-none w-full", wrapper: "!px-4" }}>
 					<NavbarMenuToggle className="md:hidden" />
-					<NavbarContent className="sm:basis-full" justify="start">
-						<NavbarBrand className="gap-3 max-w-fit sm:self-center">
+					<NavbarContent justify="start">
+						<NavbarBrand className="gap-3 max-w-fit">
 							<Link
 								className="flex justify-start items-center gap-1"
 								color="foreground"
@@ -58,22 +57,23 @@ export const Navbar = () => {
 								</p>
 							</Link>
 						</NavbarBrand>
-						<div className="hidden md:flex gap-4 justify-start ml-2">
-							{siteConfig.navItems.map((item) => (
-								<NavbarItem key={item.href} isActive={location.pathname === item.href}>
-									<Link
-										className={clsx(
-											linkStyles({ color: "foreground" }),
-											"data-[active=true]:text-primary data-[active=true]:font-medium",
-										)}
-										color="foreground"
-										href={item.href}
-									>
-										{item.label}
-									</Link>
-								</NavbarItem>
-							))}
-						</div>
+					</NavbarContent>
+
+					<NavbarContent className="hidden md:flex gap-4" justify="center">
+						{siteConfig.navItems.map((item) => (
+							<NavbarItem key={item.href} isActive={location.pathname === item.href}>
+								<Link
+									className={clsx(
+										linkStyles({ color: "foreground" }),
+										"data-[active=true]:text-primary data-[active=true]:font-medium",
+									)}
+									color="foreground"
+									href={item.href}
+								>
+									{item.label}
+								</Link>
+							</NavbarItem>
+						))}
 					</NavbarContent>
 
 					<NavbarContent
@@ -108,19 +108,15 @@ export const Navbar = () => {
 									animate={{ opacity: 1 }}
 									transition={{ delay: 0.1 + index * 0.05, duration: 0.2 }}
 								>
-									<Button variant="solid" onPress={handleMenuToggle} href={item.href} as={Link} className="rounded-none py-2 w-full text-start bg-content1 hover:bg-content2" size="lg">
-										<Link
-											className={clsx(
-												linkStyles({ color: "foreground" }),
-												"hover:text-primary transition-colors duration-200",
-											)}
-											color="foreground"
-											href={item.href}
-											size="lg"
-										>
-											{item.label}
-										</Link>
-									</Button>
+								<Link
+									href={item.href}
+									color="foreground"
+									className="rounded-none py-2 w-full text-center bg-content1 hover:bg-content2 hover:text-primary transition-colors duration-200 block px-4"
+									size="lg"
+									onPress={handleMenuToggle}
+								>
+									{item.label}
+								</Link>
 								</motion.div>
 							))}
 						</motion.div>

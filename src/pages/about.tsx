@@ -1,6 +1,6 @@
 import { title } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Card } from "@heroui/react";
+import { Accordion, AccordionItem } from "@heroui/react";
 
 export default function DocsPage() {
 
@@ -40,7 +40,7 @@ export default function DocsPage() {
 				<div className="inline-block text-center justify-center">
 					<h1 className={title()}>¿Tienes preguntas?</h1>
 					<div className="rounded-3xl bg-content1/50 backdrop-blur-sm p-5 w-max-3xl md:w-3xl border-none border-default mt-2" >
-						<Accordion variant="splitted" itemClasses={{base:"mb-2 shadow-none"}}  className="border-none">
+						<Accordion variant="splitted" itemClasses={{base:" shadow-none"}}  className="border-none">
 							{faqs.map((faq, index) => (
 								<AccordionItem key={index} title={faq.question}>
 									<p className="text-start text-default-500" dangerouslySetInnerHTML={{ __html: faq.answer }}></p>

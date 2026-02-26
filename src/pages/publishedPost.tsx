@@ -1,4 +1,4 @@
-import { BalloonFilledIcon, ConfettiFilledIcon } from "@/components/icons"
+import { ConfettiFilledIcon } from "@/components/icons"
 import { CosmosAPI, PostData } from "@/config/apiClient"
 import DefaultLayout from "@/layouts/default"
 import { Alert, Button, Calendar, Card, CardBody, CardFooter, Chip, Divider, Spinner, User } from "@heroui/react"
