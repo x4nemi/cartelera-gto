@@ -39,7 +39,7 @@ export default function DocsPage() {
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 w-full max-md:mx-7">
 				<div className="inline-block text-center justify-center">
 					<h1 className={title()}>¿Tienes preguntas?</h1>
-					<div className="rounded-3xl bg-content1/50 backdrop-blur-sm p-5 w-max-3xl md:w-3xl border-none border-default mt-2" >
+					<div className="rounded-3xl bg-content1/50 backdrop-blur-sm p-5 w-max-3xl md:w-3xl border-none border-default mt-2 px-3" >
 						<Accordion variant="splitted" itemClasses={{base:" shadow-none"}}  className="border-none">
 							{faqs.map((faq, index) => (
 								<AccordionItem key={index} title={faq.question}>

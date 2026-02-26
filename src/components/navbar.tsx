@@ -59,13 +59,13 @@ export const Navbar = () => {
 						</NavbarBrand>
 					</NavbarContent>
 
-					<NavbarContent className="hidden md:flex gap-4" justify="center">
+					<NavbarContent className="hidden md:flex gap-1" justify="center">
 						{siteConfig.navItems.map((item) => (
 							<NavbarItem key={item.href} isActive={location.pathname === item.href}>
 								<Link
 									className={clsx(
 										linkStyles({ color: "foreground" }),
-										"data-[active=true]:text-primary data-[active=true]:font-medium",
+										"data-[active=true]:text-primary data-[active=true]:font-medium hover:bg-primary/20 p-2 py-1 rounded-lg transition-all duration-300",
 									)}
 									color="foreground"
 									href={item.href}
