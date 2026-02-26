@@ -1,7 +1,7 @@
-import { FBIcon, GlobeIcon, SmileyIcon, WAIcon } from '@/components/icons';
+import { ConfettiFilledIcon, FBIcon, GlobeIcon, SmileyIcon, WAIcon } from '@/components/icons';
 import { createUser, updateUser } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast, Spacer } from '@heroui/react';
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
@@ -166,8 +166,8 @@ export const UserPage = () => {
 
     return (
         <DefaultLayout>
-            <div className={`flex w-full justify-center items-center ${!isUserFound ? "min-h-[70vh] px-4 py-8" : ""} transition-all duration-300`}>
-                <Card className='md:w-lg w-full p-5 -mt-10 rounded-3xl bg-content2/70 backdrop-blur-md' shadow='none'>
+            <div className={`flex w-full justify-center items-center ${!isUserFound ? "min-h-[70vh] px-4 py-8" : "mt-20"} transition-all duration-300`}>
+                <Card className='md:w-lg w-full p-5 max-md:p-2 -mt-10 rounded-3xl bg-content2/70 backdrop-blur-md' shadow='none'>
                     <CardHeader>
                         <h4 className="font-bold text-xl">Crea tu usuario</h4>
                     </CardHeader>
@@ -314,7 +314,10 @@ export const UserPage = () => {
                                         animate={{ opacity: 1, y: 0, transition: { type: 'spring', visualDuration: 0.5, bounce: 0.2, delay: 0.15 } }}
                                         exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
                                     >
-                                        <Alert color='primary' variant='faded' title="Tu perfil se creó correctamente, ¿ahora qué sigue?" description={`Te llegará un link a tu perfil de Instagram para que puedas empezar a publicar eventos.`} className='rounded-2xl' startContent={<SmileyIcon size={30} className="text-primary" />} hideIcon />
+                                        <Alert color='primary' variant='faded' title={<><ConfettiFilledIcon size={30} className="text-primary" />
+                                            Tu perfil se creó correctamente, ¿ahora qué sigue?
+                                        </>
+                                        } description={`Te llegará un link a tu perfil de Instagram para que puedas empezar a publicar eventos.`} className='rounded-2xl' classNames={{ title: "font-semibold flex gap-3 items-center", base:"py-3 px-2" }} hideIcon />
                                     </motion.div>
                                 )}
                             </AnimatePresence>
