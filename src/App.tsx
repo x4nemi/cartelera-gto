@@ -7,6 +7,7 @@ import { addToast } from "@heroui/react";
 import { SmileyFilledIcon, XIcon } from "./components/icons";
 import CreationPage from "./pages/docs";
 import { PublishedPost } from "./pages/publishedPost";
+import DocsPage from "./pages/about";
 
 function App() {
 	const isFirstTime = !localStorage.getItem("hasVisitedBefore");
@@ -38,6 +39,7 @@ function App() {
 			<Route element={<PublishPage />} path="/publicar" />
 			<Route element={<UserPage />} path="/user" />
 			<Route element={<PublishedPost  />} path="/completado/:id" />
+			<Route element={<DocsPage />} path="/faq" />
 		</Routes>
 	);
 }

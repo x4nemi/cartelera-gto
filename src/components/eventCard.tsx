@@ -28,10 +28,10 @@ export const EventCard = (props: PostData) => {
 	return (
 		<>
 			<Card className="rounded-3xl" isPressable onClick={onOpen} shadow="none">
-				<CardHeader className="absolute top-2 right-2 z-10 p-0 w-auto flex flex-col items-center overflow-hidden rounded-xl border border-content1" style={{ width: 50 }}>
-					<div className="w-full bg-foreground text-white dark:text-black text-[11px] font-bold tracking-wider text-center pt-0.5">{month}</div>
-					<div className="flex flex-col items-center bg-content1 w-full py-1">
-						<span className="text-xl font-semibold leading-tight text-foreground">{day}</span>
+				<CardHeader className="absolute top-2 right-2 z-10 p-0 w-auto flex flex-col items-center overflow-hidden rounded-xl" style={{ width: 45 }}>
+					<div className="w-full bg-foreground text-white dark:bg-content1 text-[11px] font-bold tracking-wider text-center pt-0.5">{month}</div>
+					<div className="flex flex-col items-center bg-content1 dark:bg-default-900 w-full py-1">
+						<span className="text-lg font-semibold leading-tight text-foreground dark:text-default-50 font-mono">{day}</span>
 						<span className="text-[11px] text-default-500">{weekday}</span>
 					</div>
 				</CardHeader>
