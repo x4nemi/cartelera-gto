@@ -1,4 +1,4 @@
-import { BalloonFilledIcon } from "@/components/icons"
+import { BalloonFilledIcon, ConfettiFilledIcon } from "@/components/icons"
 import { CosmosAPI, PostData } from "@/config/apiClient"
 import DefaultLayout from "@/layouts/default"
 import { Alert, Button, Calendar, Card, CardBody, CardFooter, Chip, Divider, Spinner, User } from "@heroui/react"
@@ -64,15 +64,15 @@ export const PublishedPost = () => {
 
     return (
         <DefaultLayout>
-            <section className="flex flex-col md:flex-row mt-10 md:gap-3 gap-1 md:mx-auto px-2 mx-4 items-center">
-                <Card className="rounded-3xl" shadow="none">
+            <section className="flex flex-col md:flex-row mt-10 md:gap-3 gap-1 md:mx-auto px-2 mx-4 items-stretch md:items-center">
+                <Card className="rounded-3xl w-full md:w-auto" shadow="none">
                     <CardBody className="overflow-visible p-0">
                         <ImageCarousel images={post.images || []} className="max-h-[70vh]" />
                     </CardBody>
                 </Card>
-                <div className="flex flex-col md:gap-3 gap-1 justify-center">
+                <div className="flex flex-col md:gap-3 gap-1 justify-center w-full md:w-auto">
                     <div>
-                        <Alert title="Pubicado con éxito" variant="flat" className="rounded-3xl rounded-b-none" color="primary" hideIcon startContent={<BalloonFilledIcon size={24} />} />
+                        <Alert title="Publicado con éxito" variant="flat" className="rounded-3xl rounded-b-none" color="primary" hideIcon startContent={<ConfettiFilledIcon size={24} />} />
                         <Card className="rounded-3xl rounded-t-none md:max-w-xs w-full bg-content1/80 backdrop-blur-lg" shadow="none">
                             <CardBody className="p-5">
                                 <Chip color="primary" variant="flat" radius="sm">{PostTypes[post.type as keyof typeof PostTypes] || post.type}</Chip>
@@ -113,7 +113,7 @@ export const PublishedPost = () => {
                             </CardFooter>
                         </Card>
                     </div>
-                    <Button className="rounded-3xl" color="warning" variant="solid" size="lg" onPress={() => navigate("/publicar")}>Regresar</Button>
+                    <Button className="rounded-3xl" color="warning" variant="solid" size="lg" onPress={() => navigate("/")}>Regresar</Button>
                 </div>
             </section>
         </DefaultLayout>

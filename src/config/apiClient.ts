@@ -83,6 +83,56 @@ export const AzureStorageAPI = {
             this.uploadImageFromUrl(img.url, img.filename)
         );
         return Promise.all(uploads);
+    },
+
+    /**
+     * Upload a file directly to Azure Blob Storage via base64
+     * @param file - The File object to upload
+     * @param filename - The desired filename for the blob
+     * @returns The new Azure Blob Storage URL
+     */
+    async uploadFile(file: File, filename: string): Promise<string> {
+        const base64 = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const result = reader.result as string;
+                resolve(result.split(",")[1]); // Remove data:...;base64, prefix
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+
+        const response = await fetch(`/api/uploadImage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                imageBase64: base64,
+                contentType: file.type,
+                filename,
+            }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || "Failed to upload file");
+        }
+
+        const result = await response.json();
+        return result.url;
+    },
+
+    /**
+     * Upload multiple files directly
+     * @param files - Array of File objects
+     * @returns Array of Azure Blob Storage URLs
+     */
+    async uploadMultipleFiles(files: File[]): Promise<string[]> {
+        const uploads = files.map((file, i) => {
+            const ext = file.name.split(".").pop() || "jpg";
+            const filename = `manual_${i}.${ext}`;
+            return this.uploadFile(file, filename);
+        });
+        return Promise.all(uploads);
     }
 };
 
@@ -117,6 +167,7 @@ export interface PostData {
     updatedAt?: string;
     dates?: string[] | null;
     type?: "event" | "workshop" | "calendar" | "draft";
+    isDraft?: boolean;
 }
 
 export interface PaginatedResponse<T> {

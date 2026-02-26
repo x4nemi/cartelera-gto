@@ -23,15 +23,15 @@ export default function DocsPage() {
 		},
 		{
 			question: "Quiero donar, ¿cómo puedo apoyar a Cartelera Cuévano?",
-			answer: "Puedes donar a través de PayPal: <a href='https://www.paypal.com/donate/?hosted_button_id=C42HWJ5ZQW3WN' target='_blank'>Donar ahora</a>. Tu apoyo nos ayuda a mantener la plataforma y seguir promoviendo eventos locales en Guanajuato."
+			answer: "Puedes donar a través de PayPal: <a href='https://www.paypal.com/donate/?hosted_button_id=C42HWJ5ZQW3WN' target='_blank' style='color: #007bff;'>Donar ahora</a>. Tu apoyo nos ayuda a mantener la plataforma y seguir promoviendo eventos locales en Guanajuato."
 		},
 		{
 			question: "Créditos de fotos usadas en la plataforma",
-			answer: "Pérfil de Flickr https://www.flickr.com/photos/anthonysurace/"
+			answer: "Pérfil de Flickr <a href='https://www.flickr.com/photos/anthonysurace/' target='_blank' style='color: #007bff;'>Anthony Surace</a>."
 		}, 
 		{
 			question: "¿Cómo puedo contactar al equipo de Cartelera Cuévano?",
-			answer: "Puedes contactarnos a tráves de nuestro Instagram oficial: <a href='https://www.instagram.com/carteleracuevano/' target='_blank'>@carteleracuevano</a>. Estamos disponibles para responder tus preguntas y recibir tus comentarios."
+			answer: "Puedes contactarnos a tráves de nuestro Instagram oficial: <a href='https://www.instagram.com/carteleracuevense/' target='_blank' style='color: #007bff;'>@carteleracuevanense</a>. Estamos disponibles para responder tus preguntas y recibir tus comentarios."
 		}
 	];
 	return (
@@ -39,8 +39,8 @@ export default function DocsPage() {
 			<section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10 w-full max-md:mx-7">
 				<div className="inline-block text-center justify-center">
 					<h1 className={title()}>¿Tienes preguntas?</h1>
-					<div className="rounded-3xl bg-content1/50 backdrop-blur-md p-5 w-max-3xl md:w-3xl border border-default" >
-						<Accordion variant="light" itemClasses={{base:"border-none"}} className="border-none">
+					<div className="rounded-3xl bg-content1/50 backdrop-blur-sm p-5 w-max-3xl md:w-3xl border-none border-default mt-2" >
+						<Accordion variant="splitted" itemClasses={{base:"mb-2 shadow-none"}}  className="border-none">
 							{faqs.map((faq, index) => (
 								<AccordionItem key={index} title={faq.question}>
 									<p className="text-start text-default-500" dangerouslySetInnerHTML={{ __html: faq.answer }}></p>

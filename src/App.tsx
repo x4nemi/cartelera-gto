@@ -36,7 +36,7 @@ function App() {
 		<Routes>
 			<Route element={<IndexPage />} path="/" />
 			<Route element={<CreationPage />} path="/creacion" />
-			<Route element={<PublishPage />} path="/publicar" />
+			<Route element={<PublishPage />} path="/:username/publicar" />
 			<Route element={<UserPage />} path="/user" />
 			<Route element={<PublishedPost  />} path="/completado/:id" />
 			<Route element={<DocsPage />} path="/faq" />

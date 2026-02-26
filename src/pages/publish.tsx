@@ -1,15 +1,16 @@
-import { FileUploadButton } from "@/components/fileUploadButton";
 import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { CancelModal } from "@/components/modal/cancelModal";
-import { InstagramLinkInput, InstagramPostPreview, PublishActions } from "@/components/publish";
-import { createPost, PostData, updatePost } from '@/config/apiClient';
+import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions } from "@/components/publish";
+import { AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Button, cn, DateValue } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, cn, DateValue } from "@heroui/react";
 import { getLocalTimeZone } from "@internationalized/date";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function PublishPage() {
+	const { username } = useParams<{ username: string }>();
+
 	//#region Selected dates
 	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
 	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
@@ -19,7 +20,14 @@ export default function PublishPage() {
 
 	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">("event");
 
+	//#region Manual post
+	const [manualImages, setManualImages] = useState<File[]>([]);
+	const [manualCaption, setManualCaption] = useState("");
+	const manualOwnerName = username ?? "";
+	//#endregion
+
 	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
+	const canPublishManual = hasSelectedDates && manualImages.length > 0 && manualOwnerName.trim().length > 0;
 
 	/**
 	 * Converts all date selections into a flat sorted list of ISO date strings.
@@ -99,6 +107,8 @@ export default function PublishPage() {
 		setWorkshopDays([]);
 		setUntil(null);
 		setDateRange({ start: null, end: null });
+		setManualImages([]);
+		setManualCaption("");
 	}
 
 	//#endregion
@@ -151,6 +161,63 @@ export default function PublishPage() {
 		}
 	};
 
+	const handlePublishManual = async () => {
+		if (manualImages.length === 0 || !manualOwnerName.trim()) return;
+
+		setIsPublishing(true);
+
+		try {
+			const imageUrls = await AzureStorageAPI.uploadMultipleFiles(manualImages);
+			const dates = computeFlatDates();
+			const shortCode = `manual-${Date.now()}`;
+
+			const manualPost: PostData = {
+				shortCode,
+				caption: manualCaption,
+				displayUrl: imageUrls[0],
+				images: imageUrls,
+				ownerUsername: manualOwnerName.trim().toLowerCase().replace(/\s+/g, "_"),
+				ownerFullName: manualOwnerName.trim(),
+				ownerProfilePicUrl: "",
+				isDraft: false,
+				type: type,
+				dates: dates.length > 0 ? dates : null,
+			};
+
+			const result = await CosmosAPI.insertEvent(manualPost);
+
+			if (result.success) {
+				addToast({
+					title: "Publicación exitosa",
+					description: "Tu evento ha sido publicado correctamente.",
+					color: "success",
+					timeout: 8000,
+					variant: "flat"
+				});
+				navigate(`/completado/${shortCode}`);
+			} else {
+				addToast({
+					title: "Error al publicar",
+					description: "Hubo un problema al publicar tu evento.",
+					color: "danger",
+					timeout: 8000,
+					variant: "flat"
+				});
+			}
+		} catch (error) {
+			console.error("Error publishing manual post:", error);
+			addToast({
+				title: "Error al publicar",
+				description: "Hubo un problema al subir las imágenes.",
+				color: "danger",
+				timeout: 8000,
+				variant: "flat"
+			});
+		} finally {
+			setIsPublishing(false);
+		}
+	}
+
 	const handlePublishPost = async () => {
 		if (!postData) return;
 
@@ -199,12 +266,8 @@ export default function PublishPage() {
 
 	return (
 		<DefaultLayout>
-			<section className={`flex flex-col mt-10 gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 mx-4`}>
+			<section className={`flex flex-col  gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 justify-center`}>
 				<h1 className="text-3xl font-bold flex items-center gap-2 text-foreground md:text-4xl lg:text-5xl">
-					<span className="relative flex size-3">
-						<span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-75 ${isLinkValid ? "bg-amber-400" : "bg-sky-400"}`}></span>
-						<span className={`relative inline-flex size-3 rounded-full ${isLinkValid ? "bg-amber-500" : "bg-sky-500"}`}></span>
-					</span>
 					Crea tu publicación</h1>
 				<h3 className="font-semibold text-foreground text-lg">¿Cómo deseas publicarlo?</h3>
 				<div className="w-full">
@@ -290,16 +353,49 @@ export default function PublishPage() {
 							startContent={selectedKey === "2" ? <ImagesFilledIcon size={26} /> : <ImagesIcon size={26} />}
 							hidden={isLinkValid}
 						>
-							<FileUploadButton />
+							<ManualPostPreview
+								images={manualImages}
+								setImages={setManualImages}
+								caption={manualCaption}
+								setCaption={setManualCaption}
+								ownerName={manualOwnerName}
+
+								selectedDates={selectedDates}
+								setSelectedDates={setSelectedDates}
+								workshopDays={workshopDays}
+								setWorkshopDays={setWorkshopDays}
+								until={until}
+								setUntil={setUntil}
+								dateRange={dateRange}
+								setDateRange={setDateRange}
+								every={every}
+								setEvery={setEvery}
+								setType={setType}
+							/>
 						</AccordionItem>
 					</Accordion>
-					{hasSelectedDates ? (
+					{selectedKey === "2" ? (
+						canPublishManual ? (
+							<PublishActions
+								onCancel={() => setOpenCancelModal(true)}
+								onPublish={handlePublishManual}
+								isPublishing={isPublishing}
+							/>
+						) : manualImages.length > 0 ? (
+							<p className="text-sm text-foreground-500 mt-2">
+								{!manualOwnerName.trim() ? "Agrega el nombre del organizador." : "Selecciona las fechas de tu evento para habilitar el botón de publicar."}
+							</p>
+						) : null
+					) : hasSelectedDates ? (
 						<PublishActions
 							onCancel={() => setOpenCancelModal(true)}
 							onPublish={handlePublishPost}
 							isPublishing={isPublishing}
-						/>) : (<Button color="danger" variant="bordered" className="w-full mt-4" >Cancelar</Button>
-					)}
+						/>
+					) : isLinkValid ? (
+						<p className="text-sm text-foreground-500 mt-2">Selecciona las fechas de tu evento para habilitar el botón de publicar.</p>
+					) : null
+					}
 				</div>
 			</section>
 			<CancelModal openModal={openCancelModal} setOpenModal={setOpenCancelModal} onCancel={handleCancel} />
