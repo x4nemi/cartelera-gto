@@ -29,10 +29,55 @@ export const UserPage = () => {
             return
         }
 
+        // if there is space in the username, return error
+        if (/\s/.test(data.username as string)) {
+            setErrorsIg({ username: "El usuario no puede contener espacios" });
+            setValidating(false);
+            return
+        }
+
+        // there should not be special characters in the username, only letters, number, dots and underscores
+        if (/[^a-zA-Z0-9._]/.test(data.username as string)) {
+            setErrorsIg({ username: "El usuario solo puede contener letras, números, puntos y guiones bajos" });
+            setValidating(false);
+            return
+        }
+
+        // there should not be more than 30 characters in the username
+        if ((data.username as string).length > 30) {
+            setErrorsIg({ username: "El usuario no puede tener más de 30 caracteres" });
+            setValidating(false);
+            return
+        }
+
         try {
             const run = await createUser(data.username as string);
 
             if (run) {
+                if(run.isDraft === false) {
+                    addToast({
+                        title: "Usuario en revisión",
+                        description: `El usuario @${run.username} ya ha sido creado y se encuentra en revisión. Te notificaremos por mensaje directo en Instagram cuando esté aprobado.`,
+                        timeout: 20000,
+                        variant: "flat",
+                        color: "warning",
+                        size: "md"
+                    });
+                    setValidating(false);
+                    return;
+                }
+                if(run.isApproved === true) {
+                    addToast({
+                        title: "Usuario ya creado",
+                        description: `El usuario @${run.username} ya ha sido creado y aprobado. Si este es tu usuario, por favor contáctanos para resolver cualquier inconveniente.`,
+                        timeout: 20000,
+                        variant: "flat",
+                        color: "warning",
+                        size: "md"
+                    });
+                    setValidating(false);
+                    return;
+                }
                 setUser(run);
                 setIsUserFound(true);
                 setErrorsIg({});
@@ -45,7 +90,14 @@ export const UserPage = () => {
                     size: "md"
                 });
             } else {
-                setErrorsIg({ username: "Usuario no encontrado" });
+                addToast({
+                    title: "Usuario no encontrado",
+                    description: `No pudimos encontrar el usuario @${data.username}. Por favor verifica que lo hayas escrito correctamente.`,
+                    timeout: 20000,
+                    variant: "flat",
+                    color: "danger",
+                    size: "md"
+                });
             }
         } catch (error) {
             console.error('Error validating Instagram user:', error);
@@ -194,6 +246,7 @@ export const UserPage = () => {
                                                             <span className=" text-xl text-primary">@</span>
                                                         </div>
                                                     }
+                                                    type='search'
                                                 />
                                                 <Button type="submit" variant="flat" size='lg' className="w-min-32 h-12 rounded-l-none" color="primary" isLoading={validating} isIconOnly={validating}>
                                                     {validating ? "" : "Siguiente"}

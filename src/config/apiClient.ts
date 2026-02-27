@@ -149,6 +149,7 @@ export interface UserData {
     createdAt?: string;
     updatedAt?: string;
     isDraft?: boolean;
+    isApproved?: boolean;
     socialLinks?: { type: string; url: string }[];
 }
 
@@ -313,7 +314,7 @@ export const CosmosAPI = {
  * Create a user from Instagram username
  * First checks if user exists in database, if not fetches from Apify and inserts
  */
-export const createUser = async (username: string): Promise<UserData> => {
+export const createUser = async (username: string): Promise<UserData | null> => {
     // First check if user already exists
     const existingUser = await CosmosAPI.getUser(username);
     if (existingUser) {
@@ -329,12 +330,21 @@ export const createUser = async (username: string): Promise<UserData> => {
     const run = await ApifyAPI.runActor("dSCLg0C3YEZ83HzYX", input);
     const completedRun = await ApifyAPI.waitForRun(run.id, "dSCLg0C3YEZ83HzYX", 120);
     const datasetItems = await ApifyAPI.getDatasetItems(completedRun.defaultDatasetId);
+
+    if(datasetItems.error) {
+        throw new Error(`Apify actor error: ${datasetItems.error}`);
+    }
     
     if (datasetItems.length === 0) {
-        throw new Error("No user data found from Apify actor");
+        return null;
     }
 
     const userData = datasetItems[0];
+
+    // Validate that we got actual profile data (Apify may return error stubs for non-existent users)
+    if (!userData || !userData.username || userData.error) {
+        return null;
+    }
     
     // Map Apify response to our UserData structure (no posts)
     const userToInsert: UserData = {
