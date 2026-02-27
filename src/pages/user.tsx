@@ -358,10 +358,10 @@ export const UserPage = () => {
                                         animate={{ opacity: 1, y: 0, transition: { type: 'spring', visualDuration: 0.5, bounce: 0.2, delay: 0.15 } }}
                                         exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
                                     >
-                                        <Alert color='primary' variant='faded' title={<><ConfettiFilledIcon size={30} className="text-primary" />
+                                        <Alert color='primary' variant='faded' title={<><ConfettiFilledIcon size={25} className="text-primary" />
                                             Tu perfil se creó correctamente, ¿ahora qué sigue?
                                         </>
-                                        } description={`Te llegará un link a tu perfil de Instagram para que puedas empezar a publicar eventos.`} className='rounded-2xl' classNames={{ title: "font-semibold flex gap-3 items-center", base:"py-3 px-2" }} hideIcon />
+                                        } description={`Te llegará un link a tu perfil de Instagram para que puedas empezar a publicar eventos.`} className='rounded-2xl' classNames={{ title: "font-semibold flex gap-2 items-center", base:"py-3 px-2" }} hideIcon />
                                     </motion.div>
                                 )}
                             </AnimatePresence>

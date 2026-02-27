@@ -189,10 +189,10 @@ export const CosmosAPI = {
      * Insert or update a user in the database
      */
     async insertUser(userData: UserData): Promise<{ success: boolean; username: string; posts?: { created: number; updated: number } }> {
-        if (userData.profilePicUrlHD) {
+        if (userData.profilePicUrl) {
             try {
-                const filenameHD = `${userData.username}_hd_profile.jpg`;
-                const newImageUrlHD = await AzureStorageAPI.uploadImageFromUrl(userData.profilePicUrlHD, filenameHD);
+                const filenameHD = `${userData.username}_profile.jpg`;
+                const newImageUrlHD = await AzureStorageAPI.uploadImageFromUrl(userData.profilePicUrl, filenameHD);
                 userData.profilePicUrl = newImageUrlHD;
             } catch (err) {
                 console.warn("Failed to upload HD profile image, using original URL:", err);
