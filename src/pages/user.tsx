@@ -1,19 +1,10 @@
-import { ConfettiFilledIcon, FBIcon, GlobeIcon, SmileyIcon, WAIcon } from '@/components/icons';
-import { createUser, updateUser } from '@/config/apiClient';
+import { ConfettiFilledIcon, FBIcon, GlobeIcon, WAIcon } from '@/components/icons';
+import { createUser, updateUser, UserData } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast, Spacer } from '@heroui/react';
+import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
-interface UserProps {
-    id?: string;
-    username: string;
-    fullName?: string;
-    profilePicUrl?: string;
-    profilePicUrlHD?: string;
-    biography?: string;
-    latestPosts?: object[];
-}
 
 export const UserPage = () => {
     //#region Form states and handlers
@@ -24,7 +15,7 @@ export const UserPage = () => {
     const [isUserFound, setIsUserFound] = useState(false)
     const [isUserCreated, setIsUserCreated] = useState(false)
 
-    const [user, setUser] = useState<UserProps | null>(null)
+    const [user, setUser] = useState<UserData | null>(null)
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -99,24 +90,24 @@ export const UserPage = () => {
             return;
         }
 
-        const externalUrls = [];
+        const socialLinks = [];
 
         if (facebook) {
-            externalUrls.push({ type: "facebook", url: facebook as string });
+            socialLinks.push({ type: "facebook", url: facebook as string });
         }
         if (whatsapp) {
-            externalUrls.push({ type: "whatsapp", url: `https://wa.me/52${whatsapp}` });
+            socialLinks.push({ type: "whatsapp", url: `https://wa.me/52${whatsapp}` });
         }
         if (website) {
-            externalUrls.push({ type: "website", url: website as string });
+            socialLinks.push({ type: "website", url: website as string });
         }
 
         const userData = {
             ...user,
-            externalUrls
-        } as UserProps;
+            socialLinks
+        } as UserData;
 
-        var userResult: UserProps | null = null;
+        var userResult: UserData | null = null;
         try {
             userResult = await updateUser(userData);
         } catch (error) {
@@ -167,7 +158,7 @@ export const UserPage = () => {
     return (
         <DefaultLayout>
             <div className={`flex w-full justify-center items-center ${!isUserFound ? "min-h-[70vh] px-4 py-8" : "mt-20"} transition-all duration-300`}>
-                <Card className='md:w-lg w-full p-5 max-md:p-2 -mt-10 rounded-3xl bg-content2/70 backdrop-blur-md' shadow='none'>
+                <Card className='md:w-lg w-full mx-2 p-5 max-md:p-1 -mt-10 rounded-3xl bg-content2/70 backdrop-blur-md transition-all duration-250' shadow='none'>
                     <CardHeader>
                         <h4 className="font-bold text-xl">Crea tu usuario</h4>
                     </CardHeader>

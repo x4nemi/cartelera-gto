@@ -188,21 +188,11 @@ export const CosmosAPI = {
      * Insert or update a user in the database
      */
     async insertUser(userData: UserData): Promise<{ success: boolean; username: string; posts?: { created: number; updated: number } }> {
-        // Try to upload profile image to Azure Storage (optional - may fail due to Instagram rate limits)
-        if (userData.profilePicUrl) {
-            try {
-                const filename = `${userData.username}_profile.jpg`;
-                const newImageUrl = await AzureStorageAPI.uploadImageFromUrl(userData.profilePicUrl, filename);
-                userData.profilePicUrl = newImageUrl;
-            } catch (err) {
-                console.warn("Failed to upload profile image, using original URL:", err);
-            }
-        }
         if (userData.profilePicUrlHD) {
             try {
                 const filenameHD = `${userData.username}_hd_profile.jpg`;
                 const newImageUrlHD = await AzureStorageAPI.uploadImageFromUrl(userData.profilePicUrlHD, filenameHD);
-                userData.profilePicUrlHD = newImageUrlHD;
+                userData.profilePicUrl = newImageUrlHD;
             } catch (err) {
                 console.warn("Failed to upload HD profile image, using original URL:", err);
             }
@@ -353,8 +343,8 @@ export const createUser = async (username: string): Promise<UserData> => {
         url: userData.url,
         biography: userData.biography,
         externalUrls: userData.externalUrls || [],
-        profilePicUrl: userData.profilePicUrl,
-        profilePicUrlHD: userData.profilePicUrlHD,
+        profilePicUrl: userData.profilePicUrlHD,
+        socialLinks: [], // We can populate this based on externalUrls if needed
         isDraft: true
     };
 
@@ -369,6 +359,7 @@ export const createUser = async (username: string): Promise<UserData> => {
 };
 
 export const updateUser = async (userData: UserData): Promise<UserData> => {
+    userData.isDraft = false; // Mark as not draft when updating
     const result = await CosmosAPI.insertUser(userData);
 
     if (!result.success) {
@@ -428,13 +419,14 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         }
     }
 
-    // get username profile picture
-    let ownerProfilePicUrl = "";
+    let ownerProfilePicUrl = postData.ownerProfilePicUrl;
     try {
-        const ownerData = await createUser(postData.ownerUsername);
-        ownerProfilePicUrl = ownerData.profilePicUrl || "";
+        const ownerData = await CosmosAPI.getUser(postData.ownerUsername);
+        if (ownerData && ownerData.profilePicUrl) {
+            ownerProfilePicUrl = ownerData.profilePicUrl;
+        }
     } catch (err) {
-        console.warn("Failed to get owner profile picture:", err);
+        console.warn("Failed to get owner data for profile picture, using Apify URL:", err);
     }
 
     // Map Apify response to our PostData structure
