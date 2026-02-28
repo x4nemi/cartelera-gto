@@ -269,11 +269,11 @@ export default function PublishPage() {
 	return (
 		<DefaultLayout>
 			{loadingUser ? (
-				<section className="flex flex-col items-center justify-center flex-grow w-full py-20">
+				<section className="flex flex-col justify-center items-center flex-grow w-full py-20">
 					<Spinner size="lg" color="primary" />
 				</section>
 			) : (
-			<section className={`flex flex-col  gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 justify-center`}>
+			<section className={`flex flex-col gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 mt-10`}>
 				<Button variant="flat" color="primary" onPress={() => navigate(`/${username}`)} className="self-start">
 					<ArrowLeftIcon size={24} />
 					Volver al portal
