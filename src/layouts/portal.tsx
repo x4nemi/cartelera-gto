@@ -26,7 +26,7 @@ export default function PortalLayout({
 					{sidebar}
 				</aside>
 
-				<main className="flex-1 min-w-0 py-4">
+				<main className="flex-1 min-w-0 py-5">
 					{children}
 				</main>
 			</div>
