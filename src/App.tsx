@@ -8,6 +8,7 @@ import { SmileyFilledIcon, XIcon } from "./components/icons";
 import CreationPage from "./pages/docs";
 import { PublishedPost } from "./pages/publishedPost";
 import DocsPage from "./pages/about";
+import { Portal } from "./pages/portal";
 
 function App() {
 	const isFirstTime = !localStorage.getItem("hasVisitedBefore");
@@ -40,6 +41,7 @@ function App() {
 			<Route element={<UserPage />} path="/user" />
 			<Route element={<PublishedPost  />} path="/completado/:id" />
 			<Route element={<DocsPage />} path="/faq" />
+			<Route element={<Portal />} path="/:username" />
 		</Routes>
 	);
 }

@@ -2,6 +2,7 @@ import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components
 import { CancelModal } from "@/components/modal/cancelModal";
 import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions } from "@/components/publish";
 import { AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
+import { useRequireUser } from "@/hooks/useRequireUser";
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, addToast, cn, DateValue } from "@heroui/react";
 import { getLocalTimeZone } from "@internationalized/date";
@@ -10,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 export default function PublishPage() {
 	const { username } = useParams<{ username: string }>();
+	const { loading: loadingUser } = useRequireUser(username);
 
 	//#region Selected dates
 	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
@@ -265,7 +267,7 @@ export default function PublishPage() {
 
 
 	return (
-		<DefaultLayout>
+		!loadingUser && <DefaultLayout>
 			<section className={`flex flex-col  gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 justify-center`}>
 				<h1 className="text-3xl font-bold flex items-center gap-2 text-foreground md:text-4xl lg:text-5xl">
 					Crea tu publicación</h1>
