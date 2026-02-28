@@ -1,39 +1,21 @@
-import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useRequireUser } from "@/hooks/useRequireUser";
+import { useUserPosts } from "@/hooks/useUserPosts";
 import { Wall } from "@/components/pinterestWall";
 import DefaultLayout from "@/layouts/default";
 import { Avatar, Button, Card, CardBody, Divider, Link, Skeleton, Spinner } from "@heroui/react";
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const Portal = () => {
     const { username } = useParams();
     const navigate = useNavigate();
     const { user, loading: loadingUser } = useRequireUser(username);
-
-    const [posts, setPosts] = useState<PostData[]>([]);
-    const [loadingPosts, setLoadingPosts] = useState(true);
-
-    const fetchPosts = async () => {
-        try {
-            const response = await CosmosAPI.getEvents({ ownerUsername: username!, limit: 50 });
-            setPosts(response.data);
-        } catch {
-            // silently fail
-        } finally {
-            setLoadingPosts(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchPosts();
-    }, [username]);
+    const { posts, loading: loadingPosts } = useUserPosts(username);
 
     return (
         <DefaultLayout>
             <section className="flex flex-col md:flex-row w-full gap-6 py-6">
                 {/* Left Sidebar - User Info */}
-                <aside className="md:w-80  max-md:mx-5 shrink-0 md:sticky md:top-20 md:self-start">
+                <aside className="md:w-80 max-md:mx-10  shrink-0 md:sticky md:top-20 md:self-start">
                     <Card shadow="none" className="rounded-3xl bg-content2/70 backdrop-blur-md">
                         <CardBody className="flex flex-col items-center gap-4 p-6">
                             {loadingUser ? (
@@ -64,9 +46,9 @@ export const Portal = () => {
                                         </Link>
                                     </div>
                                     <div className="flex flex-col gap-2 w-full">
-                                        <Button className="rounded-2xl" size="lg" color="primary" onPress={() => navigate(`/${username}/publicar`)}>Crear publicación</Button>
+                                        <Button className="rounded-2xl" size="lg" color="primary" onPress={() => navigate(`/${username}/publicar`)} variant="flat">Crear publicación</Button>
                                         <Divider />
-                                        <Button className="rounded-2xl" size="lg" color="danger">Eliminar perfil</Button>
+                                        <Button className="rounded-2xl" size="lg" color="danger" variant="flat">Eliminar perfil</Button>
                                     </div>
                                 </>
                             )}

@@ -1,10 +1,10 @@
-import { IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
+import { ArrowLeftIcon, IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { CancelModal } from "@/components/modal/cancelModal";
 import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions } from "@/components/publish";
 import { AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
 import { useRequireUser } from "@/hooks/useRequireUser";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, cn, DateValue } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, Button, cn, DateValue, Spinner } from "@heroui/react";
 import { getLocalTimeZone } from "@internationalized/date";
 import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -267,8 +267,17 @@ export default function PublishPage() {
 
 
 	return (
-		!loadingUser && <DefaultLayout>
+		<DefaultLayout>
+			{loadingUser ? (
+				<section className="flex flex-col items-center justify-center flex-grow w-full py-20">
+					<Spinner size="lg" color="primary" />
+				</section>
+			) : (
 			<section className={`flex flex-col  gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 justify-center`}>
+				<Button variant="flat" color="primary" onPress={() => navigate(`/${username}`)} className="self-start">
+					<ArrowLeftIcon size={24} />
+					Volver al portal
+				</Button>
 				<h1 className="text-3xl font-bold flex items-center gap-2 text-foreground md:text-4xl lg:text-5xl">
 					Crea tu publicación</h1>
 				<h3 className="font-semibold text-foreground text-lg">¿Cómo deseas publicarlo?</h3>
@@ -400,6 +409,7 @@ export default function PublishPage() {
 					}
 				</div>
 			</section>
+			)}
 			<CancelModal openModal={openCancelModal} setOpenModal={setOpenCancelModal} onCancel={handleCancel} />
 		</DefaultLayout>
 	);
