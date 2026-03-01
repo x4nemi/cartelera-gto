@@ -27,12 +27,12 @@ export const EventCard = (props: PostData) => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	return (
 		<>
-			<Card className="rounded-3xl" isPressable onClick={onOpen} shadow="none">
-				<CardHeader className="absolute top-2 right-2 z-10 p-0 w-auto flex flex-col items-center overflow-hidden rounded-xl" style={{ width: 45 }}>
-					<div className="w-full bg-foreground text-white dark:bg-content1 text-[11px] font-bold tracking-wider text-center pt-0.5">{month}</div>
+			<Card className="rounded-3xl transition-all duration-200" isPressable onClick={onOpen} shadow="none">
+				<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-xl w-9" style={{ width: 45 }}>
+					<div className="w-full bg-foreground text-white dark:bg-content1 text-[9px] font-bold tracking-wider text-center pt-0.5">{month}</div>
 					<div className="flex flex-col items-center bg-content1 dark:bg-default-900 w-full py-1">
-						<span className="text-lg font-semibold leading-tight text-foreground dark:text-default-50 font-mono">{day}</span>
-						<span className="text-[11px] text-default-500">{weekday}</span>
+						<span className=" font-semibold leading-tight text-foreground dark:text-default-50 font-mono text-md">{day}</span>
+						<span className="text-[9px] text-default-500">{weekday}</span>
 					</div>
 				</CardHeader>
 

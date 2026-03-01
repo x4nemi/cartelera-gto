@@ -14,7 +14,7 @@ export const Portal = () => {
     const sidebar = (
         <div className="flex flex-col gap-4">
             {loadingUser ? (
-                <div className="flex flex-col gap-3 items-center w-full">
+                <div className="flex flex-col gap-3 items-center w-full rounded-3xl bg-content1 dark:bg-content2 backdrop-blur-sm p-6">
                     <Skeleton className="rounded-full w-24 h-24" />
                     <Skeleton className="h-5 w-40 rounded-lg" />
                     <Skeleton className="h-4 w-32 rounded-lg" />

@@ -20,7 +20,7 @@ export const PortalWall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {
 
 	return (
 		<div className="w-full">
-			<div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 max-sm:gap-1.5">
+			<div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 max-sm:gap-1.5 transition-all duration-200">
 				<div className="flex flex-col gap-3 max-sm:gap-1.5">
 					{column1.map((card, index) => (
 						<div key={`col1-${index}`} className="card-wrapper">
