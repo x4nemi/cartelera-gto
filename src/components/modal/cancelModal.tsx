@@ -1,5 +1,4 @@
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
-import React from 'react'
 
 export const CancelModal = ({ openModal, setOpenModal, onCancel }: { openModal: boolean; setOpenModal: (open: boolean) => void; onCancel: () => void }) => {
     return (

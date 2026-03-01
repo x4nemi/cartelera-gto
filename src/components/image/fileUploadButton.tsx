@@ -1,5 +1,3 @@
-import { Image } from "@heroui/react"
-
 export const FileUploadButton = () => {
 	return (
 		<div className="mt-2 flex justify-center rounded-xl border border-dashed border-foreground/30 px-6 py-10">
