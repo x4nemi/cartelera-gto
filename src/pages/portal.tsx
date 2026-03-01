@@ -1,6 +1,6 @@
 import { useRequireUser } from "@/hooks/useRequireUser";
 import { useUserPosts } from "@/hooks/useUserPosts";
-import { PortalWall } from "@/components/portalWall";
+import { PortalWall } from "@/layouts/portalWall";
 import PortalLayout from "@/layouts/portal";
 import { Avatar, Button, Card, CardBody, Divider, Link, Skeleton, Spinner } from "@heroui/react";
 import { useNavigate, useParams } from "react-router-dom";

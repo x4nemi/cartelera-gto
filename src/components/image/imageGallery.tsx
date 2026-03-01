@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ImageItem } from "./imageItem"
+import { ImageItem } from "../imageItem"
 
 export const ImageGallery = ({ images }: { images: { src: string }[] }) => {
     const [imageOrder, setImageOrder] = useState(images)

@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/navbar";
+import { Navbar } from "@/components/nav/navbar";
 
 /**
  * Portal layout: full-width navbar on top, then sidebar + content below.

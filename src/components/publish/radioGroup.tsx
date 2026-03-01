@@ -1,5 +1,5 @@
 import { RadioGroup, Radio, cn } from "@heroui/react";
-import { CalendarFilledIcon, CalendarIcon, EventFilledIcon, EventIcon, LoopFilledIcon, LoopIcon } from "./icons";
+import { CalendarFilledIcon, CalendarIcon, EventFilledIcon, EventIcon, LoopFilledIcon, LoopIcon } from "../icons";
 import { useState } from "react";
 
 export const CustomRadio = ({ children, ...props }: & React.ComponentProps<typeof Radio>) => {
@@ -30,7 +30,7 @@ const postsTypes = [{
     value: "Calendario", label: "Calendario", description: "Contiene varios eventos", icon: <CalendarIcon size={26} color="bg-secondary" />, selectedIcon: <CalendarFilledIcon size={26} />
 }];
 
-const CustomRadioGroup = () => {
+export const CustomRadioGroup = () => {
     const [value, setValue] = useState("");
     return (
         <RadioGroup className="flex" orientation="horizontal" description="" value={value} onValueChange={setValue}>
@@ -53,5 +53,3 @@ const CustomRadioGroup = () => {
         </RadioGroup>
     );
 }
-
-export default CustomRadioGroup;

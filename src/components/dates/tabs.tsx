@@ -1,6 +1,6 @@
 import { Alert, Card, CardBody, DateValue, Tab, Tabs } from "@heroui/react"
 import { CalendarIcon, EventIcon, LoopIcon } from "../icons";
-import { WorkshopCalendar } from "../workshopCalendar";
+import { WorkshopCalendar } from "./workshopCalendar";
 import { DatesWidget } from "./datesWidget";
 import { MonthSelect } from "./monthSelect";
 

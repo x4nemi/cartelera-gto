@@ -5,7 +5,7 @@ import { Alert, Button, Calendar, Card, CardBody, CardFooter, Chip, Divider, Spi
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue, CalendarDate, startOfMonth, endOfMonth } from "@internationalized/date"
-import { ImageCarousel } from "@/components/imageCarousel"
+import { ImageCarousel } from "@/components/image/imageCarousel"
 
 const PostTypes = {
     event: "Evento",

@@ -1,6 +1,6 @@
 import { Image, Button } from '@heroui/react'
 import { useState, useRef } from 'react'
-import { ChevronLeftIcon, ChevronRightIcon } from './icons'
+import { ChevronLeftIcon, ChevronRightIcon } from '../icons'
 
 interface ImageCarouselProps {
     images: string[]

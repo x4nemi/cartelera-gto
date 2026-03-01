@@ -10,7 +10,7 @@ import {
     Link,
     ScrollShadow,
 } from "@heroui/react";
-import { ImageCarousel } from "../imageCarousel";
+import { ImageCarousel } from "../image/imageCarousel";
 import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon } from "../icons";

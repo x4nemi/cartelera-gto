@@ -1,7 +1,7 @@
 import DefaultLayout from "@/layouts/default";
 import { FilterWidget } from "@/components/filterWidget";
 import { randomEvents } from "@/config/site";
-import { Wall } from "@/components/pinterestWall";
+import { Wall } from "@/layouts/pinterestWall";
 import { useMemo, useState } from "react";
 
 export default function IndexPage() {

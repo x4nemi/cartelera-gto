@@ -1,4 +1,4 @@
-import { EventDates } from "@/components/draft/tabs";
+import { EventDates } from "@/components/dates/tabs";
 import { Card, DateValue, Image, Input, Textarea } from "@heroui/react";
 import { useRef, useState } from "react";
 

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { EventCard } from "./card/eventCard";
+import { EventCard } from "../components/card/eventCard";
 import { PostData } from "@/config/apiClient";
-import { UpdatableEventCard } from "./card/updatableEventCard";
+import { UpdatableEventCard } from "../components/card/updatableEventCard";
 
 /**
  * Wall layout for the portal page.

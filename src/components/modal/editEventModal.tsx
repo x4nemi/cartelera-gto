@@ -1,6 +1,6 @@
 import { PostData, updatePost } from "@/config/apiClient";
-import { EventDates } from "@/components/draft/tabs";
-import { ImageGallery } from "@/components/imageGallery";
+import { EventDates } from "@/components/dates/tabs";
+import { ImageGallery } from "@/components/image/imageGallery";
 import {
 	addToast,
 	Button,
