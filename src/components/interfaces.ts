@@ -18,10 +18,4 @@ export interface UserProfileProps {
 	avatarUrl: string;
 	location?: string;
 	bio?: string;
-	socialLinks?: {
-		instagram?: string;
-		facebook?: string;
-		whatsapp?: string;
-		website?: string;
-	};
 }

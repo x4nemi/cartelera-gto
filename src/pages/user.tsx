@@ -1,4 +1,4 @@
-import { ConfettiFilledIcon, FBIcon, GlobeIcon, WAIcon } from '@/components/icons';
+import { ConfettiFilledIcon } from '@/components/icons';
 import { createUser, updateUser, UserData } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
 import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
@@ -9,7 +9,6 @@ import { useState } from 'react';
 export const UserPage = () => {
     //#region Form states and handlers
     const [errorsIg, setErrorsIg] = useState({})
-    const [errors, setErrors] = useState<{ [key: string]: string }>({})
 
     const [validating, setValidating] = useState(false)
     const [isUserFound, setIsUserFound] = useState(false)
@@ -110,53 +109,8 @@ export const UserPage = () => {
     const onCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        setErrors({});
-
-        const data = Object.fromEntries(new FormData(e.currentTarget));
-        const { facebook, whatsapp, website } = data;
-
-        // validate fb link
-        const patterns = {
-            facebook: /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9_.-]+\/?$/,
-            whatsapp: /^\d{10}$/,
-            website: /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/
-        };
-
-        const newErrors: { [key: string]: string } = {};
-
-        if (facebook && facebook !== "" && !patterns.facebook.test(facebook as string)) {
-            newErrors.facebook = "Enlace de Facebook inválido";
-        }
-
-        if (whatsapp && whatsapp !== "" && !patterns.whatsapp.test(whatsapp as string)) {
-            newErrors.whatsapp = "Número de WhatsApp inválido (10 dígitos)";
-        }
-
-        if (website && website !== "" && !patterns.website.test(website as string)) {
-            newErrors.website = "Enlace de sitio web inválido";
-        }
-
-        newErrors && setErrors(newErrors);
-
-        if (Object.keys(newErrors).length > 0) {
-            return;
-        }
-
-        const socialLinks = [];
-
-        if (facebook) {
-            socialLinks.push({ type: "facebook", url: facebook as string });
-        }
-        if (whatsapp) {
-            socialLinks.push({ type: "whatsapp", url: `https://wa.me/52${whatsapp}` });
-        }
-        if (website) {
-            socialLinks.push({ type: "website", url: website as string });
-        }
-
         const userData = {
             ...user,
-            socialLinks
         } as UserData;
 
         var userResult: UserData | null = null;
@@ -201,7 +155,6 @@ export const UserPage = () => {
         // reset form and states
         setIsUserFound(false);
         setValidating(false);
-        setErrors({});
         setErrorsIg({});
         setOpenModal(false);
     }
@@ -306,38 +259,8 @@ export const UserPage = () => {
                                     >
                                         <Form
                                             className="w-full flex flex-col gap-3"
-                                            validationErrors={errors}
                                             onSubmit={onCreateUser}
                                         >
-                                            <div><span>Redes sociales</span></div>
-                                            <Input
-                                                name='facebook'
-                                                label='Facebook'
-                                                type="text"
-                                                isClearable
-                                                placeholder='https://www.facebook.com/...'
-                                                classNames={{ inputWrapper: "rounded-2xl" }}
-                                                startContent={<FBIcon size={20} className="text-primary" />}
-                                            />
-                                            <Input
-                                                name="whatsapp"
-                                                label='WhatsApp'
-                                                type="tel"
-                                                isClearable
-                                                maxLength={10}
-                                                classNames={{ inputWrapper: "rounded-2xl" }}
-                                                startContent={<div className='flex text-sm text-foreground/80 gap-1'><WAIcon size={20} className="text-primary" /> +52</div>}
-                                            />
-                                            <Input
-                                                name="website"
-                                                label='Sitio web'
-                                                type="text"
-                                                isClearable
-                                                placeholder='https://www.tu-sitio.com'
-                                                classNames={{ inputWrapper: "rounded-2xl" }}
-                                                startContent={<GlobeIcon size={20} className="text-primary" />}
-                                            />
-                                            <Alert color='warning' variant='faded' title="Esta información es opcional" description="Sin embargo, para mejor visibilidad, te recomendamos completarla si es que cuentas con esta." className='rounded-2xl' classNames={{ iconWrapper: "animate-bounce" }} />
                                             <div className='flex gap-3 w-full'>
                                                 <Button color="danger" variant='bordered' className='h-12 px-8 rounded-2xl' onPress={() => setOpenModal(true)}>Cancelar</Button>
                                                 <Button type="submit" variant="flat" size='lg' className="w-full h-12 rounded-2xl" color='primary'>

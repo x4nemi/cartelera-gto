@@ -150,7 +150,6 @@ export interface UserData {
     updatedAt?: string;
     isDraft?: boolean;
     isApproved?: boolean;
-    socialLinks?: { type: string; url: string }[];
 }
 
 export interface PostData {
@@ -354,7 +353,6 @@ export const createUser = async (username: string): Promise<UserData | null> => 
         biography: userData.biography,
         externalUrls: userData.externalUrls || [],
         profilePicUrl: userData.profilePicUrlHD,
-        socialLinks: [], // We can populate this based on externalUrls if needed
         isDraft: true
     };
 
