@@ -14,25 +14,30 @@ import { ImageCarousel } from "./imageCarousel";
 import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon } from "./icons";
+import { useEffect, useState } from "react";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
-    const eventDates = Array.isArray(dates) ? dates : [];
+    const [eventDates, setEventDates] = useState<string[]>([])
 
-    const allDates = eventDates.map(date => {
-        // only show the dates that are in the future or today
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const eventDate = new Date(date);
-        eventDate.setHours(0, 0, 0, 0);
-        if (eventDate < today) {
-            return null;
+    const today = new Date();
+
+    useEffect(() => {
+        if (dates) {
+            const sortedDates = dates
+                .map(date => {
+                    // Parse as local date to avoid UTC timezone shift
+                    const [y, m, d] = date.split("-").map(Number);
+                    return new Date(y, m - 1, d);
+                })
+                .sort((a, b) => a.getTime() - b.getTime())
+                .map(date =>
+                    date.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "short", year: "numeric" })
+                );
+            setEventDates(sortedDates);
         }
-        const dayName = new Date(date).toLocaleDateString("es-MX", { weekday: "long" });
-        const formattedDate = new Date(date).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" });
-        return `${dayName}, ${formattedDate}`;
-    }).join("|");
-
+    }, [dates]);
+    
     return (
         <Drawer
             hideCloseButton
@@ -93,6 +98,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                                     variant="flat"
                                     as={Link}
                                     href={cardProps.url}
+                                    target="_blank"
                                 >
                                     Página del evento
                                 </Button>
@@ -104,15 +110,23 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                             </div>
                             <div className="flex flex-col gap-2">
                                 <div className=" flex flex-col gap-3">
-                                    <ScrollShadow hideScrollBar className="w-full h-max-[100px]">
+                                    {eventDates.length > 0 && (
+                                        <ScrollShadow hideScrollBar className="w-full max-h-[100px]">
                                         {
-                                            allDates.split("|").map((date, index) => (
-                                                <p key={index} className="text-small text-foreground-500 font-medium">
-                                                    <CalendarIcon className="inline mr-1" /> {date}
-                                                </p>
+                                            eventDates.map((date, index) => (
+                                                dates && today < new Date(dates[index]) ? (
+                                                    <p key={index} className="text-small text-default-600 font-medium">
+                                                        <CalendarIcon className="inline mr-1" /> {date}
+                                                    </p>
+                                                ) : (
+                                                    <p key={index} className="text-small text-default-400 font-medium line-through">
+                                                        <CalendarIcon className="inline mr-1" /> {date}
+                                                    </p>
+                                                )
                                             ))
                                         }
                                     </ScrollShadow>
+                                    )}
 
                                     <div className="flex flex-col mt-2 gap-3 items-start">
                                         <span className="text-medium font-medium">Acerca de este evento</span>
