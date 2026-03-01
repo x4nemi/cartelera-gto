@@ -10,10 +10,10 @@ import {
     Link,
     ScrollShadow,
 } from "@heroui/react";
-import { ImageCarousel } from "./imageCarousel";
+import { ImageCarousel } from "../imageCarousel";
 import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
-import { CalendarIcon } from "./icons";
+import { CalendarIcon } from "../icons";
 import { useEffect, useState } from "react";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {

@@ -1,8 +1,8 @@
 import { Card, CardBody, CardHeader, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, useDisclosure } from "@heroui/react"
 import { EventDrawer } from "./eventDrawer"
-import { EditEventModal } from "./modal/editEventModal"
+import { EditEventModal } from "../modal/editEventModal"
 import { PostData } from "@/config/apiClient"
-import { EditIcon, TrashIcon, ViewIcon } from "./icons"
+import { EditIcon, TrashIcon, ViewIcon } from "../icons"
 
 const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
 const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
