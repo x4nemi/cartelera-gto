@@ -7,8 +7,12 @@ export const ImageGallery = ({ images }: { images: { src: string }[] }) => {
     // if the image is selected, then it will be the last in the array
     // if the image is deselected, then the item will be removed from the array
     const handleSelectImage = (index: number) => {
-        
-        if (imageOrder.find(img => img.src === images[index].src)) {
+        const isSelected = imageOrder.find(img => img.src === images[index].src)
+        if (isSelected && imageOrder.length <= 1) {
+            // prevent deselecting the last remaining image
+            return
+        }
+        if (isSelected) {
             // deselect
             const newOrder = imageOrder.filter(img => img.src !== images[index].src)
             setImageOrder(newOrder)
@@ -28,7 +32,7 @@ export const ImageGallery = ({ images }: { images: { src: string }[] }) => {
             {
                 images.map((image, index) => (
                     <div key={index} className="cols-span-1">
-                    <ImageItem key={index} src={image.src} number={getIndexOfImage(image.src)} onSelect={() => handleSelectImage(index)}/>
+                    <ImageItem key={index} src={image.src} number={getIndexOfImage(image.src)} selected={getIndexOfImage(image.src) > 0} onSelect={() => handleSelectImage(index)}/>
                     </div>
                 ))
             }

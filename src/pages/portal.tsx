@@ -9,7 +9,7 @@ export const Portal = () => {
     const { username } = useParams();
     const navigate = useNavigate();
     const { user, loading: loadingUser } = useRequireUser(username);
-    const { posts, loading: loadingPosts } = useUserPosts(username);
+    const { posts, loading: loadingPosts, refresh: refreshPosts } = useUserPosts(username);
 
     const sidebar = (
         <div className="flex flex-col gap-4">
@@ -59,7 +59,7 @@ export const Portal = () => {
                     <Spinner size="lg" color="primary" />
                 </div>
             ) : posts.length > 0 ? (
-                <PortalWall cardsData={posts} />
+                <PortalWall cardsData={posts} onPostUpdated={refreshPosts} />
             ) : (
                 <div className="flex justify-center items-center py-20 text-foreground/50">
                     <p>Este usuario aún no tiene publicaciones.</p>

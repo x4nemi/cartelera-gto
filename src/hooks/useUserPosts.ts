@@ -42,7 +42,21 @@ export function useUserPosts(username: string | undefined) {
         return () => { cancelled = true; };
     }, [username]);
 
-    return { posts, loading };
+    const refresh = async () => {
+        if (!username) return;
+        setLoading(true);
+        try {
+            const response = await CosmosAPI.getEvents({ ownerUsername: username, limit: 50 });
+            postsCache.set(username, response.data);
+            setPosts(response.data);
+        } catch {
+            // silently fail
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { posts, loading, refresh };
 }
 
 /** Invalidate cached posts (e.g. after publishing a new one) */

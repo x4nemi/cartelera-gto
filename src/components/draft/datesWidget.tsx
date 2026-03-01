@@ -7,8 +7,9 @@ export const DatesWidget = ({ selectedDays, onChange }: {
     selectedDays?: DateValue[],
     onChange?: (days: DateValue[]) => void
 }) => {
-    const [widgetIds, setWidgetIds] = useState<number[]>([0]);
-    const [nextId, setNextId] = useState<number>(1);
+    const initialCount = selectedDays && selectedDays.length > 0 ? selectedDays.length : 1;
+    const [widgetIds, setWidgetIds] = useState<number[]>(() => Array.from({ length: initialCount }, (_, i) => i));
+    const [nextId, setNextId] = useState<number>(initialCount);
 
     const addOrRemoveDate = (date: DateValue | null, widgetId: number) => {
         const index = widgetIds.indexOf(widgetId);
@@ -42,8 +43,11 @@ export const DatesWidget = ({ selectedDays, onChange }: {
                                 hideTimeZone
                                 showMonthAndYearPickers
                                 variant="flat"
+                                defaultValue={selectedDays?.[index] ?? undefined}
                                 onChange={(date) => addOrRemoveDate(date, widgetId)}
                                 calendarProps={{ minValue: today(getLocalTimeZone()) }}
+                                minValue={today(getLocalTimeZone())}
+                                errorMessage="La fecha seleccionada no es válida."
                                 isDateUnavailable={(date) => {
                                     // disable dates that are already selected in other widgets
                                     if (selectedDays) {

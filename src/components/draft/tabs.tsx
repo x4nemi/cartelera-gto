@@ -33,7 +33,7 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
     return (
         <>
             <p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación:</p>
-            <Tabs title="Elige los días del evento" variant="solid" color="primary" size="lg"
+            <Tabs title="Elige los días del evento" variant="solid" color="primary" size="lg" classNames={{panel:"p-0"}}
                 onSelectionChange={(key) => {
                     const index = Number(key);
                     if (index === 0) setType("event");
@@ -46,11 +46,12 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
                     <Tab
                         key={index}
                         title={tab.label}
-                        className="w-full"
+                        className="w-full m-0"
                         titleValue="hola"
+                        
                     >
-                        <Card shadow="none">
-                            <CardBody className="w-full flex bg-content1">
+                        <Card shadow="none" className="mt-0">
+                            <CardBody className="w-full flex bg-content1 p-1">
                                 <Alert variant="flat" description={tab.content} hideIconWrapper color="primary" className="p-0 text-center" classNames={{ iconWrapper: "-mr-2" }} icon={tab.icon} />
                                 {tab.calendar && (tab.calendar(selectedDays, setSelectedDays)
                                 )}

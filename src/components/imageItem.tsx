@@ -1,9 +1,8 @@
-import { Button, image, Image } from "@heroui/react"
+import { Button, Image } from "@heroui/react"
 import { useEffect, useRef, useState } from "react"
 
-export const ImageItem = ({ src = "/bordado.jpg", number = 1, onSelect = () => { } }) => {
+export const ImageItem = ({ src = "/bordado.jpg", number = 1, selected = true, onSelect = () => { } }) => {
     const [isLoading, setIsLoading] = useState<boolean | null>(false)
-    const [selected, setSelected] = useState(true)
 
     const imageRef = useRef<HTMLImageElement>(null)
 
@@ -23,7 +22,6 @@ export const ImageItem = ({ src = "/bordado.jpg", number = 1, onSelect = () => {
 
     const handleSelect = (e: React.MouseEvent) => {
         e.stopPropagation()
-        setSelected(!selected)
         onSelect()
     }
     return (
