@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { EventCard } from "./eventCard";
 import { PostData } from "@/config/apiClient";
+import { UpdatableEventCard } from "./updatableEventCard";
 
 /**
  * Wall layout for the portal page.
@@ -24,21 +25,21 @@ export const PortalWall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {
 				<div className="flex flex-col gap-3 max-sm:gap-1.5">
 					{column1.map((card, index) => (
 						<div key={`col1-${index}`} className="card-wrapper">
-							<EventCard {...card} />
+							<UpdatableEventCard {...card} />
 						</div>
 					))}
 				</div>
 				<div className="flex flex-col gap-3 max-sm:gap-1.5">
 					{column2.map((card, index) => (
 						<div key={`col2-${index}`} className="card-wrapper">
-							<EventCard {...card} />
+							<UpdatableEventCard {...card} />
 						</div>
 					))}
 				</div>
 				<div className="hidden lg:flex flex-col gap-3 max-sm:gap-1.5">
 					{column3.map((card, index) => (
 						<div key={`col3-${index}`} className="card-wrapper">
-							<EventCard {...card} />
+							<UpdatableEventCard {...card} />
 						</div>
 					))}
 				</div>
