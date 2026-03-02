@@ -65,16 +65,16 @@ export default function IndexPage() {
 
 	const allUsernamesAndPics = useMemo(() => {
 		const all = new Set<{username: string, profilePicUrl: string}>();
-		filteredEvents.forEach(e => {
+		randomEvents.forEach(e => {
 			if (e.ownerUsername && e.ownerProfilePicUrl) {
 				all.add({username: e.ownerUsername, profilePicUrl: e.ownerProfilePicUrl});
 			}
 		});
 		return Array.from(all);
-	}, [filteredEvents]);
+	}, []);
 
 	const removeAllFilters = useCallback(() => {
-		setSelectedUsernames(new Set<string>());
+		setSelectedUsernames(new Set(allUsernamesAndPics.map(u => u.username)));
 		setMinDate(defaultDateRange.start);
 		setMaxDate(defaultDateRange.end);
 		setIsAscendingOrder(true);
