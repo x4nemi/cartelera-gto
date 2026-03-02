@@ -4,7 +4,7 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { SortIconAsc } from "./icons";
 
-const items = ["Clasificar", "Fecha", "Ordenar"];
+const items = ["Clasificar", "Fecha", "Ordenar", "x"];
 
 
 
@@ -35,6 +35,19 @@ const ClasificationTab = () => {
     return (
         <div>
             <p>Clasificar por</p>
+            <div className="flex flex-row gap-2 mt-2">
+                <Button>Usuarios</Button>
+                <Button>Tipo de evento</Button>
+            </div>
+        </div>
+    );
+}
+
+const RemoveFiltersTab = () => {
+    return (
+        <div className="flex gap-1">
+            <p>¿Quieres eliminar los filtros aplicados?</p>
+            <Button color="danger">Limpiar filtros</Button>
         </div>
     );
 }
@@ -52,6 +65,7 @@ const tabContent: Record<number, React.FC> = {
     0: ClasificationTab,
     1: DateTab,
     2: SortTab,
+    3: RemoveFiltersTab,
 };
 
 export const FilterBar = () => {
@@ -109,15 +123,15 @@ export const FilterBar = () => {
                     return (
                         <button
                             key={item}
-                            className={`relative flex-1 rounded-2xl px-4 py-2.5 text-sm font-medium cursor-pointer transition-colors duration-150 ${isActive ? "text-white" : "text-foreground"}`}
-                            onClick={() => setActive(active === i ? null : i)}
+                            className={`relative rounded-2xl px-4 py-2.5 text-sm font-medium cursor-pointer transition-colors duration-150 ${isActive ? "text-white" : "text-foreground"} ${i === items.length - 1 ? "flex-1" : "flex-1/2"}`}
+                            onClick={() => { setActive(active === i ? null : i); }}
                             onMouseEnter={() => setHovered(i)}
                         >
                             {/* Sliding hover highlight */}
                             {isHovered && !isActive && (
                                 <motion.div
                                     layoutId="filter-hover"
-                                    className="absolute inset-0 rounded-2xl bg-default dark:bg-default-300/40"
+                                    className={`absolute inset-0 rounded-2xl ${i === items.length - 1 ? "bg-danger/20" : "bg-default dark:bg-primary-300/40"}`}
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                                 />
                             )}
@@ -125,11 +139,11 @@ export const FilterBar = () => {
                             {isActive && (
                                 <motion.div
                                     layoutId="filter-active"
-                                    className="absolute inset-0 rounded-2xl bg-primary"
+                                    className={`absolute inset-0 rounded-2xl ${i === items.length - 1 ? "bg-danger/20" : "bg-primary dark:bg-primary-400"}`}
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                 />
                             )}
-                            <span className={`relative z-10 transition-colors duration-300 `}>
+                            <span className={`relative z-10 transition-colors duration-300 ${isActive ? "text-white" : ""}`}>
                                 {item}
                             </span>
                         </button>
