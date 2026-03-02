@@ -3,6 +3,7 @@ import { FilterWidget } from "@/components/filterWidget";
 import { randomEvents } from "@/config/site";
 import { Wall } from "@/layouts/pinterestWall";
 import { useMemo, useState } from "react";
+import { FilterBar } from "@/components/filterBar";
 
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
@@ -18,13 +19,16 @@ export default function IndexPage() {
 			return isAscendingOrder ? dateA - dateB : dateB - dateA;
 		});
 	}, [isAscendingOrder]);
-	
+
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
 				{/* <div className="container justify-center transition-all duration-300">
 					<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder}/>
 				</div> */}
+				<div className="absolute bottom-0 inset-x-0 z-10 p-4 flex justify-center">
+					<FilterBar />
+				</div>
 
 				<Wall cardsData={orderedEvents} />
 			</section>
