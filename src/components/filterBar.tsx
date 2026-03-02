@@ -3,7 +3,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { CalendarIcon, SortIconAsc, ViewIcon, XIcon } from "./icons";
-import { Checkbox, cn, User } from "@heroui/react";
+import { Checkbox, cn, DateValue, User } from "@heroui/react";
+import { RangeCalendar } from "@heroui/calendar";
+import { getLocalTimeZone, today } from "@internationalized/date";
 
 interface PostUser {
     username: string;
@@ -73,20 +75,35 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser }: { users: P
     );
 }
 
-const RemoveFiltersTab = () => {
+const RemoveFiltersTab = ({ removeAllFilters }: { removeAllFilters?: () => void } ) => {
     return (
         <div className="flex gap-1">
             <p>¿Quieres eliminar los filtros aplicados?</p>
-            <Button color="danger">Limpiar filtros</Button>
+            <Button color="danger" onPress={removeAllFilters}>Limpiar filtros</Button>
         </div>
     );
 }
 
-const DateTab = () => {
+const DateTab = ({ dateRange, setDateRange, minValue, applyDateRange }: { dateRange: { start: DateValue; end: DateValue }, setDateRange: (v: { start: DateValue; end: DateValue }) => void, minValue: DateValue, applyDateRange: () => void }) => {
+    const localMinDate = // max value between today and the received minValue
+        today(getLocalTimeZone()) > minValue
+            ? today(getLocalTimeZone())
+            : minValue;
     return (
-        <div>
-            <p>Filtrar por fecha</p>
-            <Input readOnly value="Fecha" />
+        <div className="flex flex-col gap-2 items-center">
+            <RangeCalendar
+                aria-label="Rango de fechas"
+                value={dateRange}
+                onChange={setDateRange}
+                minValue={localMinDate}
+                visibleMonths={1}
+                classNames={{
+                    base: "w-full shadow-none bg-transparent",
+                    gridWrapper: "w-full",
+                    content: "w-full",
+                }}
+            />
+            <Button fullWidth onPress={applyDateRange}>Aplicar cambio</Button>
         </div>
     );
 }
@@ -105,7 +122,7 @@ const tabIcons: Record<number, React.FC<{ size?: number }>> = {
     3: XIcon
 };
 
-export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setIsAscendingOrder }: { allUsers?: PostUser[], selectedUsernames: Set<string>, onToggleUser: (username: string) => void, setIsAscendingOrder: (isAscending: boolean) => void }) => {
+export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setIsAscendingOrder, onApplyDateRange, removeAllFilters }: { allUsers?: PostUser[], selectedUsernames: Set<string>, onToggleUser: (username: string) => void, setIsAscendingOrder: (isAscending: boolean) => void, onApplyDateRange?: (start: Date, end: Date) => void, removeAllFilters?: () => void }) => {
     const [active, setActive] = useState<number | null>(null);
     const [hovered, setHovered] = useState<number | null>(null);
     const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -130,6 +147,20 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
         setHovered(i);
     };
 
+    const [dateRange, setDateRange] = useState<{ start: DateValue; end: DateValue }>({
+        start: today(getLocalTimeZone()),
+        end: today(getLocalTimeZone()).add({ weeks: 1 }),
+    });
+    const minValue = today(getLocalTimeZone()).subtract({ days: today(getLocalTimeZone()).day });
+
+    const applyDateRange = () => {
+        if (onApplyDateRange) {
+            const startDate = dateRange.start.toDate(getLocalTimeZone());
+            const endDate = dateRange.end.toDate(getLocalTimeZone());
+            onApplyDateRange(startDate, endDate);
+        }
+    };
+
     // Show content for hovered tab, or fall back to active tab
     const visibleTab = active;
     const isOpen = visibleTab !== null;
@@ -149,7 +180,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                     animate={{ height: isOpen ? "auto" : 0 }}
                     initial={{ height: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 28, bounce: 0.25, duration: 0.5 }}
-                    className="overflow-hidden"
+                    className={isOpen ? "overflow-visible" : "overflow-hidden"}
                 >
                     <div className="px-4 py-3 relative">
                         <AnimatePresence mode="wait">
@@ -164,7 +195,13 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                                         exit={{ opacity: 0, filter: "blur(1px)" }}
                                         transition={{ duration: 0.2 }}
                                     >
-                                        {i === 0 ? <ClasificationTab users={allUsers} selectedUsernames={selectedUsernames} onToggleUser={onToggleUser} /> : <TabComponent {...(i === 0 ? { allUsers, setIsAscendingOrder } : {})} />}
+                                        {i === 0
+                                            ? <ClasificationTab users={allUsers} selectedUsernames={selectedUsernames} onToggleUser={onToggleUser} />
+                                            : i === 1
+                                                ? <DateTab dateRange={dateRange} setDateRange={setDateRange} minValue={minValue} applyDateRange={applyDateRange} />
+                                                : i === 2
+                                                    ? <SortTab setIsAscendingOrder={setIsAscendingOrder} />
+                                                    : <TabComponent removeAllFilters={removeAllFilters} />}
                                     </motion.div>
                                 );
                             })}
@@ -202,8 +239,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                                     />
                                 )}
                                 <span className={`relative z-10 transition-colors duration-300 flex justify-center items-center gap-1 ${isActive ? "text-white" : ""}`}>
-                                    {tabIcons[i] && React.createElement(tabIcons[i], { size: 16 })}
-                                    {/* {item} */}
+                                    {tabIcons[i] && React.createElement(tabIcons[i], { size: 20 })}
                                 </span>
                             </button>
                         );

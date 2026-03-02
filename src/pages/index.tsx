@@ -11,6 +11,22 @@ export default function IndexPage() {
 		randomEvents.forEach(e => { if (e.ownerUsername) all.add(e.ownerUsername); });
 		return all;
 	});
+	
+	const defaultDateRange = useMemo(() => {
+		const allDates = randomEvents.flatMap(e => e.dates ?? []).map(d => new Date(d));
+		if (allDates.length === 0) return { start: null, end: null };
+		return {
+			start: new Date(Math.min(...allDates.map(d => d.getTime()))),
+			end: new Date(Math.max(...allDates.map(d => d.getTime())))
+		};
+	}, []);
+	const [minDate, setMinDate] = useState<Date | null>(defaultDateRange.start);
+	const [maxDate, setMaxDate] = useState<Date | null>(defaultDateRange.end);
+
+	const applyDateRange = useCallback((start: Date, end: Date) => {
+		setMinDate(start);
+		setMaxDate(end);
+	}, []);
 
 	const toggleUser = useCallback((username: string) => {
 		setSelectedUsernames(prev => {
@@ -27,6 +43,15 @@ export default function IndexPage() {
 	const filteredEvents = useMemo(() => {
 		return [...randomEvents]
 			.filter(e => selectedUsernames.has(e.ownerUsername))
+			.filter(e => {
+				if (!e.dates || e.dates.length === 0) return true
+				return e.dates.some(d => {
+					const date = new Date(d);
+					if (minDate && date < minDate) return false;
+					if (maxDate && date > maxDate) return false;
+					return true;
+				});
+			})
 			.sort((a, b) => {
 			const dateA = a.dates && a.dates.length > 0
 				? Math.min(...a.dates.map(date => new Date(date).getTime()))
@@ -36,7 +61,7 @@ export default function IndexPage() {
 				: 0;
 			return isAscendingOrder ? dateA - dateB : dateB - dateA;
 		});
-	}, [isAscendingOrder, selectedUsernames]);
+	}, [isAscendingOrder, selectedUsernames, minDate, maxDate]);
 
 	const allUsernamesAndPics = useMemo(() => {
 		const all = new Set<{username: string, profilePicUrl: string}>();
@@ -48,11 +73,18 @@ export default function IndexPage() {
 		return Array.from(all);
 	}, [filteredEvents]);
 
+	const removeAllFilters = useCallback(() => {
+		setSelectedUsernames(new Set<string>());
+		setMinDate(defaultDateRange.start);
+		setMaxDate(defaultDateRange.end);
+		setIsAscendingOrder(true);
+	}, []);
+
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
 				<div className="absolute -bottom-10 inset-x-0 z-20 p-4 flex justify-center">
-					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} />
+					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} />
 				</div>
 
 				<Wall cardsData={filteredEvents} />
