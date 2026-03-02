@@ -68,7 +68,7 @@ export const FilterBar = () => {
             onMouseLeave={() => setHovered(null)}
         >
             {/* Background layer that scales on hover */}
-            <div className="absolute inset-0 rounded-[20px] bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-300 group-hover:scale-x-105 group-hover:scale-y-120" />
+            <div className="absolute inset-0 rounded-[20px] bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-105 group-hover:scale-y-120" />
 
             {/* Content stays in place */}
             <div className="relative z-10 overflow-hidden rounded-[20px]">
@@ -117,7 +117,7 @@ export const FilterBar = () => {
                             {isHovered && !isActive && (
                                 <motion.div
                                     layoutId="filter-hover"
-                                    className="absolute inset-0 rounded-xl bg-default-200/60 dark:bg-default-300/40"
+                                    className="absolute inset-0 rounded-2xl bg-default dark:bg-default-300/40"
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                                 />
                             )}
@@ -125,7 +125,7 @@ export const FilterBar = () => {
                             {isActive && (
                                 <motion.div
                                     layoutId="filter-active"
-                                    className="absolute inset-0 rounded-xl bg-primary"
+                                    className="absolute inset-0 rounded-2xl bg-primary"
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                 />
                             )}
