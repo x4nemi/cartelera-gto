@@ -14,11 +14,22 @@ export const EventCard = (props: PostData) => {
 	};
 	const eventDate = () => {
 		if (props.dates && props.dates.length > 0) {
-			//get the closest date to today
-			const sortedDates = props.dates
+			//get the dates that are today or in the future
+			const futureDates = props.dates
 				.map(date => parseLocalDate(date))
+				.filter(date => date >= today)
 				.sort((a, b) => Math.abs(a.getTime() - today.getTime()) - Math.abs(b.getTime() - today.getTime()));
-			return sortedDates[0];
+			if (futureDates.length > 0) {
+				return futureDates[0];
+			}
+			//if all dates are in the past, return the closest past date
+			const pastDates = props.dates
+				.map(date => parseLocalDate(date))
+				.filter(date => date < today)
+				.sort((a, b) => Math.abs(a.getTime() - today.getTime()) - Math.abs(b.getTime() - today.getTime()));
+			if (pastDates.length > 0) {
+				return pastDates[0];
+			}
 		}
 		return new Date();
 	}
