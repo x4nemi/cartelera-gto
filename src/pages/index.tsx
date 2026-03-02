@@ -26,7 +26,7 @@ export default function IndexPage() {
 				{/* <div className="container justify-center transition-all duration-300">
 					<FilterWidget isAscending={isAscendingOrder} setIsAscending={setIsAscendingOrder}/>
 				</div> */}
-				<div className="absolute bottom-0 inset-x-0 z-10 p-4 flex justify-center">
+				<div className="absolute -bottom-10 inset-x-0 z-10 p-4 flex justify-center">
 					<FilterBar />
 				</div>
 

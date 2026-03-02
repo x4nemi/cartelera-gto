@@ -131,7 +131,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                                     <div className="flex flex-col mt-2 gap-3 items-start">
                                         <span className="text-medium font-medium">Acerca de este evento</span>
                                         <div className="text-medium text-default-500 flex flex-col gap-2">
-                                            <p>{caption}</p>
+                                            <p className="whitespace-pre-line">{caption}</p>
                                         </div>
                                     </div>
                                 </div>
