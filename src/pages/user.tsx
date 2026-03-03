@@ -5,6 +5,13 @@ import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Ske
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
+const Rules = () => (
+    <div className='flex flex-col gap-3'>
+        <Alert variant='faded' color='primary' title="¿Cómo funciona?" description="1. Ingresa tu usuario de Instagram. Asegúrate de que tu cuenta sea pública para que podamos verificarla." />
+        <Alert variant='faded' color='primary' title="¿Qué sigue?" description="2. Si encontramos tu usuario, te notificaremos aquí mismo. Luego, podrás crear tu perfil en nuestra plataforma para empezar a publicar tus eventos." />
+        <Alert variant='faded' color='primary' title="¿Y si no encuentro mi usuario?" description="3. Si no encontramos tu usuario, verifica que lo hayas escrito correctamente. Si el problema persiste, contáctanos para ayudarte a resolverlo." />
+    </div>
+)
 
 export const UserPage = () => {
     //#region Form states and handlers
@@ -99,6 +106,17 @@ export const UserPage = () => {
                 });
             }
         } catch (error) {
+            if(error instanceof Error && error.message.includes("privada")) {
+                addToast({
+                    title: "Cuenta privada",
+                    description: "La cuenta de Instagram es privada. Por favor, asegúrate de que tu cuenta sea pública para continuar.",
+                    timeout: 20000,
+                    variant: "flat",
+                    color: "danger",
+                    size: "md"
+                });
+                setErrorsIg({ username: "La cuenta de Instagram es privada" });
+            }
             console.error('Error validating Instagram user:', error);
             setErrorsIg({ username: "Error al validar usuario" });
         }
@@ -165,7 +183,9 @@ export const UserPage = () => {
             <div className={`flex w-full justify-center items-center ${!isUserFound ? "min-h-[70vh] px-4 py-8" : "mt-20"} transition-all duration-300`}>
                 <Card className='md:w-lg w-full mx-2 p-5 max-md:p-1 -mt-10 rounded-3xl bg-content2/70 backdrop-blur-md transition-all duration-250' shadow='none'>
                     <CardHeader>
-                        <h4 className="font-bold text-xl">Crea tu usuario</h4>
+                        <h4 className="font-bold text-xl">
+                            { isUserFound ? "Usuario encontrado" : "Crea tu usuario" }
+                        </h4>
                     </CardHeader>
                     <CardBody>
                         <LayoutGroup>
@@ -288,7 +308,6 @@ export const UserPage = () => {
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-
                         </LayoutGroup>
                     </CardBody>
                 </Card>

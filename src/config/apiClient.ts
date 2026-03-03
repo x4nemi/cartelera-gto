@@ -150,6 +150,7 @@ export interface UserData {
     updatedAt?: string;
     isDraft?: boolean;
     isApproved?: boolean;
+    private?: boolean;
 }
 
 export interface PostData {
@@ -317,6 +318,9 @@ export const createUser = async (username: string): Promise<UserData | null> => 
     // First check if user already exists
     const existingUser = await CosmosAPI.getUser(username);
     if (existingUser) {
+        if(existingUser.private) {
+            throw new Error("La cuenta de Instagram es privada. Por favor, asegúrate de que tu cuenta sea pública para continuar.");
+        }
         return existingUser;
     }
 
@@ -353,10 +357,15 @@ export const createUser = async (username: string): Promise<UserData | null> => 
         biography: userData.biography,
         externalUrls: userData.externalUrls || [],
         profilePicUrl: userData.profilePicUrlHD,
-        isDraft: true
+        isDraft: true,
+        private: userData.isPrivate || false,
     };
 
     const result = await CosmosAPI.insertUser(userToInsert);
+
+    if(userData.private) {
+        throw new Error("La cuenta de Instagram es privada. Por favor, asegúrate de que tu cuenta sea pública para continuar.");
+    }
 
     if (!result.success) {
         throw new Error("Error inserting user into database");
