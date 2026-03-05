@@ -6,7 +6,7 @@ interface ImageCarouselProps {
     images: string[]
 }
 
-export const ImageCarousel = ({ images, className, isCardEvent }: ImageCarouselProps & { className?: string, isCardEvent?: boolean }) => {
+export const ImageCarousel = ({ images, className }: ImageCarouselProps & { className?: string }) => {
     const [currentIndex, setCurrentIndex] = useState(0)
     const touchStartX = useRef(0)
     const touchEndX = useRef(0)
@@ -68,7 +68,7 @@ export const ImageCarousel = ({ images, className, isCardEvent }: ImageCarouselP
                     <Button
                         isIconOnly
                         variant="flat"
-                        className={`absolute left-2 top-1/2 -translate-y-1/2 text-white/80 bg-black/50 z-10 ${isCardEvent ? 'opacity-0 group-hover:opacity-100 transition-opacity' : ''}`}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 text-white/80 bg-black/50 z-10"
                         size="sm"
                         onPress={goToPrevious}
                         aria-label="Imagen anterior"
@@ -78,7 +78,7 @@ export const ImageCarousel = ({ images, className, isCardEvent }: ImageCarouselP
                     <Button
                         isIconOnly
                         variant="flat"
-                        className={`absolute right-2 top-1/2 -translate-y-1/2 text-white/80 bg-black/50 z-10 ${isCardEvent ? 'opacity-0 group-hover:opacity-100 transition-opacity' : ''}`}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-white/80 bg-black/50 z-10"
                         size="sm"
                         onPress={goToNext}
                         aria-label="Imagen siguiente"

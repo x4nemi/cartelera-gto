@@ -106,7 +106,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                         </DrawerHeader>
                         <DrawerBody className="pt-16">
                             <div className="flex w-full justify-center items-center pt-4">
-                                <ImageCarousel images={[...images ? [images, images] : []].flat()} />
+                                <ImageCarousel images={[...images ? [images] : []].flat()} />
                             </div>
                             <div className="flex flex-col gap-2">
                                 <div className=" flex flex-col gap-3">
