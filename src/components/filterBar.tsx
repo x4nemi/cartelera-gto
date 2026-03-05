@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
@@ -153,6 +153,18 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
     const [active, setActive] = useState<number | null>(null);
     const [hovered, setHovered] = useState<number | null>(null);
     const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const barRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (barRef.current && !barRef.current.contains(e.target as Node)) {
+                setActive(null);
+                setHovered(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
 
     const clearHoverTimeout = () => {
@@ -193,6 +205,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
 
     return (
         <div
+            ref={barRef}
             className="group relative flex flex-col max-w-sm self-center w-full"
             onMouseLeave={handleMouseLeave}
         >
