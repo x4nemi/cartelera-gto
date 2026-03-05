@@ -55,8 +55,8 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser, eventTypes, 
         <div className="w-full flex flex-col">
             <p className="text-sm">Mostrar por</p>
             <div className="flex flex-row gap-2 mt-2">
-                <Button size="sm" variant="flat" color={view === "users" ? "success" : "default"} onPress={() => setview("users")}>Usuarios</Button>
-                <Button size="sm" variant="flat" color={view === "eventType" ? "success" : "default"} onPress={() => setview("eventType")}>Tipo de evento</Button>
+                <Button size="sm" variant="flat" color={view === "users" ? "primary" : "default"} onPress={() => setview("users")}>Usuarios</Button>
+                <Button size="sm" variant="flat" color={view === "eventType" ? "primary" : "default"} onPress={() => setview("eventType")}>Tipo de evento</Button>
             </div>
             <div className="flex flex-col w-full items-center mt-3 gap-4 scroll-auto max-h-100">
                 {view === "users" ? users.map((user) => (
@@ -116,12 +116,12 @@ const RemoveFiltersTab = ({ removeAllFilters }: { removeAllFilters?: () => void 
     );
 }
 
-const DateTab = ({ dateRange, setDateRange, applyDateRange }: { dateRange: { start: DateValue; end: DateValue }, setDateRange: (v: { start: DateValue; end: DateValue }) => void, applyDateRange: () => void }) => {
+const DateTab = ({ dateRange, setDateRange, applyDateRange }: { dateRange?: { start: DateValue | null; end: DateValue | null }, setDateRange: (v: { start: DateValue | null; end: DateValue | null }) => void, applyDateRange: () => void }) => {
     return (
         <div className="flex flex-col gap-2 items-center">
             <RangeCalendar
                 aria-label="Rango de fechas"
-                value={dateRange}
+                value={dateRange && dateRange.start && dateRange.end ? { start: dateRange.start, end: dateRange.end } : undefined}
                 onChange={setDateRange}
                 visibleMonths={1}
                 classNames={{
@@ -130,7 +130,7 @@ const DateTab = ({ dateRange, setDateRange, applyDateRange }: { dateRange: { sta
                     content: "w-full",
                 }}
             />
-            <Button fullWidth onPress={applyDateRange} color="success" variant="flat">Aplicar cambio</Button>
+            <Button fullWidth onPress={applyDateRange} color="success" variant="flat" disabled={!dateRange || !dateRange.start || !dateRange.end}>Aplicar cambio</Button>
         </div>
     );
 }
@@ -186,13 +186,13 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
         setHovered(i);
     };
 
-    const [dateRange, setDateRange] = useState<{ start: DateValue; end: DateValue }>({
+    const [dateRange, setDateRange] = useState<{ start: DateValue | null; end: DateValue | null }>({
         start: today(getLocalTimeZone()),
-        end: today(getLocalTimeZone()).add({ weeks: 1 }),
+        end: today(getLocalTimeZone()),
     });
 
     const applyDateRange = () => {
-        if (onApplyDateRange) {
+        if (onApplyDateRange && dateRange.start && dateRange.end) {
             const startDate = dateRange.start.toDate(getLocalTimeZone());
             const endDate = dateRange.end.toDate(getLocalTimeZone());
             onApplyDateRange(startDate, endDate);
@@ -210,10 +210,10 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
             onMouseLeave={handleMouseLeave}
         >
             {/* Background layer that scales on hover */}
-            <div className="absolute inset-0 rounded-[20px] bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-103 group-hover:scale-y-104 " />
+            <div className="absolute inset-0 rounded-3xl bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-103 group-hover:scale-y-104 " />
 
             {/* Content stays in place */}
-            <div className="relative z-10 overflow-hidden rounded-[20px]">
+            <div className="relative z-10 overflow-hidden rounded-3xl">
                 {/* Content panel — spring-animated height */}
                 <motion.div
                     animate={{ height: isOpen ? "auto" : 0 }}
@@ -257,7 +257,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                         return (
                             <button
                                 key={item}
-                                className={`relative rounded-2xl px-3 py-2.5  font-light cursor-pointer transition-colors duration-150 ${isActive ? "text-white" : "text-foreground"} ${i === items.length - 1 ? "flex-1" : "flex-1/2"}`}
+                                className={`relative rounded-3xl px-3 py-2.5  font-light cursor-pointer transition-colors duration-150 ${isActive ? "text-white" : "text-foreground"} ${i === items.length - 1 ? "flex-1" : "flex-1/2"}`}
                                 onClick={() => { setActive(active === i ? null : i); }}
                                 onMouseEnter={() => handleMouseEnter(i)}
                             >
@@ -265,7 +265,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                                 {isHovered && !isActive && (
                                     <motion.div
                                         layoutId="filter-hover"
-                                        className={`absolute inset-0 rounded-2xl ${i === items.length - 1 ? "bg-danger/20" : "bg-default dark:bg-primary-300/40"}`}
+                                        className={`absolute inset-0 rounded-3xl ${i === items.length - 1 ? "bg-danger/20" : "bg-default dark:bg-primary-300/40"}`}
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
                                     />
                                 )}
@@ -273,7 +273,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                                 {isActive && (
                                     <motion.div
                                         layoutId="filter-active"
-                                        className={`absolute inset-0 rounded-2xl ${i === items.length - 1 ? "bg-danger/20" : "bg-primary dark:bg-primary-400"}`}
+                                        className={`absolute inset-0 rounded-3xl ${i === items.length - 1 ? "bg-danger/20" : "bg-primary dark:bg-primary-400"}`}
                                         transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                     />
                                 )}
