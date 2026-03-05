@@ -6,10 +6,16 @@ import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
 const Rules = () => (
-    <div className='flex flex-col gap-3'>
-        <Alert variant='faded' color='primary' title="¿Cómo funciona?" description="1. Ingresa tu usuario de Instagram. Asegúrate de que tu cuenta sea pública para que podamos verificarla." />
-        <Alert variant='faded' color='primary' title="¿Qué sigue?" description="2. Si encontramos tu usuario, te notificaremos aquí mismo. Luego, podrás crear tu perfil en nuestra plataforma para empezar a publicar tus eventos." />
-        <Alert variant='faded' color='primary' title="¿Y si no encuentro mi usuario?" description="3. Si no encontramos tu usuario, verifica que lo hayas escrito correctamente. Si el problema persiste, contáctanos para ayudarte a resolverlo." />
+    <div className='flex flex-col gap-3 mb-3'>
+        <Alert variant='bordered' title="Reglas para crear tu usuario" className='rounded-2xl' color="default" description={<>
+            <p>Al crear tu usuario aceptas las siguientes reglas. Su incumplimiento puede resultar en la eliminación de tu cuenta.</p>
+            <ol className='list-decimal list-inside mt-2 flex flex-col gap-1'>
+                <li>Publica únicamente eventos del estado de Guanajuato.</li>
+                <li>El contenido debe estar dirigido a <strong>público local</strong>, no turístico.</li>
+                <li>Queda prohibido cualquier contenido que promueva odio, violencia o discriminación.</li>
+                <li>Cartelera Cuevanense se reserva el derecho de moderar o eliminar publicaciones y cuentas que incumplan estas reglas.</li>
+            </ol>
+        </>} classNames={{ title: "font-semibold", base: "p-4" }} hideIcon />
     </div>
 )
 
@@ -277,6 +283,7 @@ export const UserPage = () => {
                                         animate={{ opacity: 1, y: 0, transition: { type: 'spring', visualDuration: 0.5, bounce: 0.2, delay: 0.15 } }}
                                         exit={{ opacity: 0, y: 20, transition: { duration: 0.2 } }}
                                     >
+                                        <Rules />
                                         <Form
                                             className="w-full flex flex-col gap-3"
                                             onSubmit={onCreateUser}
@@ -284,7 +291,7 @@ export const UserPage = () => {
                                             <div className='flex gap-3 w-full'>
                                                 <Button color="danger" variant='bordered' className='h-12 px-8 rounded-2xl' onPress={() => setOpenModal(true)}>Cancelar</Button>
                                                 <Button type="submit" variant="flat" size='lg' className="w-full h-12 rounded-2xl" color='primary'>
-                                                    Crear usuario
+                                                    Aceptar y crear usuario
                                                 </Button>
                                             </div>
                                         </Form>
