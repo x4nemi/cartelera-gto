@@ -2,8 +2,9 @@ import { useRequireUser } from "@/hooks/useRequireUser";
 import { useUserPosts } from "@/hooks/useUserPosts";
 import { PortalWall } from "@/layouts/portalWall";
 import PortalLayout from "@/layouts/portal";
-import { Avatar, Button, Card, CardBody, Divider, Link, Skeleton, Spinner } from "@heroui/react";
+import { Avatar, Button, Card, CardBody, Link, Skeleton, Spinner } from "@heroui/react";
 import { useNavigate, useParams } from "react-router-dom";
+import { SadIcon } from "@/components/icons";
 
 export const Portal = () => {
     const { username } = useParams();
@@ -42,9 +43,7 @@ export const Portal = () => {
                             </Link>
                         </div>
                         <div className="flex flex-col gap-2 w-full">
-                            <Button className="rounded-2xl" size="lg" color="primary" onPress={() => navigate(`/${username}/publicar`)} variant="flat">Crear publicación</Button>
-                            <Divider />
-                            <Button className="rounded-2xl" size="lg" color="danger" variant="flat">Eliminar perfil</Button>
+                            <Button className="rounded-2xl" size="md" color="primary" onPress={() => navigate(`/${username}/publicar`)} variant="flat">Crear publicación</Button>
                         </div>
                     </CardBody>
                 </Card>
@@ -61,7 +60,8 @@ export const Portal = () => {
             ) : posts.length > 0 ? (
                 <PortalWall cardsData={posts} onPostUpdated={refreshPosts} />
             ) : (
-                <div className="flex justify-center items-center py-20 text-foreground/50">
+                <div className="flex flex-col justify-center items-center py-20 text-foreground/50 gap-2">
+                    <SadIcon size={48} />
                     <p>Este usuario aún no tiene publicaciones.</p>
                 </div>
             )}
