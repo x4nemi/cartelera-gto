@@ -167,7 +167,7 @@ export interface PostData {
     createdAt?: string;
     updatedAt?: string;
     dates?: string[] | null;
-    type?: "event" | "workshop" | "calendar" | "draft";
+    type: "event" | "workshop" | "calendar" | "draft";
     isDraft?: boolean;
 }
 

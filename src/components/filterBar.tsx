@@ -37,16 +37,29 @@ const SortTab = ({setIsAscendingOrder}: { setIsAscendingOrder: (isAscending: boo
     );
 }
 
-const ClasificationTab = ({ users, selectedUsernames, onToggleUser }: { users: PostUser[], selectedUsernames: Set<string>, onToggleUser: (username: string) => void }) => {
+const ClasificationTab = ({ users, selectedUsernames, onToggleUser, eventTypes, setEventTypes }: { users: PostUser[], selectedUsernames: Set<string>, onToggleUser: (username: string) => void, setEventTypes: (types: string[]) => void, eventTypes: string[] }) => {
+    const [view, setview] = useState("users")
+    const types = ["Evento", "Recurrente", "Calendario"];
+    const englishTypes = ["event", "workshop", "calendar"];
+
+    const onToggleType = (type: string) => {
+        if (eventTypes.includes(type)) {
+            setEventTypes(eventTypes.filter(t => t !== type));
+        } else {
+            setEventTypes([...eventTypes, type]);
+        }
+        
+    }
+    console.log(eventTypes);
     return (
         <div className="w-full flex flex-col">
             <p className="text-sm">Mostrar por</p>
             <div className="flex flex-row gap-2 mt-2">
-                <Button size="sm">Usuarios</Button>
-                <Button size="sm">Tipo de evento</Button>
+                <Button size="sm" onPress={() => setview("users")}>Usuarios</Button>
+                <Button size="sm" onPress={() => setview("eventType")}>Tipo de evento</Button>
             </div>
-            <div className="flex flex-col w-full items-center mt-3 gap-1 scroll-auto max-h-100">
-                {users.map((user) => (
+            <div className="flex flex-col w-full items-center mt-3 gap-4 scroll-auto max-h-100">
+                {view === "users" ? users.map((user) => (
                     <Checkbox
                         key={user.username}
                         size="sm"
@@ -57,10 +70,9 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser }: { users: P
                             base: cn(
                                 "inline-flex w-full max-w-md bg-content1",
                                 "hover:bg-content2 items-center justify-start",
-                                "cursor-pointer rounded-lg gap-2 p-2 border-2 border-transparent",
-                                "data-[selected=true]:bg-content2",
+                                "cursor-pointer rounded-none last:rounded-b-xl first:rounded-t-xl gap-2 p-3",
                             ),
-                            label: "w-full",
+                            label: "w-full ",
                         }}
                     >
                         <User
@@ -69,7 +81,27 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser }: { users: P
                             classNames={{ name:"text-xs" }}
                         />
                     </Checkbox>
-                ))}
+                )): 
+                 types.map((type) => (
+                    <Checkbox                  
+                        size="sm"
+                        key={type}
+                        aria-label={type}
+                        classNames={{
+                            base: cn(
+                                "inline-flex w-full max-w-md bg-content1",
+                                "hover:bg-content2 items-center justify-start",
+                                "cursor-pointer rounded-none last:rounded-b-xl first:rounded-t-xl gap-2 p-3",
+                            ),
+                            label: "w-full",
+                        }}
+                        isSelected={eventTypes.includes(englishTypes[types.indexOf(type)])}
+                        onValueChange={() => onToggleType(englishTypes[types.indexOf(type)])}
+                    >
+                        <span className="text-sm">{type}</span>
+                    </Checkbox>
+                 ))
+            }
             </div>
         </div>
     );
@@ -122,7 +154,7 @@ const tabIcons: Record<number, React.FC<{ size?: number }>> = {
     3: XIcon
 };
 
-export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setIsAscendingOrder, onApplyDateRange, removeAllFilters }: { allUsers?: PostUser[], selectedUsernames: Set<string>, onToggleUser: (username: string) => void, setIsAscendingOrder: (isAscending: boolean) => void, onApplyDateRange?: (start: Date, end: Date) => void, removeAllFilters?: () => void }) => {
+export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setIsAscendingOrder, onApplyDateRange, removeAllFilters, setEventTypes, eventTypes }: { allUsers?: PostUser[], selectedUsernames: Set<string>, onToggleUser: (username: string) => void, setIsAscendingOrder: (isAscending: boolean) => void, onApplyDateRange?: (start: Date, end: Date) => void, removeAllFilters?: () => void, setEventTypes: (types: string[]) => void, eventTypes: string[] }) => {
     const [active, setActive] = useState<number | null>(null);
     const [hovered, setHovered] = useState<number | null>(null);
     const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -171,7 +203,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
             onMouseLeave={handleMouseLeave}
         >
             {/* Background layer that scales on hover */}
-            <div className="absolute inset-0 rounded-[20px] bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-103 group-hover:py-4" />
+            <div className="absolute inset-0 rounded-[20px] bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-103 group-hover:scale-y-104 " />
 
             {/* Content stays in place */}
             <div className="relative z-10 overflow-hidden rounded-[20px]">
@@ -196,7 +228,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                                         transition={{ duration: 0.2 }}
                                     >
                                         {i === 0
-                                            ? <ClasificationTab users={allUsers} selectedUsernames={selectedUsernames} onToggleUser={onToggleUser} />
+                                            ? <ClasificationTab users={allUsers} selectedUsernames={selectedUsernames} onToggleUser={onToggleUser} eventTypes={eventTypes} setEventTypes={setEventTypes} />
                                             : i === 1
                                                 ? <DateTab dateRange={dateRange} setDateRange={setDateRange} minValue={minValue} applyDateRange={applyDateRange} />
                                                 : i === 2

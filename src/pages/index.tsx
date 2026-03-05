@@ -23,6 +23,8 @@ export default function IndexPage() {
 	const [minDate, setMinDate] = useState<Date | null>(defaultDateRange.start);
 	const [maxDate, setMaxDate] = useState<Date | null>(defaultDateRange.end);
 
+	const [eventTypes, setEventTypes] = useState<string[]>(["event", "workshop", "calendar"]);
+
 	const applyDateRange = useCallback((start: Date, end: Date) => {
 		setMinDate(start);
 		setMaxDate(end);
@@ -43,6 +45,7 @@ export default function IndexPage() {
 	const filteredEvents = useMemo(() => {
 		return [...randomEvents]
 			.filter(e => selectedUsernames.has(e.ownerUsername))
+			.filter(e => eventTypes.includes(e.type || "event"))
 			.filter(e => {
 				if (!e.dates || e.dates.length === 0) return true
 				return e.dates.some(d => {
@@ -61,7 +64,7 @@ export default function IndexPage() {
 				: 0;
 			return isAscendingOrder ? dateA - dateB : dateB - dateA;
 		});
-	}, [isAscendingOrder, selectedUsernames, minDate, maxDate]);
+	}, [isAscendingOrder, selectedUsernames, minDate, maxDate, eventTypes]);
 
 	const allUsernamesAndPics = useMemo(() => {
 		const all = new Set<{username: string, profilePicUrl: string}>();
@@ -78,13 +81,14 @@ export default function IndexPage() {
 		setMinDate(defaultDateRange.start);
 		setMaxDate(defaultDateRange.end);
 		setIsAscendingOrder(true);
+		setEventTypes(["event", "workshop", "calendar"]);
 	}, []);
 
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
 				<div className="absolute -bottom-10 inset-x-0 z-20 p-4 flex justify-center">
-					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} />
+					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
 				</div>
 
 				<Wall cardsData={filteredEvents} />
