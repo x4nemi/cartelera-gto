@@ -3,6 +3,7 @@ import { randomEvents } from "@/config/site";
 import { Wall } from "@/layouts/pinterestWall";
 import { useMemo, useState, useCallback } from "react";
 import { FilterBar } from "@/components/filterBar";
+import { SadIcon } from "@/components/icons";
 
 export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
@@ -84,6 +85,15 @@ export default function IndexPage() {
 		setEventTypes(["event", "workshop", "calendar"]);
 	}, []);
 
+	const areFiltersApplied = useMemo(() => {
+		const allUsernames = new Set(allUsernamesAndPics.map(u => u.username));
+		const isUserFilterApplied = ![...selectedUsernames].every(username => allUsernames.has(username)) || selectedUsernames.size !== allUsernames.size;
+		const isDateFilterApplied = minDate?.getTime() !== defaultDateRange.start?.getTime() || maxDate?.getTime() !== defaultDateRange.end?.getTime();
+		const isOrderFilterApplied = !isAscendingOrder;
+		const isEventTypeFilterApplied = eventTypes.length !== 3 || !eventTypes.includes("event") || !eventTypes.includes("workshop") || !eventTypes.includes("calendar");
+		return isUserFilterApplied || isDateFilterApplied || isOrderFilterApplied || isEventTypeFilterApplied;
+	}, [selectedUsernames, minDate, maxDate, isAscendingOrder, eventTypes, defaultDateRange]);
+
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
@@ -91,6 +101,14 @@ export default function IndexPage() {
 					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
 				</div>
 
+				{
+					filteredEvents.length === 0 && areFiltersApplied && (
+						<div className="flex flex-col justify-center items-center py-20 text-foreground/50 gap-2">
+							<SadIcon size={48} />
+							<p className="text-lg">No se encontraron eventos con los filtros seleccionados.</p>
+						</div>
+					)
+				}
 				<Wall cardsData={filteredEvents} />
 			</section>
 		</DefaultLayout>
