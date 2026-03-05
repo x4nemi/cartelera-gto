@@ -55,8 +55,8 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser, eventTypes, 
         <div className="w-full flex flex-col">
             <p className="text-sm">Mostrar por</p>
             <div className="flex flex-row gap-2 mt-2">
-                <Button size="sm" onPress={() => setview("users")}>Usuarios</Button>
-                <Button size="sm" onPress={() => setview("eventType")}>Tipo de evento</Button>
+                <Button size="sm" variant="flat" color={view === "users" ? "success" : "default"} onPress={() => setview("users")}>Usuarios</Button>
+                <Button size="sm" variant="flat" color={view === "eventType" ? "success" : "default"} onPress={() => setview("eventType")}>Tipo de evento</Button>
             </div>
             <div className="flex flex-col w-full items-center mt-3 gap-4 scroll-auto max-h-100">
                 {view === "users" ? users.map((user) => (
@@ -116,26 +116,21 @@ const RemoveFiltersTab = ({ removeAllFilters }: { removeAllFilters?: () => void 
     );
 }
 
-const DateTab = ({ dateRange, setDateRange, minValue, applyDateRange }: { dateRange: { start: DateValue; end: DateValue }, setDateRange: (v: { start: DateValue; end: DateValue }) => void, minValue: DateValue, applyDateRange: () => void }) => {
-    const localMinDate = // max value between today and the received minValue
-        today(getLocalTimeZone()) > minValue
-            ? today(getLocalTimeZone())
-            : minValue;
+const DateTab = ({ dateRange, setDateRange, applyDateRange }: { dateRange: { start: DateValue; end: DateValue }, setDateRange: (v: { start: DateValue; end: DateValue }) => void, applyDateRange: () => void }) => {
     return (
         <div className="flex flex-col gap-2 items-center">
             <RangeCalendar
                 aria-label="Rango de fechas"
                 value={dateRange}
                 onChange={setDateRange}
-                minValue={localMinDate}
                 visibleMonths={1}
                 classNames={{
-                    base: "w-full shadow-none bg-transparent",
+                    base: "w-full shadow-none",
                     gridWrapper: "w-full",
                     content: "w-full",
                 }}
             />
-            <Button fullWidth onPress={applyDateRange}>Aplicar cambio</Button>
+            <Button fullWidth onPress={applyDateRange} color="success" variant="flat">Aplicar cambio</Button>
         </div>
     );
 }
@@ -183,7 +178,6 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
         start: today(getLocalTimeZone()),
         end: today(getLocalTimeZone()).add({ weeks: 1 }),
     });
-    const minValue = today(getLocalTimeZone()).subtract({ days: today(getLocalTimeZone()).day });
 
     const applyDateRange = () => {
         if (onApplyDateRange) {
@@ -230,7 +224,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                                         {i === 0
                                             ? <ClasificationTab users={allUsers} selectedUsernames={selectedUsernames} onToggleUser={onToggleUser} eventTypes={eventTypes} setEventTypes={setEventTypes} />
                                             : i === 1
-                                                ? <DateTab dateRange={dateRange} setDateRange={setDateRange} minValue={minValue} applyDateRange={applyDateRange} />
+                                                ? <DateTab dateRange={dateRange} setDateRange={setDateRange} applyDateRange={applyDateRange} />
                                                 : i === 2
                                                     ? <SortTab setIsAscendingOrder={setIsAscendingOrder} />
                                                     : <TabComponent removeAllFilters={removeAllFilters} />}
