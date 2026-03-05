@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import { EventCard } from "../components/card/eventCard";
 import { PostData } from "@/config/apiClient";
 import { UpdatableEventCard } from "../components/card/updatableEventCard";
 

@@ -45,7 +45,7 @@ export const Wall = ({ cardsData = [] }: { cardsData?: PostData[] }) => {
     }, [numColumns, cardsData]);
 
     return (
-        <div className="w-full px-3 max-sm:px-1.5">
+        <div className="w-full">
             <div className={`grid gap-3 max-sm:gap-1.5 ${numColumns === 1 ? 'grid-cols-1 max-w-md mx-auto' : 'xl:grid-cols-3 2xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 grid-cols-2'}`}>
                 <div className='flex flex-col gap-3 max-sm:gap-1.5'>
                     {column1.map((card, index) => (

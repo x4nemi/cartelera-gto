@@ -42,7 +42,7 @@ export const Navbar = () => {
 		<>
 		<div className="sticky top-0 z-50 flex justify-center px-[8.33%] mt-3" ref={navMobileRef}>
 			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
-				<HeroUINavbar maxWidth="xl" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "!bg-transparent !shadow-none !rounded-none w-full", wrapper: "!px-4" }}>
+				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "!bg-transparent !shadow-none !rounded-none w-full", wrapper: "!px-4" }}>
 					<NavbarMenuToggle className="md:hidden" />
 					<NavbarContent justify="start">
 						<NavbarBrand className="gap-3 max-w-fit">

@@ -87,7 +87,7 @@ export default function IndexPage() {
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
-				<div className="absolute -bottom-10 inset-x-0 z-20 p-4 flex justify-center">
+				<div className="absolute -bottom-10 inset-x-0 z-20 flex justify-center">
 					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
 				</div>
 
