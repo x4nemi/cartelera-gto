@@ -207,7 +207,6 @@ export default function PublishPage() {
 				});
 			}
 		} catch (error) {
-			console.error("Error publishing manual post:", error);
 			addToast({
 				title: "Error al publicar",
 				description: "Hubo un problema al subir las imágenes.",
@@ -258,7 +257,13 @@ export default function PublishPage() {
 			}
 
 		} catch (error) {
-			console.error("Error publishing post:", error);
+			addToast({
+				title: "Error al publicar",
+				description: "Hubo un problema al publicar tu evento. Inténtalo de nuevo.",
+				color: "danger",
+				timeout: 8000,
+				variant: "flat"
+			});
 		} finally {
 			setIsPublishing(false);
 		}

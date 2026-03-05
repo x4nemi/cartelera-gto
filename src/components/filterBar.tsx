@@ -50,7 +50,6 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser, eventTypes, 
         }
         
     }
-    console.log(eventTypes);
     return (
         <div className="w-full flex flex-col">
             <p className="text-sm">Mostrar por</p>

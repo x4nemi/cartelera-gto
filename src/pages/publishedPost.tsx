@@ -34,7 +34,9 @@ export const PublishedPost = () => {
         if (!id) return
         CosmosAPI.getEvent(id)
             .then(setPost)
-            .catch(console.error)
+            .catch(err => {
+                setPost(null);
+             })
             .finally(() => setLoading(false))
     }, [id])
 

@@ -123,7 +123,6 @@ export const UserPage = () => {
                 });
                 setErrorsIg({ username: "La cuenta de Instagram es privada" });
             }
-            console.error('Error validating Instagram user:', error);
             setErrorsIg({ username: "Error al validar usuario" });
         }
 

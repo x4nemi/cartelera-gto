@@ -195,7 +195,8 @@ export const CosmosAPI = {
                 const newImageUrlHD = await AzureStorageAPI.uploadImageFromUrl(userData.profilePicUrl, filenameHD);
                 userData.profilePicUrl = newImageUrlHD;
             } catch (err) {
-                console.warn("Failed to upload HD profile image, using original URL:", err);
+                // If upload fails, log the error but continue with the original URL
+                console.warn("Failed to upload profile picture to Azure, using original URL:", err);
             }
         }
 
@@ -443,7 +444,7 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
             ownerProfilePicUrl = ownerData.profilePicUrl;
         }
     } catch (err) {
-        console.warn("Failed to get owner data for profile picture, using Apify URL:", err);
+        console.warn("Failed to get owner profile picture, using original URL:", err);
     }
 
     // Map Apify response to our PostData structure

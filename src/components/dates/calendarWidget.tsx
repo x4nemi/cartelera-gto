@@ -30,7 +30,6 @@ export const CalendarWidget = ({
         if (!calendarRef.current) return;
 
         const applyStyles = () => {
-            console.log('Applying styles, calendarRef:', calendarRef.current);
             
             // Query for the actual date cell buttons - they have role="gridcell"
             let allButtons = document.querySelectorAll('[role="gridcell"] button');
@@ -39,8 +38,6 @@ export const CalendarWidget = ({
                 // Try alternative selector
                 allButtons = document.querySelectorAll('td[role="gridcell"]>span');
             }
-            
-            console.log('Found buttons:', allButtons?.length, allButtons);
             
             // allButtons?.forEach(button => {
             //     button.removeAttribute('data-selected');
@@ -57,7 +54,6 @@ export const CalendarWidget = ({
                     day: 'numeric'
                 });
                 
-                console.log('Looking for date:', formattedDate);
                 
                 allButtons?.forEach(button => {
                     const ariaLabel = button.getAttribute('aria-label');
@@ -65,7 +61,6 @@ export const CalendarWidget = ({
                     
                     // Check if aria-label starts with our formatted date
                     if (ariaLabel && ariaLabel.startsWith(formattedDate)) {
-                        console.log('MATCH! Setting selected on button:', button);
                         button.className += ' border-2 border-primary'; // Add custom class for selected
                     }
                 });
