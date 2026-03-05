@@ -110,7 +110,7 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser, eventTypes, 
 const RemoveFiltersTab = ({ removeAllFilters }: { removeAllFilters?: () => void } ) => {
     return (
         <div className="flex gap-1">
-            <p>¿Quieres eliminar los filtros aplicados?</p>
+            <p className="text-sm">¿Quieres eliminar los filtros aplicados?</p>
             <Button color="danger" onPress={removeAllFilters}>Limpiar filtros</Button>
         </div>
     );

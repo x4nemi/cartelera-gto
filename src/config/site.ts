@@ -77,5 +77,6 @@ Tejer también puede ser una forma de volver a jugar 🦖💫`,
     ownerUsername: "aracne_crochet_gto",
     ownerFullName: "Aracne Crochet🧶",
     ownerProfilePicUrl: "https://cartelerasa.blob.core.windows.net/images/1771895353042-escarola.gto_profile.jpg",
+    type: "workshop",
   },
 ]
