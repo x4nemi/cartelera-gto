@@ -437,16 +437,6 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         }
     }
 
-    let ownerProfilePicUrl = postData.ownerProfilePicUrl;
-    try {
-        const ownerData = await CosmosAPI.getUser(postData.ownerUsername);
-        if (ownerData && ownerData.profilePicUrl) {
-            ownerProfilePicUrl = ownerData.profilePicUrl;
-        }
-    } catch (err) {
-        console.warn("Failed to get owner profile picture, using original URL:", err);
-    }
-
     // Map Apify response to our PostData structure
     const postToInsert: PostData = {
         shortCode: postData.shortCode,
@@ -455,8 +445,6 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         displayUrl: imageUrls[0] || postData.displayUrl, // Use uploaded URL if available
         images: imageUrls, // Use uploaded Azure URLs
         ownerUsername: postData.ownerUsername,
-        ownerFullName: postData.ownerFullName,
-        ownerProfilePicUrl: ownerProfilePicUrl,
         timestamp: postData.timestamp,
         type: "draft"
 

@@ -179,8 +179,6 @@ export default function PublishPage() {
 				displayUrl: imageUrls[0],
 				images: imageUrls,
 				ownerUsername: manualOwnerName.trim().toLowerCase().replace(/\s+/g, "_"),
-				ownerFullName: manualOwnerName.trim(),
-				ownerProfilePicUrl: "",
 				isDraft: false,
 				type: type,
 				dates: dates.length > 0 ? dates : null,
