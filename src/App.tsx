@@ -9,6 +9,7 @@ import CreationPage from "./pages/docs";
 import { PublishedPost } from "./pages/publishedPost";
 import DocsPage from "./pages/about";
 import { Portal } from "./pages/portal";
+import NotFoundPage from "./pages/notFound";
 
 function App() {
 	const isFirstTime = !localStorage.getItem("hasVisitedBefore");
@@ -42,6 +43,7 @@ function App() {
 			<Route element={<PublishedPost  />} path="/completado/:id" />
 			<Route element={<DocsPage />} path="/faq" />
 			<Route element={<Portal />} path="/:username" />
+			<Route element={<NotFoundPage />} path="*" />
 		</Routes>
 	);
 }
