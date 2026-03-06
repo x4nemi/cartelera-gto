@@ -1,30 +1,52 @@
 import DefaultLayout from "@/layouts/default";
-import { randomEvents } from "@/config/site";
 import { Wall } from "@/layouts/pinterestWall";
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useRef, useEffect } from "react";
 import { FilterBar } from "@/components/filterBar";
 import { SadIcon } from "@/components/icons";
+import { useEvents } from "@/hooks/useEvents";
+import { Spinner } from "@heroui/react";
 
 export default function IndexPage() {
-	const [isAscendingOrder, setIsAscendingOrder] = useState(true)
-	const [selectedUsernames, setSelectedUsernames] = useState<Set<string>>(() => {
-		const all = new Set<string>();
-		randomEvents.forEach(e => { if (e.ownerUsername) all.add(e.ownerUsername); });
-		return all;
-	});
-	
+	const { posts, loading, loadingMore, hasMore, loadMore } = useEvents();
+
+	const [isAscendingOrder, setIsAscendingOrder] = useState(true);
+	const [selectedUsernames, setSelectedUsernames] = useState<Set<string> | null>(null);
+
 	const defaultDateRange = useMemo(() => {
-		const allDates = randomEvents.flatMap(e => e.dates ?? []).map(d => new Date(d));
+		const allDates = posts.flatMap(e => e.dates ?? []).map(d => new Date(d));
 		if (allDates.length === 0) return { start: null, end: null };
 		return {
 			start: new Date(Math.min(...allDates.map(d => d.getTime()))),
 			end: new Date(Math.max(...allDates.map(d => d.getTime())))
 		};
-	}, []);
-	const [minDate, setMinDate] = useState<Date | null>(defaultDateRange.start);
-	const [maxDate, setMaxDate] = useState<Date | null>(defaultDateRange.end);
+	}, [posts]);
+	const [minDate, setMinDate] = useState<Date | null>(null);
+	const [maxDate, setMaxDate] = useState<Date | null>(null);
 
 	const [eventTypes, setEventTypes] = useState<string[]>(["event", "workshop", "calendar"]);
+
+	// Initialize selectedUsernames when posts first load
+	useEffect(() => {
+		if (posts.length > 0 && selectedUsernames === null) {
+			const all = new Set<string>();
+			posts.forEach(e => { if (e.ownerUsername) all.add(e.ownerUsername); });
+			setSelectedUsernames(all);
+		}
+	}, [posts, selectedUsernames]);
+
+	// Update selectedUsernames when new posts arrive with new users
+	useEffect(() => {
+		if (selectedUsernames === null) return;
+		const newUsernames = new Set(selectedUsernames);
+		let changed = false;
+		posts.forEach(e => {
+			if (e.ownerUsername && !newUsernames.has(e.ownerUsername)) {
+				newUsernames.add(e.ownerUsername);
+				changed = true;
+			}
+		});
+		if (changed) setSelectedUsernames(newUsernames);
+	}, [posts]);
 
 	const applyDateRange = useCallback((start: Date, end: Date) => {
 		setMinDate(start);
@@ -33,6 +55,7 @@ export default function IndexPage() {
 
 	const toggleUser = useCallback((username: string) => {
 		setSelectedUsernames(prev => {
+			if (!prev) return prev;
 			const next = new Set(prev);
 			if (next.has(username)) {
 				next.delete(username);
@@ -43,74 +66,111 @@ export default function IndexPage() {
 		});
 	}, []);
 
+	const effectiveMinDate = minDate ?? defaultDateRange.start;
+	const effectiveMaxDate = maxDate ?? defaultDateRange.end;
+
 	const filteredEvents = useMemo(() => {
-		return [...randomEvents]
-			.filter(e => selectedUsernames.has(e.ownerUsername))
+		const activeUsernames = selectedUsernames ?? new Set<string>();
+		return [...posts]
+			.filter(e => activeUsernames.has(e.ownerUsername))
 			.filter(e => eventTypes.includes(e.type || "event"))
 			.filter(e => {
-				if (!e.dates || e.dates.length === 0) return true
+				if (!e.dates || e.dates.length === 0) return true;
 				return e.dates.some(d => {
 					const date = new Date(d);
-					if (minDate && date < minDate) return false;
-					if (maxDate && date > maxDate) return false;
+					if (effectiveMinDate && date < effectiveMinDate) return false;
+					if (effectiveMaxDate && date > effectiveMaxDate) return false;
 					return true;
 				});
 			})
 			.sort((a, b) => {
-			const dateA = a.dates && a.dates.length > 0
-				? Math.min(...a.dates.map(date => new Date(date).getTime()))
-				: 0;
-			const dateB = b.dates && b.dates.length > 0
-				? Math.min(...b.dates.map(date => new Date(date).getTime()))
-				: 0;
-			return isAscendingOrder ? dateA - dateB : dateB - dateA;
-		});
-	}, [isAscendingOrder, selectedUsernames, minDate, maxDate, eventTypes]);
+				const dateA = a.dates && a.dates.length > 0
+					? Math.min(...a.dates.map(date => new Date(date).getTime()))
+					: 0;
+				const dateB = b.dates && b.dates.length > 0
+					? Math.min(...b.dates.map(date => new Date(date).getTime()))
+					: 0;
+				return isAscendingOrder ? dateA - dateB : dateB - dateA;
+			});
+	}, [isAscendingOrder, selectedUsernames, effectiveMinDate, effectiveMaxDate, eventTypes, posts]);
 
 	const allUsernamesAndPics = useMemo(() => {
-		const all = new Set<{username: string, profilePicUrl: string}>();
-		randomEvents.forEach(e => {
-			if (e.ownerUsername && e.ownerProfilePicUrl) {
-				all.add({username: e.ownerUsername, profilePicUrl: e.ownerProfilePicUrl});
+		const map = new Map<string, { username: string; profilePicUrl: string }>();
+		posts.forEach(e => {
+			if (e.ownerUsername && e.ownerProfilePicUrl && !map.has(e.ownerUsername)) {
+				map.set(e.ownerUsername, { username: e.ownerUsername, profilePicUrl: e.ownerProfilePicUrl });
 			}
 		});
-		return Array.from(all);
-	}, []);
+		return Array.from(map.values());
+	}, [posts]);
 
 	const removeAllFilters = useCallback(() => {
 		setSelectedUsernames(new Set(allUsernamesAndPics.map(u => u.username)));
-		setMinDate(defaultDateRange.start);
-		setMaxDate(defaultDateRange.end);
+		setMinDate(null);
+		setMaxDate(null);
 		setIsAscendingOrder(true);
 		setEventTypes(["event", "workshop", "calendar"]);
-	}, []);
+	}, [allUsernamesAndPics]);
 
 	const areFiltersApplied = useMemo(() => {
 		const allUsernames = new Set(allUsernamesAndPics.map(u => u.username));
-		const isUserFilterApplied = ![...selectedUsernames].every(username => allUsernames.has(username)) || selectedUsernames.size !== allUsernames.size;
-		const isDateFilterApplied = minDate?.getTime() !== defaultDateRange.start?.getTime() || maxDate?.getTime() !== defaultDateRange.end?.getTime();
+		const activeUsernames = selectedUsernames ?? new Set<string>();
+		const isUserFilterApplied = ![...activeUsernames].every(username => allUsernames.has(username)) || activeUsernames.size !== allUsernames.size;
+		const isDateFilterApplied = (minDate !== null && minDate.getTime() !== defaultDateRange.start?.getTime()) || (maxDate !== null && maxDate.getTime() !== defaultDateRange.end?.getTime());
 		const isOrderFilterApplied = !isAscendingOrder;
 		const isEventTypeFilterApplied = eventTypes.length !== 3 || !eventTypes.includes("event") || !eventTypes.includes("workshop") || !eventTypes.includes("calendar");
 		return isUserFilterApplied || isDateFilterApplied || isOrderFilterApplied || isEventTypeFilterApplied;
 	}, [selectedUsernames, minDate, maxDate, isAscendingOrder, eventTypes, defaultDateRange]);
 
+	// Infinite scroll sentinel
+	const sentinelRef = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (!sentinelRef.current) return;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting && hasMore && !loadingMore) {
+					loadMore();
+				}
+			},
+			{ rootMargin: "400px" }
+		);
+		observer.observe(sentinelRef.current);
+		return () => observer.disconnect();
+	}, [hasMore, loadingMore, loadMore]);
+
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5 relative">
-				{ randomEvents.length > 0 && (
-				<div className="absolute -bottom-10 inset-x-0 z-20 flex justify-center">
-					<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
-				</div> )}
+				{posts.length > 0 && (
+					<div className="absolute -bottom-10 inset-x-0 z-20 flex justify-center">
+						<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames ?? new Set()} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
+					</div>
+				)}
 
-				{
-					filteredEvents.length === 0 && areFiltersApplied && (
-						<div className="flex flex-col justify-center items-center py-20 text-foreground/50 gap-2">
-							<SadIcon size={48} />
-							<p className="text-lg">No se encontraron eventos con los filtros seleccionados.</p>
-						</div>
-					)
-				}
-				<Wall cardsData={filteredEvents} />
+				{loading ? (
+					<div className="flex justify-center items-center py-20">
+						<Spinner size="lg" />
+					</div>
+				) : (
+					<>
+						{filteredEvents.length === 0 && areFiltersApplied && (
+							<div className="flex flex-col justify-center items-center py-20 text-foreground/50 gap-2">
+								<SadIcon size={48} />
+								<p className="text-lg">No se encontraron eventos con los filtros seleccionados.</p>
+							</div>
+						)}
+						<Wall cardsData={filteredEvents} />
+
+						{/* Infinite scroll sentinel */}
+						<div ref={sentinelRef} className="w-full h-1" />
+
+						{loadingMore && (
+							<div className="flex justify-center py-6">
+								<Spinner size="md" />
+							</div>
+						)}
+					</>
+				)}
 			</section>
 		</DefaultLayout>
 	);
