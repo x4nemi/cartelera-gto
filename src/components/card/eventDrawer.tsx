@@ -15,6 +15,7 @@ import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon } from "../icons";
 import { useEffect, useState } from "react";
+import { EventTypeChip } from "./eventTypeChip";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
@@ -37,7 +38,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
             setEventDates(sortedDates);
         }
     }, [dates]);
-    
+
     return (
         <Drawer
             hideCloseButton
@@ -53,29 +54,32 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                 {(onClose) => (
                     <>
                         <DrawerHeader className="absolute top-0 inset-x-0 z-50 flex flex-row gap-2 px-2 border-b border-default-200/50 justify-between bg-content1/50 backdrop-saturate-150 backdrop-blur-lg">
-                            <Tooltip content="Cerrar">
-                                <Button
-                                    isIconOnly
-                                    className="text-default-400"
-                                    size="sm"
-                                    variant="light"
-                                    onPress={onClose}
-                                >
-                                    <svg
-                                        fill="none"
-                                        height="20"
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        viewBox="0 0 24 24"
-                                        width="20"
-                                        xmlns="http://www.w3.org/2000/svg"
+                            <>
+                                <Tooltip content="Cerrar">
+                                    <Button
+                                        isIconOnly
+                                        className="text-default-400"
+                                        size="sm"
+                                        variant="light"
+                                        onPress={onClose}
                                     >
-                                        <path d="m13 17 5-5-5-5M6 17l5-5-5-5" />
-                                    </svg>
-                                </Button>
-                            </Tooltip>
+                                        <svg
+                                            fill="none"
+                                            height="20"
+                                            stroke="currentColor"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            viewBox="0 0 24 24"
+                                            width="20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path d="m13 17 5-5-5-5M6 17l5-5-5-5" />
+                                        </svg>
+                                    </Button>
+                                </Tooltip>
+                                <EventTypeChip type={cardProps.type} variant="drawer" />
+                            </>
                             <div className="w-full flex justify-end gap-2">
                                 <Button
                                     className="font-medium text-small text-default-500"
@@ -112,20 +116,20 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                                 <div className=" flex flex-col gap-3">
                                     {eventDates.length > 0 && (
                                         <ScrollShadow hideScrollBar className="w-full max-h-[100px]">
-                                        {
-                                            eventDates.map((date, index) => (
-                                                dates && today < new Date(dates[index]) ? (
-                                                    <p key={index} className="text-small text-default-600 font-medium">
-                                                        <CalendarIcon className="inline mr-1" /> {date}
-                                                    </p>
-                                                ) : (
-                                                    <p key={index} className="text-small text-default-400 font-medium line-through">
-                                                        <CalendarIcon className="inline mr-1" /> {date}
-                                                    </p>
-                                                )
-                                            ))
-                                        }
-                                    </ScrollShadow>
+                                            {
+                                                eventDates.map((date, index) => (
+                                                    dates && today < new Date(dates[index]) ? (
+                                                        <p key={index} className="text-small text-default-600 font-medium">
+                                                            <CalendarIcon className="inline mr-1" /> {date}
+                                                        </p>
+                                                    ) : (
+                                                        <p key={index} className="text-small text-default-400 font-medium line-through">
+                                                            <CalendarIcon className="inline mr-1" /> {date}
+                                                        </p>
+                                                    )
+                                                ))
+                                            }
+                                        </ScrollShadow>
                                     )}
 
                                     <div className="flex flex-col mt-2 gap-3 items-start">
