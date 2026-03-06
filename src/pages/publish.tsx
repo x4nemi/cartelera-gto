@@ -144,6 +144,18 @@ export default function PublishPage() {
 			const eventData = await createPost(inputLink);
 
 			if (eventData) {
+				if (eventData.ownerUsername !== username) {
+					addToast({
+						title: "Publicación no válida",
+						description: `Esta publicación pertenece a @${eventData.ownerUsername}, no a @${username}.`,
+						color: "danger",
+						timeout: 10000,
+						variant: "flat"
+					});
+					setIsLinkValid(false);
+					setLoading(false);
+					return;
+				}
 				setPostData(eventData);
 				setIsLinkValid(true);
 				addToast({
