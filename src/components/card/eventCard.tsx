@@ -49,6 +49,7 @@ export const EventCard = (props: PostData) => {
 			<Card className="rounded-3xl transition-all duration-200" isPressable onClick={onOpen} shadow="none">
 				{!isPast ? (
 					<>
+						{ props.type !== "calendar" && 
 						<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl w-9 border-2 border-default-300" style={{ width: 45 }}>
 							<div className="w-full bg-content2 text-[9px] font-bold tracking-wider text-center pt-1 ">{month}</div>
 							<div className="flex flex-col items-center bg-content2 w-full pb-1 pt-0.5 border-t border-default-300">
@@ -56,6 +57,7 @@ export const EventCard = (props: PostData) => {
 								<span className="text-[9px]">{weekday}</span>
 							</div>
 						</CardHeader>
+						}
 						<CardHeader className="absolute top-2 left-2 z-10 p-0">
 							<EventTypeChip type={props.type} />
 						</CardHeader>
