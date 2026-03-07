@@ -59,43 +59,45 @@ export const AzureStorageAPI = {
     },
 
     /**
-     * Upload a file directly to Azure Blob Storage via base64
+     * Upload a file directly to Azure Blob Storage via SAS token
      * @param file - The File object to upload
      * @param filename - The desired filename for the blob
-     * @returns The new Azure Blob Storage URL
+     * @returns The public Azure Blob Storage URL
      */
     async uploadFile(file: File, filename: string): Promise<string> {
-        const base64 = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const result = reader.result as string;
-                resolve(result.split(",")[1]); // Remove data:...;base64, prefix
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-
-        const response = await fetch(`/api/uploadImage`, {
+        // 1. Get a short-lived SAS upload URL from our Function
+        const tokenResponse = await fetch(`/api/getSasToken`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                imageBase64: base64,
-                contentType: file.type,
-                filename,
-            }),
+            body: JSON.stringify({ filename, contentType: file.type }),
         });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || "Failed to upload file");
+        if (!tokenResponse.ok) {
+            const error = await tokenResponse.json();
+            throw new Error(error.error || "Failed to get upload URL");
         }
 
-        const result = await response.json();
-        return result.url;
+        const { sasUrl, blobUrl } = await tokenResponse.json();
+
+        // 2. Upload directly to Blob Storage
+        const uploadResponse = await fetch(sasUrl, {
+            method: "PUT",
+            headers: {
+                "x-ms-blob-type": "BlockBlob",
+                "Content-Type": file.type || "image/jpeg",
+            },
+            body: file,
+        });
+
+        if (!uploadResponse.ok) {
+            throw new Error("Failed to upload file to storage");
+        }
+
+        return blobUrl;
     },
 
     /**
-     * Upload multiple files directly
+     * Upload multiple files directly in parallel via SAS tokens
      * @param files - Array of File objects
      * @returns Array of Azure Blob Storage URLs
      */
