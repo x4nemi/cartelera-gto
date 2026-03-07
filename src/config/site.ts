@@ -15,6 +15,10 @@ export const siteConfig = {
       href: "/creacion",
     },
     {
+      label: "Acerca",
+      href: "/acerca",
+    },
+    {
       label: "Preguntas frecuentes",
       href: "/faq",
     }

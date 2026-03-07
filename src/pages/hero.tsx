@@ -59,17 +59,17 @@ export default function HeroPage() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 w-full max-w-3xl"
         >
           <FeatureCard
-            icon={<CalendarFilledIcon size={24} />}
+            icon={<CalendarFilledIcon size={30}/>}
             title="Eventos locales"
             description="Encuentra actividades creadas por emprendimientos y colectivos de Guanajuato capital."
           />
           <FeatureCard
-            icon={<PaletteIcon size={24} />}
+            icon={<PaletteIcon size={30} />}
             title="Talleres y cultura"
             description="Desde crochet hasta cerámica, descubre talleres artísticos y culturales."
           />
           <FeatureCard
-            icon={<HeartFilledIcon size={24} />}
+            icon={<HeartFilledIcon size={30} />}
             title="Publica gratis"
             description="Comparte tus eventos con la comunidad de forma sencilla y gratuita."
           />
