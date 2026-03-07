@@ -1,18 +1,11 @@
 import { ConfettiFilledIcon } from "@/components/icons"
 import { CosmosAPI, PostData } from "@/config/apiClient"
 import DefaultLayout from "@/layouts/default"
-import { Alert, Button, Calendar, Card, CardBody, CardFooter, Chip, Divider, Spinner, User } from "@heroui/react"
+import { Alert, Button, Calendar, Card, CardBody, CardFooter, Divider, Spinner, User } from "@heroui/react"
 import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { DateValue, CalendarDate, startOfMonth, endOfMonth } from "@internationalized/date"
 import { ImageCarousel } from "@/components/image/imageCarousel"
-
-const PostTypes = {
-    event: "Evento",
-    workshop: "Taller",
-    calendar: "Calendario",
-    draft: "Borrador"
-}
 
 export const PublishedPost = () => {
     const { id } = useParams<{ id: string }>()
@@ -23,7 +16,7 @@ export const PublishedPost = () => {
 
     const dates = post?.dates?.map(date => {
         const d = new Date(date)
-        return new CalendarDate(d.getFullYear(), d.getMonth() + 1, d.getDate())
+        return new CalendarDate(d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate())
     })
 
     const singleMonth = dates && dates.length > 0
@@ -36,7 +29,7 @@ export const PublishedPost = () => {
             .then(setPost)
             .catch(err => {
                 setPost(null);
-             })
+            })
             .finally(() => setLoading(false))
     }, [id])
 
@@ -66,56 +59,56 @@ export const PublishedPost = () => {
 
     return (
         <DefaultLayout>
-            <section className="flex flex-col md:flex-row mt-10 md:gap-3 gap-1 md:mx-auto px-2 mx-4 items-stretch md:items-center">
-                <Card className="rounded-3xl w-full md:w-auto" shadow="none">
-                    <CardBody className="overflow-visible p-0">
-                        <ImageCarousel images={post.images || []} className="max-h-[70vh]" />
-                    </CardBody>
-                </Card>
-                <div className="flex flex-col md:gap-3 gap-1 justify-center w-full md:w-auto">
-                    <div>
-                        <Alert title="Publicado con éxito" variant="flat" className="rounded-3xl rounded-b-none" color="primary" hideIcon startContent={<ConfettiFilledIcon size={24} />} />
-                        <Card className="rounded-3xl rounded-t-none md:max-w-xs w-full bg-content1/80 backdrop-blur-lg" shadow="none">
-                            <CardBody className="p-5">
-                                <Chip color="primary" variant="flat" radius="sm">{PostTypes[post.type as keyof typeof PostTypes] || post.type}</Chip>
-                                <p className="font-semibold mt-3 mb-1">Fechas</p>
-                                {dates && dates.length > 0 && (
-                                    <Calendar
-                                        isReadOnly
-                                        defaultValue={dates[0]}
-                                        minValue={startOfMonth(dates[0])}
-                                        maxValue={endOfMonth(dates[dates.length - 1])}
-                                        isDateUnavailable={(date: DateValue) => !dates.some(d => d.compare(date) === 0)}
-                                        className="self-center"
-                                        showShadow={false}
-                                        aria-label="Fechas"
-                                        classNames={{
-                                            cellButton: [
-                                                "data-[unavailable=true]:!text-foreground",
-                                                "data-[unavailable=true]:!no-underline",
-                                                "[&:not([data-unavailable])]:bg-primary",
-                                                "[&:not([data-unavailable])]:text-primary-foreground",
-                                            ].join(" "),
-                                            ...(singleMonth && {
-                                                prevButton: "hidden",
-                                                nextButton: "hidden",
-                                            })
-                                        }}
-                                    />
-                                )}
+            <section className="flex flex-col md:flex-row mt-10 md:gap-4 gap-2 md:mx-auto items-start justify-center md:max-w-5xl w-full">
+                <div className="md:w-1/2 md:max-w-lg gap-2 flex flex-col w-full justify-center h-full">
+                    <Card className="rounded-3xl w-full" shadow="none">
+                        <CardBody className="overflow-visible p-0">
+                            <ImageCarousel images={post.images || []} className="md:max-h-[70vh] w-full" />
+                        </CardBody>
+                    </Card>
+                    <Button className="rounded-3xl" fullWidth color="warning" variant="solid" size="lg" onPress={() => navigate(`/${post.ownerUsername}`)}>Regresar al portal</Button>
+                </div>
+                <div className="flex flex-col w-full md:w-1/2 md:max-w-lg">
+                    <Alert title="Publicado con éxito" variant="flat" className="rounded-3xl rounded-b-none" color="primary" hideIcon startContent={<ConfettiFilledIcon size={24} />} />
+                    <Card className="rounded-3xl rounded-t-none md:max-w-lg w-full bg-content1/80 backdrop-blur-lg" shadow="none">
+                        <CardBody className="px-5">
+                            {/* <Chip color="primary" variant="flat" radius="sm">{PostTypes[post.type as keyof typeof PostTypes] || post.type}</Chip> */}
+                            <p className="font-semibold mb-1">Fechas</p>
+                            {dates && dates.length > 0 && (
+                                <Calendar
+                                    isReadOnly
+                                    defaultValue={dates[0]}
+                                    minValue={startOfMonth(dates[0])}
+                                    maxValue={endOfMonth(dates[dates.length - 1])}
+                                    isDateUnavailable={(date: DateValue) => !dates.some(d => d.compare(date) === 0)}
+                                    className="self-center"
+                                    showShadow={false}
+                                    aria-label="Fechas"
+                                    classNames={{
+                                        cellButton: [
+                                            "data-[unavailable=true]:!text-foreground",
+                                            "data-[unavailable=true]:!no-underline",
+                                            "[&:not([data-unavailable])]:bg-primary",
+                                            "[&:not([data-unavailable])]:text-primary-foreground",
+                                        ].join(" "),
+                                        ...(singleMonth && {
+                                            prevButton: "hidden",
+                                            nextButton: "hidden",
+                                        })
+                                    }}
+                                />
+                            )}
 
-                                <p className="font-semibold mt-3 mb-1">Descripción</p>
-                                <p className="text-foreground-600 italic">
-                                    {post.caption || "Sin descripción"}
-                                </p>
-                            </CardBody>
-                            <Divider />
-                            <CardFooter className="justify-center bg-content2" >
-                                <User name={post.ownerFullName} description={post.ownerUsername} avatarProps={{ src: post.ownerProfilePicUrl }} />
-                            </CardFooter>
-                        </Card>
-                    </div>
-                    <Button className="rounded-3xl" color="warning" variant="solid" size="lg" onPress={() => navigate("/")}>Regresar</Button>
+                            <p className="font-semibold mt-3 mb-1">Descripción</p>
+                            <p className="text-foreground-600 italic">
+                                {post.caption || "Sin descripción"}
+                            </p>
+                        </CardBody>
+                        <Divider />
+                        <CardFooter className="justify-center bg-content2" >
+                            <User name={post.ownerFullName} description={post.ownerUsername} avatarProps={{ src: post.ownerProfilePicUrl }} />
+                        </CardFooter>
+                    </Card>
                 </div>
             </section>
         </DefaultLayout>
