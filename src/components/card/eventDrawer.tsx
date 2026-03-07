@@ -22,6 +22,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
     const [eventDates, setEventDates] = useState<string[]>([])
 
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     useEffect(() => {
         if (dates) {
@@ -117,17 +118,25 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] 
                                     {eventDates.length > 0 && (
                                         <ScrollShadow hideScrollBar className="w-full max-h-[100px]">
                                             {
-                                                eventDates.map((date, index) => (
-                                                    dates && today < new Date(dates[index]) ? (
-                                                        <p key={index} className="text-small text-default-600 font-medium">
-                                                            <CalendarIcon className="inline mr-1" /> {date}
-                                                        </p>
-                                                    ) : (
+                                                eventDates.map((date, index) => {
+                                                    const [y, m, d] = (dates?.[index] ?? "").split("-").map(Number);
+                                                    const eventDate = new Date(y, m - 1, d);
+                                                    const isPast = today > eventDate;
+                                                    const prevIsPast = index > 0 && (() => {
+                                                        const [py, pm, pd] = (dates?.[index - 1] ?? "").split("-").map(Number);
+                                                        return today > new Date(py, pm - 1, pd);
+                                                    })();
+                                                    const isNext = !isPast && (index === 0 || prevIsPast);
+                                                    return isPast ? (
                                                         <p key={index} className="text-small text-default-400 font-medium line-through">
                                                             <CalendarIcon className="inline mr-1" /> {date}
                                                         </p>
-                                                    )
-                                                ))
+                                                    ) : (
+                                                        <p key={index} className={`text-small text-default-600 ${isNext ? "text-primary" : ""}`}>
+                                                            <CalendarIcon className="inline mr-1" /> {date}
+                                                        </p>
+                                                    );
+                                                })
                                             }
                                         </ScrollShadow>
                                     )}
