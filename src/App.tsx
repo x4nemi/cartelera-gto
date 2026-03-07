@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 import IndexPage from "@/pages/index";
 import PublishPage from "@/pages/publish";
@@ -10,9 +10,11 @@ import { PublishedPost } from "./pages/publishedPost";
 import DocsPage from "./pages/about";
 import { Portal } from "./pages/portal";
 import NotFoundPage from "./pages/notFound";
+import HeroPage from "./pages/hero";
 
 function App() {
 	const isFirstTime = !localStorage.getItem("hasVisitedBefore");
+	const navigate = useNavigate();
 	if (isFirstTime) {
 		localStorage.setItem("hasVisitedBefore", "true");
 		addToast({
@@ -33,6 +35,7 @@ function App() {
 			icon: (<SmileyFilledIcon size={10} className="" />),
 
 		});
+		navigate("/acerca");
 	}
 	return (
 		<Routes>
@@ -43,6 +46,7 @@ function App() {
 			<Route element={<PublishedPost  />} path="/completado/:id" />
 			<Route element={<DocsPage />} path="/faq" />
 			<Route element={<Portal />} path="/:username" />
+			<Route element={<HeroPage />} path="/acerca" />
 			<Route element={<NotFoundPage />} path="*" />
 		</Routes>
 	);
