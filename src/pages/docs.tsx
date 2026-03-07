@@ -70,16 +70,16 @@ export default function CreationPage() {
 
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4 w-full mt-10 mx-2 mb-20">
+			<section className="flex flex-col items-center justify-center gap-4 w-full mt-18 mx-2 mb-20">
 				<div className="flex flex-col max-w-3xl w-full text-center justify-center items-center">
 					<h1 className="md:text-5xl text-4xl font-semibold">¿Te interesa publicar un evento?</h1>
 					<p className={subtitle()}>Sigue estos pasos</p>
 
-					<p className="text-default-500 text-sm  mt-4 select-none">
+					<p className="text-default-500 text-xs  mt-4 select-none">
 						Toca para continuar · {topIndex + 1} / {steps.length}
 					</p>
 					<div
-						className={`relative w-full mt-5 ${hasReachedEnd() ? "cursor-default" : "cursor-pointer"}`}
+						className={`relative w-full mt-1 ${hasReachedEnd() ? "cursor-default" : "cursor-pointer"}`}
 						style={{ height: 420, WebkitTapHighlightColor: "transparent" }}
 						role="button"
 						tabIndex={0}

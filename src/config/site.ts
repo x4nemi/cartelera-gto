@@ -7,10 +7,6 @@ export const siteConfig = {
   description: "Busca y descubre eventos en Guanajuato capital.",
   navItems: [
     {
-      label: "Inicio",
-      href: "/",
-    },
-    {
       label: "Publicar",
       href: "/creacion",
     },
