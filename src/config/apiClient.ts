@@ -169,6 +169,7 @@ export interface PostData {
     dates?: string[] | null;
     type: "event" | "workshop" | "calendar" | "draft";
     isDraft?: boolean;
+    taggedUsers?: string[];
 }
 
 export interface PaginatedResponse<T> {
@@ -446,7 +447,13 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         images: imageUrls, // Use uploaded Azure URLs
         ownerUsername: postData.ownerUsername,
         timestamp: postData.timestamp,
-        type: "draft"
+        type: "draft",
+        taggedUsers: [
+            ...new Set([
+                ...(postData.taggedUsers ?? []).map((u: { username: string }) => u.username),
+                ...(postData.coauthorProducers ?? []).map((u: { username: string }) => u.username),
+            ])
+        ]
 
     };
 

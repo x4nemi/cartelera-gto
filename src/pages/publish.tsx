@@ -144,17 +144,40 @@ export default function PublishPage() {
 			const eventData = await createPost(inputLink);
 
 			if (eventData) {
-				if (eventData.ownerUsername !== username) {
+				if(!eventData.isDraft) {
 					addToast({
-						title: "Publicación no válida",
-						description: `Esta publicación pertenece a @${eventData.ownerUsername}, no a @${username}.`,
-						color: "danger",
+						title: "Publicación existente",
+						description: "Esta publicación ya ha sido publicada previamente. Se cargarán los datos existentes para su edición.",
+						color: "warning",
 						timeout: 10000,
 						variant: "flat"
 					});
 					setIsLinkValid(false);
 					setLoading(false);
 					return;
+				}
+				if (eventData.ownerUsername !== username) {
+					const isTagged = eventData.taggedUsers?.includes(username!);
+					if (!isTagged) {
+						addToast({
+							title: "Publicación no válida",
+							description: `Esta publicación pertenece a @${eventData.ownerUsername} y tu cuenta @${username} no está etiquetada.`,
+							color: "danger",
+							timeout: 10000,
+							variant: "flat"
+						});
+						setIsLinkValid(false);
+						setLoading(false);
+						return;
+					}
+					addToast({
+						title: "Publicación colaborativa",
+						description: `Esta publicación es de @${eventData.ownerUsername}. Se publicará bajo tu cuenta @${username}.`,
+						color: "warning",
+						timeout: 10000,
+						variant: "flat"
+					});
+					eventData.ownerUsername = username!;
 				}
 				setPostData(eventData);
 				setIsLinkValid(true);
