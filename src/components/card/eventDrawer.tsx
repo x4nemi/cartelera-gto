@@ -11,13 +11,12 @@ import {
     ScrollShadow,
 } from "@heroui/react";
 import { ImageCarousel } from "../image/imageCarousel";
-import { randomEvents } from "@/config/site";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon } from "../icons";
 import { useEffect, useState } from "react";
 import { EventTypeChip } from "./eventTypeChip";
 
-export const EventDrawer = ({ isOpen, onOpenChange, cardProps = randomEvents[0] }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
+export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
     const [eventDates, setEventDates] = useState<string[]>([])
 

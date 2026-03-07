@@ -1,4 +1,4 @@
-import { ConfettiFilledIcon } from '@/components/icons';
+import { CheckIcon, ConfettiFilledIcon } from '@/components/icons';
 import { createUser, updateUser, UserData } from '@/config/apiClient';
 import DefaultLayout from '@/layouts/default'
 import { Button, Card, CardBody, CardHeader, Form, Input, User, Link, Alert, Skeleton, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
@@ -9,11 +9,10 @@ const Rules = () => (
     <div className='flex flex-col gap-3 mb-3'>
         <Alert variant='bordered' title="Reglas para crear tu usuario" className='rounded-2xl' color="default" description={<>
             <p>Al crear tu usuario aceptas las siguientes reglas. Su incumplimiento puede resultar en la eliminación de tu cuenta.</p>
-            <ol className='list-decimal list-inside mt-2 flex flex-col gap-1'>
-                <li>Publica únicamente eventos del estado de Guanajuato.</li>
-                <li>El contenido debe estar dirigido a <strong>público local</strong>, no turístico.</li>
-                <li>Queda prohibido cualquier contenido que promueva odio, violencia o discriminación.</li>
-                <li>Cartelera Cuevanense se reserva el derecho de moderar o eliminar publicaciones y cuentas que incumplan estas reglas.</li>
+            <ol className=' list-inside mt-2 flex flex-col gap-1 list-image-none'>
+                <li className='flex flex-row gap-1'><CheckIcon className='text-primary shrink-0' size={15}/><span>Publica únicamente eventos del estado de Guanajuato.</span></li>
+                <li className='flex flex-row gap-1'><CheckIcon className='text-primary shrink-0' size={15}/><span>El contenido debe estar dirigido a <strong>público local</strong>, no turístico.</span></li>
+                <li className='flex flex-row gap-1'><CheckIcon className='text-primary shrink-0' size={15}/><span>Queda prohibido cualquier contenido que promueva odio, violencia o discriminación.</span></li>
             </ol>
         </>} classNames={{ title: "font-semibold", base: "p-4" }} hideIcon />
     </div>
