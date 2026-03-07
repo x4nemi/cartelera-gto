@@ -11,7 +11,7 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Publicar evento",
+      label: "Publicar",
       href: "/creacion",
     },
     {
