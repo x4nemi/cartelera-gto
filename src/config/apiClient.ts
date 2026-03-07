@@ -370,6 +370,12 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
     }
     const shortCode = match[1];
 
+    // Check if post already exists in database
+    const existingPost = await CosmosAPI.getEvent(shortCode);
+    if (existingPost) {
+        return existingPost;
+    }
+
     // Run Apify instagram-scraper with directUrls
     const cleanUrl = `https://www.instagram.com/p/${shortCode}/`;
     const input = {
