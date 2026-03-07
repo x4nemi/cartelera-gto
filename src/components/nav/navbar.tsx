@@ -94,13 +94,13 @@ export const Navbar = () => {
 				<AnimatePresence>
 					{isMenuOpen && (
 						<motion.div
-							ref={menuBox}
 							initial={{ height: 0 }}
 							animate={{ height: "auto" }}
 							exit={{ height: 0 }}
 							transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 							className="overflow-hidden"
 						>
+						<div ref={menuBox}>
 							{siteConfig.navItems.map((item, index) => (
 								<motion.div
 									key={item.href}
@@ -119,6 +119,7 @@ export const Navbar = () => {
 								</Link>
 								</motion.div>
 							))}
+						</div>
 						</motion.div>
 					)}
 				</AnimatePresence>
