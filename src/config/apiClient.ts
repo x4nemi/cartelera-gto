@@ -1,5 +1,9 @@
 export const ApifyAPI = {
-    async runActor(actorId: string, input: object) {
+    /**
+     * Run an Apify actor synchronously and return the dataset items.
+     * The server waits for the run to finish and fetches dataset items in one call.
+     */
+    async runActorSync(actorId: string, input: object): Promise<{ data: any; items: any[] }> {
         const response = await fetch(`/api/runApifyActor`, {
             method: "POST",
             headers: {
@@ -12,39 +16,8 @@ export const ApifyAPI = {
             throw new Error(`Failed to run actor: ${response.statusText}`);
         }
 
-        const run = await response.json();
-        return run.data;
-    },
-
-    async getDatasetItems(datasetId: string) {
-        const response = await fetch(`/api/getApifyDataset?datasetId=${encodeURIComponent(datasetId)}`);
-
-        if (!response.ok) {
-            throw new Error(`Failed to get dataset: ${response.statusText}`);
-        }
-
         return response.json();
     },
-
-    async waitForRun(runId: string, actorId: string, maxWaitSeconds = 60) {
-        const startTime = Date.now();
-        
-        while (Date.now() - startTime < maxWaitSeconds * 1000) {
-            const response = await fetch(`/api/getApifyRun?actorId=${encodeURIComponent(actorId)}&runId=${encodeURIComponent(runId)}`);
-            const data = await response.json();
-            
-            if (data.data.status === "SUCCEEDED") {
-                return data.data;
-            } else if (data.data.status === "FAILED" || data.data.status === "ABORTED") {
-                throw new Error(`Actor run ${data.data.status}`);
-            }
-            
-            // Wait 2 seconds before polling again
-            await new Promise(resolve => setTimeout(resolve, 2000));
-        }
-        
-        throw new Error("Timeout waiting for actor run");
-    }
 };
 
 // Azure Storage API for uploading images
@@ -332,12 +305,11 @@ export const createUser = async (username: string): Promise<UserData | null> => 
         "resultsLimit": 1
     };
 
-    const run = await ApifyAPI.runActor("dSCLg0C3YEZ83HzYX", input);
-    const completedRun = await ApifyAPI.waitForRun(run.id, "dSCLg0C3YEZ83HzYX", 120);
-    const datasetItems = await ApifyAPI.getDatasetItems(completedRun.defaultDatasetId);
+    const apifyResult = await ApifyAPI.runActorSync("dSCLg0C3YEZ83HzYX", input);
+    const datasetItems = apifyResult.items;
 
-    if(datasetItems.error) {
-        throw new Error(`Apify actor error: ${datasetItems.error}`);
+    if (!datasetItems) {
+        throw new Error("Apify actor returned no data");
     }
     
     if (datasetItems.length === 0) {
@@ -403,9 +375,8 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         "resultsLimit": 1
     };
 
-    const run = await ApifyAPI.runActor("shu8hvrXbJbY3Eb9W", input);
-    const completedRun = await ApifyAPI.waitForRun(run.id, "shu8hvrXbJbY3Eb9W", 120);
-    const datasetItems = await ApifyAPI.getDatasetItems(completedRun.defaultDatasetId);
+    const apifyResult = await ApifyAPI.runActorSync("shu8hvrXbJbY3Eb9W", input);
+    const datasetItems = apifyResult.items;
     
     if (datasetItems.length === 0) {
         throw new Error("No post data found from Apify actor");
@@ -457,9 +428,9 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
 
     };
 
-    const result = await CosmosAPI.insertEvent(postToInsert);
+    const insertResult = await CosmosAPI.insertEvent(postToInsert);
 
-    if (!result.success) {
+    if (!insertResult.success) {
         throw new Error("Error inserting post into database");
     }
 
