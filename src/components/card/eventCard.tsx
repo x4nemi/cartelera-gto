@@ -62,11 +62,11 @@ export const EventCard = (props: PostData) => {
 					</>
 				) :
 					<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl">
-						<Chip color="danger" size="md" className="self-end rounded-2xl">Evento pasado</Chip>
+						<Chip color="default" size="md" className="self-end rounded-2xl">Evento pasado</Chip>
 					</CardHeader>
 				}
 				{isPast && (
-					<CardHeader className="absolute inset-0 z-9 p-0 flex items-center justify-center rounded-3xl bg-default-900/30 dark:bg-default-50/30">
+					<CardHeader className="absolute inset-0 z-9 p-0 flex items-center justify-center rounded-3xl bg-default-900/70 dark:bg-default-50/70">
 					</CardHeader>
 				)}
 

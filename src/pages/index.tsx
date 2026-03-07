@@ -15,8 +15,11 @@ export default function IndexPage() {
 	const defaultDateRange = useMemo(() => {
 		const allDates = posts.flatMap(e => e.dates ?? []).map(d => new Date(d));
 		if (allDates.length === 0) return { start: null, end: null };
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		const earliest = new Date(Math.min(...allDates.map(d => d.getTime())));
 		return {
-			start: new Date(Math.min(...allDates.map(d => d.getTime()))),
+			start: earliest < today ? today : earliest,
 			end: new Date(Math.max(...allDates.map(d => d.getTime())))
 		};
 	}, [posts]);
