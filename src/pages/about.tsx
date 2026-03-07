@@ -3,7 +3,6 @@ import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem } from "@heroui/react";
 
 export default function DocsPage() {
-
 	const faqs = [
 		{
 			question: "¿Cuánto cuesta publicar un evento?",
@@ -14,8 +13,8 @@ export default function DocsPage() {
 			answer: "Sí, puedes editar o eliminar tu evento en cualquier momento. Simplemente ve a tu perfil, selecciona el evento que deseas modificar y elige la opción de editar o eliminar."
 		},
 		{
-			question: "¿Cuánto tiempo tarda en aprobarse mi evento?",
-			answer: "Nuestro equipo revisa cada evento para asegurarse de que cumpla con nuestras pautas. El proceso de aprobación generalmente toma entre 1h a 8h, pero puede variar dependiendo de la cantidad de eventos en revisión."
+			question: "¿Cuánto tiempo tarda en aprobarse mi usuario?",
+			answer: "Nuestro equipo revisa cada usuario para asegurarse de que cumpla con nuestras pautas. El proceso de aprobación generalmente toma entre 1h a 8h, pero puede variar dependiendo de la cantidad de usuarios en revisión."
 		},
 		{
 			question: "¿Puedo publicar eventos que no estén relacionados con Guanajuato?",
