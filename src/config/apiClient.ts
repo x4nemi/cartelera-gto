@@ -216,6 +216,26 @@ export const CosmosAPI = {
     },
 
     /**
+     * Get all users
+     */
+    async getUsers(): Promise<UserData[]> {
+        const response = await fetch(`/api/getUsers`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || "Failed to get users");
+        }
+
+        const result = await response.json();
+        return result.users;
+    },
+
+    /**
      * Insert or update an event/post (upsert)
      */
     async insertEvent(eventData: PostData): Promise<{ success: boolean; shortCode: string; isNew?: boolean }> {
