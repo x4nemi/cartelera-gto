@@ -447,6 +447,7 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         ownerUsername: postData.ownerUsername,
         timestamp: postData.timestamp,
         type: "draft",
+        isDraft: true,
         taggedUsers: [
             ...new Set([
                 ...(postData.taggedUsers ?? []).map((u: { username: string }) => u.username),
