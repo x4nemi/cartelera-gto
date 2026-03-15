@@ -170,7 +170,7 @@ export default function IndexPage() {
 				)}
 
 				{posts.length > 0 && (
-					<div className="sticky bottom-4 inset-x-0 z-20 flex justify-center">
+					<div className="fixed bottom-4 inset-x-0 z-20 flex justify-center">
 						<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames ?? new Set()} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
 					</div>
 				)}
