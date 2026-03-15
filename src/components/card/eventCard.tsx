@@ -50,9 +50,9 @@ export const EventCard = (props: PostData) => {
 				{!isPast ? (
 					<>
 						{ props.type !== "calendar" && 
-						<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl w-9 border-2 border-default-300" style={{ width: 45 }}>
-							<div className="w-full bg-content2 text-[9px] font-bold tracking-wider text-center pt-1 ">{month}</div>
-							<div className="flex flex-col items-center bg-content2 w-full pb-1 pt-0.5 border-t border-default-300">
+						<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl w-9 border-default-300 bg-content2/70 backdrop-blur-sm" style={{ width: 45 }}>
+							<div className="w-full text-[9px] font-bold tracking-wider text-center pt-1 ">{month}</div>
+							<div className="flex flex-col items-center w-full pb-1 pt-0.5 border-t border-default-300">
 								<span className=" font-semibold leading-tight font-mono text-md">{day}</span>
 								<span className="text-[9px]">{weekday}</span>
 							</div>
