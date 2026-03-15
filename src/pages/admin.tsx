@@ -101,15 +101,15 @@ const AdminPanel = () => {
 
     return (
         <DefaultLayout>
-            <section className="w-full justify-center">
+            <section className="w-full items-center flex flex-col">
 
                 {/* <h1 className="text-2xl font-bold">Usuarios para aprobar</h1> */}
                 {loading ? (
                     <p>Cargando usuarios...</p>
                 ) : (
-                    <ul className="mt-4 space-y-2">
+                    <ul className="mt-4 space-y-2 items-center flex flex-col">
                         {users.map(user => (
-                            <Card key={user._id} className="p-4 flex flex-row justify-between items-center gap-5 w-full">
+                            <Card key={user._id} className="p-4 flex flex-row justify-between items-center gap-5 max-w-xl w-md rounded-3xl shadow-none">
                                 <User
                                     name={user.fullName}
                                     description={user.isApproved ? "Aprobado" : "Pendiente"}
