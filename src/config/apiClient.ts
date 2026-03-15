@@ -1,3 +1,28 @@
+export const AIApi = {
+    /**
+     * Extract event dates from an Instagram post caption and/or images using Azure OpenAI.
+     * Returns either specific dates, a recurring weekday pattern, or nothing.
+     */
+    async extractDates({ text, imageUrls }: { text?: string; imageUrls?: string[] }): Promise<
+        | { type: "specific"; dates: string[] }
+        | { type: "recurring"; daysOfWeek: number[]; label: string }
+        | { type: "none" }
+    > {
+        const response = await fetch(`/api/extractDates`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text, imageUrls }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.error || "Failed to extract dates");
+        }
+
+        return response.json();
+    },
+};
+
 export const ApifyAPI = {
     /**
      * Run an Apify actor synchronously and return the dataset items.

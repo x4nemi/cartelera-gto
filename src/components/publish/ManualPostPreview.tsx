@@ -1,5 +1,5 @@
-import { EventDates } from "@/components/dates/tabs";
-import { Card, DateValue, Image, Input, Textarea } from "@heroui/react";
+import { SmartDatePicker } from "@/components/dates/smartDatePicker";
+import { Card, Image, Input, Textarea } from "@heroui/react";
 import { useRef, useState } from "react";
 
 interface ManualPostPreviewProps {
@@ -8,17 +8,8 @@ interface ManualPostPreviewProps {
 	caption: string;
 	setCaption: (caption: string) => void;
 	ownerName: string;
-	selectedDates: DateValue[];
-	setSelectedDates: (dates: DateValue[]) => void;
-	workshopDays: string[];
-	setWorkshopDays: (days: string[]) => void;
-	until: DateValue | null;
-	setUntil: (date: DateValue | null) => void;
-	dateRange: { start: DateValue | null; end: DateValue | null };
-	setDateRange: (range: { start: DateValue | null; end: DateValue | null }) => void;
-	every: number;
-	setEvery: (num: number) => void;
-	setType: (type: "event" | "workshop" | "calendar" | "draft") => void;
+	selectedDates: Date[];
+	onDatesChange: (dates: Date[]) => void;
 }
 
 export const ManualPostPreview = ({
@@ -28,16 +19,7 @@ export const ManualPostPreview = ({
 	setCaption,
 	ownerName,
 	selectedDates,
-	setSelectedDates,
-	workshopDays,
-	setWorkshopDays,
-	until,
-	setUntil,
-	dateRange,
-	setDateRange,
-	every,
-	setEvery,
-	setType,
+	onDatesChange,
 }: ManualPostPreviewProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [previews, setPreviews] = useState<string[]>([]);
@@ -132,18 +114,10 @@ export const ManualPostPreview = ({
 				</div>
 			</Card>
 
-			<EventDates
-				selectedDays={selectedDates}
-				setSelectedDays={setSelectedDates}
-				workshopDays={workshopDays}
-				setWorkshopDays={setWorkshopDays}
-				until={until}
-				setUntil={setUntil}
-				dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }}
-				setDateRange={setDateRange}
-				every={every}
-				setEvery={setEvery}
-				setType={setType}
+			<SmartDatePicker
+				selectedDates={selectedDates}
+				onChange={onDatesChange}
+				caption={caption}
 			/>
 		</div>
 	);

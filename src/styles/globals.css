@@ -38,3 +38,9 @@ body {
 #root {
     min-height: 100vh;
 }
+
+/* Make calendar date cells rounded on hover and selection */
+[role="gridcell"] button,
+[role="gridcell"] [role="button"] {
+    border-radius: 9999px !important;
+}

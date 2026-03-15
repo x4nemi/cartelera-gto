@@ -1,36 +1,18 @@
-import { EventDates } from "@/components/dates/tabs";
+import { SmartDatePicker } from "@/components/dates/smartDatePicker";
 import { ImageGallery } from "@/components/image/imageGallery";
 import { PostData } from "@/config/apiClient";
-import { Card, DateValue, Link, Textarea, User } from "@heroui/react";
+import { Card, Link, Textarea, User } from "@heroui/react";
 
 interface InstagramPostPreviewProps {
 	postData: PostData | null;
-	selectedDates: DateValue[];
-	setSelectedDates: (dates: DateValue[]) => void;
-	workshopDays: string[];
-	setWorkshopDays: (days: string[]) => void;
-	until: DateValue | null;
-	setUntil: (date: DateValue | null) => void;
-	dateRange: { start: DateValue | null; end: DateValue | null };
-	setDateRange: (range: { start: DateValue | null; end: DateValue | null }) => void;
-	every: number;
-	setEvery: (num: number) => void;
-	setType: (type: "event" | "workshop" | "calendar" | "draft") => void;
+	selectedDates: Date[];
+	onDatesChange: (dates: Date[]) => void;
 }
 
 export const InstagramPostPreview = ({
 	postData,
 	selectedDates,
-	setSelectedDates,
-	workshopDays,
-	setWorkshopDays,
-	until,
-	setUntil,
-	dateRange,
-	setDateRange,
-	every,
-	setEvery,
-	setType,
+	onDatesChange,
 }: InstagramPostPreviewProps) => {
 	return (
 		<div className="mt-2 flex flex-col rounded-xl">
@@ -69,18 +51,11 @@ export const InstagramPostPreview = ({
 					/>
 				</div>
 			</Card>
-			<EventDates
-				selectedDays={selectedDates}
-				setSelectedDays={setSelectedDates}
-				workshopDays={workshopDays}
-				setWorkshopDays={setWorkshopDays}
-				until={until}
-				setUntil={setUntil}
-				dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }}
-				setDateRange={setDateRange}
-				every={every}
-				setEvery={setEvery}
-				setType={setType}
+			<SmartDatePicker
+				selectedDates={selectedDates}
+				onChange={onDatesChange}
+				caption={postData?.caption}
+				imageUrls={postData?.images}
 			/>
 		</div>
 	);

@@ -2,10 +2,10 @@ import { ArrowLeftIcon, IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } fro
 import { CancelModal } from "@/components/modal/cancelModal";
 import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions } from "@/components/publish";
 import { AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
+import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Button, cn, DateValue, Spinner } from "@heroui/react";
-import { getLocalTimeZone } from "@internationalized/date";
+import { Accordion, AccordionItem, addToast, Button, cn, Spinner } from "@heroui/react";
 import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -14,13 +14,7 @@ export default function PublishPage() {
 	const { loading: loadingUser } = useRequireUser(username);
 
 	//#region Selected dates
-	const [selectedDates, setSelectedDates] = useState<DateValue[]>([]);
-	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
-	const [every, setEvery] = useState<number>(1);
-	const [until, setUntil] = useState<DateValue | null>(null);
-	const [dateRange, setDateRange] = useState<{ start: DateValue | null, end: DateValue | null }>({ start: null, end: null });
-
-	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">("event");
+	const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
 	//#region Manual post
 	const [manualImages, setManualImages] = useState<File[]>([]);
@@ -28,69 +22,13 @@ export default function PublishPage() {
 	const manualOwnerName = username ?? "";
 	//#endregion
 
-	let hasSelectedDates = selectedDates.length > 0 || (workshopDays.length > 0 && until !== null && every > 0) || (dateRange.start !== null && dateRange.end !== null);
+	const hasSelectedDates = selectedDates.length > 0;
 	const canPublishManual = hasSelectedDates && manualImages.length > 0 && manualOwnerName.trim().length > 0;
 
-	/**
-	 * Converts all date selections into a flat sorted list of ISO date strings.
-	 * - Event: uses the directly selected DateValue[]
-	 * - Workshop: expands recurring weekdays (every N weeks) until the end date
-	 * - Calendar: expands the date range into every day between start and end
-	 */
 	const computeFlatDates = (): string[] => {
-		const tz = getLocalTimeZone();
-
-		if (type === "event") {
-			return selectedDates
-				.map(d => d.toDate(tz).toISOString().split("T")[0])
-				.sort();
-		}
-
-		if (type === "workshop" && workshopDays.length > 0 && until) {
-			// workshopDays are indices like "0"=Lunes, "1"=Martes, etc.
-			// Map to JS weekday: Lunes=1, Martes=2, ..., Domingo=0
-			const dayMap: Record<string, number> = { "0": 1, "1": 2, "2": 3, "3": 4, "4": 5, "5": 6, "6": 0 };
-			const targetDays = workshopDays.map(d => dayMap[d]);
-			const endDate = until.toDate(tz);
-			const dates: string[] = [];
-			const cursor = new Date();
-			cursor.setHours(0, 0, 0, 0);
-
-			while (cursor <= endDate) {
-				if (targetDays.includes(cursor.getDay())) {
-					dates.push(cursor.toISOString().split("T")[0]);
-				}
-				cursor.setDate(cursor.getDate() + 1);
-			}
-
-			// If every > 1, keep only every Nth occurrence per weekday
-			if (every > 1) {
-				const countPerDay: Record<number, number> = {};
-				return dates.filter(dateStr => {
-					const day = new Date(dateStr).getDay();
-					countPerDay[day] = (countPerDay[day] || 0) + 1;
-					return (countPerDay[day] - 1) % every === 0;
-				});
-			}
-
-			return dates;
-		}
-
-		if (type === "calendar" && dateRange.start && dateRange.end) {
-			const start = dateRange.start.toDate(tz);
-			const end = dateRange.end.toDate(tz);
-			const dates: string[] = [];
-			const cursor = new Date(start);
-
-			while (cursor <= end) {
-				dates.push(cursor.toISOString().split("T")[0]);
-				cursor.setDate(cursor.getDate() + 1);
-			}
-
-			return dates;
-		}
-
-		return [];
+		return selectedDates
+			.map(d => d.toISOString().split("T")[0])
+			.sort();
 	};
 	//#endregion
 	
@@ -106,9 +44,6 @@ export default function PublishPage() {
 		setIsLinkValid(false);
 		setPostData(null);
 		setSelectedDates([]);
-		setWorkshopDays([]);
-		setUntil(null);
-		setDateRange({ start: null, end: null });
 		setManualImages([]);
 		setManualCaption("");
 	}
@@ -215,7 +150,7 @@ export default function PublishPage() {
 				images: imageUrls,
 				ownerUsername: manualOwnerName.trim().toLowerCase().replace(/\s+/g, "_"),
 				isDraft: false,
-				type: type,
+				type: inferEventType(dates),
 				dates: dates.length > 0 ? dates : null,
 			};
 
@@ -263,7 +198,7 @@ export default function PublishPage() {
 			const postDataToPublish = {
 				...postData,
 				isDraft: false,
-				type: type,
+				type: inferEventType(dates),
 				dates: dates.length > 0 ? dates : null
 			};
 
@@ -374,16 +309,7 @@ export default function PublishPage() {
 								<InstagramPostPreview
 									postData={postData}
 									selectedDates={selectedDates}
-									setSelectedDates={setSelectedDates}
-									workshopDays={workshopDays}
-									setWorkshopDays={setWorkshopDays}
-									until={until}
-									setUntil={setUntil}
-									dateRange={dateRange}
-									setDateRange={setDateRange}
-									every={every}
-									setEvery={setEvery}
-									setType={setType}
+								onDatesChange={setSelectedDates}
 								/>
 							)}
 						</AccordionItem>
@@ -408,18 +334,8 @@ export default function PublishPage() {
 								caption={manualCaption}
 								setCaption={setManualCaption}
 								ownerName={manualOwnerName}
-
 								selectedDates={selectedDates}
-								setSelectedDates={setSelectedDates}
-								workshopDays={workshopDays}
-								setWorkshopDays={setWorkshopDays}
-								until={until}
-								setUntil={setUntil}
-								dateRange={dateRange}
-								setDateRange={setDateRange}
-								every={every}
-								setEvery={setEvery}
-								setType={setType}
+								onDatesChange={setSelectedDates}
 							/>
 						</AccordionItem>
 					</Accordion>
