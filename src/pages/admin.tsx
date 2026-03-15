@@ -1,7 +1,7 @@
 import { CosmosAPI } from "@/config/apiClient";
 import { useProfiles } from "@/hooks/useProfiles";
 import DefaultLayout from "@/layouts/default"
-import { addToast, Button, Card, User } from "@heroui/react";
+import { addToast, Button, Card, Switch, User } from "@heroui/react";
 import { useState } from "react";
 
 export const Admin = () => {
@@ -36,6 +36,26 @@ export const Admin = () => {
         }
 
     }
+
+    const handleToggleAutoDetect = async (username: string, enabled: boolean) => {
+        const user = users.find(u => u.username === username);
+        if (!user) return;
+        try {
+            await CosmosAPI.insertUser({ ...user, autoDetectEnabled: enabled });
+            await refresh();
+            addToast({
+                title: enabled ? "Auto-detección activada" : "Auto-detección desactivada",
+                description: `@${username}`,
+                timeout: 3000,
+                variant: "flat",
+                color: enabled ? "success" : "default",
+                size: "lg",
+            });
+        } catch {
+            addToast({ title: "Error al actualizar", color: "danger" });
+        }
+    };
+
     return (
         <DefaultLayout>
             <section className="w-full justify-center">
@@ -46,15 +66,26 @@ export const Admin = () => {
                 ) : (
                     <ul className="mt-4 space-y-2">
                         {users.map(user => (
-                            <Card key={user._id} className="p-4 flex flex-row justify-between gap-5 w-full">
+                            <Card key={user._id} className="p-4 flex flex-row justify-between items-center gap-5 w-full">
                                 <User
                                     name={user.fullName}
                                     description={user.isApproved ? "Aprobado" : "Pendiente"}
                                     avatarProps={{ src: user.profilePicUrl }}
                                 />
-                                { !user.isApproved &&
-                                    <Button color="primary" variant="flat" isLoading={loading2} size="md" onClick={() => handleApprove(user.username)}>Aprobar</Button>
-                                }
+                                <div className="flex items-center gap-3">
+                                    {user.isApproved && (
+                                        <Switch
+                                            size="sm"
+                                            isSelected={!!user.autoDetectEnabled}
+                                            onValueChange={(val) => handleToggleAutoDetect(user.username, val)}
+                                        >
+                                            <span className="text-xs">Auto-detectar</span>
+                                        </Switch>
+                                    )}
+                                    {!user.isApproved &&
+                                        <Button color="primary" variant="flat" isLoading={loading2} size="md" onClick={() => handleApprove(user.username)}>Aprobar</Button>
+                                    }
+                                </div>
                             </Card>
                         ))}
                     </ul>

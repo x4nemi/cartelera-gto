@@ -151,6 +151,8 @@ export interface UserData {
     isDraft?: boolean;
     isApproved?: boolean;
     private?: boolean;
+    autoDetectEnabled?: boolean;
+    lastScrapedPostId?: string;
 }
 
 export interface PostData {
@@ -170,6 +172,9 @@ export interface PostData {
     type: "event" | "workshop" | "calendar" | "draft";
     isDraft?: boolean;
     taggedUsers?: string[];
+    source?: "manual" | "auto-detected";
+    status?: "pending" | "published" | "dismissed";
+    instagramPostId?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -329,7 +334,41 @@ export const CosmosAPI = {
         }
 
         return response.json();
-    }
+    },
+
+    /**
+     * Update an event (publish, dismiss, or update dates)
+     */
+    async updateEvent(shortCode: string, action: "publish" | "dismiss" | "updateDates", data?: { dates?: string[]; type?: string }): Promise<{ success: boolean }> {
+        const response = await fetch(`/api/updateEvent`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ shortCode, action, ...data }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || "Failed to update event");
+        }
+
+        return response.json();
+    },
+
+    /**
+     * Get pending (auto-detected) events for a user
+     */
+    async getPendingEvents(ownerUsername: string): Promise<PostData[]> {
+        const params = new URLSearchParams({ ownerUsername, status: "pending" });
+        const response = await fetch(`/api/getEvents?${params.toString()}&includeDrafts=true`);
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || "Failed to get pending events");
+        }
+
+        const result = await response.json();
+        return result.data || [];
+    },
 };
 
 /**
@@ -473,6 +512,7 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
         timestamp: postData.timestamp,
         type: "draft",
         isDraft: true,
+        source: "manual",
         taggedUsers: [
             ...new Set([
                 ...(postData.taggedUsers ?? []).map((u: { username: string }) => u.username),

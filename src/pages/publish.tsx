@@ -152,6 +152,8 @@ export default function PublishPage() {
 				isDraft: false,
 				type: inferEventType(dates),
 				dates: dates.length > 0 ? dates : null,
+				source: "manual",
+				status: "published",
 			};
 
 			const result = await CosmosAPI.insertEvent(manualPost);
@@ -199,7 +201,9 @@ export default function PublishPage() {
 				...postData,
 				isDraft: false,
 				type: inferEventType(dates),
-				dates: dates.length > 0 ? dates : null
+				dates: dates.length > 0 ? dates : null,
+				source: postData.source || "manual" as const,
+				status: "published" as const,
 			};
 
 			const publishedPost = await updatePost(postDataToPublish);

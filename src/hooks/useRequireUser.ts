@@ -1,5 +1,5 @@
 import { CosmosAPI, UserData } from "@/config/apiClient";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Simple in-memory cache so the user is only fetched once per username
@@ -55,7 +55,18 @@ export function useRequireUser(username: string | undefined) {
         return () => { cancelled = true; };
     }, [username, navigate]);
 
-    return { user, loading };
+    const refresh = useCallback(async () => {
+        if (!username) return;
+        try {
+            const response = await CosmosAPI.getUser(username);
+            if (response?.username) {
+                userCache.set(username, response);
+                setUser(response);
+            }
+        } catch { /* ignore */ }
+    }, [username]);
+
+    return { user, loading, refresh };
 }
 
 /** Clear the cached user (e.g. on logout or profile deletion) */
