@@ -1,10 +1,53 @@
 import { CosmosAPI } from "@/config/apiClient";
 import { useProfiles } from "@/hooks/useProfiles";
 import DefaultLayout from "@/layouts/default"
-import { addToast, Button, Card, Switch, User } from "@heroui/react";
+import { addToast, Button, Card, Input, Switch, User } from "@heroui/react";
 import { useState } from "react";
 
+const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN;
+
 export const Admin = () => {
+    const [authed, setAuthed] = useState(() => sessionStorage.getItem("admin_auth") === "1");
+    const [pin, setPin] = useState("");
+    const [pinError, setPinError] = useState(false);
+
+    if (!authed) {
+        const handleSubmit = () => {
+            if (pin === ADMIN_PIN) {
+                sessionStorage.setItem("admin_auth", "1");
+                setAuthed(true);
+            } else {
+                setPinError(true);
+                setPin("");
+            }
+        };
+
+        return (
+            <DefaultLayout>
+                <div className="flex flex-col items-center justify-center gap-4 py-20 w-full">
+                    <Input
+                        type="password"
+                        label="PIN de acceso"
+                        placeholder="Ingresa el PIN"
+                        value={pin}
+                        onValueChange={(v) => { setPin(v); setPinError(false); }}
+                        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                        isInvalid={pinError}
+                        errorMessage={pinError ? "PIN incorrecto" : undefined}
+                        className="max-w-xs"
+                    />
+                    <Button color="primary" variant="flat" className="rounded-2xl" onPress={handleSubmit}>
+                        Entrar
+                    </Button>
+                </div>
+            </DefaultLayout>
+        );
+    }
+
+    return <AdminPanel />;
+};
+
+const AdminPanel = () => {
     const { users, loading, refresh } = useProfiles();
 
     const [loading2, setLoading2] = useState(false)
