@@ -23,10 +23,10 @@ export const EventTypeChip = ({ type, variant = "card" }: { type?: EventType, va
 		<Chip
 			variant="flat"
 			className={`${isDrawer ? "rounded-lg h-8 px-1" : "rounded-2xl h-6 border-2 py-3 px-2"} ${config.bgClass} ${config.borderClass}`}
-			classNames={{ content: `${config.contentClass} ${isDrawer ? "text-sm" : "text-xs"}` }}
+			classNames={{ content: `${config.contentClass} ${isDrawer ? "text-sm" : "pr-0"}` }}
 			startContent={config.icon}
 		>
-			{config.label}
+			{isDrawer ?config.label : ""}
 		</Chip>
 	);
 }
