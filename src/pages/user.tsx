@@ -21,6 +21,7 @@ const Rules = () => (
 export const UserPage = () => {
     //#region Form states and handlers
     const [errorsIg, setErrorsIg] = useState({})
+    const [usernameInput, setUsernameInput] = useState("")
 
     const [validating, setValidating] = useState(false)
     const [isUserFound, setIsUserFound] = useState(false)
@@ -121,8 +122,9 @@ export const UserPage = () => {
                     size: "md"
                 });
                 setErrorsIg({ username: "La cuenta de Instagram es privada" });
+            } else {
+                setErrorsIg({ username: "Error al validar usuario" });
             }
-            setErrorsIg({ username: "Error al validar usuario" });
         }
 
         setValidating(false);
@@ -214,6 +216,8 @@ export const UserPage = () => {
                                                     labelPlacement="outside"
                                                     name="username"
                                                     autoComplete="off"
+                                                    value={usernameInput}
+                                                    onValueChange={setUsernameInput}
                                                     classNames={{
                                                         inputWrapper: "h-12 rounded-2xl rounded-r-none",
                                                     }}

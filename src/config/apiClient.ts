@@ -394,11 +394,7 @@ export const createUser = async (username: string): Promise<UserData | null> => 
     const apifyResult = await ApifyAPI.runActorSync("dSCLg0C3YEZ83HzYX", input);
     const datasetItems = apifyResult.items;
 
-    if (!datasetItems) {
-        throw new Error("Apify actor returned no data");
-    }
-    
-    if (datasetItems.length === 0) {
+    if (!datasetItems || datasetItems.length === 0) {
         return null;
     }
 
@@ -407,6 +403,11 @@ export const createUser = async (username: string): Promise<UserData | null> => 
     // Validate that we got actual profile data (Apify may return error stubs for non-existent users)
     if (!userData || !userData.username || userData.error) {
         return null;
+    }
+
+    // Check privacy early — Apify may return partial data for private accounts
+    if (userData.isPrivate) {
+        throw new Error("La cuenta de Instagram es privada. Por favor, asegúrate de que tu cuenta sea pública para continuar.");
     }
     
     // Map Apify response to our UserData structure (no posts)
@@ -418,13 +419,8 @@ export const createUser = async (username: string): Promise<UserData | null> => 
         externalUrls: userData.externalUrls || [],
         profilePicUrl: userData.profilePicUrlHD,
         isDraft: true,
-        private: userData.isPrivate || false,
+        private: false,
     };
-
-    // Check privacy BEFORE inserting
-    if (userToInsert.private) {
-        throw new Error("La cuenta de Instagram es privada. Por favor, asegúrate de que tu cuenta sea pública para continuar.");
-    }
 
     const result = await CosmosAPI.insertUser(userToInsert);
 
