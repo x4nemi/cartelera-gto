@@ -65,9 +65,9 @@ export const EventPage = () => {
 
     return (
         <DefaultLayout>
-            <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto bg-content1 mt-5 rounded-3xl">
+            <div className="flex flex-col gap-4 w-full max-w-2xl mx-2 bg-content1 mt-5 rounded-3xl">
                 {/* Header */}
-                <div className="sticky top-0 z-20 flex items-center justify-between pt-3 px-5">
+                <div className="flex items-center justify-between pt-3 px-3">
                     <Button
                         isIconOnly
                         variant="light"
@@ -78,22 +78,24 @@ export const EventPage = () => {
                             <path d="m15 18-6-6 6-6" />
                         </svg>
                     </Button>
-                    <EventTypeChip type={event.type} variant="drawer" />
-                    <Button
-                        className="font-medium text-small text-default-500"
-                        endContent={
-                            <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="16">
-                                <path d="M7 17 17 7M7 7h10v10" />
-                            </svg>
-                        }
-                        size="sm"
-                        variant="flat"
-                        as={Link}
-                        href={event.url}
-                        target="_blank"
-                    >
-                        Página del evento
-                    </Button>
+                    <div className="flex gap-2">
+                        <EventTypeChip type={event.type} variant="drawer" />
+                        <Button
+                            className="font-medium text-small text-default-500"
+                            endContent={
+                                <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="16">
+                                    <path d="M7 17 17 7M7 7h10v10" />
+                                </svg>
+                            }
+                            size="sm"
+                            variant="flat"
+                            as={Link}
+                            href={event.url}
+                            target="_blank"
+                        >
+                            Página del evento
+                        </Button>
+                    </div>
                 </div>
 
                 {/* Images */}
