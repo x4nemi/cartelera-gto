@@ -421,11 +421,12 @@ export const createUser = async (username: string): Promise<UserData | null> => 
         private: userData.isPrivate || false,
     };
 
-    const result = await CosmosAPI.insertUser(userToInsert);
-
-    if(userData.private) {
+    // Check privacy BEFORE inserting
+    if (userToInsert.private) {
         throw new Error("La cuenta de Instagram es privada. Por favor, asegúrate de que tu cuenta sea pública para continuar.");
     }
+
+    const result = await CosmosAPI.insertUser(userToInsert);
 
     if (!result.success) {
         throw new Error("Error inserting user into database");

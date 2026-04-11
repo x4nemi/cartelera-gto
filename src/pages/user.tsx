@@ -188,7 +188,7 @@ export const UserPage = () => {
                 <Card className='md:w-lg w-full mx-2 p-5 max-md:p-1 -mt-10 rounded-3xl bg-content2/70 backdrop-blur-md transition-all duration-250' shadow='none'>
                     <CardHeader>
                         <h4 className="font-bold text-xl">
-                            { isUserFound ? "Usuario encontrado" : "Crea tu usuario" }
+                            { validating ? "Validando usuario..." : (isUserFound ? "Usuario encontrado" : "Crea tu usuario") }
                         </h4>
                     </CardHeader>
                     <CardBody>
