@@ -2,6 +2,8 @@ import { Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/
 import { EventDrawer } from "./eventDrawer"
 import { PostData } from "@/config/apiClient"
 import { EventTypeChip } from "./eventTypeChip"
+import { useMediaQuery } from "@/hooks/useMediaQuery"
+import { useNavigate } from "react-router-dom"
 
 const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
 const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
@@ -43,10 +45,20 @@ export const EventCard = (props: PostData) => {
 	const isPast = props.dates ? props.dates.every(d => parseLocalDate(d) < today) : false;
 
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const isMobile = useMediaQuery("(max-width: 640px)");
+	const navigate = useNavigate();
+
+	const handlePress = () => {
+		if (isMobile) {
+			navigate(`/evento/${props.shortCode}`);
+		} else {
+			onOpen();
+		}
+	};
 
 	return (
 		<>
-			<Card className="rounded-3xl transition-all duration-200" isPressable onClick={onOpen} shadow="none">
+			<Card className="rounded-3xl transition-all duration-200" isPressable onClick={handlePress} shadow="none">
 				{!isPast ? (
 					<>
 						{ props.type !== "calendar" && 

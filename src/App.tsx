@@ -12,6 +12,7 @@ import { Portal } from "./pages/portal";
 import NotFoundPage from "./pages/notFound";
 import HeroPage from "./pages/hero";
 import { Admin } from "./pages/admin";
+import { EventPage } from "./pages/event";
 
 function App() {
 	const isFirstTime = !localStorage.getItem("hasVisitedBefore");
@@ -45,6 +46,7 @@ function App() {
 			<Route element={<PublishPage />} path="/:username/publicar" />
 			<Route element={<UserPage />} path="/user" />
 			<Route element={<PublishedPost  />} path="/completado/:id" />
+			<Route element={<EventPage />} path="/evento/:shortCode" />
 			<Route element={<DocsPage />} path="/faq" />
 			<Route element={<Portal />} path="/:username" />
 			<Route element={<HeroPage />} path="/acerca" />
