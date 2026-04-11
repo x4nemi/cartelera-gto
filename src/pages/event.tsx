@@ -1,7 +1,7 @@
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Link, ScrollShadow, Spinner, User } from "@heroui/react";
+import { Button, Link, Spinner, User } from "@heroui/react";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { CalendarIcon } from "@/components/icons";
 import { EventTypeChip } from "@/components/card/eventTypeChip";
@@ -65,9 +65,9 @@ export const EventPage = () => {
 
     return (
         <DefaultLayout>
-            <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto pb-8">
+            <div className="flex flex-col gap-4 w-full max-w-2xl mx-auto bg-content1 mt-5 rounded-3xl">
                 {/* Header */}
-                <div className="flex items-center justify-between">
+                <div className="sticky top-0 z-20 flex items-center justify-between pt-3 px-5">
                     <Button
                         isIconOnly
                         variant="light"
@@ -103,7 +103,7 @@ export const EventPage = () => {
 
                 {/* Dates */}
                 {eventDates.length > 0 && (
-                    <ScrollShadow hideScrollBar className="w-full max-h-[120px]">
+                    <div className="flex flex-col px-5">
                         {eventDates.map((d, i) => {
                             const prevIsPast = i > 0 && eventDates[i - 1].isPast;
                             const isNext = !d.isPast && (i === 0 || prevIsPast);
@@ -117,22 +117,28 @@ export const EventPage = () => {
                                 </p>
                             );
                         })}
-                    </ScrollShadow>
+                    </div>
                 )}
 
                 {/* Caption */}
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 px-5">
                     <span className="text-medium font-medium">Acerca de este evento</span>
                     <p className="text-medium text-default-500 whitespace-pre-line">{caption}</p>
                 </div>
 
                 {/* Owner */}
-                <div className="border-t border-default-200/50 pt-4">
-                    <User
-                        name={ownerFullName}
-                        description={"@" + ownerUsername}
-                        avatarProps={{ src: ownerProfilePicUrl }}
-                    />
+                <div className="border-t border-default-200/50 py-4 justify-center items-center flex bg-content2 rounded-b-3xl">
+                    <Link
+                        href={`https://instagram.com/${ownerUsername}`}
+                        target="_blank"
+                        className="text-foreground"
+                    >
+                        <User
+                            name={ownerFullName}
+                            description={"@" + ownerUsername}
+                            avatarProps={{ src: ownerProfilePicUrl }}
+                        />
+                    </Link>
                 </div>
             </div>
         </DefaultLayout>
