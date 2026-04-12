@@ -40,7 +40,7 @@ export const Navbar = () => {
     }, []);
 	return (
 		<>
-		<div className="flex justify-center px-[8.33%] mt-3 relative z-50" ref={navMobileRef}>
+		<div className="flex justify-center px-[2%] mt-3 relative z-50" ref={navMobileRef}>
 			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
 				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "bg-content1 backdrop-blur-md !rounded-none w-full", wrapper: "!px-4" }}>
 					<NavbarMenuToggle className="md:hidden" />
@@ -63,10 +63,6 @@ export const Navbar = () => {
 						{siteConfig.navItems.map((item) => (
 							<NavbarItem key={item.href} isActive={location.pathname === item.href}>
 								<Link
-									className={clsx(
-										linkStyles({ color: "foreground" }),
-										"data-[active=true]:text-primary data-[active=true]:font-medium hover:bg-primary/20 p-2 py-1 rounded-lg transition-all duration-300",
-									)}
 									color="foreground"
 									href={item.href}
 								>
@@ -100,7 +96,7 @@ export const Navbar = () => {
 							transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 							className="overflow-hidden"
 						>
-						<div ref={menuBox}>
+						<div ref={menuBox} className="grid grid-cols-2 gap-4 p-4">
 							{siteConfig.navItems.map((item, index) => (
 								<motion.div
 									key={item.href}
@@ -111,7 +107,8 @@ export const Navbar = () => {
 								<Link
 									href={item.href}
 									color="foreground"
-									className="rounded-none py-2 w-full text-center bg-content1 hover:bg-content2 hover:text-primary transition-colors duration-200 block px-4"
+									// className="rounded-none py-2 w-full text-center bg-content1 hover:bg-content2 hover:text-primary transition-colors duration-200 block px-4"
+									className="rounded-xl w-full text-center bg-content2 block py-5"
 									size="lg"
 									onPress={handleMenuToggle}
 								>
