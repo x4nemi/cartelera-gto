@@ -1,7 +1,7 @@
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Link, Spinner, User } from "@heroui/react";
+import { Button, Link, ScrollShadow, Spinner, User } from "@heroui/react";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { CalendarIcon } from "@/components/icons";
 import { EventTypeChip } from "@/components/card/eventTypeChip";
@@ -24,7 +24,7 @@ export const EventPage = () => {
     if (loading) {
         return (
             <DefaultLayout>
-                <div className="flex justify-center items-center min-h-[60vh]">
+                <div className="flex justify-center items-center w-full flex-grow">
                     <Spinner size="lg" color="primary" />
                 </div>
             </DefaultLayout>
@@ -65,7 +65,7 @@ export const EventPage = () => {
 
     return (
         <DefaultLayout>
-            <div className="flex flex-col gap-2 w-full max-w-2xl bg-content1 mt-5 rounded-3xl">
+            <div className="flex flex-col gap-2 w-full max-w-2xl bg-content1 mt-5 rounded-3xl mx-auto">
                 {/* Header */}
                 <div className="flex items-center justify-between pt-3 px-3">
                     <Button
@@ -104,8 +104,11 @@ export const EventPage = () => {
                 </div>
 
                 {/* Dates */}
+                <div className="flex flex-col gap-3 px-5">
+                    <span className="text-medium font-medium">Fechas</span>
+                </div>
                 {eventDates.length > 0 && (
-                    <div className="flex flex-col px-5">
+                    <ScrollShadow hideScrollBar className="w-full max-h-[100px] px-5">
                         {eventDates.map((d, i) => {
                             const prevIsPast = i > 0 && eventDates[i - 1].isPast;
                             const isNext = !d.isPast && (i === 0 || prevIsPast);
@@ -119,7 +122,7 @@ export const EventPage = () => {
                                 </p>
                             );
                         })}
-                    </div>
+                    </ScrollShadow>
                 )}
 
                 {/* Caption */}
