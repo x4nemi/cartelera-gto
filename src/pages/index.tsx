@@ -12,8 +12,13 @@ export default function IndexPage() {
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true);
 	const [selectedUsernames, setSelectedUsernames] = useState<Set<string> | null>(null);
 
+	const parseLocalDate = (d: string) => {
+		const [y, m, day] = d.split("-").map(Number);
+		return new Date(y, m - 1, day);
+	};
+
 	const defaultDateRange = useMemo(() => {
-		const allDates = posts.flatMap(e => e.dates ?? []).map(d => new Date(d));
+		const allDates = posts.flatMap(e => e.dates ?? []).map(d => parseLocalDate(d));
 		if (allDates.length === 0) return { start: null, end: null };
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
@@ -80,7 +85,7 @@ export default function IndexPage() {
 			.filter(e => {
 				if (!e.dates || e.dates.length === 0) return true;
 				return e.dates.some(d => {
-					const date = new Date(d);
+					const date = parseLocalDate(d);
 					if (effectiveMinDate && date < effectiveMinDate) return false;
 					if (effectiveMaxDate && date > effectiveMaxDate) return false;
 					return true;
@@ -88,10 +93,10 @@ export default function IndexPage() {
 			})
 			.sort((a, b) => {
 				const dateA = a.dates && a.dates.length > 0
-					? Math.min(...a.dates.map(date => new Date(date).getTime()))
+					? Math.min(...a.dates.map(date => parseLocalDate(date).getTime()))
 					: 0;
 				const dateB = b.dates && b.dates.length > 0
-					? Math.min(...b.dates.map(date => new Date(date).getTime()))
+					? Math.min(...b.dates.map(date => parseLocalDate(date).getTime()))
 					: 0;
 				return isAscendingOrder ? dateA - dateB : dateB - dateA;
 			});

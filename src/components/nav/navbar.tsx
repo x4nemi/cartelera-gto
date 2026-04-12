@@ -108,7 +108,7 @@ export const Navbar = () => {
 									href={item.href}
 									color="foreground"
 									// className="rounded-none py-2 w-full text-center bg-content1 hover:bg-content2 hover:text-primary transition-colors duration-200 block px-4"
-									className="rounded-xl w-full text-center bg-content2 block py-5"
+									className="rounded-xl w-full text-center bg-content2 block py-5 hover:bg-primary hover:text-white transition-colors duration-200"
 									size="lg"
 									onPress={handleMenuToggle}
 								>
