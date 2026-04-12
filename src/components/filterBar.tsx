@@ -209,7 +209,7 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
             onMouseLeave={handleMouseLeave}
         >
             {/* Background layer that scales on hover */}
-            <div className="absolute inset-0 rounded-3xl bg-content1/50 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-103 group-hover:scale-y-104 " />
+            <div className="absolute inset-0 rounded-3xl bg-content1/80 dark:bg-content2/70 backdrop-blur-sm border-2 border-default/30 transition-transform duration-200 group-hover:scale-x-103 group-hover:scale-y-104 " />
 
             {/* Content stays in place */}
             <div className="relative z-10 overflow-hidden rounded-3xl">
@@ -249,14 +249,14 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                 </motion.div>
 
                 {/* Tab buttons at the bottom */}
-                <div className="flex gap-1 p-1.5">
+                <div className="flex gap-1 pt-1.5 px-1.5">
                     {items.map((item, i) => {
                         const isActive = active === i;
                         const isHovered = hovered === i;
                         return (
                             <button
                                 key={item}
-                                className={`relative rounded-3xl px-3 py-2.5  font-light cursor-pointer transition-colors duration-150 ${isActive ? "text-white" : "text-foreground"} ${i === items.length - 1 ? "flex-1" : "flex-1/2"}`}
+                                className={`relative rounded-3xl px-3 py-2.5  font-light cursor-pointer transition-colors duration-150 ${isActive ? "text-white" : "text-foreground"} ${i === items.length - 1 ? "flex-1" : "flex-1"}`}
                                 onClick={() => { setActive(active === i ? null : i); }}
                                 onMouseEnter={() => handleMouseEnter(i)}
                             >
@@ -282,6 +282,9 @@ export const FilterBar = ({ allUsers = [], selectedUsernames, onToggleUser, setI
                             </button>
                         );
                     })}
+                </div>
+                <div className="w-full flex items-center justify-center pb-1.5">
+                    <p className="font-semibold uppercase text-xs text-foreground-600">Filtros</p>
                 </div>
             </div>
         </div>
