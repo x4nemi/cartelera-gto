@@ -65,7 +65,7 @@ export const EventPage = () => {
 
     return (
         <DefaultLayout>
-            <div className="flex flex-col gap-2 w-full max-w-2xl mx-2 bg-content1 mt-5 rounded-3xl">
+            <div className="flex flex-col gap-2 w-full max-w-2xl bg-content1 mt-5 rounded-3xl">
                 {/* Header */}
                 <div className="flex items-center justify-between pt-3 px-3">
                     <Button
@@ -99,7 +99,7 @@ export const EventPage = () => {
                 </div>
 
                 {/* Images */}
-                <div className="flex w-full justify-center">
+                <div className="flex w-full justify-center px-3">
                     <ImageCarousel images={[...(images ?? [])].flat()} />
                 </div>
 
