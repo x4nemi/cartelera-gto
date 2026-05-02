@@ -1,14 +1,17 @@
 import DefaultLayout from "@/layouts/default";
 import { Wall } from "@/layouts/pinterestWall";
+import { CalendarFeed } from "@/layouts/calendarFeed";
 import { useMemo, useState, useCallback, useRef, useEffect } from "react";
 import { FilterBar } from "@/components/filterBar";
 import { SadIcon } from "@/components/icons";
+import { ViewToggle, HomeViewMode } from "@/components/viewToggle";
 import { useEvents } from "@/hooks/useEvents";
 import { Spinner } from "@heroui/react";
 
 export default function IndexPage() {
 	const { posts, loading, loadingMore, hasMore, loadMore } = useEvents();
 
+	const [viewMode, setViewMode] = useState<HomeViewMode>("wall");
 	const [isAscendingOrder, setIsAscendingOrder] = useState(true);
 	const [selectedUsernames, setSelectedUsernames] = useState<Set<string> | null>(null);
 
@@ -102,6 +105,15 @@ export default function IndexPage() {
 			});
 	}, [isAscendingOrder, selectedUsernames, effectiveMinDate, effectiveMaxDate, eventTypes, posts]);
 
+	// Calendar view applies user/type filters but ignores date-range filter
+	// (the calendar widget itself acts as the date selector).
+	const calendarEvents = useMemo(() => {
+		const activeUsernames = selectedUsernames ?? new Set<string>();
+		return posts
+			.filter(e => activeUsernames.has(e.ownerUsername))
+			.filter(e => eventTypes.includes(e.type || "event"));
+	}, [posts, selectedUsernames, eventTypes]);
+
 	const allUsernamesAndPics = useMemo(() => {
 		const map = new Map<string, { username: string; profilePicUrl: string }>();
 		posts.forEach(e => {
@@ -149,10 +161,18 @@ export default function IndexPage() {
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5">
+				{!loading && posts.length > 0 && (
+					<div className="flex justify-end">
+						<ViewToggle value={viewMode} onChange={setViewMode} />
+					</div>
+				)}
+
 				{loading ? (
 					<div className="flex justify-center items-center py-20">
 						<Spinner size="lg" />
 					</div>
+				) : viewMode === "calendar" ? (
+					<CalendarFeed posts={calendarEvents} />
 				) : (
 					<>
 						{filteredEvents.length === 0 && areFiltersApplied && (
@@ -174,7 +194,7 @@ export default function IndexPage() {
 					</>
 				)}
 
-				{posts.length > 0 && (
+				{posts.length > 0 && viewMode === "wall" && (
 					<div className="fixed bottom-4 inset-x-0 z-20 flex justify-center">
 						<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames ?? new Set()} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
 					</div>

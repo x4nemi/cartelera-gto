@@ -40,7 +40,7 @@ export const Navbar = () => {
     }, []);
 	return (
 		<>
-		<div className="flex justify-center px-[2%] mt-3 relative z-50" ref={navMobileRef}>
+		<div className="md:sticky md:top-0 z-50 flex justify-center px-[2%] pt-3 pb-1 bg-background/80 backdrop-blur-md" ref={navMobileRef}>
 			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
 				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "bg-content1 backdrop-blur-md !rounded-none w-full", wrapper: "!px-4" }}>
 					<NavbarMenuToggle className="md:hidden" />
