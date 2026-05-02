@@ -1,7 +1,8 @@
 import { Card, CardBody, CardHeader, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, useDisclosure } from "@heroui/react"
 import { EventDrawer } from "./eventDrawer"
 import { EditEventModal } from "../modal/editEventModal"
-import { PostData } from "@/config/apiClient"
+import { DeleteEventModal } from "../modal/deleteEventModal"
+import { CosmosAPI, PostData } from "@/config/apiClient"
 import { EditIcon, TrashIcon, ViewIcon } from "../icons"
 import { EventTypeChip } from "./eventTypeChip"
 
@@ -46,6 +47,7 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 
 	const { isOpen: isDrawerOpen, onOpen: onDrawerOpen, onOpenChange: onDrawerOpenChange } = useDisclosure();
 	const { isOpen: isEditOpen, onOpen: onEditOpen, onOpenChange: onEditOpenChange } = useDisclosure();
+	const { isOpen: isDeleteOpen, onOpen: onDeleteOpen, onOpenChange: onDeleteOpenChange } = useDisclosure();
 	return (
 		<>
 			<Dropdown size="lg">
@@ -89,13 +91,25 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 				<DropdownMenu aria-label="Static Actions" variant="flat">
 					<DropdownItem key="view" startContent={<ViewIcon size={20} />} onPress={onDrawerOpen}>Ver evento</DropdownItem>
 					<DropdownItem key="edit" startContent={<EditIcon size={20} />} onPress={onEditOpen}>Editar evento</DropdownItem>
-					<DropdownItem key="delete" className="text-danger" color="danger" startContent={<TrashIcon size={20} />} onPress={() => alert("Eliminar evento")}>
+					<DropdownItem key="delete" className="text-danger" color="danger" startContent={<TrashIcon size={20} />} onPress={onDeleteOpen}>
 						Eliminar evento
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>
 			<EventDrawer isOpen={isDrawerOpen} onOpenChange={onDrawerOpenChange} cardProps={props} />
 			<EditEventModal isOpen={isEditOpen} onOpenChange={onEditOpenChange} postData={props} onUpdated={() => onPostUpdated?.()} />
+			<DeleteEventModal
+				isOpen={isDeleteOpen}
+				onOpenChange={onDeleteOpenChange}
+				onDelete={async () => {
+					try {
+						await CosmosAPI.deleteEvent(props.shortCode);
+						onPostUpdated?.();
+					} catch {
+						alert("No se pudo eliminar el evento. Intenta de nuevo.");
+					}
+				}}
+			/>
 		</>
 	)
 }

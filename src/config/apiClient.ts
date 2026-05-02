@@ -355,6 +355,22 @@ export const CosmosAPI = {
     },
 
     /**
+     * Delete an event by shortCode
+     */
+    async deleteEvent(shortCode: string): Promise<{ success: boolean; shortCode: string }> {
+        const response = await fetch(`/api/deleteEvent?shortCode=${encodeURIComponent(shortCode)}`, {
+            method: "DELETE",
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.error || "Failed to delete event");
+        }
+
+        return response.json();
+    },
+
+    /**
      * Get pending (auto-detected) events for a user
      */
     async getPendingEvents(ownerUsername: string): Promise<PostData[]> {
