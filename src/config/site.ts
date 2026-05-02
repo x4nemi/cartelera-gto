@@ -12,10 +12,10 @@ export const siteConfig = {
       label: "Publicar",
       href: "/creacion",
     },
-    {
-      label: "Acerca",
-      href: "/acerca",
-    },
+    // {
+    //   label: "Acerca",
+    //   href: "/acerca",
+    // },
     {
       label: "Preguntas frecuentes",
       href: "/faq",
