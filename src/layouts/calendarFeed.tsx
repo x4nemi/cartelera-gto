@@ -68,14 +68,24 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     const [calendarExpanded, setCalendarExpanded] = useState(true);
 
     // Auto-collapse the calendar when the user scrolls down; expand when at top.
+    // Mobile only — on desktop the calendar stays expanded.
     useEffect(() => {
+        const mql = window.matchMedia("(min-width: 768px)");
         const onScroll = () => {
+            if (mql.matches) {
+                setCalendarExpanded(true);
+                return;
+            }
             if (window.scrollY > 24) setCalendarExpanded(false);
             else setCalendarExpanded(true);
         };
         onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
+        mql.addEventListener("change", onScroll);
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            mql.removeEventListener("change", onScroll);
+        };
     }, []);
 
     // Re-sync defaults when posts arrive.

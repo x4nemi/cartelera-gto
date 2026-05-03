@@ -207,7 +207,7 @@ export const MonthCalendar = ({
             <button
                 type="button"
                 onClick={() => setExpanded(!expanded)}
-                className="relative z-30 mt-2 mx-auto block py-1.5 px-6 rounded-full hover:bg-default-200/60 transition-colors"
+                className="relative z-30 mt-2 mx-auto block py-1.5 px-6 rounded-full hover:bg-default-200/60 transition-colors md:hidden"
                 aria-label={expanded ? "Contraer calendario" : "Expandir calendario"}
                 aria-expanded={expanded}
             >
