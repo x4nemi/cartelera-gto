@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/react";
+import { Avatar, Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { EventDrawer } from "./eventDrawer";
 import { EventTypeChip } from "./eventTypeChip";
@@ -35,18 +35,18 @@ export const EventCardLarge = (props: PostData) => {
     return (
         <>
             <Card
-                className="rounded-3xl transition-all duration-200 w-full"
+                className="rounded-4xl transition-all duration-200 w-full"
                 isPressable
                 onClick={handlePress}
                 shadow="none"
             >
                 {!isPast ? (
-                    <CardHeader className="absolute top-2 left-2 z-10 p-0">
-                        <EventTypeChip type={props.type} />
+                    <CardHeader className="absolute bottom-2 left-2 z-10 p-0">
+                        <Avatar src={props.ownerProfilePicUrl} size="lg" />
                     </CardHeader>
                 ) : (
                     <>
-                        <CardHeader className="absolute top-2 right-2 z-10 p-0">
+                        <CardHeader className="absolute top-2 left-2 z-10 p-0">
                             <Chip color="default" size="md" className="rounded-2xl">
                                 Evento pasado
                             </Chip>

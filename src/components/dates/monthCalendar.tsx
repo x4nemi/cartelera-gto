@@ -117,7 +117,7 @@ export const MonthCalendar = ({
                 >
                     <ChevronLeftIcon size={20} />
                 </Button>
-                <span className="text-sm font-medium capitalize max-md:text-lg">
+                <span className=" font-medium capitalize text-lg md:font-bold">
                     {MONTH_NAMES[viewMonth.getMonth()]} {viewMonth.getFullYear()}
                 </span>
                 <Button
