@@ -106,7 +106,7 @@ export const MonthCalendar = ({
             ].join(" ")}
         >
             {/* Header */}
-            <div className="flex items-center justify-between px-1 mb-2">
+            <div className="flex items-center justify-between px-1 mb-3">
                 <Button
                     isIconOnly
                     variant="light"
@@ -117,7 +117,7 @@ export const MonthCalendar = ({
                 >
                     <ChevronLeftIcon size={20} />
                 </Button>
-                <span className="text-sm font-medium capitalize">
+                <span className="text-sm font-medium capitalize max-md:text-lg">
                     {MONTH_NAMES[viewMonth.getMonth()]} {viewMonth.getFullYear()}
                 </span>
                 <Button
@@ -133,11 +133,11 @@ export const MonthCalendar = ({
             </div>
 
             {/* Weekday row */}
-            <div className="grid grid-cols-7 gap-1 px-1 mb-1">
+            <div className="grid grid-cols-7 gap-1 px-1 mb-2">
                 {WEEKDAYS.map((w, i) => (
                     <div
                         key={i}
-                        className="text-center text-[11px] font-medium text-foreground/60"
+                        className="text-center text-[13px] font-bold text-foreground/60"
                     >
                         {w}
                     </div>
@@ -174,7 +174,7 @@ export const MonthCalendar = ({
                                         onClick={() => onSelectDate(d)}
                                         tabIndex={visible ? 0 : -1}
                                         className={[
-                                            "relative aspect-square flex items-center justify-center rounded-full text-sm transition-colors",
+                                            "relative aspect-square flex items-center justify-center rounded-full text-sm transition-colors max-md:text-lg",
                                             isSelected
                                                 ? "bg-primary text-primary-foreground font-semibold"
                                                 : isToday

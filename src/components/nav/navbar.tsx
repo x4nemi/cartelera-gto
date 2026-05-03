@@ -6,8 +6,6 @@ import {
 	NavbarItem,
 	NavbarMenuToggle
 } from "@heroui/navbar";
-import { link as linkStyles } from "@heroui/theme";
-import clsx from "clsx";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/nav/theme-switch";
@@ -43,7 +41,6 @@ export const Navbar = () => {
 		<div className="md:sticky md:top-0 z-50 flex justify-center px-[2%] pt-3 pb-1 bg-background/80 backdrop-blur-md" ref={navMobileRef}>
 			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
 				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "bg-content1 backdrop-blur-md !rounded-none w-full", wrapper: "!px-4" }}>
-					<NavbarMenuToggle className="md:hidden" />
 					<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 						<NavbarBrand className="gap-3 max-w-fit">
 							<Link
@@ -52,7 +49,7 @@ export const Navbar = () => {
 								href="/"
 							>
 								<Logo />
-								<p className="font-bold text-inherit text-lg max-md:text-sm">
+								<p className="font-bold text-inherit text-lg max-md:text-xl">
 									{siteConfig.name}
 								</p>
 							</Link>
@@ -84,6 +81,7 @@ export const Navbar = () => {
 					<NavbarContent className="sm:hidden basis-1" justify="end">
 						<ThemeSwitch />
 					</NavbarContent>
+					<NavbarMenuToggle className="md:hidden" />
 				</HeroUINavbar>
 
 				{/* Menu items inside the same rounded container */}

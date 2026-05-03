@@ -64,6 +64,10 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     }, [eventDates, sortedDays, today]);
 
     const [selectedDate, setSelectedDate] = useState<Date>(defaultSelected);
+    // Anchor used only for filtering which day sections to render. Updated on
+    // click (so users can jump forward) but NOT on scroll, so past day sections
+    // don't unmount and cause layout jumps as the highlighted day advances.
+    const [anchorDate, setAnchorDate] = useState<Date>(defaultSelected);
     const [viewMonth, setViewMonth] = useState<Date>(defaultSelected);
     const [calendarExpanded, setCalendarExpanded] = useState(true);
 
@@ -91,6 +95,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     // Re-sync defaults when posts arrive.
     useEffect(() => {
         setSelectedDate((cur) => (cur.getTime() === today.getTime() ? defaultSelected : cur));
+        setAnchorDate((cur) => (cur.getTime() === today.getTime() ? defaultSelected : cur));
         setViewMonth((cur) => (isSameMonth(cur, today) ? defaultSelected : cur));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultSelected.getTime()]);
@@ -108,6 +113,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     // next-available) section. If no event on/after that date, do nothing.
     const handleSelectDate = (date: Date) => {
         setSelectedDate(date);
+        setAnchorDate(date);
         if (!isSameMonth(date, viewMonth)) setViewMonth(date);
 
         const target =
@@ -122,9 +128,10 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
-    // Scroll → calendar sync via IntersectionObserver. Only updates the
-    // visible month (selectedDate is changed by clicks only, since past days
-    // are not rendered and would otherwise unmount and cause layout jumps).
+    // Scroll → calendar sync via IntersectionObserver. Updates the highlighted
+    // day and visible month based on which section is currently in view.
+    // anchorDate is intentionally NOT updated here, to avoid unmounting past
+    // day sections (which would cause layout jumps).
     useEffect(() => {
         const observer = new IntersectionObserver(
             (entries) => {
@@ -136,19 +143,21 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                 const key = (visible[0].target as HTMLElement).dataset.dayKey;
                 if (!key) return;
                 const date = parseLocalDate(key);
+                setSelectedDate((cur) => (cur.getTime() === date.getTime() ? cur : date));
                 setViewMonth((cur) => (isSameMonth(cur, date) ? cur : date));
             },
             { rootMargin: "-10% 0px -85% 0px", threshold: 0 },
         );
         sectionRefs.current.forEach((el) => observer.observe(el));
         return () => observer.disconnect();
-    }, [postsByDay, selectedDate]);
+    }, [postsByDay, anchorDate]);
 
-    // Days to render: every day with events, in ascending order.
-    // Days to render: only days >= selectedDate that have events.
+    // Days to render: only days >= anchorDate that have events. anchorDate is
+    // pinned by clicks (not scroll), so the rendered set is stable while
+    // scrolling.
     const visibleDays = useMemo(
-        () => sortedDays.filter((d) => d >= selectedDate),
-        [sortedDays, selectedDate],
+        () => sortedDays.filter((d) => d >= anchorDate),
+        [sortedDays, anchorDate],
     );
 
     if (sortedDays.length === 0) {
