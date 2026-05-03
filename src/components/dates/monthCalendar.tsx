@@ -159,7 +159,7 @@ export const MonthCalendar = ({
                                 opacity: visible ? 1 : 0,
                                 marginTop: visible && weekIdx > 0 ? 4 : 0,
                             }}
-                            transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                            transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
                             aria-hidden={!visible}
                         >
                             {week.map((d) => {

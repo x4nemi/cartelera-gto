@@ -189,10 +189,6 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
 
             {/* Right column: month header + day sections. Lower z-index so the sticky calendar above stays visible as content scrolls underneath. */}
             <div className="flex flex-col gap-3 md:flex-1 min-w-0 relative z-10 pt-4 md:pt-0">
-                <h2 className="text-2xl font-semibold capitalize px-1">
-                    {MONTH_NAMES[selectedDate.getMonth()]} {selectedDate.getFullYear()}
-                </h2>
-
                 {visibleDays.length === 0 ? (
                     <p className="text-center text-foreground/60 py-10">
                         No hay eventos a partir de esta fecha.
