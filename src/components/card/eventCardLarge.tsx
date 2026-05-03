@@ -1,7 +1,6 @@
 import { Avatar, Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/react";
 import { useNavigate } from "react-router-dom";
 import { EventDrawer } from "./eventDrawer";
-import { EventTypeChip } from "./eventTypeChip";
 import { PostData } from "@/config/apiClient";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
