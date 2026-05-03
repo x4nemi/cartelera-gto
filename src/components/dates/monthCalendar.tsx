@@ -101,7 +101,7 @@ export const MonthCalendar = ({
     return (
         <div
             className={[
-                "bg-content2 p-3 select-none transition-[border-radius] duration-300",
+                "bg-content1 p-3 select-none transition-[border-radius] duration-300",
                 expanded ? "rounded-3xl" : "rounded-t-3xl rounded-b-none",
             ].join(" ")}
         >

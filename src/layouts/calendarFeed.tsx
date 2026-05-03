@@ -7,7 +7,7 @@ const MONTH_NAMES = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
-const WEEKDAYS_LONG = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const WEEKDAYS_LONG = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
 const parseLocalDate = (d: string) => {
     const [y, m, day] = d.split("-").map(Number);
@@ -184,7 +184,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     return (
         <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start">
             {/* Calendar: sticky on top of the feed on all breakpoints so it stays visible while scrolling. */}
-            <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 bg-background">
+            <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 bg-background pt-2">
                 <MonthCalendar
                     viewMonth={viewMonth}
                     onViewMonthChange={setViewMonth}
@@ -214,8 +214,8 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                                     data-day-key={key}
                                     className="flex flex-col gap-2 scroll-mt-24"
                                 >
-                                    <h3 className="text-base font-medium text-foreground/80 capitalize px-1">
-                                        {WEEKDAYS_LONG[d.getDay()]} {d.getDate()} de{" "}
+                                    <h3 className="text-base font-semibold text-foreground/60 capitalize px-1">
+                                        {WEEKDAYS_LONG[d.getDay()]}, {d.getDate()} de{" "}
                                         {MONTH_NAMES[d.getMonth()].toLowerCase()}
                                     </h3>
                                     <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
