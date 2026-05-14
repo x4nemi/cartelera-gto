@@ -33,36 +33,40 @@ export const EventCardLarge = (props: PostData) => {
 
     return (
         <>
-            <Card
-                className="rounded-4xl transition-all duration-200 w-full"
-                isPressable
-                onClick={handlePress}
-                shadow="none"
-            >
-                {!isPast ? (
-                    <CardHeader className="absolute bottom-2 left-2 z-10 p-0">
-                        <Avatar src={props.ownerProfilePicUrl} size="lg" />
-                    </CardHeader>
-                ) : (
-                    <>
-                        <CardHeader className="absolute top-2 left-2 z-10 p-0">
-                            <Chip color="default" size="md" className="rounded-2xl">
-                                Evento pasado
-                            </Chip>
-                        </CardHeader>
-                        <CardHeader className="absolute inset-0 z-9 p-0 rounded-3xl bg-default-900/70 dark:bg-default-50/70" />
-                    </>
-                )}
+            <div className="flex items-start gap-2 w-full">
+                <Card
+                    className="rounded-4xl transition-all duration-200 flex-1 min-w-0"
+                    isPressable
+                    onClick={handlePress}
+                    shadow="none"
+                >
+                    {isPast && (
+                        <>
+                            <CardHeader className="absolute top-2 left-2 z-10 p-0">
+                                <Chip color="default" size="md" className="rounded-2xl">
+                                    Evento pasado
+                                </Chip>
+                            </CardHeader>
+                            <CardHeader className="absolute inset-0 z-9 p-0 rounded-3xl bg-default-900/70 dark:bg-default-50/70" />
+                        </>
+                    )}
 
-                <CardBody className="overflow-visible p-0">
-                    <Image
-                        removeWrapper
-                        alt={props.caption ?? "Evento"}
-                        className="z-0 w-full h-full object-cover rounded-3xl"
-                        src={props.displayUrl}
-                    />
-                </CardBody>
-            </Card>
+                    <CardBody className="overflow-visible p-0">
+                        <Image
+                            removeWrapper
+                            alt={props.caption ?? "Evento"}
+                            className="z-0 w-full h-full object-cover rounded-3xl"
+                            src={props.displayUrl}
+                        />
+                    </CardBody>
+                </Card>
+
+                {!isPast && (
+                    <div className="flex-shrink-0 bg-content1 rounded-2xl">
+                        <Avatar src={props.ownerProfilePicUrl} size="lg" radius="lg" />
+                    </div>
+                )}
+            </div>
             <EventDrawer isOpen={isOpen} onOpenChange={onOpenChange} cardProps={props} />
         </>
     );

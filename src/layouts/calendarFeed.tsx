@@ -163,7 +163,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     if (sortedDays.length === 0) {
         return (
             <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start">
-                <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 bg-background">
+                <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30">
                     <MonthCalendar
                         viewMonth={viewMonth}
                         onViewMonthChange={setViewMonth}
@@ -184,7 +184,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     return (
         <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start">
             {/* Calendar: sticky on top of the feed on all breakpoints so it stays visible while scrolling. */}
-            <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 bg-background pt-2">
+            <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 pt-2">
                 <MonthCalendar
                     viewMonth={viewMonth}
                     onViewMonthChange={setViewMonth}
@@ -207,6 +207,9 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                         {visibleDays.map((d) => {
                             const key = toKey(d);
                             const dayPosts = postsByDay.get(key) ?? [];
+                            const isActive =
+                                d.getTime() === selectedDate.getTime();
+                            const isToday = d.getTime() === today.getTime();
                             return (
                                 <section
                                     key={key}
@@ -214,11 +217,34 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                                     data-day-key={key}
                                     className="flex flex-col gap-2 scroll-mt-24"
                                 >
-                                    <h3 className="text-base font-semibold text-foreground/60 capitalize px-1">
+                                    {/* Mobile: thin divider with a centered day-number pill (sticky) */}
+                                    <div className="md:hidden sticky top-0 z-20 flex items-center gap-2 py-1">
+                                        <div className="flex-1 h-px bg-foreground/10" />
+                                        <span
+                                            className={[
+                                                "px-3 py-0.5 rounded-full text-xs font-semibold bg-content1",
+                                                isToday
+                                                    ? "text-primary"
+                                                    : "text-foreground/70",
+                                            ].join(" ")}
+                                        >
+                                            {d.getDate()}
+                                        </span>
+                                        <div className="flex-1 h-px bg-foreground/10" />
+                                    </div>
+
+                                    {/* Desktop: full Spanish heading */}
+                                    <h3 className="hidden md:block text-base font-semibold text-foreground/60 capitalize px-1">
                                         {WEEKDAYS_LONG[d.getDay()]}, {d.getDate()} de{" "}
                                         {MONTH_NAMES[d.getMonth()].toLowerCase()}
                                     </h3>
-                                    <div className="grid gap-3 grid-cols-1 md:grid-cols-2">
+
+                                    <div
+                                        className={[
+                                            "grid gap-3 grid-cols-1 md:grid-cols-2 transition-opacity duration-200",
+                                            isActive ? "opacity-100" : "opacity-60 md:opacity-100",
+                                        ].join(" ")}
+                                    >
                                         {dayPosts.map((p) => (
                                             <EventCardLarge key={`${key}-${p.shortCode}`} {...p} />
                                         ))}
