@@ -230,36 +230,43 @@ export const MonthCalendar = ({
         (viewMonth.getFullYear() === today.getFullYear() &&
             viewMonth.getMonth() <= today.getMonth());
 
+    const prevMonthName =
+        MONTH_NAMES[(viewMonth.getMonth() + 11) % 12];
+    const nextMonthName =
+        MONTH_NAMES[(viewMonth.getMonth() + 1) % 12];
+
     return (
         <div className="bg-content1/90 backdrop-blur-md p-3 select-none rounded-none rounded-b-4xl max-md:border-t-0 border border-default md:rounded-4xl shadow-sm md:shadow-none">
             {/* Header */}
-            <div className="flex items-center justify-between px-1 mb-3">
+            <div className="flex items-center justify-between gap-2 px-1 mb-3">
                 {isCurrentOrPastMonth ? (
-                    <span className="w-8" aria-hidden />
+                    <span className="w-20" aria-hidden />
                 ) : (
                     <Button
-                        isIconOnly
                         variant="light"
                         radius="full"
                         size="sm"
-                        aria-label="Mes anterior"
+                        aria-label={`Ir a ${prevMonthName}`}
                         onPress={handlePrev}
+                        startContent={<ChevronLeftIcon size={16} />}
+                        className="text-foreground/70 font-medium px-2 min-w-0"
                     >
-                        <ChevronLeftIcon size={20} />
+                        {prevMonthName}
                     </Button>
                 )}
-                <span className="md:text-lead text-h2 ">
+                <span className="md:text-lead text-h2 text-center flex-1">
                     {MONTH_NAMES[viewMonth.getMonth()]} {viewMonth.getFullYear()}
                 </span>
                 <Button
-                    isIconOnly
                     variant="light"
                     radius="full"
                     size="sm"
-                    aria-label="Mes siguiente"
+                    aria-label={`Ir a ${nextMonthName}`}
                     onPress={handleNext}
+                    endContent={<ChevronRightIcon size={16} />}
+                    className="text-foreground/70 font-medium px-2 min-w-0"
                 >
-                    <ChevronRightIcon size={20} />
+                    {nextMonthName}
                 </Button>
             </div>
 
@@ -295,14 +302,9 @@ export const MonthCalendar = ({
                                         onClick={() => onSelectDate(d)}
                                         disabled={disabled}
                                         className={[
-                                            "relative flex flex-col items-center justify-center gap-1 py-3 rounded-2xl transition-colors",
+                                            "group relative flex flex-col items-center justify-center gap-1.5 py-2 transition-colors",
                                             disabled ? "opacity-30 cursor-default" : "",
                                             !disabled && !inMonth ? "opacity-50" : "",
-                                            isSelected
-                                                ? "bg-primary"
-                                                : !disabled
-                                                    ? "hover:bg-default-100"
-                                                    : "",
                                         ].join(" ")}
                                         aria-label={d.toDateString()}
                                         aria-pressed={isSelected}
@@ -312,12 +314,12 @@ export const MonthCalendar = ({
                                         </span>
                                         <span
                                             className={[
-                                                "text-2xl leading-none",
-                                                isToday
-                                                    ? "text-primary font-bold"
-                                                    : isSelected
-                                                        ? "font-semibold"
-                                                        : "text-foreground",
+                                                "flex items-center justify-center size-9 rounded-full text-base leading-none transition-colors",
+                                                isSelected
+                                                    ? "bg-primary text-primary-foreground font-semibold"
+                                                    : isToday
+                                                        ? "text-primary font-bold group-hover:bg-primary/10"
+                                                        : "text-foreground group-hover:bg-default-200/60",
                                             ].join(" ")}
                                         >
                                             {d.getDate()}
@@ -325,7 +327,11 @@ export const MonthCalendar = ({
                                         <span
                                             className={[
                                                 "w-1 h-1 rounded-full",
-                                                hasEvent ? "bg-foreground/40" : "bg-transparent",
+                                                hasEvent
+                                                    ? isSelected
+                                                        ? "bg-primary"
+                                                        : "bg-foreground/40"
+                                                    : "bg-transparent",
                                             ].join(" ")}
                                         />
                                     </button>
