@@ -201,11 +201,13 @@ export default function IndexPage() {
 				)}
 				*/}
 
+				{/* Filter widget hidden temporarily.
 				{posts.length > 0 && viewMode === "wall" && (
 					<div className="fixed bottom-4 inset-x-0 z-20 flex justify-center">
 						<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames ?? new Set()} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
 					</div>
 				)}
+				*/}
 			</section>
 		</DefaultLayout>
 	);

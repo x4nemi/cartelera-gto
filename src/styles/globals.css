@@ -37,15 +37,15 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    background-color: #C8E2FB;
+    /* background-color: #C8E2FB;
     background-image: url('/mountains2.png');
     background-position: left -100px bottom -100px;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background-size: calc(90vh);
+    background-size: calc(90vh); */
     font-family: var(--font-sans);
 }
-
+/* 
 .dark body {
     background-color: #000;
     background-image: url('/darkbg.jpg');
@@ -53,7 +53,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: calc(100vh);
-}
+} */
 
 
 

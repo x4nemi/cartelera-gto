@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@heroui/react";
-import { motion } from "motion/react";
+import { motion, animate } from "motion/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 const MONTH_NAMES = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -122,9 +122,76 @@ export const MonthCalendar = ({
     useEffect(() => {
         const strip = stripRef.current;
         if (!strip) return;
-        // Each week panel is full-width of the strip.
-        strip.scrollTo({ left: strip.clientWidth * targetWeekIdx, behavior: "smooth" });
+        strip.scrollTo({
+            left: strip.clientWidth * targetWeekIdx,
+            behavior: "smooth",
+        });
     }, [targetWeekIdx]);
+
+    const innerRef = useRef<HTMLDivElement>(null);
+
+    // Rubber-band effect at the strip edges: when the user pulls past the
+    // first or last week, translate the inner container by a damped amount
+    // and spring it back on release.
+    useEffect(() => {
+        const strip = stripRef.current;
+        const inner = innerRef.current;
+        if (!strip || !inner) return;
+
+        let startX: number | null = null;
+        let startScroll = 0;
+        let offset = 0;
+
+        const onTouchStart = (e: TouchEvent) => {
+            startX = e.touches[0].clientX;
+            startScroll = strip.scrollLeft;
+        };
+
+        const onTouchMove = (e: TouchEvent) => {
+            if (startX === null) return;
+            const dx = e.touches[0].clientX - startX;
+            const max = strip.scrollWidth - strip.clientWidth;
+            const atLeft = startScroll <= 0 && dx > 0;
+            const atRight = startScroll >= max - 1 && dx < 0;
+            if (atLeft || atRight) {
+                e.preventDefault();
+                // Diminishing returns, capped so it never feels infinite.
+                const damped = Math.sign(dx) * Math.min(80, Math.abs(dx) / 2.5);
+                offset = damped;
+                inner.style.transform = `translateX(${damped}px)`;
+            }
+        };
+
+        const onTouchEnd = () => {
+            startX = null;
+            if (offset !== 0) {
+                const from = offset;
+                offset = 0;
+                animate(from, 0, {
+                    type: "spring",
+                    stiffness: 280,
+                    damping: 22,
+                    onUpdate: (v) => {
+                        inner.style.transform = `translateX(${v}px)`;
+                    },
+                    onComplete: () => {
+                        inner.style.transform = "";
+                    },
+                });
+            }
+        };
+
+        strip.addEventListener("touchstart", onTouchStart, { passive: true });
+        strip.addEventListener("touchmove", onTouchMove, { passive: false });
+        strip.addEventListener("touchend", onTouchEnd, { passive: true });
+        strip.addEventListener("touchcancel", onTouchEnd, { passive: true });
+        return () => {
+            strip.removeEventListener("touchstart", onTouchStart);
+            strip.removeEventListener("touchmove", onTouchMove);
+            strip.removeEventListener("touchend", onTouchEnd);
+            strip.removeEventListener("touchcancel", onTouchEnd);
+        };
+    }, []);
 
     // Track whether the strip can scroll further left/right, to fade the
     // edge gradient hints accordingly.
@@ -164,7 +231,7 @@ export const MonthCalendar = ({
             viewMonth.getMonth() <= today.getMonth());
 
     return (
-        <div className="bg-content1 p-3 select-none rounded-none md:rounded-4xl shadow-sm md:shadow-none">
+        <div className="bg-content1/80 backdrop-blur-sm p-3 select-none rounded-none rounded-b-4xl max-md:border-t-0 border border-default mx-2 md:rounded-4xl shadow-sm md:shadow-none ">
             {/* Header */}
             <div className="flex items-center justify-between px-1 mb-3">
                 {isCurrentOrPastMonth ? (
@@ -200,8 +267,9 @@ export const MonthCalendar = ({
             <div className="md:hidden relative">
                 <div
                     ref={stripRef}
-                    className="flex overflow-x-auto px-3 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    className="flex overflow-x-auto snap-x snap-mandatory overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                 >
+                <div ref={innerRef} className="flex will-change-transform">
                 {mobileWeeks.map((week, weekIdx) => {
                     return (
                         <div
@@ -231,7 +299,7 @@ export const MonthCalendar = ({
                                             disabled ? "opacity-30 cursor-default" : "",
                                             !disabled && !inMonth ? "opacity-50" : "",
                                             isSelected
-                                                ? "bg-default-200"
+                                                ? "bg-primary-200"
                                                 : !disabled
                                                     ? "hover:bg-default-100"
                                                     : "",
@@ -267,22 +335,7 @@ export const MonthCalendar = ({
                     );
                 })}
                 </div>
-
-                {/* Edge fade hints — show only when scroll is possible in that direction */}
-                <div
-                    aria-hidden
-                    className={[
-                        "pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-content1 to-transparent rounded-l-3xl transition-opacity duration-200",
-                        canScrollLeft ? "opacity-100" : "opacity-0",
-                    ].join(" ")}
-                />
-                <div
-                    aria-hidden
-                    className={[
-                        "pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-content1 to-transparent rounded-r-3xl transition-opacity duration-200",
-                        canScrollRight ? "opacity-100" : "opacity-0",
-                    ].join(" ")}
-                />
+                </div>
             </div>
 
             {/* Desktop: full month grid */}
