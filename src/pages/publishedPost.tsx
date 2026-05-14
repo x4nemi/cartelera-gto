@@ -1,103 +1,231 @@
-import { ConfettiFilledIcon } from "@/components/icons"
-import { CosmosAPI, PostData } from "@/config/apiClient"
-import DefaultLayout from "@/layouts/default"
-import { Alert, Button, Card, CardBody, CardFooter, Chip, Divider, ScrollShadow, Spinner, User } from "@heroui/react"
-import { useEffect, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { ImageCarousel } from "@/components/image/imageCarousel"
+import { CalendarIcon, ConfettiFilledIcon, MapPinIcon } from "@/components/icons";
+import { ImageCarousel } from "@/components/image/imageCarousel";
+import { CosmosAPI, PostData } from "@/config/apiClient";
+import DefaultLayout from "@/layouts/default";
+import {
+	Button,
+	Card,
+	CardBody,
+	Chip,
+	Divider,
+	ScrollShadow,
+	Spinner,
+	User,
+} from "@heroui/react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const PublishedPost = () => {
-    const { id } = useParams<{ id: string }>()
-    const [post, setPost] = useState<PostData | null>(null)
-    const [loading, setLoading] = useState(true)
+	const { id } = useParams<{ id: string }>();
+	const [post, setPost] = useState<PostData | null>(null);
+	const [loading, setLoading] = useState(true);
 
-    const navigate = useNavigate()
+	const navigate = useNavigate();
 
-    const dates = post?.dates?.map(date => {
-        const [y, m, d] = date.split("-").map(Number)
-        return new Date(y, m - 1, d)
-    }) ?? []
+	const dates =
+		post?.dates?.map((date) => {
+			const [y, m, d] = date.split("-").map(Number);
+			return new Date(y, m - 1, d);
+		}) ?? [];
 
-    useEffect(() => {
-        if (!id) return
-        CosmosAPI.getEvent(id)
-            .then(setPost)
-            .catch(err => {
-                setPost(null);
-            })
-            .finally(() => setLoading(false))
-    }, [id])
+	useEffect(() => {
+		if (!id) return;
+		CosmosAPI.getEvent(id)
+			.then(setPost)
+			.catch(() => setPost(null))
+			.finally(() => setLoading(false));
+	}, [id]);
 
-    if (loading) {
-        return (
-            <DefaultLayout>
-                <div className="flex justify-center items-center w-full">
-                    <Card className="bg-content1/70 p-5 backdrop-blur-md rounded-3xl" shadow="none">
-                        <Spinner size="lg" color="primary" />
-                    </Card>
-                </div>
-            </DefaultLayout>
-        )
-    }
+	if (loading) {
+		return (
+			<DefaultLayout>
+				<div className="flex justify-center items-center w-full py-20">
+					<Spinner size="lg" color="primary" />
+				</div>
+			</DefaultLayout>
+		);
+	}
 
-    if (!post) {
-        return (
-            <DefaultLayout>
-                <div className="flex justify-center items-center h-64">
-                    <p className="text-foreground-500">Publicación no encontrada</p>
-                </div>
-            </DefaultLayout>
-        )
-    }
+	if (!post) {
+		return (
+			<DefaultLayout>
+				<div className="flex justify-center items-center h-64">
+					<p className="text-foreground-500">Publicación no encontrada</p>
+				</div>
+			</DefaultLayout>
+		);
+	}
 
+	const sortedDates = [...dates].sort((a, b) => a.getTime() - b.getTime());
+	const heroDateLabel =
+		sortedDates.length === 0
+			? null
+			: sortedDates.length === 1
+				? sortedDates[0].toLocaleDateString("es-MX", {
+					weekday: "long",
+					day: "numeric",
+					month: "long",
+				})
+				: `${sortedDates.length} fechas · primera ${sortedDates[0].toLocaleDateString(
+					"es-MX",
+					{ day: "numeric", month: "short" },
+				)}`;
 
+	return (
+		<DefaultLayout>
+			<section className="flex flex-col gap-6 max-w-5xl w-full md:mx-auto px-2 mt-8 mb-8">
+				{/* Celebration banner */}
+				<div className="flex items-center gap-3 rounded-2xl border border-success-200/60 dark:border-success-800/40 bg-success-50/60 dark:bg-success-900/20 p-4">
+					<div className="rounded-xl bg-success-100 dark:bg-success-900/40 p-2 shrink-0">
+						<ConfettiFilledIcon size={22} className="text-success-600" />
+					</div>
+					<div className="flex-1 min-w-0">
+						<p className="text-sm font-semibold text-success-700 dark:text-success-300">
+							¡Publicado con éxito!
+						</p>
+						<p className="text-xs text-foreground-500 mt-0.5">
+							Tu evento ya forma parte de la cartelera. Compártelo con tu comunidad.
+						</p>
+					</div>
+				</div>
 
-    return (
-        <DefaultLayout>
-            <section className="flex flex-col md:flex-row mt-10 md:gap-4 gap-2 md:mx-auto items-center justify-center md:max-w-5xl w-full">
-                <div className="md:w-1/2 md:max-w-lg gap-2 flex flex-col w-full justify-center h-full">
-                    <Card className="rounded-3xl w-full" shadow="none">
-                        <CardBody className="overflow-visible p-0">
-                            <ImageCarousel images={post.images || []} className="md:max-h-[70vh] w-full" />
-                        </CardBody>
-                    </Card>
-                    <Button className="rounded-3xl" fullWidth color="warning" variant="solid" size="lg" onPress={() => navigate(`/${post.ownerUsername}`)}>Regresar al portal</Button>
-                </div>
-                <div className="flex flex-col w-full md:w-1/2 md:max-w-lg">
-                    <Alert title="Publicado con éxito" variant="flat" className="rounded-3xl rounded-b-none" color="primary" hideIcon startContent={<ConfettiFilledIcon size={24} />} />
-                    <Card className="rounded-3xl rounded-t-none md:max-w-lg w-full bg-content1/80 backdrop-blur-lg" shadow="none">
-                        <CardBody className="px-5">
-                            {/* <Chip color="primary" variant="flat" radius="sm">{PostTypes[post.type as keyof typeof PostTypes] || post.type}</Chip> */}
-                            <p className="font-semibold mb-1">Fechas</p>
-                            {dates.length > 0 && (
-                                <div className="flex flex-wrap gap-2">
-                                    {dates.map((date, idx) => (
-                                        <Chip key={idx} variant="flat" color="primary">
-                                            {date.toLocaleDateString("es-MX", {
-                                                weekday: "short",
-                                                day: "numeric",
-                                                month: "short",
-                                                year: "numeric",
-                                            })}
-                                        </Chip>
-                                    ))}
-                                </div>
-                            )}
+				{/* Two-column body */}
+				<div className="grid grid-cols-1 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] gap-6 items-start">
+					{/* LEFT — image */}
+					<Card className="rounded-3xl overflow-hidden" shadow="sm">
+						<CardBody className="p-0">
+							<ImageCarousel
+								images={post.images || []}
+								className="w-full h-auto rounded-3xl bg-content3 object-contain"
+							/>
+						</CardBody>
+					</Card>
 
-                            <p className="font-semibold mt-3 mb-1">Descripción</p>
-                            <ScrollShadow className="max-h-40">
-                                <p className="text-foreground-600 italic whitespace-pre-line">
-                                    {post.caption || "Sin descripción"}
-                                </p>
-                            </ScrollShadow>
-                        </CardBody>
-                        <Divider />
-                        <CardFooter className="justify-center bg-content2" >
-                            <User name={post.owner?.fullName} description={`@${post.ownerUsername}`} avatarProps={{ src: post.owner?.profilePicUrl }} />
-                        </CardFooter>
-                    </Card>
-                </div>
-            </section>
-        </DefaultLayout>
-    )
-}
+					{/* RIGHT — details */}
+					<Card className="rounded-3xl bg-content1/80 backdrop-blur-lg" shadow="sm">
+						<CardBody className="p-5 flex flex-col gap-4">
+							{/* Title + summary */}
+							<div>
+								{post.title && (
+									<h1 className="text-2xl font-bold text-foreground leading-tight">
+										{post.title}
+									</h1>
+								)}
+								{post.summary && (
+									<p className="text-sm text-foreground-600 mt-1 leading-relaxed">
+										{post.summary}
+									</p>
+								)}
+								{!post.title && !post.summary && (
+									<p className="text-sm text-foreground-500 italic">
+										Sin título ni resumen.
+									</p>
+								)}
+							</div>
+
+							{/* Quick facts row */}
+							<div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-foreground-600">
+								{heroDateLabel && (
+									<span className="inline-flex items-center gap-1.5">
+										<CalendarIcon size={16} className="text-foreground-500" />
+										{heroDateLabel}
+									</span>
+								)}
+								{post.location && (
+									<span className="inline-flex items-center gap-1.5">
+										<MapPinIcon size={16} className="text-foreground-500" />
+										<span className="truncate max-w-[18rem]">
+											{post.location}
+										</span>
+									</span>
+								)}
+								{post.price && (
+									<span className="inline-flex items-center gap-1.5">
+										<span aria-hidden>💵</span>
+										{post.price}
+									</span>
+								)}
+							</div>
+
+							{post.tags && post.tags.length > 0 && (
+								<div className="flex flex-wrap gap-1.5">
+									{post.tags.map((tag) => (
+										<Chip key={tag} size="sm" variant="flat">
+											{tag}
+										</Chip>
+									))}
+								</div>
+							)}
+
+							<Divider />
+
+							{/* All dates */}
+							{dates.length > 0 && (
+								<div>
+									<p className="text-xs font-semibold uppercase tracking-wide text-foreground-500 mb-2">
+										Fechas
+									</p>
+									<div className="flex flex-wrap gap-1.5">
+										{sortedDates.map((date, idx) => (
+											<Chip key={idx} variant="flat" color="primary" size="sm">
+												{date.toLocaleDateString("es-MX", {
+													weekday: "short",
+													day: "numeric",
+													month: "short",
+												})}
+											</Chip>
+										))}
+									</div>
+								</div>
+							)}
+
+							{/* Caption */}
+							{post.caption && (
+								<div>
+									<p className="text-xs font-semibold uppercase tracking-wide text-foreground-500 mb-2">
+										Publicación original
+									</p>
+									<ScrollShadow className="max-h-48">
+										<p className="text-sm text-foreground-600 italic whitespace-pre-line">
+											{post.caption}
+										</p>
+									</ScrollShadow>
+								</div>
+							)}
+
+							<Divider />
+
+							{/* Owner footer */}
+							<User
+								name={post.owner?.fullName || post.ownerUsername}
+								description={`@${post.ownerUsername}`}
+								avatarProps={{ src: post.owner?.profilePicUrl }}
+								className="self-start"
+							/>
+						</CardBody>
+					</Card>
+				</div>
+
+				{/* Actions */}
+				<div className="flex flex-col sm:flex-row gap-2 sm:justify-between">
+					<Button
+						variant="bordered"
+						size="lg"
+						className="rounded-2xl"
+						onPress={() => navigate(`/${post.ownerUsername}`)}
+					>
+						Regresar al portal
+					</Button>
+					<Button
+						color="primary"
+						size="lg"
+						className="rounded-2xl"
+						onPress={() => navigate(`/${post.ownerUsername}/publicar`)}
+					>
+						Publicar otro evento
+					</Button>
+				</div>
+			</section>
+		</DefaultLayout>
+	);
+};
