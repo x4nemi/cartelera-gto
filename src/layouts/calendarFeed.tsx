@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MonthCalendar } from "@/components/dates/monthCalendar";
 import { EventCardLarge } from "@/components/card/eventCardLarge";
+import { EventRowCard } from "@/components/card/eventRowCard";
 import { PostData } from "@/config/apiClient";
 
 const MONTH_NAMES = [
@@ -239,7 +240,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
 
                                     <div className="flex flex-col items-center gap-3 transition-opacity duration-200">
                                         {dayPosts.map((p) => (
-                                            <EventCardLarge key={`${key}-${p.shortCode}`} {...p} />
+                                            <EventRowCard key={`${key}-${p.shortCode}`} {...p} />
                                         ))}
                                     </div>
                                 </section>

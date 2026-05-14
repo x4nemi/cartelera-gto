@@ -114,49 +114,47 @@ export const EventPage = () => {
                     </div>
                 )}
 
-                <div className="flex flex-col gap-5 px-5 sm:px-6 py-5">
+                <div className="flex flex-col gap-3 px-5 sm:px-6 py-4">
                     {/* Title + summary */}
                     {(title || summary) && (
-                        <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col gap-1">
                             {title && (
-                                <h1 className="text-3xl font-semibold leading-tight tracking-tight">
+                                <h1 className="text-2xl sm:text-3xl font-semibold leading-tight tracking-tight">
                                     {title}
                                 </h1>
                             )}
                             {summary && (
-                                <p className="text-medium text-default-500 leading-snug">{summary}</p>
+                                <p className="text-small sm:text-medium text-default-500 leading-snug">{summary}</p>
                             )}
                         </div>
                     )}
 
-                    {/* Quick facts */}
+                    {/* Quick facts (compact, no card) */}
                     {(nextDate || location || price) && (
-                        <div className="flex flex-col gap-2 rounded-2xl bg-content2/60 border border-default-200/60 p-3">
+                        <div className="flex flex-col gap-1">
                             {nextDate && (
-                                <div className="flex items-start gap-2">
-                                    <CalendarIcon className="text-primary shrink-0 mt-0.5" size={18} />
-                                    <div className="flex flex-col">
-                                        <span className="text-small font-medium text-foreground capitalize">
-                                            {nextDate.short}
+                                <div className="flex items-center gap-1.5">
+                                    <CalendarIcon size={14} className="text-primary shrink-0" />
+                                    <span className="text-small font-medium text-foreground capitalize">
+                                        {nextDate.short}
+                                    </span>
+                                    {hasMultipleDates && (
+                                        <span className="text-tiny text-default-500">
+                                            · {parsedDates.length} fechas
                                         </span>
-                                        {hasMultipleDates && (
-                                            <span className="text-tiny text-default-500">
-                                                {parsedDates.length} fechas en total
-                                            </span>
-                                        )}
-                                    </div>
+                                    )}
                                 </div>
                             )}
                             {location && (
-                                <div className="flex items-start gap-2">
-                                    <MapPinIcon size={18} className="text-default-500 shrink-0 mt-0.5" />
-                                    <span className="text-small text-foreground">{location}</span>
+                                <div className="flex items-center gap-1.5">
+                                    <MapPinIcon size={14} className="text-default-500 shrink-0" />
+                                    <span className="text-small text-default-600">{location}</span>
                                 </div>
                             )}
                             {price && (
-                                <div className="flex items-start gap-2">
-                                    <MoneyIcon size={18} className="text-default-500 shrink-0 mt-0.5" />
-                                    <span className="text-small text-foreground">{price}</span>
+                                <div className="flex items-center gap-1.5">
+                                    <MoneyIcon size={14} className="text-default-500 shrink-0" />
+                                    <span className="text-small text-default-600">{price}</span>
                                 </div>
                             )}
                         </div>
@@ -164,9 +162,9 @@ export const EventPage = () => {
 
                     {/* Tags */}
                     {tags && tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-1">
                             {tags.map((t) => (
-                                <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-xl">
+                                <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
                                     #{t}
                                 </Chip>
                             ))}
@@ -177,11 +175,11 @@ export const EventPage = () => {
                     {hasMultipleDates && (
                         <>
                             <Divider />
-                            <div className="flex flex-col gap-2">
-                                <span className="text-small font-medium text-default-700">
+                            <div className="flex flex-col gap-1">
+                                <span className="text-tiny font-medium text-default-500 uppercase tracking-wide">
                                     Todas las fechas
                                 </span>
-                                <ScrollShadow hideScrollBar className="w-full max-h-[180px] flex flex-col gap-1">
+                                <ScrollShadow hideScrollBar className="w-full max-h-[180px] flex flex-col gap-0.5">
                                     {parsedDates.map((d) => {
                                         const isNext = d === nextDate;
                                         return (
@@ -195,7 +193,7 @@ export const EventPage = () => {
                                                             : "text-default-600"
                                                 }`}
                                             >
-                                                <CalendarIcon className="inline mr-1.5" /> {d.label}
+                                                <CalendarIcon size={14} className="inline mr-1" /> {d.label}
                                             </p>
                                         );
                                     })}
