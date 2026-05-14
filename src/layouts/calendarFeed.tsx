@@ -203,7 +203,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                         No hay eventos a partir de esta fecha.
                     </p>
                 ) : (
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-6 max-w-3xl">
                         {visibleDays.map((d) => {
                             const key = toKey(d);
                             const dayPosts = postsByDay.get(key) ?? [];
@@ -217,33 +217,27 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                                     data-day-key={key}
                                     className="flex flex-col gap-2 scroll-mt-24"
                                 >
-                                    {/* Mobile: thin divider with a centered day-number pill (sticky) */}
-                                    <div className="md:hidden sticky top-0 z-20 flex items-center gap-2 py-1">
+                                    {/* Divider with centered date pill (sticky on mobile, static on desktop) */}
+                                    <div className="sticky top-0 md:static md:top-auto z-20 flex items-center gap-2 py-1">
                                         <div className="flex-1 h-px bg-foreground/10" />
                                         <span
                                             className={[
-                                                "px-3 py-0.5 rounded-full text-xs font-semibold bg-content1",
+                                                "px-3 py-0.5 rounded-full text-xs font-semibold bg-content1 capitalize",
                                                 isToday
                                                     ? "text-primary"
                                                     : "text-foreground/70",
                                             ].join(" ")}
                                         >
-                                            {d.getDate()}
+                                            <span className="md:hidden">{d.getDate()}</span>
+                                            <span className="hidden md:inline">
+                                                {WEEKDAYS_LONG[d.getDay()]}, {d.getDate()} de{" "}
+                                                {MONTH_NAMES[d.getMonth()].toLowerCase()}
+                                            </span>
                                         </span>
                                         <div className="flex-1 h-px bg-foreground/10" />
                                     </div>
 
-                                    {/* Desktop: full Spanish heading */}
-                                    <h3 className="hidden md:block text-base font-semibold text-foreground/60 capitalize px-1">
-                                        {WEEKDAYS_LONG[d.getDay()]}, {d.getDate()} de{" "}
-                                        {MONTH_NAMES[d.getMonth()].toLowerCase()}
-                                    </h3>
-
-                                    <div
-                                        className={[
-                                            "grid gap-3 grid-cols-1 md:grid-cols-2 transition-opacity duration-200",
-                                        ].join(" ")}
-                                    >
+                                    <div className="flex flex-col items-center gap-3 transition-opacity duration-200">
                                         {dayPosts.map((p) => (
                                             <EventCardLarge key={`${key}-${p.shortCode}`} {...p} />
                                         ))}
