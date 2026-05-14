@@ -160,17 +160,23 @@ export default function IndexPage() {
 
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 mt-5">
+			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 md:mt-5">
+				{/* Calendar/Wall view toggle — temporarily hidden; calendar is the only view.
 				{!loading && posts.length > 0 && (
 					<div className="flex justify-end">
 						<ViewToggle value={viewMode} onChange={setViewMode} />
 					</div>
 				)}
+				*/}
 
 				{loading ? (
 					<div className="flex justify-center items-center py-20">
 						<Spinner size="lg" />
 					</div>
+				) : (
+					<CalendarFeed posts={calendarEvents} />
+				)}
+				{/* Wall view temporarily disabled — re-enable by restoring the ternary above and the toggle.
 				) : viewMode === "calendar" ? (
 					<CalendarFeed posts={calendarEvents} />
 				) : (
@@ -183,7 +189,7 @@ export default function IndexPage() {
 						)}
 						<Wall cardsData={filteredEvents} />
 
-						{/* Infinite scroll sentinel */}
+						{/* Infinite scroll sentinel * /}
 						<div ref={sentinelRef} className="w-full h-1" />
 
 						{loadingMore && (
@@ -193,6 +199,7 @@ export default function IndexPage() {
 						)}
 					</>
 				)}
+				*/}
 
 				{posts.length > 0 && viewMode === "wall" && (
 					<div className="fixed bottom-4 inset-x-0 z-20 flex justify-center">

@@ -163,7 +163,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     if (sortedDays.length === 0) {
         return (
             <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start">
-                <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30">
+                <div className="-mx-3 md:mx-0 w-screen md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30">
                     <MonthCalendar
                         viewMonth={viewMonth}
                         onViewMonthChange={setViewMonth}
@@ -184,7 +184,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     return (
         <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start">
             {/* Calendar: sticky on top of the feed on all breakpoints so it stays visible while scrolling. */}
-            <div className="w-full md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 pt-2">
+            <div className="-mx-3 md:mx-0 w-screen md:w-72 md:flex-shrink-0 sticky top-0 md:top-24 z-30 md:pt-2">
                 <MonthCalendar
                     viewMonth={viewMonth}
                     onViewMonthChange={setViewMonth}
