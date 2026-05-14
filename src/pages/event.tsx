@@ -1,9 +1,9 @@
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Link, ScrollShadow, Spinner, User } from "@heroui/react";
+import { Button, Chip, Link, ScrollShadow, Spinner, User } from "@heroui/react";
 import { ImageCarousel } from "@/components/image/imageCarousel";
-import { CalendarIcon } from "@/components/icons";
+import { CalendarIcon, MapPinIcon } from "@/components/icons";
 import { EventTypeChip } from "@/components/card/eventTypeChip";
 import DefaultLayout from "@/layouts/default";
 
@@ -44,7 +44,7 @@ export const EventPage = () => {
         );
     }
 
-    const { dates, images, ownerUsername, caption, owner } = event;
+    const { dates, images, ownerUsername, caption, owner, title, summary, location, price, tags } = event;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -102,6 +102,41 @@ export const EventPage = () => {
                 <div className="flex w-full justify-center px-3">
                     <ImageCarousel images={[...(images ?? [])].flat()} />
                 </div>
+
+                {/* Title + summary */}
+                {(title || summary) && (
+                    <div className="flex flex-col gap-1 px-5">
+                        {title && <h1 className="text-2xl font-semibold leading-tight">{title}</h1>}
+                        {summary && <p className="text-medium text-default-500">{summary}</p>}
+                    </div>
+                )}
+
+                {/* Location + price */}
+                {(location || price) && (
+                    <div className="flex flex-wrap gap-2 px-5">
+                        {location && (
+                            <Chip variant="flat" size="sm" startContent={<MapPinIcon size={14} />} className="rounded-xl">
+                                {location}
+                            </Chip>
+                        )}
+                        {price && (
+                            <Chip variant="flat" size="sm" className="rounded-xl">
+                                💵 {price}
+                            </Chip>
+                        )}
+                    </div>
+                )}
+
+                {/* Tags */}
+                {tags && tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 px-5">
+                        {tags.map((t) => (
+                            <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-xl">
+                                #{t}
+                            </Chip>
+                        ))}
+                    </div>
+                )}
 
                 {/* Dates */}
                 <div className="flex flex-col gap-3 px-5">

@@ -5,6 +5,7 @@ import {
     DrawerBody,
     DrawerFooter,
     Button,
+    Chip,
     Tooltip,
     User,
     Link,
@@ -12,12 +13,12 @@ import {
 } from "@heroui/react";
 import { ImageCarousel } from "../image/imageCarousel";
 import { PostData } from "@/config/apiClient";
-import { CalendarIcon } from "../icons";
+import { CalendarIcon, MapPinIcon } from "../icons";
 import { useEffect, useState } from "react";
 import { EventTypeChip } from "./eventTypeChip";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
-    const { dates, images, ownerUsername, caption, owner } = cardProps;
+    const { dates, images, ownerUsername, caption, owner, title, summary, location, price, tags } = cardProps;
     const [eventDates, setEventDates] = useState<string[]>([])
 
     const today = new Date();
@@ -114,6 +115,39 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                             </div>
                             <div className="flex flex-col gap-2">
                                 <div className=" flex flex-col gap-3">
+                                    {(title || summary) && (
+                                        <div className="flex flex-col gap-1">
+                                            {title && (
+                                                <h2 className="text-xl font-semibold leading-tight">{title}</h2>
+                                            )}
+                                            {summary && (
+                                                <p className="text-small text-default-500">{summary}</p>
+                                            )}
+                                        </div>
+                                    )}
+                                    {(location || price) && (
+                                        <div className="flex flex-wrap gap-2">
+                                            {location && (
+                                                <Chip variant="flat" size="sm" startContent={<MapPinIcon size={14} />} className="rounded-xl">
+                                                    {location}
+                                                </Chip>
+                                            )}
+                                            {price && (
+                                                <Chip variant="flat" size="sm" className="rounded-xl">
+                                                    💵 {price}
+                                                </Chip>
+                                            )}
+                                        </div>
+                                    )}
+                                    {tags && tags.length > 0 && (
+                                        <div className="flex flex-wrap gap-1">
+                                            {tags.map((t) => (
+                                                <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-xl">
+                                                    #{t}
+                                                </Chip>
+                                            ))}
+                                        </div>
+                                    )}
                                     {eventDates.length > 0 && (
                                         <ScrollShadow hideScrollBar className="w-full max-h-[100px]">
                                             {

@@ -61,24 +61,34 @@ export const EventCard = (props: PostData) => {
 			<Card className="rounded-3xl transition-all duration-200" isPressable onClick={handlePress} shadow="none">
 				{!isPast ? (
 					<>
-						{ props.type !== "calendar" && 
-						<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl w-9 border-default-300 bg-content2/70 backdrop-blur-sm" style={{ width: 45 }}>
-							<div className="w-full text-[9px] font-bold tracking-wider text-center pt-1 ">{month}</div>
-							<div className="flex flex-col items-center w-full pb-1 pt-0.5 border-t border-default-300">
-								<span className=" font-semibold leading-tight font-mono text-md">{day}</span>
-								<span className="text-[9px]">{weekday}</span>
+						{props.type !== "calendar" && (
+							/* Date badge — pinned to bottom-right so it doesn't cover poster titles. */
+							<div
+								className="absolute bottom-2 right-2 z-10 flex flex-col items-center overflow-hidden rounded-xl border border-default-300/60 bg-content2/80 backdrop-blur-md shadow-sm"
+								style={{ width: 40 }}
+							>
+								<div className="w-full text-[8px] font-bold tracking-wider text-center pt-0.5">
+									{month}
+								</div>
+								<div className="flex flex-col items-center w-full pb-0.5 pt-0 border-t border-default-300/60">
+									<span className="font-semibold leading-tight font-mono text-sm">
+										{day}
+									</span>
+									<span className="text-[8px] leading-tight pb-0.5">{weekday}</span>
+								</div>
 							</div>
-						</CardHeader>
-						}
+						)}
 						<CardHeader className="absolute top-2 left-2 z-10 p-0">
 							<EventTypeChip type={props.type} />
 						</CardHeader>
 					</>
-				) :
-					<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl">
-						<Chip color="default" size="md" className="self-end rounded-2xl">Evento pasado</Chip>
+				) : (
+					<CardHeader className="absolute bottom-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl">
+						<Chip color="default" size="sm" className="self-end rounded-xl">
+							Evento pasado
+						</Chip>
 					</CardHeader>
-				}
+				)}
 				{isPast && (
 					<CardHeader className="absolute inset-0 z-9 p-0 flex items-center justify-center rounded-3xl bg-default-900/70 dark:bg-default-50/70">
 					</CardHeader>

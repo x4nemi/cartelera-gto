@@ -1,10 +1,10 @@
 import { PostData, updatePost } from "@/config/apiClient";
-import { EventDates } from "@/components/dates/tabs";
 import { ImageGallery } from "@/components/image/imageGallery";
 import {
 	addToast,
 	Button,
-	DateValue,
+	Chip,
+	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
@@ -12,8 +12,7 @@ import {
 	ModalHeader,
 	Textarea,
 } from "@heroui/react";
-import { parseDate } from "@internationalized/date";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface EditEventModalProps {
 	isOpen: boolean;
@@ -24,82 +23,37 @@ interface EditEventModalProps {
 
 export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: EditEventModalProps) => {
 	const [caption, setCaption] = useState(postData.caption || "");
+	const [title, setTitle] = useState(postData.title || "");
+	const [summary, setSummary] = useState(postData.summary || "");
+	const [location, setLocation] = useState(postData.location || "");
+	const [price, setPrice] = useState(postData.price || "");
+	const [tags, setTags] = useState<string[]>(postData.tags || []);
+	const [tagInput, setTagInput] = useState("");
 	const [isSaving, setIsSaving] = useState(false);
 
-	// Date selection state
-	const [selectedDates, setSelectedDates] = useState<DateValue[]>(() => {
-		if (postData.dates && postData.dates.length > 0) {
-			return postData.dates.map((d) => parseDate(d));
-		}
-		return [];
-	});
-	const [workshopDays, setWorkshopDays] = useState<string[]>([]);
-	const [every, setEvery] = useState<number>(1);
-	const [until, setUntil] = useState<DateValue | null>(null);
-	const [dateRange, setDateRange] = useState<{ start: DateValue | null; end: DateValue | null }>({
-		start: null,
-		end: null,
-	});
-	const [type, setType] = useState<"event" | "workshop" | "calendar">(postData.type || "event");
-
-	const computeFlatDates = (): string[] => {
-		if (type === "event") {
-			return selectedDates
-				.map((d) => {
-					const { year, month, day } = d;
-					return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-				})
-				.sort();
-		}
-
-		if (type === "workshop" && workshopDays.length > 0 && until) {
-			const jsMap: Record<string, number> = { "0": 1, "1": 2, "2": 3, "3": 4, "4": 5, "5": 6, "6": 0 };
-			const targetDays = workshopDays.map((d) => jsMap[d]);
-			const endDate = new Date(until.year, until.month - 1, until.day);
-			const dates: string[] = [];
-			const cursor = new Date();
-			cursor.setHours(0, 0, 0, 0);
-
-			while (cursor <= endDate) {
-				if (targetDays.includes(cursor.getDay())) {
-					dates.push(cursor.toISOString().split("T")[0]);
-				}
-				cursor.setDate(cursor.getDate() + 1);
-			}
-
-			if (every > 1) {
-				return dates.filter((_dateStr, idx) => {
-					// group by week, keep every Nth week
-					return Math.floor(idx / workshopDays.length) % every === 0;
-				});
-			}
-			return dates;
-		}
-
-		if (type === "calendar" && dateRange.start && dateRange.end) {
-			const start = new Date(dateRange.start.year, dateRange.start.month - 1, dateRange.start.day);
-			const end = new Date(dateRange.end.year, dateRange.end.month - 1, dateRange.end.day);
-			const dates: string[] = [];
-			const cursor = new Date(start);
-			while (cursor <= end) {
-				dates.push(cursor.toISOString().split("T")[0]);
-				cursor.setDate(cursor.getDate() + 1);
-			}
-			return dates;
-		}
-
-		return [];
-	};
+	// Re-seed inputs every time the modal opens so we always show the latest postData values.
+	useEffect(() => {
+		if (!isOpen) return;
+		setCaption(postData.caption || "");
+		setTitle(postData.title || "");
+		setSummary(postData.summary || "");
+		setLocation(postData.location || "");
+		setPrice(postData.price || "");
+		setTags(postData.tags || []);
+		setTagInput("");
+	}, [isOpen, postData]);
 
 	const handleSave = async () => {
 		setIsSaving(true);
 		try {
-			const dates = computeFlatDates();
 			const updatedPostData: PostData = {
 				...postData,
 				caption,
-				type,
-				dates: dates.length > 0 ? dates : postData.dates,
+				title: title.trim() || undefined,
+				summary: summary.trim() || undefined,
+				location: location.trim() || undefined,
+				price: price.trim() || undefined,
+				tags: tags.length > 0 ? tags : undefined,
 			};
 
 			const result = await updatePost(updatedPostData);
@@ -146,6 +100,87 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 
 								{/* Right: Caption + Dates */}
 								<div className="flex flex-col gap-3 flex-1 min-w-0">
+									<Input
+										label="Título"
+										labelPlacement="outside"
+										placeholder="Nombre del evento"
+										value={title}
+										onValueChange={setTitle}
+										variant="bordered"
+									/>
+									<Textarea
+										label="Resumen"
+										labelPlacement="outside"
+										placeholder="Resumen breve del evento"
+										value={summary}
+										onValueChange={setSummary}
+										variant="bordered"
+										minRows={2}
+									/>
+									<div className="grid grid-cols-2 gap-3">
+										<Input
+											label="Lugar"
+											labelPlacement="outside"
+											placeholder="Ej. Teatro Juárez"
+											value={location}
+											onValueChange={setLocation}
+											variant="bordered"
+										/>
+										<Input
+											label="Costo"
+											labelPlacement="outside"
+											placeholder="Ej. $150 o Gratis"
+											value={price}
+											onValueChange={setPrice}
+											variant="bordered"
+										/>
+									</div>
+									<div className="flex flex-col gap-2">
+										<label className="text-small">Etiquetas</label>
+										<div className="flex flex-wrap gap-1">
+											{tags.map((t) => (
+												<Chip
+													key={t}
+													variant="flat"
+													color="primary"
+													size="sm"
+													className="rounded-xl"
+													onClose={() => setTags(tags.filter((x) => x !== t))}
+												>
+													#{t}
+												</Chip>
+											))}
+										</div>
+										<div className="flex gap-2">
+											<Input
+												placeholder="Agregar etiqueta"
+												value={tagInput}
+												onValueChange={setTagInput}
+												variant="bordered"
+												size="sm"
+												onKeyDown={(e) => {
+													if (e.key === "Enter") {
+														e.preventDefault();
+														const v = tagInput.trim().toLowerCase();
+														if (v && !tags.includes(v) && tags.length < 5) setTags([...tags, v]);
+														setTagInput("");
+													}
+												}}
+											/>
+											<Button
+												size="sm"
+												variant="flat"
+												className="rounded-xl"
+												onPress={() => {
+													const v = tagInput.trim().toLowerCase();
+													if (v && !tags.includes(v) && tags.length < 5) setTags([...tags, v]);
+													setTagInput("");
+												}}
+											>
+												Agregar
+											</Button>
+										</div>
+									</div>
 									<Textarea
 										label="Descripción"
 										labelPlacement="outside"
@@ -154,20 +189,6 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 										onValueChange={setCaption}
 										variant="bordered"
 										className="w-full"
-									/>
-
-									<EventDates
-										selectedDays={selectedDates}
-										setSelectedDays={setSelectedDates}
-										workshopDays={workshopDays}
-										setWorkshopDays={setWorkshopDays}
-										until={until}
-										setUntil={setUntil}
-										dateRange={{ start: dateRange.start ?? undefined, end: dateRange.end ?? undefined }}
-										setDateRange={setDateRange}
-										every={every}
-										setEvery={setEvery}
-										setType={setType}
 									/>
 								</div>
 							</div>
