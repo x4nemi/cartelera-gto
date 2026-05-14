@@ -92,7 +92,7 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 							<Image
 								removeWrapper
 								alt="Card background"
-								className={"z-0 w-full h-full object-cover rounded-3xl"}
+								className={"z-0 w-full h-auto object-contain rounded-3xl"}
 								src={props.images?.[0]}
 							/>
 						</CardBody>
