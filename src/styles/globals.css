@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&display=swap');
 @import "tailwindcss";
 
 @config "../../tailwind.config.js";
 
 @theme {
     --font-sans: 'Plus Jakarta Sans', sans-serif;
-    --font-display: 'Fraunces', Georgia, serif;
+    --font-display: 'Bricolage Grotesque', 'Plus Jakarta Sans', sans-serif;
 }
 
 @layer base {
@@ -26,6 +26,7 @@
     .text-body    { @apply text-base leading-relaxed; }
     .text-caption { @apply text-sm text-foreground/60; }
     .text-meta    { @apply text-xs text-foreground/50; }
+    .text-dayName { @apply text-sm font-medium text-foreground/80 uppercase; }
 }
 
 html {
