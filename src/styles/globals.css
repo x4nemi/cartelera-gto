@@ -1,10 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,800&display=swap');
 @import "tailwindcss";
 
 @config "../../tailwind.config.js";
 
 @theme {
-    --font-sans: 'Nunito Sans', sans-serif;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
+    --font-display: 'Fraunces', Georgia, serif;
+}
+
+@layer base {
+    h1, h2, h3 {
+        font-family: var(--font-display);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+}
+
+@layer components {
+    .text-hero    { @apply text-4xl sm:text-5xl lg:text-6xl font-display font-bold tracking-tight; }
+    .text-h1      { @apply text-3xl sm:text-4xl font-display font-bold tracking-tight; }
+    .text-h2      { @apply text-2xl sm:text-3xl font-display font-semibold; }
+    .text-h3      { @apply text-xl sm:text-2xl font-display font-semibold; }
+    .text-lead    { @apply text-lg leading-relaxed; }
+    .text-body    { @apply text-base leading-relaxed; }
+    .text-caption { @apply text-sm text-foreground/60; }
+    .text-meta    { @apply text-xs text-foreground/50; }
 }
 
 html {
