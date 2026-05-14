@@ -1,9 +1,9 @@
 import { CosmosAPI, PostData } from "@/config/apiClient";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Chip, Link, ScrollShadow, Spinner, User } from "@heroui/react";
+import { Button, Chip, Divider, Link, ScrollShadow, Spinner, User } from "@heroui/react";
 import { ImageCarousel } from "@/components/image/imageCarousel";
-import { CalendarIcon, MapPinIcon } from "@/components/icons";
+import { CalendarIcon, MapPinIcon, MoneyIcon } from "@/components/icons";
 import DefaultLayout from "@/layouts/default";
 
 export const EventPage = () => {
@@ -19,6 +19,29 @@ export const EventPage = () => {
             .catch(() => setEvent(null))
             .finally(() => setLoading(false));
     }, [shortCode]);
+
+    const today = useMemo(() => {
+        const d = new Date();
+        d.setHours(0, 0, 0, 0);
+        return d;
+    }, []);
+
+    const parsedDates = useMemo(() => {
+        if (!event?.dates) return [];
+        return event.dates
+            .map((raw) => {
+                const [y, m, d] = raw.split("-").map(Number);
+                const dateObj = new Date(y, m - 1, d);
+                return {
+                    raw,
+                    dateObj,
+                    label: dateObj.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long", year: "numeric" }),
+                    short: dateObj.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" }),
+                    isPast: dateObj < today,
+                };
+            })
+            .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+    }, [event?.dates, today]);
 
     if (loading) {
         return (
@@ -43,30 +66,16 @@ export const EventPage = () => {
         );
     }
 
-    const { dates, images, ownerUsername, caption, owner, title, summary, location, price, tags } = event;
+    const { images, ownerUsername, owner, title, summary, location, price, tags, url } = event;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const eventDates = (dates ?? [])
-        .map((date, i) => {
-            const [y, m, d] = date.split("-").map(Number);
-            const dateObj = new Date(y, m - 1, d);
-            return {
-                index: i,
-                raw: date,
-                dateObj,
-                label: dateObj.toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "short", year: "numeric" }),
-                isPast: today > dateObj,
-            };
-        })
-        .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
+    const nextDate = parsedDates.find((d) => !d.isPast) ?? parsedDates[parsedDates.length - 1];
+    const hasMultipleDates = parsedDates.length > 1;
 
     return (
         <DefaultLayout>
-            <div className="flex flex-col gap-2 w-full max-w-2xl bg-content1 mt-5 rounded-3xl mx-auto">
+            <div className="flex flex-col w-full max-w-2xl bg-content1 mt-5 rounded-3xl mx-auto overflow-hidden border border-default-200/60">
                 {/* Header */}
-                <div className="flex items-center justify-between pt-3 px-3">
+                <div className="flex items-center justify-between pt-3 px-3 pb-1">
                     <Button
                         isIconOnly
                         variant="light"
@@ -77,95 +86,127 @@ export const EventPage = () => {
                             <path d="m15 18-6-6 6-6" />
                         </svg>
                     </Button>
-                    <div className="flex gap-2">
+                    {url && (
                         <Button
-                            className="font-medium text-small text-default-500"
+                            className="font-medium text-small text-default-600"
                             endContent={
-                                <svg fill="none" height="16" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="16">
+                                <svg fill="none" height="14" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" width="14">
                                     <path d="M7 17 17 7M7 7h10v10" />
                                 </svg>
                             }
                             size="sm"
                             variant="flat"
                             as={Link}
-                            href={event.url}
+                            href={url}
                             target="_blank"
                         >
                             Página del evento
                         </Button>
-                    </div>
+                    )}
                 </div>
 
-                {/* Images */}
-                <div className="flex w-full justify-center px-3">
-                    <ImageCarousel images={[...(images ?? [])].flat()} />
-                </div>
-
-                {/* Title + summary */}
-                {(title || summary) && (
-                    <div className="flex flex-col gap-1 px-5">
-                        {title && <h1 className="text-2xl font-semibold leading-tight">{title}</h1>}
-                        {summary && <p className="text-medium text-default-500">{summary}</p>}
+                {/* Image */}
+                {images && images.length > 0 && (
+                    <div className="flex w-full justify-center px-3 pt-2">
+                        <div className="w-full rounded-2xl overflow-hidden bg-content2">
+                            <ImageCarousel images={[...(images ?? [])].flat()} />
+                        </div>
                     </div>
                 )}
 
-                {/* Location + price */}
-                {(location || price) && (
-                    <div className="flex flex-wrap gap-2 px-5">
-                        {location && (
-                            <Chip variant="flat" size="sm" startContent={<MapPinIcon size={14} />} className="rounded-xl">
-                                {location}
-                            </Chip>
-                        )}
-                        {price && (
-                            <Chip variant="flat" size="sm" className="rounded-xl">
-                                💵 {price}
-                            </Chip>
-                        )}
-                    </div>
-                )}
+                <div className="flex flex-col gap-5 px-5 sm:px-6 py-5">
+                    {/* Title + summary */}
+                    {(title || summary) && (
+                        <div className="flex flex-col gap-1.5">
+                            {title && (
+                                <h1 className="text-3xl font-semibold leading-tight tracking-tight">
+                                    {title}
+                                </h1>
+                            )}
+                            {summary && (
+                                <p className="text-medium text-default-500 leading-snug">{summary}</p>
+                            )}
+                        </div>
+                    )}
 
-                {/* Tags */}
-                {tags && tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 px-5">
-                        {tags.map((t) => (
-                            <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-xl">
-                                #{t}
-                            </Chip>
-                        ))}
-                    </div>
-                )}
+                    {/* Quick facts */}
+                    {(nextDate || location || price) && (
+                        <div className="flex flex-col gap-2 rounded-2xl bg-content2/60 border border-default-200/60 p-3">
+                            {nextDate && (
+                                <div className="flex items-start gap-2">
+                                    <CalendarIcon className="text-primary shrink-0 mt-0.5" size={18} />
+                                    <div className="flex flex-col">
+                                        <span className="text-small font-medium text-foreground capitalize">
+                                            {nextDate.short}
+                                        </span>
+                                        {hasMultipleDates && (
+                                            <span className="text-tiny text-default-500">
+                                                {parsedDates.length} fechas en total
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+                            {location && (
+                                <div className="flex items-start gap-2">
+                                    <MapPinIcon size={18} className="text-default-500 shrink-0 mt-0.5" />
+                                    <span className="text-small text-foreground">{location}</span>
+                                </div>
+                            )}
+                            {price && (
+                                <div className="flex items-start gap-2">
+                                    <MoneyIcon size={18} className="text-default-500 shrink-0 mt-0.5" />
+                                    <span className="text-small text-foreground">{price}</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
-                {/* Dates */}
-                <div className="flex flex-col gap-3 px-5">
-                    <span className="text-medium font-medium">Fechas</span>
-                </div>
-                {eventDates.length > 0 && (
-                    <ScrollShadow hideScrollBar className="w-full max-h-[100px] px-5">
-                        {eventDates.map((d, i) => {
-                            const prevIsPast = i > 0 && eventDates[i - 1].isPast;
-                            const isNext = !d.isPast && (i === 0 || prevIsPast);
-                            return d.isPast ? (
-                                <p key={i} className="text-small text-default-400 font-medium line-through">
-                                    <CalendarIcon className="inline mr-1" /> {d.label}
-                                </p>
-                            ) : (
-                                <p key={i} className={`text-small text-default-600 ${isNext ? "text-primary" : ""}`}>
-                                    <CalendarIcon className="inline mr-1" /> {d.label}
-                                </p>
-                            );
-                        })}
-                    </ScrollShadow>
-                )}
+                    {/* Tags */}
+                    {tags && tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {tags.map((t) => (
+                                <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-xl">
+                                    #{t}
+                                </Chip>
+                            ))}
+                        </div>
+                    )}
 
-                {/* Caption */}
-                <div className="flex flex-col gap-3 px-5">
-                    <span className="text-medium font-medium">Acerca de este evento</span>
-                    <p className="text-medium text-default-500 whitespace-pre-line">{caption}</p>
+                    {/* All dates list */}
+                    {hasMultipleDates && (
+                        <>
+                            <Divider />
+                            <div className="flex flex-col gap-2">
+                                <span className="text-small font-medium text-default-700">
+                                    Todas las fechas
+                                </span>
+                                <ScrollShadow hideScrollBar className="w-full max-h-[180px] flex flex-col gap-1">
+                                    {parsedDates.map((d) => {
+                                        const isNext = d === nextDate;
+                                        return (
+                                            <p
+                                                key={d.raw}
+                                                className={`text-small capitalize ${
+                                                    d.isPast
+                                                        ? "text-default-400 line-through"
+                                                        : isNext
+                                                            ? "text-primary font-medium"
+                                                            : "text-default-600"
+                                                }`}
+                                            >
+                                                <CalendarIcon className="inline mr-1.5" /> {d.label}
+                                            </p>
+                                        );
+                                    })}
+                                </ScrollShadow>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Owner */}
-                <div className="border-t border-default-200/50 py-4 justify-center items-center flex bg-content2 rounded-b-3xl">
+                <div className="border-t border-default-200/50 py-4 justify-center items-center flex bg-content2/60">
                     <Link
                         href={`https://instagram.com/${ownerUsername}`}
                         target="_blank"
