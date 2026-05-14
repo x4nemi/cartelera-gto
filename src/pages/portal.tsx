@@ -115,12 +115,12 @@ export const Portal = () => {
                         {pendingEvents.map((event) => (
                             <Card key={event.shortCode} className="rounded-3xl" shadow="none">
                                 <CardBody className="p-0 overflow-hidden">
-                                    {event.displayUrl && (
+                                    {event.images?.[0] && (
                                         <Image
                                             removeWrapper
                                             alt="Evento detectado"
                                             className="w-full h-40 object-cover rounded-t-3xl rounded-b-none"
-                                            src={event.displayUrl}
+                                            src={event.images[0]}
                                         />
                                     )}
                                     <div className="p-3 flex flex-col gap-2">

@@ -89,7 +89,7 @@ export const EventCard = (props: PostData) => {
 						removeWrapper
 						alt="Card background"
 						className={"z-0 w-full h-full object-cover rounded-3xl"}
-						src={props.displayUrl}
+						src={props.images?.[0]}
 					/>
 				</CardBody>
 			</Card>

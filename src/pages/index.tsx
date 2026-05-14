@@ -117,8 +117,8 @@ export default function IndexPage() {
 	const allUsernamesAndPics = useMemo(() => {
 		const map = new Map<string, { username: string; profilePicUrl: string }>();
 		posts.forEach(e => {
-			if (e.ownerUsername && e.ownerProfilePicUrl && !map.has(e.ownerUsername)) {
-				map.set(e.ownerUsername, { username: e.ownerUsername, profilePicUrl: e.ownerProfilePicUrl });
+			if (e.ownerUsername && e.owner?.profilePicUrl && !map.has(e.ownerUsername)) {
+				map.set(e.ownerUsername, { username: e.ownerUsername, profilePicUrl: e.owner.profilePicUrl });
 			}
 		});
 		return Array.from(map.values());

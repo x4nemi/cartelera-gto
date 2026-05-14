@@ -136,58 +136,19 @@ export const AzureStorageAPI = {
     }
 };
 
-// Types
-export interface UserData {
-    _id?: string;
-    username: string;
-    fullName?: string;
-    url?: string;
-    biography?: string;
-    externalUrls?: string[];
-    profilePicUrl?: string;
-    profilePicUrlHD?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    isDraft?: boolean;
-    isApproved?: boolean;
-    private?: boolean;
-    autoDetectEnabled?: boolean;
-    lastScrapedPostId?: string;
-}
+// Re-export domain types from src/types so backend + frontend share one source.
+export type {
+    PostData,
+    UserData,
+    OwnerRef,
+    PostStatus,
+    PostType,
+    PostSource,
+    UserStatus,
+    PaginatedResponse,
+} from "@/types";
 
-export interface PostData {
-    _id?: string;
-    shortCode: string;
-    caption?: string;
-    url?: string;
-    displayUrl?: string;
-    images?: string[];
-    ownerUsername: string;
-    ownerFullName?: string;
-    ownerProfilePicUrl?: string;
-    timestamp?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    dates?: string[] | null;
-    type: "event" | "workshop" | "calendar" | "draft";
-    isDraft?: boolean;
-    taggedUsers?: string[];
-    source?: "manual" | "auto-detected";
-    status?: "pending" | "published" | "dismissed";
-    instagramPostId?: string;
-}
-
-export interface PaginatedResponse<T> {
-    data: T[];
-    pagination: {
-        page: number;
-        limit: number;
-        totalCount: number;
-        totalPages: number;
-        hasNextPage: boolean;
-        hasPrevPage: boolean;
-    };
-}
+import type { PostData, UserData, PostStatus, PaginatedResponse } from "@/types";
 
 // Cosmos DB API for user and event management
 export const CosmosAPI = {
@@ -337,7 +298,8 @@ export const CosmosAPI = {
     },
 
     /**
-     * Update an event (publish, dismiss, or update dates)
+     * Update an event (publish, dismiss, or update dates).
+     * Note: state lives in the `status` field; "publish" sets status:"published", "dismiss" sets status:"dismissed".
      */
     async updateEvent(shortCode: string, action: "publish" | "dismiss" | "updateDates", data?: { dates?: string[]; type?: string }): Promise<{ success: boolean }> {
         const response = await fetch(`/api/updateEvent`, {
@@ -375,7 +337,7 @@ export const CosmosAPI = {
      */
     async getPendingEvents(ownerUsername: string): Promise<PostData[]> {
         const params = new URLSearchParams({ ownerUsername, status: "pending" });
-        const response = await fetch(`/api/getEvents?${params.toString()}&includeDrafts=true`);
+        const response = await fetch(`/api/getEvents?${params.toString()}`);
 
         if (!response.ok) {
             const error = await response.json();
@@ -422,15 +384,19 @@ export const createUser = async (username: string): Promise<UserData | null> => 
     }
     
     // Map Apify response to our UserData structure (no posts)
+    const nowIso = new Date().toISOString();
     const userToInsert: UserData = {
         username: userData.username,
         fullName: userData.fullName,
         url: userData.url,
         biography: userData.biography,
         externalUrls: userData.externalUrls || [],
-        profilePicUrl: userData.profilePicUrlHD,
-        isDraft: true,
-        private: userData.isPrivate,
+        profilePicUrl: userData.profilePicUrlHD || userData.profilePicUrl,
+        private: !!userData.isPrivate,
+        autoDetectEnabled: false,
+        status: "draft",
+        createdAt: nowIso,
+        updatedAt: nowIso,
     };
 
     const result = await CosmosAPI.insertUser(userToInsert);
@@ -447,8 +413,11 @@ export const createUser = async (username: string): Promise<UserData | null> => 
     return userToInsert;
 };
 
-export const updateUser = async (userData: UserData): Promise<UserData> => {
-    userData.isDraft = false; // Mark as not draft when updating
+export const updateUser = async (userData: UserData, status: PostStatus | "approved" | "rejected" | "pending" = "pending"): Promise<UserData> => {
+    // When the user finishes the signup form we move them from "draft" → "pending" review.
+    // Admin actions later promote to "approved" or "rejected".
+    userData.status = status as UserData["status"];
+    userData.updatedAt = new Date().toISOString();
     const result = await CosmosAPI.insertUser(userData);
 
     if (!result.success) {
@@ -514,24 +483,26 @@ export const createPost = async (IgLink: string): Promise<PostData> => {
     }
 
     // Map Apify response to our PostData structure
+    const nowIso = new Date().toISOString();
     const postToInsert: PostData = {
         shortCode: postData.shortCode,
         caption: postData.caption,
         url: postData.url,
-        displayUrl: imageUrls[0] || postData.displayUrl, // Use uploaded URL if available
-        images: imageUrls, // Use uploaded Azure URLs
+        images: imageUrls,
         ownerUsername: postData.ownerUsername,
         timestamp: postData.timestamp,
-        type: "draft",
-        isDraft: true,
-        source: "manual",
+        dates: null,
+        type: "event",
+        status: "draft",
+        source: "instagram",
         taggedUsers: [
-            ...new Set([
+            ...new Set<string>([
                 ...(postData.taggedUsers ?? []).map((u: { username: string }) => u.username),
                 ...(postData.coauthorProducers ?? []).map((u: { username: string }) => u.username),
             ])
-        ]
-
+        ],
+        createdAt: nowIso,
+        updatedAt: nowIso,
     };
 
     const insertResult = await CosmosAPI.insertEvent(postToInsert);

@@ -44,7 +44,7 @@ export const EventPage = () => {
         );
     }
 
-    const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = event;
+    const { dates, images, ownerUsername, caption, owner } = event;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -139,9 +139,9 @@ export const EventPage = () => {
                         className="text-foreground"
                     >
                         <User
-                            name={ownerFullName}
+                            name={owner?.fullName}
                             description={"@" + ownerUsername}
-                            avatarProps={{ src: ownerProfilePicUrl }}
+                            avatarProps={{ src: owner?.profilePicUrl }}
                         />
                     </Link>
                 </div>

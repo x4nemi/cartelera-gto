@@ -74,7 +74,7 @@ export const UserPage = () => {
             const run = await createUser(data.username as string);
 
             if (run) {
-                if(run.isDraft === false) {
+                if(run.status === "pending") {
                     addToast({
                         title: "Usuario en revisión",
                         description: `El usuario @${run.username} ya ha sido creado y se encuentra en revisión. Te notificaremos por mensaje directo en Instagram cuando esté aprobado.`,
@@ -86,7 +86,7 @@ export const UserPage = () => {
                     setValidating(false);
                     return;
                 }
-                if(run.isApproved === true) {
+                if(run.status === "approved") {
                     addToast({
                         title: "Usuario ya creado",
                         description: `El usuario @${run.username} ya ha sido creado y aprobado. Si este es tu usuario, por favor contáctanos para resolver cualquier inconveniente.`,

@@ -40,7 +40,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 		start: null,
 		end: null,
 	});
-	const [type, setType] = useState<"event" | "workshop" | "calendar" | "draft">(postData.type || "event");
+	const [type, setType] = useState<"event" | "workshop" | "calendar">(postData.type || "event");
 
 	const computeFlatDates = (): string[] => {
 		if (type === "event") {
@@ -126,7 +126,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 	};
 
 	const images = postData.images?.map((url) => ({ src: url })) ||
-		(postData.displayUrl ? [{ src: postData.displayUrl }] : []);
+		(postData.images?.[0] ? [{ src: postData.images[0] }] : []);
 
 	return (
 		<Modal isOpen={isOpen} onOpenChange={onOpenChange} backdrop="blur" size="4xl" scrollBehavior="inside" className="rounded-3xl">

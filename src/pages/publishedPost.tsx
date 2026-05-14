@@ -93,7 +93,7 @@ export const PublishedPost = () => {
                         </CardBody>
                         <Divider />
                         <CardFooter className="justify-center bg-content2" >
-                            <User name={post.ownerFullName} description={`@${post.ownerUsername}`} avatarProps={{ src: post.ownerProfilePicUrl }} />
+                            <User name={post.owner?.fullName} description={`@${post.ownerUsername}`} avatarProps={{ src: post.owner?.profilePicUrl }} />
                         </CardFooter>
                     </Card>
                 </div>

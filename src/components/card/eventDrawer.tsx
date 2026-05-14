@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 import { EventTypeChip } from "./eventTypeChip";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
-    const { dates, images, ownerUsername, caption, ownerFullName, ownerProfilePicUrl } = cardProps;
+    const { dates, images, ownerUsername, caption, owner } = cardProps;
     const [eventDates, setEventDates] = useState<string[]>([])
 
     const today = new Date();
@@ -150,7 +150,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                             </div>
                         </DrawerBody>
                         <DrawerFooter className="flex flex-col gap-1 border-t border-default-200/50 bg-content2">
-                            <User name={ownerFullName} description={"@" + ownerUsername} avatarProps={{ src: ownerProfilePicUrl }} />
+                            <User name={owner?.fullName} description={"@" + ownerUsername} avatarProps={{ src: owner?.profilePicUrl }} />
                         </DrawerFooter>
                     </>
                 )}

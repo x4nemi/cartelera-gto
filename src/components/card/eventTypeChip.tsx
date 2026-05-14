@@ -1,7 +1,7 @@
 import { Chip } from "@heroui/react"
 import { CalendarFilledIcon, CalendarIcon, LoopIcon, StarIcon } from "../icons"
 
-type EventType = "event" | "workshop" | "calendar" | "draft" | undefined;
+type EventType = "event" | "workshop" | "calendar" | undefined;
 
 const eventTypeConfig = (type: EventType) => {
 	switch (type) {

@@ -44,7 +44,7 @@ export const EventCardLarge = (props: PostData) => {
                         removeWrapper
                         alt={props.caption ?? "Evento"}
                         className="z-0 w-full h-full object-cover rounded-3xl"
-                        src={props.displayUrl}
+                        src={props.images?.[0]}
                     />
                 </CardBody>
 
@@ -57,12 +57,12 @@ export const EventCardLarge = (props: PostData) => {
                 {/* Owner row, floating bottom-left */}
                 <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center gap-2">
                     <Avatar
-                        src={props.ownerProfilePicUrl}
+                        src={props.owner?.profilePicUrl}
                         size="sm"
                         className="ring-2 ring-white/80"
                     />
                     <span className="text-white text-sm font-semibold drop-shadow truncate">
-                        {props.ownerFullName ?? `@${props.ownerUsername}`}
+                        {props.owner?.fullName ?? `@${props.ownerUsername}`}
                     </span>
                 </div>
 

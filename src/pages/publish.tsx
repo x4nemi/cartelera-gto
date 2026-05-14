@@ -79,7 +79,7 @@ export default function PublishPage() {
 			const eventData = await createPost(inputLink);
 
 			if (eventData) {
-				if(!eventData.isDraft) {
+				if(eventData.status !== "draft") {
 					addToast({
 						title: "Publicación existente",
 						description: "Esta publicación ya ha sido publicada previamente. Se cargarán los datos existentes para su edición.",
@@ -146,14 +146,15 @@ export default function PublishPage() {
 			const manualPost: PostData = {
 				shortCode,
 				caption: manualCaption,
-				displayUrl: imageUrls[0],
 				images: imageUrls,
 				ownerUsername: manualOwnerName.trim().toLowerCase().replace(/\s+/g, "_"),
-				isDraft: false,
 				type: inferEventType(dates),
 				dates: dates.length > 0 ? dates : null,
+				taggedUsers: [],
 				source: "manual",
 				status: "published",
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString(),
 			};
 
 			const result = await CosmosAPI.insertEvent(manualPost);
@@ -199,11 +200,11 @@ export default function PublishPage() {
 			
 			const postDataToPublish = {
 				...postData,
-				isDraft: false,
 				type: inferEventType(dates),
 				dates: dates.length > 0 ? dates : null,
-				source: postData.source || "manual" as const,
+				source: postData.source || ("instagram" as const),
 				status: "published" as const,
+				updatedAt: new Date().toISOString(),
 			};
 
 			const publishedPost = await updatePost(postDataToPublish);

@@ -36,7 +36,7 @@ export function useRequireUser(username: string | undefined) {
             try {
                 const response = await CosmosAPI.getUser(username);
                 if (!cancelled) {
-                    if (response?.username && response.isApproved) {
+                    if (response?.username && response.status === "approved") {
                         userCache.set(username, response);
                         setUser(response);
                     } else {

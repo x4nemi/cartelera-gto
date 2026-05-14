@@ -53,7 +53,7 @@ const AdminPanel = () => {
     const [loading2, setLoading2] = useState(false)
 
     const handleApprove = async (username: string) => {
-        const finalUser = {...users.find(u => u.username === username, )!, isApproved: true};
+        const finalUser = {...users.find(u => u.username === username, )!, status: "approved" as const};
         
         try{
             const result = await CosmosAPI.insertUser(finalUser);
@@ -112,11 +112,11 @@ const AdminPanel = () => {
                             <Card key={user._id} className="p-4 flex flex-row justify-between items-center gap-5 max-w-xl w-md rounded-3xl shadow-none">
                                 <User
                                     name={user.fullName}
-                                    description={user.isApproved ? "Aprobado" : "Pendiente"}
+                                    description={user.status === "approved" ? "Aprobado" : user.status === "pending" ? "Pendiente" : user.status === "rejected" ? "Rechazado" : "Borrador"}
                                     avatarProps={{ src: user.profilePicUrl }}
                                 />
                                 <div className="flex items-center gap-3">
-                                    {user.isApproved && (
+                                    {user.status === "approved" && (
                                         <Switch
                                             size="sm"
                                             isSelected={!!user.autoDetectEnabled}
@@ -125,7 +125,7 @@ const AdminPanel = () => {
                                             <span className="text-xs">Auto-detectar</span>
                                         </Switch>
                                     )}
-                                    {!user.isApproved &&
+                                    {user.status !== "approved" &&
                                         <Button color="primary" variant="flat" isLoading={loading2} size="md" onClick={() => handleApprove(user.username)}>Aprobar</Button>
                                     }
                                 </div>

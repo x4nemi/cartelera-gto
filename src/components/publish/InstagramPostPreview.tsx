@@ -22,7 +22,7 @@ export const InstagramPostPreview = ({
 				<p className="text-small text-foreground-700 mb-2">Usuario</p>
 				<User
 					avatarProps={{
-						src: postData?.ownerProfilePicUrl || "",
+						src: postData?.owner?.profilePicUrl || "",
 					}}
 					description={
 						<Link isExternal href={"https://www.instagram.com/" + postData?.ownerUsername} size="sm">
@@ -30,7 +30,7 @@ export const InstagramPostPreview = ({
 						</Link>
 					}
 					className="self-start ml-3"
-					name={postData?.ownerFullName || ""}
+					name={postData?.owner?.fullName || ""}
 				/>
 				<Textarea
 					className="w-full mt-3"
@@ -45,8 +45,7 @@ export const InstagramPostPreview = ({
 				<div className="gap-2 flex flex-col">
 					<ImageGallery
 						images={
-							postData?.images?.map((url) => ({ src: url })) ||
-							(postData?.displayUrl ? [{ src: postData.displayUrl }] : [])
+							postData?.images?.map((url) => ({ src: url })) || []
 						}
 					/>
 				</div>
