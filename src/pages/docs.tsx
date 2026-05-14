@@ -1,165 +1,100 @@
-import { Button, Card, CardBody, Chip, Link } from "@heroui/react";
-import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { Button, Link } from "@heroui/react";
+import { motion } from "motion/react";
 
 import {
-	CheckIcon,
-	FourIcon,
 	IgIcon,
-	MailBoxIcon,
-	OneIcon,
-	RetryIcon,
+	MapPinIcon,
 	RightArrowIcon,
-	StarIcon,
-	ThreeIcon,
-	TwoIcon,
 } from "@/components/icons";
 import { subtitle } from "@/components/primitives";
 import DefaultLayout from "@/layouts/default";
 
-const steps = [
+const requirements = [
 	{
-		icon: <OneIcon size={26} />,
-		title: "Usuario de Instagram",
-		description: "Ten a la mano tu cuenta de Instagram. Debe ser pública.",
-		bgIcon: <IgIcon size={300} className="absolute text-primary-400 opacity-10 -left-20 -bottom-20" />,
+		icon: <IgIcon size={28} />,
+		title: "Cuenta de Instagram pública",
+		description:
+			"La usamos para extraer las imágenes y los detalles de tu evento.",
 	},
 	{
-		icon: <TwoIcon size={26} />,
-		title: "Link para crear",
-		description: "Se te hará llegar un link para crear tu evento en nuestro formulario.",
-		bgIcon: <MailBoxIcon size={300} className="absolute text-primary-400 opacity-10 -right-15 -bottom-10" />,
-	},
-	{
-		icon: <ThreeIcon size={26} />,
-		title: "Publica tu evento",
-		description: "Completa el formulario con título, descripción, fecha y ubicación.",
-		bgIcon: <StarIcon size={300} className="absolute text-primary-400 opacity-10 -left-10 -top-10" />,
-	},
-	{
-		icon: <FourIcon size={26} />,
-		title: "Espera a que se apruebe tu evento",
-		description: "Tu evento será revisado y aprobado por nuestro equipo antes de ser publicado.",
-		bgIcon: <CheckIcon size={300} className="absolute text-primary-400 opacity-10 -right-10 -top-10" />,
+		icon: <MapPinIcon size={28} />,
+		title: "Eventos en Guanajuato, para locales",
+		description:
+			"Cartelera es para la comunidad cuevanense. No publicamos eventos pensados para turismo.",
 	},
 ];
 
 export default function CreationPage() {
-	const [topIndex, setTopIndex] = useState(0);
-
-	function dismissTop(e: React.MouseEvent | React.KeyboardEvent) {
-		e.preventDefault();
-		if (topIndex >= steps.length - 1) return;
-		setTopIndex((prev) => prev + 1);
-	}
-
-	function reset(e: React.MouseEvent | React.KeyboardEvent) {
-		e.preventDefault();
-		setTopIndex(0);
-	}
-
-	function hasReachedEnd() {
-		return topIndex >= steps.length - 1;
-	}
-
-	// Cards visible in the stack (top card + up to 2 behind it for depth)
-	const visibleCards = steps
-		.map((step, i) => ({ step, i }))
-		.filter(({ i }) => i >= topIndex && i < topIndex + 3)
-		.reverse(); // render bottom-most first so top card is last in DOM (on top)
-
 	return (
 		<DefaultLayout>
-			<section className="flex flex-col items-center justify-center gap-4 w-full mt-18 mx-2 mb-20">
-				<div className="flex flex-col max-w-3xl w-full text-center justify-center items-center">
-					<h1 className="md:text-5xl text-4xl font-semibold">¿Te interesa publicar un evento?</h1>
-					<p className={subtitle()}>Sigue estos pasos</p>
-
-					<p className="text-default-500 text-xs  mt-4 select-none">
-						Toca para continuar · {topIndex + 1} / {steps.length}
+			<section className="flex flex-col items-center justify-center gap-6 w-full mt-16 mb-20 px-4">
+				<motion.div
+					initial={{ opacity: 0, y: 12 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.4 }}
+					className="flex flex-col max-w-xl w-full text-center items-center gap-2"
+				>
+					<h1 className="md:text-5xl text-4xl font-semibold">
+						Antes de empezar
+					</h1>
+					<p className={subtitle()}>
+						Solo necesitas dos cosas para publicar tu evento.
 					</p>
-					<div
-						className={`relative w-full mt-1 ${hasReachedEnd() ? "cursor-default" : "cursor-pointer"}`}
-						style={{ height: 420, WebkitTapHighlightColor: "transparent" }}
-						role="button"
-						tabIndex={0}
-						onClick={(e) => {
-							if (hasReachedEnd()) return;
-							topIndex >= steps.length - 1 ? reset(e) : dismissTop(e);
-						}}
-						onKeyDown={(e) => {
-							if (e.key === "Enter" || e.key === " ") {
-								topIndex >= steps.length - 1 ? reset(e) : dismissTop(e);
-							}
-						}}
-					>
-						<AnimatePresence>
-							{visibleCards.map(({ step, i }) => {
-								const depth = i - topIndex; // 0 = top, 1 = behind, 2 = further back
-								return (
-									<motion.div
-										key={i}
-										className="absolute inset-0 w-full will-change-transform"
-										style={{ zIndex: steps.length - i }}
-										initial={{ scale: 1 - depth * 0.05, y: depth * 14, opacity: depth > 1 ? 0 : 1 }}
-										animate={{
-											scale: 1 - depth * 0.05,
-											y: depth * 14,
-											opacity: depth > 1 ? 0.5 : 1,
-											transition: { type: "spring", visualDuration: 0.4, bounce: 0.25 },
-										}}
-										exit={{
-											y: 40,
-											scale: 0.92,
-											opacity: 0,
-											transition: { duration: 0.35, ease: "easeIn" },
-										}}
-									>
-										<Card
-											className="w-full bg-content1/70 backdrop-blur-md border border-default h-96 overflow-hidden"
-											shadow="none"
-										>
-											<CardBody>
-												<div className="flex flex-col gap-4 items-center justify-center h-full">
-													<Chip variant="flat" className="py-5" color="primary" size="lg">
-														{step.icon}
-													</Chip>
-													<h1 className="text-3xl tracking-tight text-center font-semibold">{step.title}</h1>
-													<span className="text-default-600 text-lg text-center mx-10">
-														{step.description}
-													</span>
-												</div>
-											</CardBody>
-											{step.bgIcon}
-										</Card>
-									</motion.div>
-								);
-							})}
-						</AnimatePresence>
-					</div>
-					{
-						hasReachedEnd() &&
-						<motion.div
-							initial={{ opacity: 0, scale: 0 }}
-							animate={{ opacity: 1, scale: 1 }}
-							transition={{
-								duration: 0.4,
-								scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
-							}}
-							className="w-full items-center justify-center flex gap-3"
-						>
-							<Button isIconOnly color="warning" onClick={reset} className="rounded-full" size="lg"><RetryIcon size={24} /></Button>
-							<Link href="/user" >
-								<Button color="primary" fullWidth size="lg" endContent={<RightArrowIcon />}>
-									Empezar
-								</Button>
-							</Link>
-						</motion.div>
+				</motion.div>
 
-					}
-				</div>
+				<motion.ul
+					initial="hidden"
+					animate="visible"
+					variants={{
+						hidden: {},
+						visible: { transition: { staggerChildren: 0.1, delayChildren: 0.15 } },
+					}}
+					className="flex flex-col gap-3 w-full max-w-xl"
+				>
+					{requirements.map((req, i) => (
+						<motion.li
+							key={i}
+							variants={{
+								hidden: { opacity: 0, y: 10 },
+								visible: { opacity: 1, y: 0 },
+							}}
+							className="flex items-start gap-4 p-5 rounded-2xl bg-content1/70 backdrop-blur-md border border-default"
+						>
+							<div className="text-primary shrink-0 mt-0.5">{req.icon}</div>
+							<div className="flex flex-col gap-1 text-left">
+								<span className="font-semibold text-lg leading-tight">
+									{req.title}
+								</span>
+								<span className="text-default-600 text-sm">
+									{req.description}
+								</span>
+							</div>
+						</motion.li>
+					))}
+				</motion.ul>
+
+				<motion.div
+					initial={{ opacity: 0, y: 8 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ delay: 0.45, duration: 0.35 }}
+					className="w-full max-w-xl flex flex-col items-center gap-2"
+				>
+					<Link href="/user" className="w-full">
+						<Button
+							color="primary"
+							size="lg"
+							fullWidth
+							endContent={<RightArrowIcon />}
+						>
+							Empezar
+						</Button>
+					</Link>
+					<p className="text-default-500 text-xs text-center">
+						Al continuar aceptas que tu evento será revisado por nuestro
+						equipo antes de publicarse.
+					</p>
+				</motion.div>
 			</section>
 		</DefaultLayout>
 	);
 }
-
