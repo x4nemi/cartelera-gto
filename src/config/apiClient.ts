@@ -8,10 +8,13 @@ export const AIApi = {
         | { type: "recurring"; daysOfWeek: number[]; label: string }
         | { type: "none" }
     > {
+        // Hard 25s ceiling so a stalled OpenAI image fetch (IG CDN URLs can be slow/expired)
+        // can never lock the UI in a spinner state.
         const response = await fetch(`/api/extractDates`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ text, imageUrls }),
+            signal: AbortSignal.timeout(25000),
         });
 
         if (!response.ok) {
@@ -20,6 +23,49 @@ export const AIApi = {
         }
 
         return response.json();
+    },
+
+    /**
+     * Extract structured event details (title, summary, tags, location, price, type)
+     * from an Instagram post caption and/or images using Azure OpenAI.
+     * Returns null on transport error so callers can degrade gracefully.
+     */
+    async extractEventDetails({
+        text,
+        imageUrls,
+    }: {
+        text?: string;
+        imageUrls?: string[];
+    }): Promise<{
+        title: string | null;
+        summary: string | null;
+        tags: string[];
+        location: string | null;
+        price: string | null;
+        eventType: "event" | "workshop" | "calendar" | null;
+        confidence: {
+            title: number;
+            summary: number;
+            tags: number;
+            location: number;
+            price: number;
+            eventType: number;
+        };
+    } | null> {
+        try {
+            // Hard 25s ceiling so a stalled OpenAI image fetch (IG CDN URLs can be slow/expired)
+            // can never lock the UI in a spinner state.
+            const response = await fetch(`/api/extractEventDetails`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, imageUrls }),
+                signal: AbortSignal.timeout(25000),
+            });
+            if (!response.ok) return null;
+            return await response.json();
+        } catch {
+            return null;
+        }
     },
 };
 
@@ -145,6 +191,7 @@ export type {
     PostType,
     PostSource,
     UserStatus,
+    AISuggestions,
     PaginatedResponse,
 } from "@/types";
 

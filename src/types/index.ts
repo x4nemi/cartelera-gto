@@ -19,6 +19,20 @@ export interface OwnerRef {
   profilePicUrl?: string;
 }
 
+/** AI-extracted suggestions for a post. Each field is optional and may be edited or rejected by the user. */
+export interface AISuggestions {
+  title?: string | null;
+  summary?: string | null;
+  tags?: string[];
+  location?: string | null;
+  price?: string | null;
+  eventType?: PostType | null;
+  /** 0.0–1.0 per field, mirrors the suggestion shape. */
+  confidence?: Partial<Record<"title" | "summary" | "tags" | "location" | "price" | "eventType", number>>;
+  /** ISO timestamp of when the extraction ran. */
+  extractedAt?: string;
+}
+
 export interface PostData {
   _id?: string;                  // === shortCode; optional client-side, set server-side
   shortCode: string;             // required
@@ -33,6 +47,16 @@ export interface PostData {
   // event metadata
   dates: string[] | null;        // always present (null if unknown), never undefined
   type: PostType;                // date-pattern only
+
+  // user-editable AI-assisted fields (any of these may have been suggested by AI then accepted/edited)
+  title?: string;
+  summary?: string;
+  tags?: string[];
+  location?: string;
+  price?: string;
+
+  /** Raw AI output kept for reference / re-suggestion; never shown directly when the user has saved their own values. */
+  aiSuggestions?: AISuggestions | null;
 
   // state
   status: PostStatus;            // single source of truth for lifecycle

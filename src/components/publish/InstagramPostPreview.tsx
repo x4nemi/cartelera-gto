@@ -1,55 +1,83 @@
 import { SmartDatePicker } from "@/components/dates/smartDatePicker";
-import { ImageGallery } from "@/components/image/imageGallery";
-import { PostData } from "@/config/apiClient";
-import { Card, Link, Textarea, User } from "@heroui/react";
-
+import { ImageCarousel } from "@/components/image/imageCarousel";
+import { AISuggestions, PostData } from "@/config/apiClient";
+import { Avatar, Card, Link, Textarea } from "@heroui/react";
+import { AISuggestionsPanel, AIFieldsValue } from "./AISuggestionsPanel"
 interface InstagramPostPreviewProps {
 	postData: PostData | null;
 	selectedDates: Date[];
 	onDatesChange: (dates: Date[]) => void;
+	aiFields: AIFieldsValue;
+	onAIFieldsChange: (next: AIFieldsValue) => void;
+	onAISuggestions?: (s: AISuggestions | null) => void;
 }
 
 export const InstagramPostPreview = ({
 	postData,
 	selectedDates,
 	onDatesChange,
+	aiFields,
+	onAIFieldsChange,
+	onAISuggestions,
 }: InstagramPostPreviewProps) => {
 	return (
-		<div className="mt-2 flex flex-col rounded-xl">
-			<p className="text-sm font-medium text-foreground-500 mb-2">Publicación encontrada</p>
-
-			<Card className="flex flex-col justify-start mb-2 bg-content2 p-4 gap-2" shadow="none">
-				<p className="text-small text-foreground-700 mb-2">Usuario</p>
-				<User
-					avatarProps={{
-						src: postData?.owner?.profilePicUrl || "",
-					}}
-					description={
-						<Link isExternal href={"https://www.instagram.com/" + postData?.ownerUsername} size="sm">
+		<div className="mt-2 flex flex-col rounded-xl gap-3">
+			<Card className="flex flex-col bg-content2 p-4 gap-4" shadow="none">
+				{/* Compact user header */}
+				<div className="flex items-center gap-3">
+					<Avatar
+						size="sm"
+						src={postData?.owner?.profilePicUrl || ""}
+						name={postData?.owner?.fullName || postData?.ownerUsername || ""}
+					/>
+					<div className="flex flex-col min-w-0">
+						<span className="text-sm font-semibold text-foreground truncate">
+							{postData?.owner?.fullName || postData?.ownerUsername}
+						</span>
+						<Link
+							isExternal
+							size="sm"
+							href={"https://www.instagram.com/" + postData?.ownerUsername}
+							className="text-xs"
+						>
 							@{postData?.ownerUsername}
 						</Link>
-					}
-					className="self-start ml-3"
-					name={postData?.owner?.fullName || ""}
-				/>
-				<Textarea
-					className="w-full mt-3"
-					label="Descripción"
-					placeholder="Describe tu evento aquí"
-					value={postData?.caption || ""}
-					labelPlacement="outside"
-					variant="bordered"
-				/>
+					</div>
+				</div>
 
-				<p className="text-small text-foreground-700 mt-3 mb-1">Imágenes</p>
-				<div className="gap-2 flex flex-col">
-					<ImageGallery
-						images={
-							postData?.images?.map((url) => ({ src: url })) || []
-						}
+				{/* Description | Images — image renders at natural aspect ratio,
+				    description is a scrollable textarea with a comfortable fixed height. */}
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<Textarea
+						label="Descripción"
+						placeholder="Describe tu evento aquí"
+						value={postData?.caption || ""}
+						labelPlacement="outside"
+						variant="bordered"
+						minRows={12}
+						maxRows={12}
+						classNames={{
+							input: "resize-none",
+						}}
 					/>
+					<div className="flex flex-col gap-1.5">
+						<label className="text-xs text-foreground-700">Imágenes</label>
+						<ImageCarousel
+							images={postData?.images || []}
+							className="w-full h-auto rounded-xl object-contain bg-content3"
+						/>
+					</div>
 				</div>
 			</Card>
+
+			<AISuggestionsPanel
+				caption={postData?.caption}
+				imageUrls={postData?.images}
+				value={aiFields}
+				onChange={onAIFieldsChange}
+				onSuggestions={onAISuggestions}
+			/>
+
 			<SmartDatePicker
 				selectedDates={selectedDates}
 				onChange={onDatesChange}

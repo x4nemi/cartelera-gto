@@ -161,38 +161,96 @@ export const SmartDatePicker = ({
 				}
 			});
 
-			// Build lookup set from latest ref
-			const highlightSet = new Set<string>();
+			// Build a Set of "YYYY-MM-DD" strings for O(1) lookup, locale-independent.
+			const selectedSet = new Set<string>();
 			internalDatesRef.current.forEach((d) => {
-				const label = d.toLocaleDateString("es-MX", {
-					weekday: "long",
-					year: "numeric",
-					month: "long",
-					day: "numeric",
-				});
-				highlightSet.add(label);
+				const y = d.getFullYear();
+				const m = String(d.getMonth() + 1).padStart(2, "0");
+				const day = String(d.getDate()).padStart(2, "0");
+				selectedSet.add(`${y}-${m}-${day}`);
 			});
 
-			container.querySelectorAll<HTMLElement>("td[role='gridcell'] span[role='button'], td[role='gridcell'] button").forEach((el) => {
-				const ariaLabel = el.getAttribute("aria-label") ?? "";
-				const matched = [...highlightSet].some((k) => ariaLabel.startsWith(k));
+			// Walk each month grid; we infer the year+month from how many grids the
+			// calendar shows (visibleMonths={2}, starting at the current focused month).
+			// react-aria gives us a stable signal: each grid's first in-month day is "1",
+			// and each cell's aria-label always contains the day digit.
+			const grids = container.querySelectorAll<HTMLElement>("[role='grid']");
+			grids.forEach((grid, gridIdx) => {
+				const cells = grid.querySelectorAll<HTMLElement>(
+					"td[role='gridcell']:not([data-outside-month]) span[role='button'], " +
+					"td[role='gridcell']:not([data-outside-month]) button",
+				);
 
-				if (matched) {
-					// Our selected date → blue
-					el.style.setProperty("background-color", "hsl(var(--heroui-primary))", "important");
-					el.style.setProperty("color", "hsl(var(--heroui-primary-foreground))", "important");
-					el.style.setProperty("box-shadow", "none", "important");
-				} else if (el.hasAttribute("data-selected") || el.closest("td")?.hasAttribute("data-selected")) {
-					// HeroUI marked this as selected but it's NOT in our list → neutralize
-					el.style.setProperty("background-color", "transparent", "important");
-					el.style.setProperty("color", "inherit", "important");
-					el.style.setProperty("box-shadow", "none", "important");
-				} else {
-					// Regular cell → clear any leftover inline styles
-					el.style.removeProperty("background-color");
-					el.style.removeProperty("color");
-					el.style.removeProperty("box-shadow");
+				// Determine this grid's year+month by sampling a cell's aria-label that
+				// happens to contain a 4-digit year, falling back to the first cell text.
+				let gridYear: number | null = null;
+				let gridMonth: number | null = null; // 0-indexed
+				for (const cell of cells) {
+					const label = cell.getAttribute("aria-label") || "";
+					const yearMatch = label.match(/\b(20\d{2})\b/);
+					if (yearMatch) gridYear = Number(yearMatch[1]);
+					// month name: try matching any of the canonical Spanish/English names
+					const monthName = label.toLowerCase();
+					const monthMap: Record<string, number> = {
+						enero: 0, january: 0,
+						febrero: 1, february: 1,
+						marzo: 2, march: 2,
+						abril: 3, april: 3,
+						mayo: 4, may: 4,
+						junio: 5, june: 5,
+						julio: 6, july: 6,
+						agosto: 7, august: 7,
+						septiembre: 8, september: 8,
+						octubre: 9, october: 9,
+						noviembre: 10, november: 10,
+						diciembre: 11, december: 11,
+					};
+					for (const key of Object.keys(monthMap)) {
+						if (monthName.includes(key)) {
+							gridMonth = monthMap[key];
+							break;
+						}
+					}
+					if (gridYear !== null && gridMonth !== null) break;
 				}
+
+				// Fallback: assume grid 0 is current focused month from `today()`,
+				// grid 1 is the next month.
+				if (gridYear === null || gridMonth === null) {
+					const base = new Date();
+					base.setDate(1);
+					base.setMonth(base.getMonth() + gridIdx);
+					gridYear = base.getFullYear();
+					gridMonth = base.getMonth();
+				}
+
+				cells.forEach((el) => {
+					// Extract the day from aria-label or text content
+					const label = el.getAttribute("aria-label") || el.textContent || "";
+					const dayMatch = label.match(/\b(\d{1,2})\b/);
+					if (!dayMatch) return;
+					const day = Number(dayMatch[1]);
+
+					const y = gridYear!;
+					const m = String(gridMonth! + 1).padStart(2, "0");
+					const dStr = String(day).padStart(2, "0");
+					const key = `${y}-${m}-${dStr}`;
+					const matched = selectedSet.has(key);
+
+					if (matched) {
+						el.style.setProperty("background-color", "hsl(var(--heroui-primary))", "important");
+						el.style.setProperty("color", "hsl(var(--heroui-primary-foreground))", "important");
+						el.style.setProperty("box-shadow", "none", "important");
+					} else if (el.hasAttribute("data-selected") || el.closest("td")?.hasAttribute("data-selected")) {
+						el.style.setProperty("background-color", "transparent", "important");
+						el.style.setProperty("color", "inherit", "important");
+						el.style.setProperty("box-shadow", "none", "important");
+					} else {
+						el.style.removeProperty("background-color");
+						el.style.removeProperty("color");
+						el.style.removeProperty("box-shadow");
+					}
+				});
 			});
 			applying = false;
 		};

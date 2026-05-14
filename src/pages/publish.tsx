@@ -1,7 +1,7 @@
 import { ArrowLeftIcon, IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { CancelModal } from "@/components/modal/cancelModal";
-import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions } from "@/components/publish";
-import { AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
+import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions, AIFieldsValue, ReviewSummary } from "@/components/publish";
+import { AISuggestions, AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
 import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
 import DefaultLayout from "@/layouts/default";
@@ -22,6 +22,11 @@ export default function PublishPage() {
 	const manualOwnerName = username ?? "";
 	//#endregion
 
+	//#region AI-assisted fields (shared by both flows; reset on cancel)
+	const [aiFields, setAiFields] = useState<AIFieldsValue>({});
+	const [aiSuggestions, setAiSuggestions] = useState<AISuggestions | null>(null);
+	//#endregion
+
 	const hasSelectedDates = selectedDates.length > 0;
 	const canPublishManual = hasSelectedDates && manualImages.length > 0 && manualOwnerName.trim().length > 0;
 
@@ -29,6 +34,18 @@ export default function PublishPage() {
 		return selectedDates
 			.map(d => d.toISOString().split("T")[0])
 			.sort();
+	};
+
+	/** Strip empty AI fields so we don't pollute the document with undefined/empty values. */
+	const aiFieldsToWrite = (): Partial<PostData> => {
+		const out: Partial<PostData> = {};
+		if (aiFields.title?.trim()) out.title = aiFields.title.trim();
+		if (aiFields.summary?.trim()) out.summary = aiFields.summary.trim();
+		if (aiFields.location?.trim()) out.location = aiFields.location.trim();
+		if (aiFields.price?.trim()) out.price = aiFields.price.trim();
+		if (aiFields.tags && aiFields.tags.length > 0) out.tags = aiFields.tags;
+		if (aiSuggestions) out.aiSuggestions = aiSuggestions;
+		return out;
 	};
 	//#endregion
 	
@@ -46,6 +63,8 @@ export default function PublishPage() {
 		setSelectedDates([]);
 		setManualImages([]);
 		setManualCaption("");
+		setAiFields({});
+		setAiSuggestions(null);
 	}
 
 	//#endregion
@@ -155,6 +174,7 @@ export default function PublishPage() {
 				status: "published",
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString(),
+				...aiFieldsToWrite(),
 			};
 
 			const result = await CosmosAPI.insertEvent(manualPost);
@@ -205,6 +225,7 @@ export default function PublishPage() {
 				source: postData.source || ("instagram" as const),
 				status: "published" as const,
 				updatedAt: new Date().toISOString(),
+				...aiFieldsToWrite(),
 			};
 
 			const publishedPost = await updatePost(postDataToPublish);
@@ -346,6 +367,9 @@ export default function PublishPage() {
 									postData={postData}
 									selectedDates={selectedDates}
 									onDatesChange={setSelectedDates}
+									aiFields={aiFields}
+									onAIFieldsChange={setAiFields}
+									onAISuggestions={setAiSuggestions}
 								/>
 							)}
 						</AccordionItem>
@@ -374,6 +398,9 @@ export default function PublishPage() {
 								ownerName={manualOwnerName}
 								selectedDates={selectedDates}
 								onDatesChange={setSelectedDates}
+								aiFields={aiFields}
+								onAIFieldsChange={setAiFields}
+								onAISuggestions={setAiSuggestions}
 							/>
 						</AccordionItem>
 					</Accordion>
@@ -390,6 +417,19 @@ export default function PublishPage() {
 								Revisa y publica
 							</h3>
 						</div>
+
+						<ReviewSummary
+							fields={aiFields}
+							dates={selectedDates}
+							imageCount={
+								selectedKey === "2"
+									? manualImages.length
+									: postData?.images?.length
+							}
+							ownerName={
+								selectedKey === "2" ? manualOwnerName : postData?.ownerUsername
+							}
+						/>
 
 						{selectedKey === "2" ? (
 							canPublishManual ? (
