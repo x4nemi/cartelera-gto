@@ -5,7 +5,7 @@ import { AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/
 import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Button, cn, Spinner } from "@heroui/react";
+import { Accordion, AccordionItem, addToast, Alert, Button, Chip, cn, Spinner } from "@heroui/react";
 import { useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -177,7 +177,7 @@ export default function PublishPage() {
 					variant: "flat"
 				});
 			}
-		} catch (error) {
+		} catch {
 			addToast({
 				title: "Error al publicar",
 				description: "Hubo un problema al subir las imágenes.",
@@ -229,7 +229,7 @@ export default function PublishPage() {
 				});
 			}
 
-		} catch (error) {
+		} catch {
 			addToast({
 				title: "Error al publicar",
 				description: "Hubo un problema al publicar tu evento. Inténtalo de nuevo.",
@@ -251,15 +251,39 @@ export default function PublishPage() {
 					<Spinner size="lg" color="primary" />
 				</section>
 			) : (
-			<section className={`flex flex-col gap-4 flex-grow max-w-3xl md:mx-auto w-full px-2 mt-10`}>
-				<Button variant="flat" color="primary" onPress={() => navigate(`/${username}`)} className="self-start">
-					<ArrowLeftIcon size={24} />
-					Volver al portal
-				</Button>
-				<h1 className="text-3xl font-bold flex items-center gap-2 text-foreground md:text-4xl lg:text-5xl">
-					Crea tu publicación</h1>
-				<h3 className="font-semibold text-foreground text-lg">¿Cómo deseas publicarlo?</h3>
-				<div className="w-full">
+			<section className="flex flex-col gap-6 flex-grow max-w-3xl md:mx-auto w-full px-2 mt-8 mb-8">
+				{/* Header */}
+				<div className="flex flex-col gap-3">
+					<Button
+						variant="light"
+						color="default"
+						onPress={() => navigate(`/${username}`)}
+						className="self-start text-foreground-600 -ml-2"
+						startContent={<ArrowLeftIcon size={18} />}
+						size="sm"
+					>
+						Volver al portal
+					</Button>
+					<div className="flex flex-col gap-1">
+						<h1 className="text-3xl font-bold text-foreground md:text-4xl">
+							Crea tu publicación
+						</h1>
+						<p className="text-foreground-500 text-sm md:text-base">
+							Comparte tu evento con la comunidad cuevanense en pocos pasos.
+						</p>
+					</div>
+				</div>
+
+				{/* Step 1 — Method */}
+				<div className="flex flex-col gap-3">
+					<div className="flex items-center gap-2">
+						<div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+							1
+						</div>
+						<h3 className="font-semibold text-foreground text-base md:text-lg">
+							¿Cómo deseas publicarlo?
+						</h3>
+					</div>
 					<Accordion
 						showDivider={false}
 						selectionMode="single"
@@ -283,17 +307,24 @@ export default function PublishPage() {
 					>
 						<AccordionItem
 							key="1"
-							aria-label="Free"
+							aria-label="Con un link de Instagram"
 							title={
-								<div className="flex items-center justify-between w-full">
-									<div className="flex flex-col items-start">
-										<span className="font-bold text-md">Con un link de Instagram</span>
-										<span className="text-default-600 font-medium text-sm italic">Extrae las imágenes y detalles de tu evento. Tu cuenta debe ser pública.</span>
+								<div className="flex items-center justify-between w-full gap-2">
+									<div className="flex flex-col items-start min-w-0">
+										<div className="flex items-center gap-2 flex-wrap">
+											<span className="font-bold text-md">Con un link de Instagram</span>
+											<Chip size="sm" variant="flat" color="primary" className="h-5">
+												Recomendado
+											</Chip>
+										</div>
+										<span className="text-default-600 font-medium text-sm italic">
+											Extrae las imágenes y detalles de tu evento. Tu cuenta debe ser pública.
+										</span>
 									</div>
 								</div>
 							}
 							startContent={selectedKey === "1" ? <IGFilledIcon size={26} /> : <IgIcon size={26} />}
-							classNames={{base:"backdrop-blur-sm mb-2 "}}
+							classNames={{ base: "backdrop-blur-sm mb-2 " }}
 							onPress={() => {
 								if (selectedKey === "1" && isLinkValid) {
 									setSelectedKey("1");
@@ -314,18 +345,20 @@ export default function PublishPage() {
 								<InstagramPostPreview
 									postData={postData}
 									selectedDates={selectedDates}
-								onDatesChange={setSelectedDates}
+									onDatesChange={setSelectedDates}
 								/>
 							)}
 						</AccordionItem>
 						<AccordionItem
 							key="2"
-							aria-label="Pro"
+							aria-label="Desde cero"
 							title={
 								<div className="flex items-center justify-between w-full">
 									<div className="flex flex-col items-start ">
 										<span className="font-bold text-md">Desde cero</span>
-										<span className="text-default-700 font-medium text-sm italic">Sube tus propias imágenes y detalles.</span>
+										<span className="text-default-700 font-medium text-sm italic">
+											Sube tus propias imágenes y detalles.
+										</span>
 									</div>
 								</div>
 							}
@@ -344,29 +377,61 @@ export default function PublishPage() {
 							/>
 						</AccordionItem>
 					</Accordion>
-					{selectedKey === "2" ? (
-						canPublishManual ? (
+				</div>
+
+				{/* Step 2 — Publish (validation hints + actions) */}
+				{(selectedKey === "1" && isLinkValid) || (selectedKey === "2" && manualImages.length > 0) ? (
+					<div className="flex flex-col gap-3">
+						<div className="flex items-center gap-2">
+							<div className="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-foreground text-sm font-semibold">
+								2
+							</div>
+							<h3 className="font-semibold text-foreground text-base md:text-lg">
+								Revisa y publica
+							</h3>
+						</div>
+
+						{selectedKey === "2" ? (
+							canPublishManual ? (
+								<PublishActions
+									onCancel={() => setOpenCancelModal(true)}
+									onPublish={handlePublishManual}
+									isPublishing={isPublishing}
+								/>
+							) : (
+								<Alert
+									color="warning"
+									variant="flat"
+									className="rounded-2xl"
+									title={
+										!manualOwnerName.trim()
+											? "Falta el organizador"
+											: "Falta seleccionar fechas"
+									}
+									description={
+										!manualOwnerName.trim()
+											? "Agrega el nombre del organizador para continuar."
+											: "Selecciona las fechas de tu evento para habilitar el botón de publicar."
+									}
+								/>
+							)
+						) : hasSelectedDates ? (
 							<PublishActions
 								onCancel={() => setOpenCancelModal(true)}
-								onPublish={handlePublishManual}
+								onPublish={handlePublishPost}
 								isPublishing={isPublishing}
 							/>
-						) : manualImages.length > 0 ? (
-							<p className="text-sm text-foreground-500 mt-2">
-								{!manualOwnerName.trim() ? "Agrega el nombre del organizador." : "Selecciona las fechas de tu evento para habilitar el botón de publicar."}
-							</p>
-						) : null
-					) : hasSelectedDates ? (
-						<PublishActions
-							onCancel={() => setOpenCancelModal(true)}
-							onPublish={handlePublishPost}
-							isPublishing={isPublishing}
-						/>
-					) : isLinkValid ? (
-						<p className="text-sm text-foreground-500 mt-2">Selecciona las fechas de tu evento para habilitar el botón de publicar.</p>
-					) : null
-					}
-				</div>
+						) : (
+							<Alert
+								color="warning"
+								variant="flat"
+								className="rounded-2xl"
+								title="Falta seleccionar fechas"
+								description="Selecciona las fechas de tu evento para habilitar el botón de publicar."
+							/>
+						)}
+					</div>
+				) : null}
 			</section>
 			)}
 			<CancelModal openModal={openCancelModal} setOpenModal={setOpenCancelModal} onCancel={handleCancel} />

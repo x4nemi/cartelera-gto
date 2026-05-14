@@ -52,30 +52,40 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 		<>
 			<Dropdown size="lg">
 				<DropdownTrigger>
-					<Card className="rounded-3xl transition-all duration-200" isPressable shadow="none">
+					<Card className="rounded-3xl transition-all duration-200 group" isPressable shadow="none">
 						{!isPast ? (
 							<>
-							{ props.type !== "calendar" &&
-								<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl w-9 border-2 border-default-300" style={{ width: 45 }}>
-									<div className="w-full bg-content2 text-[9px] font-bold tracking-wider text-center pt-1 ">{month}</div>
-									<div className="flex flex-col items-center bg-content2 w-full pb-1 pt-0.5 border-t border-default-300">
-										<span className=" font-semibold leading-tight font-mono text-md">{day}</span>
-										<span className="text-[9px]">{weekday}</span>
-									</div>
-								</CardHeader>
-							}
+								{props.type !== "calendar" && (
+									<CardHeader
+										className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl bg-content1/80 dark:bg-content1/70 backdrop-blur-md ring-1 ring-default-200/60 dark:ring-default-100/40 shadow-sm"
+										style={{ width: 45 }}
+									>
+										<div className="w-full text-[9px] font-bold tracking-wider text-center pt-1 text-default-700 dark:text-default-500">
+											{month}
+										</div>
+										<div className="flex flex-col items-center w-full pb-1 pt-0.5 border-t border-default-200/60 dark:border-default-100/40">
+											<span className="font-semibold leading-tight font-mono text-md text-foreground">
+												{day}
+											</span>
+											<span className="text-[9px] text-default-600 dark:text-default-400">
+												{weekday}
+											</span>
+										</div>
+									</CardHeader>
+								)}
 								<CardHeader className="absolute top-2 left-2 z-10 p-0">
 									<EventTypeChip type={props.type} />
 								</CardHeader>
 							</>
-						) :
-							<CardHeader className="absolute top-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl">
-								<Chip color="danger" size="md" className="self-end rounded-2xl">Evento pasado</Chip>
+						) : (
+							<CardHeader className="absolute top-2 right-2 z-10 p-0">
+								<Chip color="default" size="sm" variant="flat" className="rounded-2xl bg-content1/80 dark:bg-content1/70 backdrop-blur-md ring-1 ring-default-200/60 dark:ring-default-100/40">
+									Evento pasado
+								</Chip>
 							</CardHeader>
-						}
+						)}
 						{isPast && (
-							<CardHeader className="absolute inset-0 z-9 p-0 flex items-center justify-center rounded-3xl bg-default-900/30 dark:bg-default-50/30">
-							</CardHeader>
+							<CardHeader className="absolute inset-0 z-[9] p-0 rounded-3xl bg-background/60 dark:bg-background/70 pointer-events-none" />
 						)}
 
 						<CardBody className="overflow-visible p-0">
@@ -88,7 +98,7 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 						</CardBody>
 					</Card>
 				</DropdownTrigger>
-				<DropdownMenu aria-label="Static Actions" variant="flat">
+				<DropdownMenu aria-label="Acciones del evento" variant="flat">
 					<DropdownItem key="view" startContent={<ViewIcon size={20} />} onPress={onDrawerOpen}>Ver evento</DropdownItem>
 					<DropdownItem key="edit" startContent={<EditIcon size={20} />} onPress={onEditOpen}>Editar evento</DropdownItem>
 					<DropdownItem key="delete" className="text-danger" color="danger" startContent={<TrashIcon size={20} />} onPress={onDeleteOpen}>

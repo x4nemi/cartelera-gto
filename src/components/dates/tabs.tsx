@@ -1,4 +1,4 @@
-import { Alert, Card, CardBody, DateValue, Tab, Tabs } from "@heroui/react"
+import { Card, CardBody, DateValue, Tab, Tabs } from "@heroui/react"
 import { CalendarIcon, EventIcon, LoopIcon } from "../icons";
 import { WorkshopCalendar } from "./workshopCalendar";
 import { DatesWidget } from "./datesWidget";
@@ -49,9 +49,12 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
                         titleValue="hola"
                         
                     >
-                        <Card shadow="none" className="mt-0">
-                            <CardBody className="w-full flex bg-content1 p-1">
-                                <Alert variant="flat" description={tab.content} hideIconWrapper color="primary" className="p-0 text-center" classNames={{ iconWrapper: "-mr-2" }} icon={tab.icon} />
+                        <Card shadow="none" className="mt-0 bg-transparent">
+                            <CardBody className="w-full flex flex-col gap-2 bg-content1 p-0">
+                                <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300">
+                                    <span className="text-primary-600 dark:text-primary-400 shrink-0">{tab.icon}</span>
+                                    <span className="text-sm font-medium">{tab.content}</span>
+                                </div>
                                 {tab.calendar && (tab.calendar(selectedDays, setSelectedDays)
                                 )}
                                 {tab.coso && (tab.coso(workshopDays, setWorkshopDays, until, setUntil, every, setEvery))}

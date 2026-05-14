@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, DatePicker } from "@heroui/react";
+import { Button, DatePicker } from "@heroui/react";
 import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
 import { useState } from "react";
 import { MinusIcon, PlusIcon } from "../icons";
@@ -56,17 +56,36 @@ export const DatesWidget = ({ selectedDays, onChange }: {
                                     return false;
                                 }}
                             />
-                            <ButtonGroup className="rounded-none">
-                                {//only show add button on the last widget and when there is a selected date
-                                    (index === widgetIds.length - 1) && selectedDays && selectedDays[index] && <Button isIconOnly onPress={addNewWidget} color="primary" variant="flat"><PlusIcon size={18} /></Button>
-                                }
-                                {//show remove button if there is more than one widget and not on the last empty widget
-                                    widgetIds.length > 1 && selectedDays && selectedDays[index] &&
-                                    <Button isIconOnly variant="flat" onPress={() => {
-                                        addOrRemoveDate(null, widgetId);
-                                    }} className="rounded-l-none" color={"danger"}><MinusIcon size={18} /></Button>
-                                }
-                            </ButtonGroup>
+                            <div className="flex gap-1 shrink-0">
+                                {(index === widgetIds.length - 1) && selectedDays && selectedDays[index] && (
+                                    <Button
+                                        isIconOnly
+                                        size="md"
+                                        radius="md"
+                                        variant="light"
+                                        color="default"
+                                        aria-label="Agregar fecha"
+                                        className="text-foreground-500 hover:text-primary hover:bg-primary/10"
+                                        onPress={addNewWidget}
+                                    >
+                                        <PlusIcon size={18} />
+                                    </Button>
+                                )}
+                                {widgetIds.length > 1 && selectedDays && selectedDays[index] && (
+                                    <Button
+                                        isIconOnly
+                                        size="md"
+                                        radius="md"
+                                        variant="light"
+                                        color="default"
+                                        aria-label="Eliminar fecha"
+                                        className="text-foreground-500 hover:text-danger hover:bg-danger/10"
+                                        onPress={() => addOrRemoveDate(null, widgetId)}
+                                    >
+                                        <MinusIcon size={18} />
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     ))
                 }
