@@ -298,11 +298,11 @@ export default function PublishPage() {
 						itemClasses={{
 							base: "mb-2",
 							trigger: cn(
-								"p-4 bg-content2/70 rounded-2xl hover:bg-primary-200/70",
-								"data-[open=true]:rounded-b-none data-[open=true]:bg-primary-200/70 data-[open=true]:border-primary-300",
-								"flex items-center justify-between gap-4 duration-250 transition-all backdrop-blur-md"
+								"p-4 bg-content2 rounded-2xl hover:bg-content3 transition-colors",
+								"data-[open=true]:rounded-b-none data-[open=true]:bg-content2",
+								"flex items-center justify-between gap-4 duration-250"
 							),
-							content: "px-4 py-4 bg-gray border-t-0 rounded-b-2xl bg-content2/70 backdrop-blur-md",
+							content: "px-4 py-4 border-t border-default-200/60 dark:border-default-100/40 rounded-b-2xl bg-content2",
 						}}
 					>
 						<AccordionItem
