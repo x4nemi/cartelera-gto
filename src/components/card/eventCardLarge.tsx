@@ -33,40 +33,53 @@ export const EventCardLarge = (props: PostData) => {
 
     return (
         <>
-            <div className="flex items-start gap-2 w-full">
-                <Card
-                    className="rounded-4xl transition-all duration-200 flex-1 min-w-0"
-                    isPressable
-                    onClick={handlePress}
-                    shadow="none"
-                >
-                    {isPast && (
-                        <>
-                            <CardHeader className="absolute top-2 left-2 z-10 p-0">
-                                <Chip color="default" size="md" className="rounded-2xl">
-                                    Evento pasado
-                                </Chip>
-                            </CardHeader>
-                            <CardHeader className="absolute inset-0 z-9 p-0 rounded-3xl bg-default-900/70 dark:bg-default-50/70" />
-                        </>
-                    )}
+            <Card
+                className="relative rounded-3xl transition-all duration-200 w-full overflow-hidden"
+                isPressable
+                onClick={handlePress}
+                shadow="none"
+            >
+                <CardBody className="p-0">
+                    <Image
+                        removeWrapper
+                        alt={props.caption ?? "Evento"}
+                        className="z-0 w-full h-full object-cover rounded-3xl"
+                        src={props.displayUrl}
+                    />
+                </CardBody>
 
-                    <CardBody className="overflow-visible p-0">
-                        <Image
-                            removeWrapper
-                            alt={props.caption ?? "Evento"}
-                            className="z-0 w-full h-full object-cover rounded-3xl"
-                            src={props.displayUrl}
+                {/* Bottom gradient for legibility of overlaid info */}
+                <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/70 via-black/40 to-transparent z-10"
+                />
+
+                {/* Owner row, floating bottom-left */}
+                <div className="absolute bottom-3 left-3 right-3 z-20 flex items-center gap-2">
+                    <Avatar
+                        src={props.ownerProfilePicUrl}
+                        size="sm"
+                        className="ring-2 ring-white/80"
+                    />
+                    <span className="text-white text-sm font-semibold drop-shadow truncate">
+                        {props.ownerFullName ?? `@${props.ownerUsername}`}
+                    </span>
+                </div>
+
+                {isPast && (
+                    <>
+                        <div
+                            aria-hidden
+                            className="absolute inset-0 z-30 rounded-3xl bg-default-900/70 dark:bg-default-50/70"
                         />
-                    </CardBody>
-                </Card>
-
-                {!isPast && (
-                    <div className="flex-shrink-0 bg-content1 rounded-2xl">
-                        <Avatar src={props.ownerProfilePicUrl} size="lg" radius="lg" />
-                    </div>
+                        <CardHeader className="absolute top-2 left-2 z-40 p-0">
+                            <Chip color="default" size="md" className="rounded-2xl">
+                                Evento pasado
+                            </Chip>
+                        </CardHeader>
+                    </>
                 )}
-            </div>
+            </Card>
             <EventDrawer isOpen={isOpen} onOpenChange={onOpenChange} cardProps={props} />
         </>
     );

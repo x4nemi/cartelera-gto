@@ -242,7 +242,6 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                                     <div
                                         className={[
                                             "grid gap-3 grid-cols-1 md:grid-cols-2 transition-opacity duration-200",
-                                            isActive ? "opacity-100" : "opacity-60 md:opacity-100",
                                         ].join(" ")}
                                     >
                                         {dayPosts.map((p) => (
