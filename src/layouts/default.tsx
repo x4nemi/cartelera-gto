@@ -8,7 +8,7 @@ export default function DefaultLayout({
 	return (
 		<div className="relative flex flex-col min-h-screen md:mx-[8.33%]">
 			<Navbar />
-			<main className="w-full px-3 flex flex-grow">
+			<main className="w-full px-3 flex flex-grow pb-24 md:pb-0">
 				{children}
 			</main>
 			<footer className="w-full flex items-center justify-center py-6">

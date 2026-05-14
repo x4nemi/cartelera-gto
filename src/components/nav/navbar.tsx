@@ -38,8 +38,8 @@ export const Navbar = () => {
     }, []);
 	return (
 		<>
-		<div className="md:sticky md:top-0 z-50 flex justify-center px-[2%] pt-3 pb-1 bg-background/80 backdrop-blur-md" ref={navMobileRef}>
-			<div className="w-full bg-content1 rounded-4xl overflow-hidden">
+		<div className="fixed bottom-0 inset-x-0 md:static md:sticky md:top-0 md:bottom-auto z-50 flex justify-center px-[2%] pt-1 pb-3 md:pt-3 md:pb-1 bg-background/80 backdrop-blur-md" ref={navMobileRef}>
+			<div className="w-full bg-content1 rounded-4xl overflow-hidden flex flex-col-reverse md:flex-col">
 				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "bg-content1 backdrop-blur-md !rounded-none w-full", wrapper: "!px-4" }}>
 					<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 						<NavbarBrand className="gap-3 max-w-fit">
