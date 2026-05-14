@@ -299,7 +299,7 @@ export const MonthCalendar = ({
                                             disabled ? "opacity-30 cursor-default" : "",
                                             !disabled && !inMonth ? "opacity-50" : "",
                                             isSelected
-                                                ? "bg-primary-200"
+                                                ? "bg-primary"
                                                 : !disabled
                                                     ? "hover:bg-default-100"
                                                     : "",
