@@ -39,19 +39,17 @@ export const Navbar = () => {
 	return (
 		<>
 		<div className="fixed bottom-0 inset-x-0 md:fixed md:top-0 md:bottom-auto z-50 flex justify-center pt-1 pb-3 md:pt-3 md:pb-1" ref={navMobileRef}>
-			<div className="w-10/12 bg-content1 rounded-4xl overflow-hidden flex flex-col-reverse md:flex-col">
-				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "bg-content1 backdrop-blur-md !rounded-none w-full", wrapper: "!px-4" }}>
+			<div className="w-10/12 bg-content1/70 backdrop-blur-sm rounded-4xl overflow-hidden flex flex-col-reverse md:flex-col border border-default">
+				<HeroUINavbar maxWidth="full" position="static" isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen} classNames={{ menu: "!hidden", base: "bg-transparent !rounded-none w-full", wrapper: "!px-4" }}>
 					<NavbarContent className="basis-1/5 sm:basis-full" justify="start">
 						<NavbarBrand className="gap-3 max-w-fit">
 							<Link
-								className="flex justify-start items-center gap-1"
+								className="flex justify-start items-center"
 								color="foreground"
 								href="/"
+								aria-label={siteConfig.name}
 							>
 								<Logo />
-								<p className="font-bold text-inherit text-lg max-md:text-xl">
-									{siteConfig.name}
-								</p>
 							</Link>
 						</NavbarBrand>
 					</NavbarContent>
@@ -94,26 +92,36 @@ export const Navbar = () => {
 							transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
 							className="overflow-hidden"
 						>
-						<div ref={menuBox} className="grid grid-cols-2 gap-4 p-4">
-							{siteConfig.navItems.map((item, index) => (
-								<motion.div
-									key={item.href}
-									initial={{ opacity: 0 }}
-									animate={{ opacity: 1 }}
-									transition={{ delay: 0.1 + index * 0.05, duration: 0.2 }}
-								>
-								<Link
-									href={item.href}
-									color="foreground"
-									// className="rounded-none py-2 w-full text-center bg-content1 hover:bg-content2 hover:text-primary transition-colors duration-200 block px-4"
-									className="rounded-xl w-full text-center bg-content2 block py-5 hover:bg-primary hover:text-white transition-colors duration-200"
-									size="lg"
-									onPress={handleMenuToggle}
-								>
-									{item.label}
-								</Link>
-								</motion.div>
-							))}
+						<div ref={menuBox} className="flex flex-col p-2 gap-1">
+							{siteConfig.navItems.map((item, index) => {
+								const isActive = location.pathname === item.href;
+								const isLast = index === siteConfig.navItems.length - 1;
+								return (
+									<motion.div
+										key={item.href}
+										initial={{ opacity: 0, x: -8 }}
+										animate={{ opacity: 1, x: 0 }}
+										transition={{ delay: 0.05 + index * 0.04, duration: 0.2 }}
+									>
+										<Link
+											href={item.href}
+											color="foreground"
+											className={`w-full flex items-center px-5 py-4 rounded-3xl transition-colors duration-200 ${
+												isActive
+													? "bg-primary/10 text-primary font-semibold"
+													: "hover:bg-content2"
+											}`}
+											size="lg"
+											onPress={handleMenuToggle}
+										>
+											<span>{item.label}</span>
+										</Link>
+										{!isLast && (
+											<div className="h-px bg-default/40 mx-5" />
+										)}
+									</motion.div>
+								);
+							})}
 						</div>
 						</motion.div>
 					)}

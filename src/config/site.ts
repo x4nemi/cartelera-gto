@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Cartelera Cuévano",
+  name: "Cartelera GTO",
   description: "Busca y descubre eventos en Guanajuato capital.",
   navItems: [
     {
