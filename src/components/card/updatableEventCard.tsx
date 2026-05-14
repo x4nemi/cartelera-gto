@@ -4,7 +4,6 @@ import { EditEventModal } from "../modal/editEventModal"
 import { DeleteEventModal } from "../modal/deleteEventModal"
 import { CosmosAPI, PostData } from "@/config/apiClient"
 import { EditIcon, TrashIcon, ViewIcon } from "../icons"
-import { EventTypeChip } from "./eventTypeChip"
 
 const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"]
 const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"]
@@ -72,9 +71,7 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 										</div>
 									</div>
 								)}
-								<CardHeader className="absolute top-2 left-2 z-10 p-0">
-									<EventTypeChip type={props.type} />
-								</CardHeader>
+
 							</>
 						) : (
 							<CardHeader className="absolute bottom-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl">

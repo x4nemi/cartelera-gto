@@ -1,7 +1,6 @@
 import { Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/react"
 import { EventDrawer } from "./eventDrawer"
 import { PostData } from "@/config/apiClient"
-import { EventTypeChip } from "./eventTypeChip"
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useNavigate } from "react-router-dom"
 
@@ -78,9 +77,7 @@ export const EventCard = (props: PostData) => {
 								</div>
 							</div>
 						)}
-						<CardHeader className="absolute top-2 left-2 z-10 p-0">
-							<EventTypeChip type={props.type} />
-						</CardHeader>
+
 					</>
 				) : (
 					<CardHeader className="absolute bottom-2 right-2 z-10 p-0 flex flex-col items-center overflow-hidden rounded-2xl">

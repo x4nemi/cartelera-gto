@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button, Chip, Link, ScrollShadow, Spinner, User } from "@heroui/react";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { CalendarIcon, MapPinIcon } from "@/components/icons";
-import { EventTypeChip } from "@/components/card/eventTypeChip";
 import DefaultLayout from "@/layouts/default";
 
 export const EventPage = () => {
@@ -79,7 +78,6 @@ export const EventPage = () => {
                         </svg>
                     </Button>
                     <div className="flex gap-2">
-                        <EventTypeChip type={event.type} variant="drawer" />
                         <Button
                             className="font-medium text-small text-default-500"
                             endContent={

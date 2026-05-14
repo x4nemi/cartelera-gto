@@ -15,7 +15,6 @@ import { ImageCarousel } from "../image/imageCarousel";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon, MapPinIcon } from "../icons";
 import { useEffect, useState } from "react";
-import { EventTypeChip } from "./eventTypeChip";
 
 export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boolean, onOpenChange: (open: boolean) => void, cardProps: PostData }) => {
     const { dates, images, ownerUsername, caption, owner, title, summary, location, price, tags } = cardProps;
@@ -79,7 +78,6 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                                         </svg>
                                     </Button>
                                 </Tooltip>
-                                <EventTypeChip type={cardProps.type} variant="drawer" />
                             </>
                             <div className="w-full flex justify-end gap-2">
                                 <Button
