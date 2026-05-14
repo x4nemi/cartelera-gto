@@ -39,7 +39,7 @@ export const Navbar = () => {
 						src="/favicon.ico"
 						alt=""
 						aria-hidden
-						className="size-6 object-contain"
+						className="size-6 object-contain dark:invert"
 					/>
 				</Link>
 
