@@ -236,7 +236,7 @@ export const MonthCalendar = ({
         MONTH_NAMES[(viewMonth.getMonth() + 1) % 12];
 
     return (
-        <div className="bg-content1/90 backdrop-blur-md p-3 select-none rounded-none rounded-b-4xl max-md:border-t-0 border border-default md:rounded-4xl shadow-sm md:shadow-none">
+        <div className="bg-content1/90 backdrop-blur-md p-3 select-none rounded-4xl border border-default shadow-lg md:shadow-none">
             {/* Header */}
             <div className="flex items-center justify-between gap-2 px-1 mb-3">
                 {isCurrentOrPastMonth ? (
