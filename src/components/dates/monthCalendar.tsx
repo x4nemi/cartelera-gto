@@ -289,9 +289,9 @@ export const MonthCalendar = ({
         MONTH_NAMES[(viewMonth.getMonth() + 1) % 12];
 
     return (
-        <div className="bg-content1/90 backdrop-blur-md p-3 select-none rounded-4xl border border-default shadow-lg md:shadow-none">
+        <div className="bg-content1/90 backdrop-blur-md p-2 md:p-3 select-none rounded-4xl border border-default shadow-lg md:shadow-none">
             {/* Header */}
-            <div className="flex items-center justify-between gap-2 px-1 mb-3">
+            <div className="flex items-center justify-between gap-2 px-1 mb-1 md:mb-3">
                 {isCurrentOrPastMonth ? (
                     <span className="w-20" aria-hidden />
                 ) : (
@@ -307,7 +307,7 @@ export const MonthCalendar = ({
                         {prevMonthName}
                     </Button>
                 )}
-                <span className="md:text-lead text-h2 text-center flex-1">
+                <span className="md:text-lead text-medium md:text-h2 text-center flex-1 font-semibold">
                     {MONTH_NAMES[viewMonth.getMonth()]} {viewMonth.getFullYear()}
                 </span>
                 <Button
@@ -355,19 +355,19 @@ export const MonthCalendar = ({
                                         onClick={() => onSelectDate(d)}
                                         disabled={disabled}
                                         className={[
-                                            "group relative flex flex-col items-center justify-center gap-1.5 py-2 transition-colors",
+                                            "group relative flex flex-col items-center justify-center gap-0.5 py-1 transition-colors",
                                             disabled ? "opacity-30 cursor-default" : "",
                                             !disabled && !inMonth ? "opacity-50" : "",
                                         ].join(" ")}
                                         aria-label={d.toDateString()}
                                         aria-pressed={isSelected}
                                     >
-                                        <span className="text-[11px] font-semibold tracking-wide text-foreground/60">
+                                        <span className="text-[10px] font-semibold tracking-wide text-foreground/60">
                                             {WEEKDAYS_LONG[dow]}
                                         </span>
                                         <span
                                             className={[
-                                                "flex items-center justify-center size-9 rounded-full text-base leading-none transition-colors",
+                                                "flex items-center justify-center size-8 rounded-full text-small leading-none transition-colors",
                                                 isSelected
                                                     ? "bg-primary text-primary-foreground font-semibold"
                                                     : isToday
