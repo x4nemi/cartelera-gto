@@ -197,6 +197,55 @@ export const MonthCalendar = ({
     // edge gradient hints accordingly.
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
+
+    /** First future-or-today date in `week` that has an event, or null. */
+    const firstEventDateInWeek = (week: Date[]): Date | null => {
+        for (const d of week) {
+            if (d < today) continue;
+            if (eventDates.has(toKey(d))) return d;
+        }
+        return null;
+    };
+
+    /** First future-or-today date in the month of `monthAnchor` with an event. */
+    const firstEventDateInMonth = (monthAnchor: Date): Date | null => {
+        const year = monthAnchor.getFullYear();
+        const month = monthAnchor.getMonth();
+        const last = new Date(year, month + 1, 0).getDate();
+        for (let day = 1; day <= last; day++) {
+            const d = new Date(year, month, day);
+            if (d < today) continue;
+            if (eventDates.has(toKey(d))) return d;
+        }
+        return null;
+    };
+
+    // When the user swipes the mobile week strip, auto-select the first day
+    // with events in the newly visible week. Debounced via scroll-end snap.
+    useEffect(() => {
+        const strip = stripRef.current;
+        if (!strip) return;
+        let timer: number | null = null;
+        const onScroll = () => {
+            if (timer !== null) window.clearTimeout(timer);
+            timer = window.setTimeout(() => {
+                if (!strip.clientWidth) return;
+                const idx = Math.round(strip.scrollLeft / strip.clientWidth);
+                const week = mobileWeeks[idx];
+                if (!week) return;
+                // No-op if the currently selected date is already in this week.
+                if (week.some((d) => isSameDay(d, selectedDate))) return;
+                const first = firstEventDateInWeek(week);
+                if (first) onSelectDate(first);
+            }, 120);
+        };
+        strip.addEventListener("scroll", onScroll, { passive: true });
+        return () => {
+            strip.removeEventListener("scroll", onScroll);
+            if (timer !== null) window.clearTimeout(timer);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [mobileWeeks, eventDates, selectedDate]);
     useEffect(() => {
         const strip = stripRef.current;
         if (!strip) return;
@@ -219,10 +268,14 @@ export const MonthCalendar = ({
     const handlePrev = () => {
         const prev = new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1);
         onViewMonthChange(prev);
+        const first = firstEventDateInMonth(prev);
+        if (first) onSelectDate(first);
     };
     const handleNext = () => {
         const next = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1);
         onViewMonthChange(next);
+        const first = firstEventDateInMonth(next);
+        if (first) onSelectDate(first);
     };
 
     const isCurrentOrPastMonth =

@@ -122,26 +122,6 @@ export const EventRowCard = (props: PostData) => {
 
                             {(location || price || (tags && tags.length > 0)) && (
                                 <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                                    {location && (
-                                        <Chip
-                                            size="sm"
-                                            variant="flat"
-                                            className="rounded-[10px] bg-white/15 text-white backdrop-blur-md max-w-full"
-                                            startContent={<MapPinIcon size={12} />}
-                                        >
-                                            <span className="truncate">{location}</span>
-                                        </Chip>
-                                    )}
-                                    {price && (
-                                        <Chip
-                                            size="sm"
-                                            variant="flat"
-                                            className="rounded-[10px] bg-white/15 text-white backdrop-blur-md"
-                                            startContent={<MoneyIcon size={12} />}
-                                        >
-                                            {price}
-                                        </Chip>
-                                    )}
                                     {tags?.slice(0, 2).map((t) => (
                                         <Chip
                                             key={t}
