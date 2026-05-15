@@ -19,7 +19,7 @@ type NavEntry = {
 const NAV: NavEntry[] = [
 	{ label: "Inicio", short: "Inicio", href: "/", icon: <CalendarIcon size={20} /> },
 	{ label: "Publicar", short: "Publicar", href: "/creacion", icon: <PlusIcon size={20} /> },
-	{ label: "Preguntas frecuentes", short: "FAQ", href: "/faq", icon: <QuestionIcon size={20} /> },
+	{ label: "Acerca", short: "Acerca", href: "/faq", icon: <QuestionIcon size={20} /> },
 ];
 
 export const Navbar = () => {

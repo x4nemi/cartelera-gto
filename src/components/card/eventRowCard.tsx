@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { EventDrawer } from "./eventDrawer";
 import { PostData } from "@/config/apiClient";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { MapPinIcon, MoneyIcon } from "../icons";
 
-const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+// const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+// const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
 const parseLocalDate = (dateStr: string) => {
     const [y, m, d] = dateStr.split("-").map(Number);
@@ -22,22 +21,22 @@ export const EventRowCard = (props: PostData) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const eventDate = (() => {
-        if (!props.dates?.length) return new Date();
-        const future = props.dates
-            .map(parseLocalDate)
-            .filter((d) => d >= today)
-            .sort((a, b) => a.getTime() - b.getTime());
-        if (future.length) return future[0];
-        const past = props.dates
-            .map(parseLocalDate)
-            .filter((d) => d < today)
-            .sort((a, b) => b.getTime() - a.getTime());
-        return past[0] ?? new Date();
-    })();
-    const month = months[eventDate.getMonth()];
-    const day = eventDate.getDate();
-    const weekday = weekdays[eventDate.getDay()];
+    // const eventDate = (() => {
+    //     if (!props.dates?.length) return new Date();
+    //     const future = props.dates
+    //         .map(parseLocalDate)
+    //         .filter((d) => d >= today)
+    //         .sort((a, b) => a.getTime() - b.getTime());
+    //     if (future.length) return future[0];
+    //     const past = props.dates
+    //         .map(parseLocalDate)
+    //         .filter((d) => d < today)
+    //         .sort((a, b) => b.getTime() - a.getTime());
+    //     return past[0] ?? new Date();
+    // })();
+    // const month = months[eventDate.getMonth()];
+    // const day = eventDate.getDate();
+    // const weekday = weekdays[eventDate.getDay()];
 
     const isPast = props.dates ? props.dates.every((d) => parseLocalDate(d) < today) : false;
 
@@ -93,7 +92,7 @@ export const EventRowCard = (props: PostData) => {
 
                     {/* Top-right: date badge */}
                     {/* Top-right: date badge — colored header strip + bold day */}
-                    <div className="absolute top-3 right-3 z-20 flex flex-col items-center overflow-hidden rounded-[18px] bg-white/95 dark:bg-content1/95 backdrop-blur-md shadow-lg ring-1 ring-black/5 w-12">
+                    {/* <div className="absolute top-3 right-3 z-20 flex flex-col items-center overflow-hidden rounded-[18px] bg-white/95 dark:bg-content1/95 backdrop-blur-md shadow-lg ring-1 ring-black/5 w-12">
                         <div className="w-full bg-primary text-primary-foreground text-[10px] font-bold tracking-[0.12em] text-center py-0.5">
                             {month}
                         </div>
@@ -105,7 +104,7 @@ export const EventRowCard = (props: PostData) => {
                                 {weekday}
                             </span>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Bottom gradient + metadata overlay */}
                     <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-16 pb-4 px-4 sm:px-5">
