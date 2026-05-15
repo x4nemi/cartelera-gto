@@ -58,6 +58,19 @@ export interface PostData {
   /** Raw AI output kept for reference / re-suggestion; never shown directly when the user has saved their own values. */
   aiSuggestions?: AISuggestions | null;
 
+  /** AI judgment on whether this post is actually an event. Drives the publish gate. */
+  aiVerdict?: {
+    isEvent: boolean;
+    confidence: number;       // 0..1
+    reason?: string | null;   // short Spanish sentence; shown in gate + admin queue
+    model: string;            // e.g. "gpt-4o-mini" — for future debugging
+    evaluatedAt: string;      // ISO timestamp
+  } | null;
+
+  /** Admin who approved/rejected a pending post. */
+  reviewedBy?: string;
+  reviewedAt?: string;
+
   // state
   status: PostStatus;            // single source of truth for lifecycle
   source: PostSource;

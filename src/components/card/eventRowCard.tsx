@@ -69,8 +69,8 @@ export const EventRowCard = (props: PostData) => {
                 onClick={handlePress}
                 shadow="none"
             >
-                {/* Poster — fills the entire card. Aspect adapts: tall on mobile, wider on larger screens. */}
-                <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] md:aspect-[16/10] lg:aspect-[2/1] bg-content2">
+                {/* Poster — fills the entire card. Portrait orientation across breakpoints so the artwork stays the protagonist. */}
+                <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] bg-content2">
                     <Image
                         removeWrapper
                         alt={headline}
@@ -80,7 +80,7 @@ export const EventRowCard = (props: PostData) => {
                     />
 
                     {/* Top-left: owner chip floating on the poster */}
-                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 rounded-[18px] bg-black/45 backdrop-blur-md px-2 py-1 max-w-[60%]">
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 rounded-[18px] bg-black/45 backdrop-blur-md px-2 py-2 max-w-[60%]">
                         <Avatar
                             src={owner?.profilePicUrl}
                             size="sm"
@@ -92,18 +92,16 @@ export const EventRowCard = (props: PostData) => {
                     </div>
 
                     {/* Top-right: date badge */}
-                    <div
-                        className="absolute top-3 right-3 z-20 flex flex-col items-center overflow-hidden rounded-[18px] border border-white/30 bg-black/45 backdrop-blur-md shadow-md"
-                        style={{ width: 44 }}
-                    >
-                        <div className="w-full text-[9px] font-bold tracking-wider text-center text-white pt-0.5">
+                    {/* Top-right: date badge — colored header strip + bold day */}
+                    <div className="absolute top-3 right-3 z-20 flex flex-col items-center overflow-hidden rounded-[18px] bg-white/95 dark:bg-content1/95 backdrop-blur-md shadow-lg ring-1 ring-black/5 w-12">
+                        <div className="w-full bg-primary text-primary-foreground text-[10px] font-bold tracking-[0.12em] text-center py-0.5">
                             {month}
                         </div>
-                        <div className="flex flex-col items-center w-full pb-0.5 pt-0 border-t border-white/30">
-                            <span className="font-semibold leading-tight font-mono text-medium text-white">
+                        <div className="flex flex-col items-center w-full px-1 pt-0.5 pb-1">
+                            <span className="font-bold leading-none font-mono text-large text-foreground">
                                 {day}
                             </span>
-                            <span className="text-[9px] leading-tight pb-0.5 text-white/80">
+                            <span className="text-[10px] leading-tight text-default-500 mt-0.5">
                                 {weekday}
                             </span>
                         </div>

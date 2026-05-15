@@ -2,7 +2,7 @@ import { SmartDatePicker } from "@/components/dates/smartDatePicker";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { AISuggestions, PostData } from "@/config/apiClient";
 import { Avatar, Card, Link, Textarea } from "@heroui/react";
-import { AISuggestionsPanel, AIFieldsValue } from "./AISuggestionsPanel"
+import { AISuggestionsPanel, AIFieldsValue, AIVerdict } from "./AISuggestionsPanel"
 interface InstagramPostPreviewProps {
 	postData: PostData | null;
 	selectedDates: Date[];
@@ -10,6 +10,7 @@ interface InstagramPostPreviewProps {
 	aiFields: AIFieldsValue;
 	onAIFieldsChange: (next: AIFieldsValue) => void;
 	onAISuggestions?: (s: AISuggestions | null) => void;
+	onAIVerdict?: (v: AIVerdict | null) => void;
 }
 
 export const InstagramPostPreview = ({
@@ -19,6 +20,7 @@ export const InstagramPostPreview = ({
 	aiFields,
 	onAIFieldsChange,
 	onAISuggestions,
+	onAIVerdict,
 }: InstagramPostPreviewProps) => {
 	return (
 		<div className="mt-2 flex flex-col rounded-xl gap-3">
@@ -76,6 +78,7 @@ export const InstagramPostPreview = ({
 				value={aiFields}
 				onChange={onAIFieldsChange}
 				onSuggestions={onAISuggestions}
+				onVerdict={onAIVerdict}
 			/>
 
 			<SmartDatePicker

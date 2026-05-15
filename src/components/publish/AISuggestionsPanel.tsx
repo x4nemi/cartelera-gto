@@ -2,6 +2,10 @@ import { Button, Chip, Input, Spinner, Textarea, Tooltip } from "@heroui/react";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { AIApi, AISuggestions } from "@/config/apiClient";
+import type { PostData } from "@/types";
+
+/** AI verdict on whether the post is actually an event. Mirrors PostData.aiVerdict. */
+export type AIVerdict = NonNullable<PostData["aiVerdict"]>;
 
 /** What the parent collects: the user-edited (or accepted) values, ready to write to PostData. */
 export interface AIFieldsValue {
@@ -22,6 +26,8 @@ interface AISuggestionsPanelProps {
 	onChange: (next: AIFieldsValue) => void;
 	/** Called whenever a fresh AI suggestion arrives, so parent can persist `aiSuggestions` if it wants. */
 	onSuggestions?: (suggestions: AISuggestions | null) => void;
+	/** Called whenever the AI returns its isEvent verdict, so the parent can gate publishing. */
+	onVerdict?: (verdict: AIVerdict | null) => void;
 }
 
 function makeKey(caption?: string, imageUrls?: string[]) {
@@ -47,6 +53,7 @@ export const AISuggestionsPanel = ({
 	value,
 	onChange,
 	onSuggestions,
+	onVerdict,
 }: AISuggestionsPanelProps) => {
 	const [loading, setLoading] = useState(false);
 	const [suggestions, setSuggestions] = useState<AISuggestions | null>(null);
@@ -68,7 +75,10 @@ export const AISuggestionsPanel = ({
 			.then((res) => {
 				if (!res) {
 					setSuggestions(null);
-					if (!cancelled) onSuggestions?.(null);
+					if (!cancelled) {
+						onSuggestions?.(null);
+						onVerdict?.(null);
+					}
 					return;
 				}
 				const next: AISuggestions = {
@@ -82,7 +92,16 @@ export const AISuggestionsPanel = ({
 					extractedAt: new Date().toISOString(),
 				};
 				setSuggestions(next);
-				if (!cancelled) onSuggestions?.(next);
+				if (!cancelled) {
+					onSuggestions?.(next);
+					onVerdict?.({
+						isEvent: res.isEvent,
+						confidence: res.isEventConfidence,
+						reason: res.isEventReason,
+						model: "gpt-4o-mini",
+						evaluatedAt: new Date().toISOString(),
+					});
+				}
 			})
 			.finally(() => {
 				setLoading(false);

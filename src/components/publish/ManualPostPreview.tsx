@@ -1,7 +1,7 @@
 import { SmartDatePicker } from "@/components/dates/smartDatePicker";
 import { Avatar, Card, Image, Textarea } from "@heroui/react";
 import { useRef, useState } from "react";
-import { AISuggestionsPanel, AIFieldsValue } from "./AISuggestionsPanel";
+import { AISuggestionsPanel, AIFieldsValue, AIVerdict } from "./AISuggestionsPanel";
 import type { AISuggestions } from "@/config/apiClient";
 
 interface ManualPostPreviewProps {
@@ -15,6 +15,7 @@ interface ManualPostPreviewProps {
 	aiFields: AIFieldsValue;
 	onAIFieldsChange: (next: AIFieldsValue) => void;
 	onAISuggestions?: (s: AISuggestions | null) => void;
+	onAIVerdict?: (v: AIVerdict | null) => void;
 }
 
 export const ManualPostPreview = ({
@@ -28,6 +29,7 @@ export const ManualPostPreview = ({
 	aiFields,
 	onAIFieldsChange,
 	onAISuggestions,
+	onAIVerdict,
 }: ManualPostPreviewProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [previews, setPreviews] = useState<string[]>([]);
@@ -137,6 +139,7 @@ export const ManualPostPreview = ({
 				value={aiFields}
 				onChange={onAIFieldsChange}
 				onSuggestions={onAISuggestions}
+				onVerdict={onAIVerdict}
 			/>
 
 			<SmartDatePicker

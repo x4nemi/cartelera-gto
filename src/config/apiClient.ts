@@ -43,6 +43,9 @@ export const AIApi = {
         location: string | null;
         price: string | null;
         eventType: "event" | "workshop" | "calendar" | null;
+        isEvent: boolean;
+        isEventConfidence: number;
+        isEventReason: string | null;
         confidence: {
             title: number;
             summary: number;
@@ -254,10 +257,15 @@ export const CosmosAPI = {
     },
 
     /**
-     * Get all users
+    /**
+     * Get all users. By default the backend returns only approved users; pass
+     * `status` to filter by another lifecycle state, or `"all"` for everyone.
      */
-    async getUsers(): Promise<UserData[]> {
-        const response = await fetch(`/api/getUsers`, {
+    async getUsers(options: { status?: "draft" | "pending" | "approved" | "rejected" | "all" } = {}): Promise<UserData[]> {
+        const params = new URLSearchParams();
+        if (options.status) params.append("status", options.status);
+        const qs = params.toString();
+        const response = await fetch(`/api/getUsers${qs ? `?${qs}` : ""}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -323,11 +331,13 @@ export const CosmosAPI = {
         page?: number;
         limit?: number;
         ownerUsername?: string;
+        status?: PostStatus;
     } = {}): Promise<PaginatedResponse<PostData>> {
         const params = new URLSearchParams();
         if (options.page) params.append("page", options.page.toString());
         if (options.limit) params.append("limit", options.limit.toString());
         if (options.ownerUsername) params.append("ownerUsername", options.ownerUsername);
+        if (options.status) params.append("status", options.status);
 
         const response = await fetch(`/api/getEvents?${params.toString()}`, {
             method: "GET",
@@ -348,7 +358,7 @@ export const CosmosAPI = {
      * Update an event (publish, dismiss, or update dates).
      * Note: state lives in the `status` field; "publish" sets status:"published", "dismiss" sets status:"dismissed".
      */
-    async updateEvent(shortCode: string, action: "publish" | "dismiss" | "updateDates", data?: { dates?: string[]; type?: string }): Promise<{ success: boolean }> {
+    async updateEvent(shortCode: string, action: "publish" | "dismiss" | "updateDates", data?: { dates?: string[]; type?: string; reviewedBy?: string }): Promise<{ success: boolean }> {
         const response = await fetch(`/api/updateEvent`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },

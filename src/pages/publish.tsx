@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, IGFilledIcon, IgIcon, ImagesFilledIcon, ImagesIcon } from "@/components/icons";
 import { CancelModal } from "@/components/modal/cancelModal";
-import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions, AIFieldsValue, ReviewSummary } from "@/components/publish";
+import { AIReviewGateModal } from "@/components/modal/aiReviewGateModal";
+import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishActions, AIFieldsValue, AIVerdict, ReviewSummary } from "@/components/publish";
 import { AISuggestions, AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
 import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
@@ -25,7 +26,19 @@ export default function PublishPage() {
 	//#region AI-assisted fields (shared by both flows; reset on cancel)
 	const [aiFields, setAiFields] = useState<AIFieldsValue>({});
 	const [aiSuggestions, setAiSuggestions] = useState<AISuggestions | null>(null);
+	const [aiVerdict, setAiVerdict] = useState<AIVerdict | null>(null);
 	//#endregion
+
+	// Threshold below which the AI judgment forces admin review before publishing.
+	// Tune from real data once we have a few weeks of approvals/rejections.
+	const AI_EVENT_CONFIDENCE_THRESHOLD = 0.8;
+	const isAdmin = typeof window !== "undefined" && sessionStorage.getItem("admin_auth") === "1";
+	const requiresReview =
+		!isAdmin &&
+		!!aiVerdict &&
+		(!aiVerdict.isEvent || aiVerdict.confidence < AI_EVENT_CONFIDENCE_THRESHOLD);
+
+	const [reviewGateOpen, setReviewGateOpen] = useState(false);
 
 	const hasSelectedDates = selectedDates.length > 0;
 	const canPublishManual = hasSelectedDates && manualImages.length > 0 && manualOwnerName.trim().length > 0;
@@ -45,6 +58,7 @@ export default function PublishPage() {
 		if (aiFields.price?.trim()) out.price = aiFields.price.trim();
 		if (aiFields.tags && aiFields.tags.length > 0) out.tags = aiFields.tags;
 		if (aiSuggestions) out.aiSuggestions = aiSuggestions;
+		if (aiVerdict) out.aiVerdict = aiVerdict;
 		return out;
 	};
 	//#endregion
@@ -65,6 +79,7 @@ export default function PublishPage() {
 		setManualCaption("");
 		setAiFields({});
 		setAiSuggestions(null);
+		setAiVerdict(null);
 	}
 
 	//#endregion
@@ -152,7 +167,7 @@ export default function PublishPage() {
 		}
 	};
 
-	const handlePublishManual = async () => {
+	const handlePublishManual = async (targetStatus: "published" | "pending" = "published") => {
 		if (manualImages.length === 0 || !manualOwnerName.trim()) return;
 
 		setIsPublishing(true);
@@ -171,7 +186,7 @@ export default function PublishPage() {
 				dates: dates.length > 0 ? dates : null,
 				taggedUsers: [],
 				source: "manual",
-				status: "published",
+				status: targetStatus,
 				createdAt: new Date().toISOString(),
 				updatedAt: new Date().toISOString(),
 				...aiFieldsToWrite(),
@@ -180,14 +195,26 @@ export default function PublishPage() {
 			const result = await CosmosAPI.insertEvent(manualPost);
 
 			if (result.success) {
-				addToast({
-					title: "Publicación exitosa",
-					description: "Tu evento ha sido publicado correctamente.",
-					color: "success",
-					timeout: 8000,
-					variant: "flat"
-				});
-				navigate(`/completado/${shortCode}`);
+				if (targetStatus === "pending") {
+					addToast({
+						title: "Enviada a revisión",
+						description: "Tu publicación fue enviada a revisión. Los administradores la revisarán pronto.",
+						color: "primary",
+						timeout: 8000,
+						variant: "flat",
+					});
+					setReviewGateOpen(false);
+					navigate(`/u/${manualOwnerName.trim().toLowerCase().replace(/\s+/g, "_")}`);
+				} else {
+					addToast({
+						title: "Publicación exitosa",
+						description: "Tu evento ha sido publicado correctamente.",
+						color: "success",
+						timeout: 8000,
+						variant: "flat",
+					});
+					navigate(`/completado/${shortCode}`);
+				}
 			} else {
 				addToast({
 					title: "Error al publicar",
@@ -210,20 +237,20 @@ export default function PublishPage() {
 		}
 	}
 
-	const handlePublishPost = async () => {
+	const handlePublishPost = async (targetStatus: "published" | "pending" = "published") => {
 		if (!postData) return;
 
 		setIsPublishing(true);
 
 		try {
 			const dates = computeFlatDates();
-			
+
 			const postDataToPublish = {
 				...postData,
 				type: inferEventType(dates),
 				dates: dates.length > 0 ? dates : null,
 				source: postData.source || ("instagram" as const),
-				status: "published" as const,
+				status: targetStatus,
 				updatedAt: new Date().toISOString(),
 				...aiFieldsToWrite(),
 			};
@@ -231,15 +258,28 @@ export default function PublishPage() {
 			const publishedPost = await updatePost(postDataToPublish);
 
 			if (publishedPost) {
-				addToast({
-					title: "Publicación exitosa",
-					description: "Tu evento ha sido publicado correctamente.",
-					color: "success",
-					timeout: 8000,
-					variant: "flat"
-				});
-				setIsPublishing(false);
-				navigate(`/completado/${publishedPost.shortCode}`);
+				if (targetStatus === "pending") {
+					addToast({
+						title: "Enviada a revisión",
+						description: "Tu publicación fue enviada a revisión. Los administradores la revisarán pronto.",
+						color: "primary",
+						timeout: 8000,
+						variant: "flat",
+					});
+					setReviewGateOpen(false);
+					setIsPublishing(false);
+					navigate(`/u/${postData.ownerUsername}`);
+				} else {
+					addToast({
+						title: "Publicación exitosa",
+						description: "Tu evento ha sido publicado correctamente.",
+						color: "success",
+						timeout: 8000,
+						variant: "flat",
+					});
+					setIsPublishing(false);
+					navigate(`/completado/${publishedPost.shortCode}`);
+				}
 			} else {
 				addToast({
 					title: "Error al publicar",
@@ -317,11 +357,11 @@ export default function PublishPage() {
 						}}
 						style={{ paddingLeft: 0, paddingRight: 0 }}
 						itemClasses={{
-							base: "mb-2",
+							base: "mb-2 !text-base",
 							trigger: cn(
 								"p-4 bg-content2 rounded-2xl hover:bg-content3 transition-colors",
 								"data-[open=true]:rounded-b-none data-[open=true]:bg-content2",
-								"flex items-center justify-between gap-4 duration-250"
+								"flex items-center justify-between gap-4 duration-250 border border-default-200/60",
 							),
 							content: "px-4 py-4 border-t border-default-200/60 dark:border-default-100/40 rounded-b-2xl bg-content2",
 						}}
@@ -370,6 +410,7 @@ export default function PublishPage() {
 									aiFields={aiFields}
 									onAIFieldsChange={setAiFields}
 									onAISuggestions={setAiSuggestions}
+									onAIVerdict={setAiVerdict}
 								/>
 							)}
 						</AccordionItem>
@@ -401,6 +442,7 @@ export default function PublishPage() {
 								aiFields={aiFields}
 								onAIFieldsChange={setAiFields}
 								onAISuggestions={setAiSuggestions}
+								onAIVerdict={setAiVerdict}
 							/>
 						</AccordionItem>
 					</Accordion>
@@ -433,11 +475,25 @@ export default function PublishPage() {
 
 						{selectedKey === "2" ? (
 							canPublishManual ? (
-								<PublishActions
-									onCancel={() => setOpenCancelModal(true)}
-									onPublish={handlePublishManual}
-									isPublishing={isPublishing}
-								/>
+								<>
+									{requiresReview && (
+										<Alert
+											color="warning"
+											variant="flat"
+											className="rounded-2xl"
+											title="Esta publicación necesitará aprobación"
+											description={
+												aiVerdict?.reason ||
+												"La IA no está segura de que esto sea un evento. Un administrador deberá revisarla antes de publicarla."
+											}
+										/>
+									)}
+									<PublishActions
+										onCancel={() => setOpenCancelModal(true)}
+										onPublish={() => requiresReview ? setReviewGateOpen(true) : handlePublishManual("published")}
+										isPublishing={isPublishing}
+									/>
+								</>
 							) : (
 								<Alert
 									color="warning"
@@ -456,11 +512,25 @@ export default function PublishPage() {
 								/>
 							)
 						) : hasSelectedDates ? (
-							<PublishActions
-								onCancel={() => setOpenCancelModal(true)}
-								onPublish={handlePublishPost}
-								isPublishing={isPublishing}
-							/>
+							<>
+								{requiresReview && (
+									<Alert
+										color="warning"
+										variant="flat"
+										className="rounded-2xl"
+										title="Esta publicación necesitará aprobación"
+										description={
+											aiVerdict?.reason ||
+											"La IA no está segura de que esto sea un evento. Un administrador deberá revisarla antes de publicarla."
+										}
+									/>
+								)}
+								<PublishActions
+									onCancel={() => setOpenCancelModal(true)}
+									onPublish={() => requiresReview ? setReviewGateOpen(true) : handlePublishPost("published")}
+									isPublishing={isPublishing}
+								/>
+							</>
 						) : (
 							<Alert
 								color="warning"
@@ -475,6 +545,17 @@ export default function PublishPage() {
 			</section>
 			)}
 			<CancelModal openModal={openCancelModal} setOpenModal={setOpenCancelModal} onCancel={handleCancel} />
+			<AIReviewGateModal
+				isOpen={reviewGateOpen}
+				onOpenChange={setReviewGateOpen}
+				verdict={aiVerdict}
+				isSubmitting={isPublishing}
+				onSubmitForReview={() =>
+					selectedKey === "2"
+						? handlePublishManual("pending")
+						: handlePublishPost("pending")
+				}
+			/>
 		</DefaultLayout>
 	);
 }

@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MonthCalendar } from "@/components/dates/monthCalendar";
-import { EventCardLarge } from "@/components/card/eventCardLarge";
 import { EventRowCard } from "@/components/card/eventRowCard";
 import { PostData } from "@/config/apiClient";
 
@@ -208,8 +207,6 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                         {visibleDays.map((d) => {
                             const key = toKey(d);
                             const dayPosts = postsByDay.get(key) ?? [];
-                            const isActive =
-                                d.getTime() === selectedDate.getTime();
                             const isToday = d.getTime() === today.getTime();
                             return (
                                 <section
