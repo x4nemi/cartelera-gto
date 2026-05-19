@@ -76,7 +76,7 @@ export const Navbar = () => {
 							</Link>
 						);
 					})}
-					<Link
+					{/* <Link
 						key={PORTAL_LINK.href}
 						href={PORTAL_LINK.href}
 						isExternal
@@ -86,7 +86,7 @@ export const Navbar = () => {
 					>
 						<span className="shrink-0">{PORTAL_LINK.icon}</span>
 						<span>{PORTAL_LINK.short}</span>
-					</Link>
+					</Link> */}
 				</nav>
 
 				<div className="w-px h-6 bg-default/40 mx-1" aria-hidden />
