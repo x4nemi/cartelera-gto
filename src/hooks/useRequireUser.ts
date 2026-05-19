@@ -1,16 +1,28 @@
 import { CosmosAPI, UserData } from "@/config/apiClient";
+import { clearPortalSession } from "@/config/portalSession";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Simple in-memory cache so the user is only fetched once per username
 const userCache = new Map<string, UserData>();
 
+export type UseRequireUserOptions = {
+    /** Where to send the visitor when the user is missing / not approved. Defaults to "/". */
+    redirectTo?: string;
+    /** If true, also clear the portal session on redirect. Useful for portal-side pages. */
+    clearSessionOnReject?: boolean;
+};
+
 /**
  * Hook that fetches a user by username, verifies they exist and are approved,
  * and redirects to home if not. Caches the result so subsequent calls for the
  * same username return instantly without a loading spinner or API call.
  */
-export function useRequireUser(username: string | undefined) {
+export function useRequireUser(
+    username: string | undefined,
+    options: UseRequireUserOptions = {},
+) {
+    const { redirectTo = "/", clearSessionOnReject = false } = options;
     const navigate = useNavigate();
 
     const cached = username ? userCache.get(username) : undefined;
@@ -19,7 +31,7 @@ export function useRequireUser(username: string | undefined) {
 
     useEffect(() => {
         if (!username) {
-            navigate("/");
+            navigate(redirectTo);
             return;
         }
 
@@ -32,6 +44,11 @@ export function useRequireUser(username: string | undefined) {
 
         let cancelled = false;
 
+        const reject = () => {
+            if (clearSessionOnReject) clearPortalSession();
+            navigate(redirectTo);
+        };
+
         const fetchUser = async () => {
             try {
                 const response = await CosmosAPI.getUser(username);
@@ -40,11 +57,11 @@ export function useRequireUser(username: string | undefined) {
                         userCache.set(username, response);
                         setUser(response);
                     } else {
-                        navigate("/");
+                        reject();
                     }
                 }
             } catch {
-                if (!cancelled) navigate("/");
+                if (!cancelled) reject();
             } finally {
                 if (!cancelled) setLoading(false);
             }
@@ -53,7 +70,7 @@ export function useRequireUser(username: string | undefined) {
         fetchUser();
 
         return () => { cancelled = true; };
-    }, [username, navigate]);
+    }, [username, navigate, redirectTo, clearSessionOnReject]);
 
     const refresh = useCallback(async () => {
         if (!username) return;

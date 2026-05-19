@@ -1,5 +1,6 @@
 import { useRequireUser } from "@/hooks/useRequireUser";
 import { useUserPosts } from "@/hooks/useUserPosts";
+import { usePortalSession } from "@/hooks/usePortalSession";
 import { PortalWall } from "@/layouts/portalWall";
 import PortalLayout from "@/layouts/portal";
 import {
@@ -22,17 +23,28 @@ import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { AnimatePresence, motion } from "motion/react";
 
-export const Portal = () => {
-    const { username } = useParams();
+export type PortalProps = {
+    /** When true, hide all edit/publish/dismiss actions (public profile view). */
+    readOnly?: boolean;
+};
+
+export const Portal = ({ readOnly = false }: PortalProps = {}) => {
+    const { username: usernameParam } = useParams();
+    const sessionUsername = usePortalSession();
+    // Public route gets the username from the URL; portal-side uses the session.
+    const username = usernameParam ?? sessionUsername ?? undefined;
     const navigate = useNavigate();
-    const { user, loading: loadingUser } = useRequireUser(username);
+    const { user, loading: loadingUser } = useRequireUser(username, {
+        redirectTo: "/",
+        clearSessionOnReject: !usernameParam,
+    });
     const { posts, loading: loadingPosts, refresh: refreshPosts } = useUserPosts(username);
     const [pendingEvents, setPendingEvents] = useState<PostData[]>([]);
     const [loadingPending, setLoadingPending] = useState(false);
 
-    // Fetch pending auto-detected events
+    // Fetch pending auto-detected events (only when the owner is viewing).
     const fetchPending = useCallback(async () => {
-        if (!username) return;
+        if (!username || readOnly) return;
         setLoadingPending(true);
         try {
             const pending = await CosmosAPI.getPendingEvents(username);
@@ -42,7 +54,7 @@ export const Portal = () => {
         } finally {
             setLoadingPending(false);
         }
-    }, [username]);
+    }, [username, readOnly]);
 
     useEffect(() => {
         fetchPending();
@@ -70,7 +82,7 @@ export const Portal = () => {
     };
 
     const handleEdit = (shortCode: string) => {
-        navigate(`/${username}/publicar?draftId=${shortCode}`);
+        navigate(`/publicar?draftId=${shortCode}`);
     };
 
     const publishedCount = useMemo(() => posts.length, [posts]);
@@ -150,16 +162,18 @@ export const Portal = () => {
                             </Tooltip>
                         )}
 
+                        {!readOnly && (
                         <div className="flex flex-col gap-2 w-full px-4 mt-2">
                             <Button
                                 className="rounded-2xl font-medium"
                                 size="md"
                                 color="primary"
-                                onPress={() => navigate(`/${username}/publicar`)}
+                                onPress={() => navigate(`/publicar`)}
                             >
                                 Crear publicación
                             </Button>
                         </div>
+                        )}
                     </CardBody>
                 </Card>
             )}
@@ -169,7 +183,7 @@ export const Portal = () => {
     return (
         <PortalLayout sidebar={sidebar}>
             {/* Pending auto-detected events */}
-            {(loadingPending || pendingEvents.length > 0) && (
+            {!readOnly && (loadingPending || pendingEvents.length > 0) && (
                 <section className="mb-8">
                     <div className="rounded-3xl border border-secondary-200/60 dark:border-secondary-800/40 bg-secondary-50/40 dark:bg-secondary-950/20 p-4 sm:p-5">
                         <div className="flex items-start gap-3 mb-4">
@@ -331,7 +345,7 @@ export const Portal = () => {
                         <Spinner size="lg" color="primary" />
                     </div>
                 ) : posts.length > 0 ? (
-                    <PortalWall cardsData={posts} onPostUpdated={refreshPosts} />
+                    <PortalWall cardsData={posts} onPostUpdated={refreshPosts} readOnly={readOnly} />
                 ) : (
                     <Card className="rounded-3xl bg-content1 dark:bg-content2" shadow="none">
                         <CardBody className="flex flex-col justify-center items-center py-16 gap-3">
@@ -344,14 +358,16 @@ export const Portal = () => {
                                     Crea tu primera publicación para que aparezca en la cartelera.
                                 </p>
                             </div>
+                            {!readOnly && (
                             <Button
                                 className="rounded-2xl mt-2"
                                 color="primary"
                                 variant="flat"
-                                onPress={() => navigate(`/${username}/publicar`)}
+                                onPress={() => navigate(`/publicar`)}
                             >
                                 Crear publicación
                             </Button>
+                            )}
                         </CardBody>
                     </Card>
                 )}

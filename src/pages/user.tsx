@@ -1,5 +1,6 @@
 import { CheckIcon, ConfettiFilledIcon, IgIcon, MapPinIcon } from '@/components/icons';
 import { createUser, updateUser, UserData } from '@/config/apiClient';
+import { setPortalUsername } from '@/config/portalSession';
 import DefaultLayout from '@/layouts/default'
 import { Button, Card, CardBody, Form, Input, User, Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
@@ -168,6 +169,12 @@ export const UserPage = () => {
             color: "success",
             size: "md"
         });
+        if (userResult?.username) {
+            // Remember which username this browser claims to be, so the portal
+            // dashboard can render without needing a `/:username` URL.
+            // TODO: replace with real auth before GA.
+            setPortalUsername(userResult.username);
+        }
         setIsUserCreated(true);
     }
     //#endregion

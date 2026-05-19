@@ -1,4 +1,6 @@
 import { Navbar } from "@/components/nav/navbar";
+import { PortalNavbar } from "@/components/nav/portalNavbar";
+import { isPortalHost } from "@/config/host";
 
 /**
  * Portal layout: full-width navbar on top, then sidebar + content below.
@@ -11,9 +13,10 @@ export default function PortalLayout({
 	sidebar: React.ReactNode;
 	children: React.ReactNode;
 }) {
+	const Nav = isPortalHost() ? PortalNavbar : Navbar;
 	return (
 		<div className="relative flex flex-col min-h-screen">
-			<Navbar />
+			<Nav />
 
 			{/* Mobile: sidebar stacked full-width above posts */}
 			<div className="md:hidden px-[8.33%] pt-4">

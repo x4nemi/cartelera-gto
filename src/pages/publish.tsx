@@ -5,14 +5,18 @@ import { InstagramLinkInput, InstagramPostPreview, ManualPostPreview, PublishAct
 import { AISuggestions, AzureStorageAPI, createPost, CosmosAPI, PostData, updatePost } from '@/config/apiClient';
 import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
+import { usePortalSession } from "@/hooks/usePortalSession";
 import DefaultLayout from "@/layouts/default";
 import { Accordion, AccordionItem, addToast, Alert, Button, Chip, cn, Spinner } from "@heroui/react";
 import { useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function PublishPage() {
-	const { username } = useParams<{ username: string }>();
-	const { loading: loadingUser } = useRequireUser(username);
+	const username = usePortalSession() ?? undefined;
+	const { loading: loadingUser } = useRequireUser(username, {
+		redirectTo: "/",
+		clearSessionOnReject: true,
+	});
 
 	//#region Selected dates
 	const [selectedDates, setSelectedDates] = useState<Date[]>([]);
@@ -204,7 +208,7 @@ export default function PublishPage() {
 						variant: "flat",
 					});
 					setReviewGateOpen(false);
-					navigate(`/u/${manualOwnerName.trim().toLowerCase().replace(/\s+/g, "_")}`);
+					navigate(`/`);
 				} else {
 					addToast({
 						title: "Publicación exitosa",
@@ -268,7 +272,7 @@ export default function PublishPage() {
 					});
 					setReviewGateOpen(false);
 					setIsPublishing(false);
-					navigate(`/u/${postData.ownerUsername}`);
+					navigate(`/`);
 				} else {
 					addToast({
 						title: "Publicación exitosa",
@@ -318,7 +322,7 @@ export default function PublishPage() {
 					<Button
 						variant="light"
 						color="default"
-						onPress={() => navigate(`/${username}`)}
+						onPress={() => navigate(`/`)}
 						className="self-start text-foreground-600 -ml-2"
 						startContent={<ArrowLeftIcon size={18} />}
 						size="sm"
