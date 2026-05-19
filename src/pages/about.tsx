@@ -41,19 +41,9 @@ const faqs: Faq[] = [
 	},
 	{
 		category: "Comunidad",
-		q: "¿Cómo puedo contactar al equipo?",
-		a: "Escríbenos por Instagram: <a href='https://www.instagram.com/carteleracuevense/' target='_blank' class='text-primary underline'>@carteleracuevense</a>.",
-	},
-	{
-		category: "Comunidad",
 		q: "Quiero apoyar el proyecto, ¿cómo dono?",
 		a: "Puedes donar vía PayPal: <a href='https://www.paypal.com/donate/?hosted_button_id=C42HWJ5ZQW3WN' target='_blank' class='text-primary underline'>Donar ahora</a>. Cada granito ayuda a mantener viva la cartelera.",
-	},
-	{
-		category: "Comunidad",
-		q: "Créditos de fotografía",
-		a: "Algunas fotos de fondo son del perfil de Flickr <a href='https://www.flickr.com/photos/anthonysurace/' target='_blank' class='text-primary underline'>Anthony Surace</a>.",
-	},
+	}
 ];
 
 const categories: Faq["category"][] = ["Publicar", "Cuenta", "Comunidad"];
@@ -238,12 +228,12 @@ export default function AboutPage() {
 						</div>
 					</div>
 					<Link
-						href="https://www.instagram.com/carteleracuevense/"
+						href="https://www.instagram.com/cartelera.gto/"
 						isExternal
 						className="md:self-center"
 					>
 						<Button color="primary" startContent={<IgIcon size={18} />}>
-							@carteleracuevense
+							@cartelera.gto
 						</Button>
 					</Link>
 				</motion.div>
