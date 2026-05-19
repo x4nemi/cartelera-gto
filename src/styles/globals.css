@@ -31,29 +31,38 @@
 
 html {
     height: 100%;
+    background-color: #ffffff;
+}
+
+.dark html,
+html.dark {
+    background-color: #000000;
 }
 
 body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    /* background-color: #C8E2FB;
-    background-image: url('/mountains2.png');
-    background-position: left -100px bottom -100px;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: calc(90vh); */
     font-family: var(--font-sans);
+    background-color: transparent;
 }
-/* 
-.dark body {
-    background-color: #000;
-    background-image: url('/darkbg.jpg');
-    background-position: right -50px bottom -50px;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: calc(100vh);
-} */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(217, 91%, 60%, 0.22) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, hsla(217, 91%, 60%, 0.18) 0px, transparent 55%);
+}
+
+.dark body::before {
+    background-image:
+        radial-gradient(at 0% 0%, hsla(38, 92%, 50%, 0.22) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, hsla(38, 92%, 50%, 0.15) 0px, transparent 55%);
+}
 
 
 
