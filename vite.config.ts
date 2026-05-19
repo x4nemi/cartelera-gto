@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://cuevanocartelera.com",
+        target: "https://cartelera-gto.com",
         changeOrigin: true,
       },
     },
