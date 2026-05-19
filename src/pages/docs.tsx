@@ -7,6 +7,7 @@ import {
 	RightArrowIcon,
 } from "@/components/icons";
 import { subtitle } from "@/components/primitives";
+import { PORTAL_DOMAIN } from "@/config/site";
 import DefaultLayout from "@/layouts/default";
 
 const requirements = [
@@ -79,7 +80,7 @@ export default function CreationPage() {
 					transition={{ delay: 0.45, duration: 0.35 }}
 					className="w-full max-w-xl flex flex-col items-center gap-2"
 				>
-					<Link href="/user" className="w-full">
+					<Link href={PORTAL_DOMAIN} isExternal className="w-full">
 						<Button
 							color="primary"
 							size="md"
