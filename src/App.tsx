@@ -1,7 +1,8 @@
 import { lazy, Suspense } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { addToast, Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/react";
 
+import { addToast } from "@/utils/toast";
 import { SmileyFilledIcon, XIcon } from "./components/icons";
 import { isPortalHost } from "@/config/host";
 
