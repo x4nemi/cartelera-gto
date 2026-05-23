@@ -40,7 +40,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
             hideCloseButton
             backdrop="blur"
             classNames={{
-                base: "sm:data-[placement=right]:m-4 xs:data-[placement=right]:m-10 sm:data-[placement=left]:m-2 rounded-medium",
+                base: "!p-0 overflow-hidden sm:!rounded-3xl sm:!h-[calc(100vh-2rem)] sm:!my-4 sm:!mr-4",
             }}
             isOpen={isOpen}
             onOpenChange={onOpenChange}

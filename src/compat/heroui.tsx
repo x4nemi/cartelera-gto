@@ -527,22 +527,44 @@ export interface DrawerContentProps {
   children: ReactNode | ((onClose: () => void) => ReactNode);
 }
 
+// v2 `size` → width class for left/right placements (v3 ships fixed sm:w-96 by default).
+const DRAWER_SIZE_W: Record<string, string> = {
+  sm: "sm:!w-80",
+  md: "sm:!w-96",
+  lg: "sm:!w-[32rem]",
+  xl: "sm:!w-[36rem]",
+  "2xl": "sm:!w-[42rem]",
+  "3xl": "sm:!w-[48rem]",
+  "4xl": "sm:!w-[56rem]",
+  "5xl": "sm:!w-[64rem]",
+  full: "sm:!w-screen",
+};
+
 export function DrawerContent({ children }: DrawerContentProps): ReactElement {
   const cfg = useContext(DrawerConfigContext);
   const onClose = useContext(DrawerOnCloseContext);
+  const isHorizontal = cfg.placement === "left" || cfg.placement === "right";
+  const sizeClass = isHorizontal && cfg.size ? DRAWER_SIZE_W[cfg.size] : undefined;
 
   return (
     <V3Drawer.Backdrop
       variant={cfg.backdrop === "blur" ? "blur" : undefined}
       className={cfg.classNames?.backdrop}
+      isDismissable={cfg.isDismissable}
     >
       <V3Drawer.Content
         placement={cfg.placement}
-        className={[cfg.classNames?.base, cfg.className]
-          .filter(Boolean)
-          .join(" ")}
+        className={cfg.classNames?.wrapper}
       >
-        <V3Drawer.Dialog>
+        <V3Drawer.Dialog
+          className={[
+            sizeClass,
+            cfg.classNames?.base,
+            cfg.className,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {typeof children === "function" ? children(onClose) : children}
         </V3Drawer.Dialog>
       </V3Drawer.Content>
