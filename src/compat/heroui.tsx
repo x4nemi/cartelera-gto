@@ -265,10 +265,14 @@ export interface ModalShimProps {
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   backdrop?: "transparent" | "opaque" | "blur";
-  size?: "xs" | "sm" | "md" | "lg" | "full" | "cover";
+  size?:
+    | "xs" | "sm" | "md" | "lg" | "xl"
+    | "2xl" | "3xl" | "4xl" | "5xl"
+    | "full" | "cover";
   scrollBehavior?: "normal" | "inside" | "outside";
   placement?: "auto" | "top" | "center" | "bottom";
   isDismissable?: boolean;
+  hideCloseButton?: boolean;
   className?: string;
   children: ReactNode;
 }
@@ -286,6 +290,17 @@ export function Modal({
 }: ModalShimProps) {
   const state = useOverlayState({ isOpen, onOpenChange });
 
+  // Map v2 size strings to v3 supported sizes (xs|sm|md|lg|full|cover).
+  const v3Size: "xs" | "sm" | "md" | "lg" | "full" | "cover" | undefined =
+    size == null
+      ? undefined
+      : size === "xs" || size === "sm" || size === "md" || size === "lg" ||
+          size === "full" || size === "cover"
+        ? size
+        : size === "xl"
+          ? "lg"
+          : "cover"; // 2xl/3xl/4xl/5xl → cover
+
   return (
     <V3Modal state={state}>
       <V3Modal.Backdrop
@@ -296,7 +311,7 @@ export function Modal({
           className={className}
           placement={placement}
           scroll={scrollBehavior === "inside" ? "inside" : undefined}
-          size={size as ModalShimProps["size"]}
+          size={v3Size}
         >
           <V3Modal.Dialog>
             <ModalOnCloseContext.Provider value={state.close}>
