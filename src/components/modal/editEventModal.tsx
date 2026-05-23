@@ -1,17 +1,16 @@
 import { PostData, updatePost } from "@/config/apiClient";
 import { ImageGallery } from "@/components/image/imageGallery";
+import { Chip, Input } from "@heroui/react";
+import { Button } from "@/compat/heroui";
 import {
 	addToast,
-	Button,
-	Chip,
-	Input,
 	Modal,
 	ModalBody,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
 	Textarea,
-} from "@heroui/react";
+} from "@/compat/heroui";
 import { useEffect, useState } from "react";
 
 interface EditEventModalProps {
@@ -106,7 +105,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 										placeholder="Nombre del evento"
 										value={title}
 										onValueChange={setTitle}
-										variant="bordered"
+										variant="secondary"
 									/>
 									<Textarea
 										label="Resumen"
@@ -114,7 +113,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 										placeholder="Resumen breve del evento"
 										value={summary}
 										onValueChange={setSummary}
-										variant="bordered"
+										variant="secondary"
 										minRows={2}
 									/>
 									<div className="grid grid-cols-2 gap-3">
@@ -124,7 +123,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 											placeholder="Ej. Teatro Juárez"
 											value={location}
 											onValueChange={setLocation}
-											variant="bordered"
+											variant="secondary"
 										/>
 										<Input
 											label="Costo"
@@ -132,7 +131,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 											placeholder="Ej. $150 o Gratis"
 											value={price}
 											onValueChange={setPrice}
-											variant="bordered"
+											variant="secondary"
 										/>
 									</div>
 									<div className="flex flex-col gap-2">
@@ -141,8 +140,8 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 											{tags.map((t) => (
 												<Chip
 													key={t}
-													variant="flat"
-													color="primary"
+													variant="soft"
+													color="accent"
 													size="sm"
 													className="rounded-xl"
 													onClose={() => setTags(tags.filter((x) => x !== t))}
@@ -156,7 +155,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 												placeholder="Agregar etiqueta"
 												value={tagInput}
 												onValueChange={setTagInput}
-												variant="bordered"
+												variant="secondary"
 												size="sm"
 												onKeyDown={(e) => {
 													if (e.key === "Enter") {
@@ -169,7 +168,7 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 											/>
 											<Button
 												size="sm"
-												variant="flat"
+												variant="tertiary"
 												className="rounded-xl"
 												onPress={() => {
 													const v = tagInput.trim().toLowerCase();
@@ -187,17 +186,17 @@ export const EditEventModal = ({ isOpen, onOpenChange, postData, onUpdated }: Ed
 										placeholder="Describe tu evento aquí"
 										value={caption}
 										onValueChange={setCaption}
-										variant="bordered"
+										variant="secondary"
 										className="w-full"
 									/>
 								</div>
 							</div>
 						</ModalBody>
 						<ModalFooter>
-							<Button color="danger" variant="light" className="rounded-2xl" onPress={onClose}>
+							<Button color="danger" variant="tertiary" className="rounded-2xl" onPress={onClose}>
 								Cancelar
 							</Button>
-							<Button color="primary" className="rounded-2xl" onPress={handleSave} isLoading={isSaving}>
+							<Button color="accent" className="rounded-2xl" onPress={handleSave} isLoading={isSaving}>
 								Guardar cambios
 							</Button>
 						</ModalFooter>

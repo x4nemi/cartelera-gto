@@ -1,4 +1,6 @@
-import { Button, Chip, Input, Spinner, Textarea, Tooltip } from "@heroui/react";
+import { Chip, Input, Spinner } from "@heroui/react";
+import { Button, Tooltip } from "@/compat/heroui";
+import { Textarea } from "@/compat/heroui";
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { AIApi, AISuggestions } from "@/config/apiClient";
@@ -190,7 +192,7 @@ export const AISuggestionsPanel = ({
 			<FieldBlock label="Título" confidence={suggestions?.confidence?.title}>
 				<Input
 					size="sm"
-					variant="bordered"
+					variant="secondary"
 					placeholder="Nombre del evento"
 					value={value.title ?? ""}
 					onValueChange={(v) => editField("title", v)}
@@ -200,7 +202,7 @@ export const AISuggestionsPanel = ({
 			<FieldBlock label="Resumen" confidence={suggestions?.confidence?.summary}>
 				<Textarea
 					size="sm"
-					variant="bordered"
+					variant="secondary"
 					placeholder="Breve descripción"
 					value={value.summary ?? ""}
 					onValueChange={(v) => editField("summary", v)}
@@ -213,7 +215,7 @@ export const AISuggestionsPanel = ({
 				<FieldBlock label="Lugar" confidence={suggestions?.confidence?.location}>
 					<Input
 						size="sm"
-						variant="bordered"
+						variant="secondary"
 						placeholder="Lugar del evento"
 						value={value.location ?? ""}
 						onValueChange={(v) => editField("location", v)}
@@ -223,7 +225,7 @@ export const AISuggestionsPanel = ({
 				<FieldBlock label="Costo" confidence={suggestions?.confidence?.price}>
 					<Input
 						size="sm"
-						variant="bordered"
+						variant="secondary"
 						placeholder="Costo o entrada"
 						value={value.price ?? ""}
 						onValueChange={(v) => editField("price", v)}
@@ -250,7 +252,7 @@ export const AISuggestionsPanel = ({
 							<Chip
 								key={tag}
 								size="sm"
-								variant="flat"
+								variant="soft"
 								onClose={() => removeTag(tag)}
 							>
 								{tag}
@@ -266,7 +268,7 @@ export const AISuggestionsPanel = ({
 				<div className="flex gap-2">
 					<Input
 						size="sm"
-						variant="bordered"
+						variant="secondary"
 						placeholder="Agregar categoría"
 						value={tagInput}
 						onValueChange={setTagInput}
@@ -281,7 +283,7 @@ export const AISuggestionsPanel = ({
 					/>
 					<Button
 						size="sm"
-						variant="flat"
+						variant="tertiary"
 						onPress={() => {
 							addTag(tagInput);
 							setTagInput("");

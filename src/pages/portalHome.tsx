@@ -3,15 +3,9 @@ import DefaultLayout from "@/layouts/default";
 import { CosmosAPI } from "@/config/apiClient";
 import { setPortalUsername } from "@/config/portalSession";
 import { usePortalSession } from "@/hooks/usePortalSession";
-import {
-    Button,
-    Card,
-    CardBody,
-    Form,
-    Input,
-    Link,
-    addToast,
-} from "@heroui/react";
+import { Card, Form, Input, Link } from "@heroui/react";
+import { Button } from "@/compat/heroui";
+import { addToast, CardBody } from "@/compat/heroui";
 import { IgIcon, MapPinIcon } from "@/components/icons";
 import { motion } from "motion/react";
 import { useState } from "react";
@@ -174,10 +168,10 @@ const PortalSignInStub = () => {
                                     />
                                     <Button
                                         type="submit"
-                                        variant="solid"
+                                        variant="primary"
                                         size="lg"
                                         className="min-w-32 h-12 rounded-2xl rounded-l-none font-semibold"
-                                        color="primary"
+                                        color="accent"
                                         isLoading={submitting}
                                         isIconOnly={submitting}
                                     >
@@ -193,7 +187,7 @@ const PortalSignInStub = () => {
                             <div className="mt-5 pt-4 border-t border-default/60 text-center">
                                 <p className="text-sm text-default-600">
                                     ¿Aún no tienes cuenta?{" "}
-                                    <Link href="/registro" color="primary" className="font-semibold">
+                                    <Link href="/registro" color="accent" className="font-semibold">
                                         Regístrate aquí
                                     </Link>
                                 </p>

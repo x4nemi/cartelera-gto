@@ -1,4 +1,5 @@
-import { Button, Link } from "@heroui/react";
+import { Link } from "@heroui/react";
+import { Button } from "@/compat/heroui";
 import { motion } from "motion/react";
 
 import {
@@ -82,7 +83,7 @@ export default function CreationPage() {
 				>
 					<Link href={PORTAL_DOMAIN} isExternal className="w-full">
 						<Button
-							color="primary"
+							color="accent"
 							size="md"
 							fullWidth
 							endContent={<RightArrowIcon />}

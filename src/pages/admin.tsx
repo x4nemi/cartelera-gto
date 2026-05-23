@@ -2,7 +2,9 @@ import { CosmosAPI } from "@/config/apiClient";
 import { useProfiles } from "@/hooks/useProfiles";
 import DefaultLayout from "@/layouts/default"
 import type { PostData } from "@/types";
-import { addToast, Button, Card, Chip, Image, Input, Spinner, Switch, Tab, Tabs, User } from "@heroui/react";
+import { Chip, Input, Spinner, Switch, Tab, Tabs } from "@heroui/react";
+import { Button } from "@/compat/heroui";
+import { addToast, Card, Image, User } from "@/compat/heroui";
 import { useEffect, useState } from "react";
 
 const ADMIN_PIN = import.meta.env.VITE_ADMIN_PIN;
@@ -37,7 +39,7 @@ export const Admin = () => {
                         errorMessage={pinError ? "PIN incorrecto" : undefined}
                         className="max-w-xs"
                     />
-                    <Button color="primary" variant="flat" className="rounded-2xl" onPress={handleSubmit}>
+                    <Button color="accent" variant="tertiary" className="rounded-2xl" onPress={handleSubmit}>
                         Entrar
                     </Button>
                 </div>
@@ -117,7 +119,7 @@ const PendingPostsQueue = () => {
     if (loading) {
         return (
             <div className="flex justify-center py-10">
-                <Spinner color="primary" />
+                <Spinner color="accent" />
             </div>
         );
     }
@@ -157,12 +159,12 @@ const PendingPostsQueue = () => {
                                 <p className="text-tiny text-default-500 truncate">@{post.ownerUsername}</p>
                                 <div className="flex flex-wrap gap-1 pt-0.5">
                                     {post.aiVerdict?.isEvent === false && (
-                                        <Chip size="sm" variant="flat" color="warning" className="rounded-lg h-5 text-tiny px-1.5">
+                                        <Chip size="sm" variant="soft" color="warning" className="rounded-lg h-5 text-tiny px-1.5">
                                             La IA cree que no es un evento
                                         </Chip>
                                     )}
                                     {confidence !== undefined && (
-                                        <Chip size="sm" variant="flat" className="rounded-lg h-5 text-tiny px-1.5">
+                                        <Chip size="sm" variant="soft" className="rounded-lg h-5 text-tiny px-1.5">
                                             Confianza {Math.round(confidence * 100)}%
                                         </Chip>
                                     )}
@@ -175,7 +177,7 @@ const PendingPostsQueue = () => {
                         <div className="flex justify-end gap-2 pt-3">
                             <Button
                                 size="sm"
-                                variant="flat"
+                                variant="tertiary"
                                 color="danger"
                                 isDisabled={isActing}
                                 onPress={() => handleReject(post)}
@@ -185,7 +187,7 @@ const PendingPostsQueue = () => {
                             </Button>
                             <Button
                                 size="sm"
-                                color="primary"
+                                color="accent"
                                 isLoading={isActing}
                                 onPress={() => handleApprove(post)}
                                 className="rounded-xl"
@@ -279,7 +281,7 @@ const AdminPanel = () => {
                                                 </Switch>
                                             )}
                                             {user.status !== "approved" &&
-                                                <Button color="primary" variant="flat" isLoading={loading2} size="md" onClick={() => handleApprove(user.username)}>Aprobar</Button>
+                                                <Button color="accent" variant="tertiary" isLoading={loading2} size="md" onClick={() => handleApprove(user.username)}>Aprobar</Button>
                                             }
                                         </div>
                                     </Card>

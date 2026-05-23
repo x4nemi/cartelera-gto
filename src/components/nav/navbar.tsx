@@ -1,4 +1,4 @@
-import { Link } from "@heroui/link";
+import { Link } from "@heroui/react";
 
 import { siteConfig } from "@/config/site";
 import { PORTAL_DOMAIN } from "@/config/site";

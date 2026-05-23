@@ -7,7 +7,9 @@ import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
 import { usePortalSession } from "@/hooks/usePortalSession";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, addToast, Alert, Button, Chip, cn, Spinner } from "@heroui/react";
+import { Accordion, AccordionItem, Alert, Chip, cn, Spinner } from "@heroui/react";
+import { Button } from "@/compat/heroui";
+import { addToast } from "@/compat/heroui";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -313,14 +315,14 @@ export default function PublishPage() {
 		<DefaultLayout>
 			{loadingUser ? (
 				<section className="flex flex-col justify-center items-center flex-grow w-full py-20">
-					<Spinner size="lg" color="primary" />
+					<Spinner size="lg" color="accent" />
 				</section>
 			) : (
 			<section className="flex flex-col gap-6 flex-grow max-w-3xl md:mx-auto w-full px-2 mt-8 mb-8">
 				{/* Header */}
 				<div className="flex flex-col gap-3">
 					<Button
-						variant="light"
+						variant="tertiary"
 						color="default"
 						onPress={() => navigate(`/`)}
 						className="self-start text-foreground-600 -ml-2"
@@ -378,7 +380,7 @@ export default function PublishPage() {
 									<div className="flex flex-col items-start min-w-0">
 										<div className="flex items-center gap-2 flex-wrap">
 											<span className="font-bold text-md">Con un link de Instagram</span>
-											<Chip size="sm" variant="flat" color="primary" className="h-5">
+											<Chip size="sm" variant="soft" color="accent" className="h-5">
 												Recomendado
 											</Chip>
 										</div>
@@ -483,7 +485,7 @@ export default function PublishPage() {
 									{requiresReview && (
 										<Alert
 											color="warning"
-											variant="flat"
+											variant="soft"
 											className="rounded-2xl"
 											title="Esta publicación necesitará aprobación"
 											description={
@@ -501,7 +503,7 @@ export default function PublishPage() {
 							) : (
 								<Alert
 									color="warning"
-									variant="flat"
+									variant="soft"
 									className="rounded-2xl"
 									title={
 										!manualOwnerName.trim()
@@ -520,7 +522,7 @@ export default function PublishPage() {
 								{requiresReview && (
 									<Alert
 										color="warning"
-										variant="flat"
+										variant="soft"
 										className="rounded-2xl"
 										title="Esta publicación necesitará aprobación"
 										description={
@@ -538,7 +540,7 @@ export default function PublishPage() {
 						) : (
 							<Alert
 								color="warning"
-								variant="flat"
+								variant="soft"
 								className="rounded-2xl"
 								title="Falta seleccionar fechas"
 								description="Selecciona las fechas de tu evento para habilitar el botón de publicar."

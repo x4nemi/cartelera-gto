@@ -1,4 +1,5 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
+import { Button } from "@/compat/heroui";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@/compat/heroui"
 
 export const CancelModal = ({ openModal, setOpenModal, onCancel }: { openModal: boolean; setOpenModal: (open: boolean) => void; onCancel: () => void }) => {
     return (
@@ -11,10 +12,10 @@ export const CancelModal = ({ openModal, setOpenModal, onCancel }: { openModal: 
                             Si cancelas, se perderán los datos ingresados.
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="danger" variant="light" className='rounded-2xl' onPress={onCancel}>
+                            <Button color="danger" variant="tertiary" className='rounded-2xl' onPress={onCancel}>
                                 Sí, cancelar
                             </Button>
-                            <Button color="primary" className='rounded-2xl' onPress={onClose}>
+                            <Button color="accent" className='rounded-2xl' onPress={onClose}>
                                 No
                             </Button>
                         </ModalFooter>

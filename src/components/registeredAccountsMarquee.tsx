@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Avatar, Link, Spinner } from "@heroui/react";
+import { Link, Spinner } from "@heroui/react";
+import { Avatar } from "@/compat/heroui";
 import { motion } from "motion/react";
 import { CosmosAPI, UserData } from "@/config/apiClient";
 
@@ -33,7 +34,7 @@ export const RegisteredAccountsMarquee = () => {
     if (loading) {
         return (
             <div className="flex justify-center py-6">
-                <Spinner size="sm" color="primary" />
+                <Spinner size="sm" color="accent" />
             </div>
         );
     }

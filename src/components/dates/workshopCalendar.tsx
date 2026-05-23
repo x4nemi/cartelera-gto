@@ -1,4 +1,6 @@
-import { DatePicker, DateValue, Input, Select, SelectItem } from '@heroui/react'
+import { DatePicker, Input, Select } from "@heroui/react";
+import type { DateValue } from "@internationalized/date";
+const SelectItem = Select.Item;
 import { getLocalTimeZone, today } from '@internationalized/date';
 
 export const WorkshopCalendar = ({ days, onChange, until, setUntil, every, setEvery }: { days: string[]; until: DateValue | null; onChange: (days: string[]) => void, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void }) => {
@@ -45,7 +47,7 @@ export const WorkshopCalendar = ({ days, onChange, until, setUntil, every, setEv
                 <DatePicker
                     hideTimeZone
                     showMonthAndYearPickers
-                    variant="flat"
+                    variant="soft"
                     calendarProps={{ minValue: today(getLocalTimeZone()) }}
                     value={until}
                     onChange={setUntil}

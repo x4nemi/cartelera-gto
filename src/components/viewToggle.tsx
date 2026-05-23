@@ -1,4 +1,5 @@
-import { ButtonGroup, Button } from "@heroui/react";
+import { ButtonGroup } from "@heroui/react";
+import { Button } from "@/compat/heroui";
 import { CalendarIcon } from "./icons";
 
 export type HomeViewMode = "wall" | "calendar";
@@ -24,7 +25,7 @@ export const ViewToggle = ({
     onChange: (mode: HomeViewMode) => void;
 }) => {
     return (
-        <ButtonGroup variant="flat" radius="full" size="sm">
+        <ButtonGroup variant="soft" radius="full" size="sm">
             <Button
                 isIconOnly
                 aria-label="Vista de muro"

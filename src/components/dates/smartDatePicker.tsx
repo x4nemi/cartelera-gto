@@ -1,4 +1,6 @@
-import { Button, Calendar, Chip, Spinner, addToast } from "@heroui/react";
+import { Calendar, Chip, Spinner } from "@heroui/react";
+import { Button } from "@/compat/heroui";
+import { addToast } from "@/compat/heroui";
 import { getLocalTimeZone, today, type DateValue } from "@internationalized/date";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { SparklesIcon } from "../icons";
@@ -322,7 +324,7 @@ export const SmartDatePicker = ({
 						</p>
 						<Button
 							size="sm"
-							variant="light"
+							variant="tertiary"
 							color="danger"
 							onPress={handleClearAll}
 						>
@@ -333,8 +335,8 @@ export const SmartDatePicker = ({
 						{internalDates.map((date, idx) => (
 							<Chip
 								key={idx}
-								variant="flat"
-								color="primary"
+								variant="soft"
+								color="accent"
 								onClose={() => handleRemoveDate(date)}
 							>
 								{date.toLocaleDateString("es-MX", {

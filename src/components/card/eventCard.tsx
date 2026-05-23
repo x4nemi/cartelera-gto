@@ -1,4 +1,5 @@
-import { Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/react"
+import { CardHeader, Chip } from "@heroui/react";
+import { Card, CardBody, Image, useDisclosure } from "@/compat/heroui"
 import { EventDrawer } from "./eventDrawer"
 import { PostData } from "@/config/apiClient"
 import { useMediaQuery } from "@/hooks/useMediaQuery"

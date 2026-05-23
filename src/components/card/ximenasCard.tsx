@@ -1,4 +1,5 @@
-import { Avatar, Card, CardHeader, Chip, Image } from '@heroui/react';
+import { CardHeader, Chip } from "@heroui/react";
+import { Avatar, Card, Image } from "@/compat/heroui";
 
 import { CalendarIcon } from '@/components/icons';
 import { PostData } from '@/types';
@@ -62,8 +63,8 @@ export const XimenasCard = (props: PostData & { displayDate?: Date }) => {
                                 <Chip
                                     key={index}
                                     size="sm"
-                                    color="primary"
-                                    variant="flat"
+                                    color="accent"
+                                    variant="soft"
                                     className="rounded-full text-[11px] max-w-full"
                                     classNames={{ content: "truncate" }}
                                 >
@@ -73,7 +74,7 @@ export const XimenasCard = (props: PostData & { displayDate?: Date }) => {
                             {extraTags > 0 && (
                                 <Chip
                                     size="sm"
-                                    variant="flat"
+                                    variant="soft"
                                     className="rounded-full text-[11px]"
                                 >
                                     +{extraTags}

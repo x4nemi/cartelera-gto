@@ -2,7 +2,9 @@ import { CheckIcon, ConfettiFilledIcon, IgIcon, MapPinIcon } from '@/components/
 import { createUser, updateUser, UserData } from '@/config/apiClient';
 import { setPortalUsername } from '@/config/portalSession';
 import DefaultLayout from '@/layouts/default'
-import { Button, Card, CardBody, Form, Input, User, Link, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, addToast } from '@heroui/react';
+import { Card, Form, Input, Link } from "@heroui/react";
+import { Button } from "@/compat/heroui";
+import { addToast, CardBody, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, User } from '@/compat/heroui';
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
@@ -276,10 +278,10 @@ export const UserPage = () => {
                                                     />
                                                     <Button
                                                         type="submit"
-                                                        variant="solid"
+                                                        variant="primary"
                                                         size="lg"
                                                         className="min-w-32 h-12 rounded-2xl rounded-l-none font-semibold"
-                                                        color="primary"
+                                                        color="accent"
                                                         isLoading={validating}
                                                         isIconOnly={validating}
                                                     >
@@ -347,7 +349,7 @@ export const UserPage = () => {
                                             >
                                                 <div className="flex gap-2 w-full">
                                                     <Button
-                                                        variant="light"
+                                                        variant="tertiary"
                                                         className="h-12 px-6 rounded-2xl text-default-500"
                                                         onPress={() => setOpenModal(true)}
                                                     >
@@ -355,10 +357,10 @@ export const UserPage = () => {
                                                     </Button>
                                                     <Button
                                                         type="submit"
-                                                        variant="solid"
+                                                        variant="primary"
                                                         size="lg"
                                                         className="flex-1 h-12 rounded-2xl font-semibold"
-                                                        color="primary"
+                                                        color="accent"
                                                     >
                                                         Aceptar y crear usuario
                                                     </Button>
@@ -403,10 +405,10 @@ export const UserPage = () => {
                                 Si cancelas, se perderán los datos ingresados.
                             </ModalBody>
                             <ModalFooter>
-                                <Button color="danger" variant="light" className="rounded-2xl" onPress={onCancel}>
+                                <Button color="danger" variant="tertiary" className="rounded-2xl" onPress={onCancel}>
                                     Sí, cancelar
                                 </Button>
-                                <Button color="primary" className="rounded-2xl" onPress={onClose}>
+                                <Button color="accent" className="rounded-2xl" onPress={onClose}>
                                     No
                                 </Button>
                             </ModalFooter>

@@ -20,6 +20,7 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'heroui': ['@heroui/react'],
+          'motion': ['motion'],
           'date-utils': ['@internationalized/date'],
         },
       },

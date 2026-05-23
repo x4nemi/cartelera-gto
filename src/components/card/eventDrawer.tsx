@@ -1,16 +1,6 @@
-import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerBody,
-    DrawerFooter,
-    Button,
-    Chip,
-    Tooltip,
-    User,
-    Link,
-    ScrollShadow,
-} from "@heroui/react";
+import { Chip, Link, ScrollShadow } from "@heroui/react";
+import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Button, Tooltip } from "@/compat/heroui";
+import { User } from "@/compat/heroui";
 import { ImageCarousel } from "../image/imageCarousel";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon, MapPinIcon, MoneyIcon } from "../icons";
@@ -63,7 +53,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                                     isIconOnly
                                     className="text-default-500"
                                     size="sm"
-                                    variant="light"
+                                    variant="tertiary"
                                     onPress={onClose}
                                 >
                                     <svg
@@ -99,7 +89,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                                         </svg>
                                     }
                                     size="sm"
-                                    variant="flat"
+                                    variant="soft"
                                     as={Link}
                                     href={url}
                                     target="_blank"
@@ -168,7 +158,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                             {tags && tags.length > 0 && (
                                 <div className="flex flex-wrap gap-1">
                                     {tags.map((t) => (
-                                        <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
+                                        <Chip key={t} variant="soft" color="accent" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
                                             #{t}
                                         </Chip>
                                     ))}

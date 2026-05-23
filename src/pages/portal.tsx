@@ -3,20 +3,9 @@ import { useUserPosts } from "@/hooks/useUserPosts";
 import { usePortalSession } from "@/hooks/usePortalSession";
 import { PortalWall } from "@/layouts/portalWall";
 import PortalLayout from "@/layouts/portal";
-import {
-    Avatar,
-    Button,
-    Card,
-    CardBody,
-    CardFooter,
-    Chip,
-    Image,
-    Link,
-    Skeleton,
-    Spinner,
-    Tooltip,
-    addToast,
-} from "@heroui/react";
+import { Card, CardFooter, Chip, Link, Skeleton, Spinner } from "@heroui/react";
+import { Button, Tooltip } from "@/compat/heroui";
+import { addToast, Avatar, CardBody, Image } from "@/compat/heroui";
 import { useNavigate, useParams } from "react-router-dom";
 import { SadIcon, SparklesIcon, EditIcon, TrashIcon } from "@/components/icons";
 import { CosmosAPI, PostData } from "@/config/apiClient";
@@ -107,7 +96,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                         <Avatar
                             src={user.profilePicUrl || "/default-avatar.png"}
                             className="w-24 h-24 ring-4 ring-content1 dark:ring-content2"
-                            color="primary"
+                            color="accent"
                         />
                         <div className="flex flex-col gap-0.5 items-center text-center px-3">
                             {user.fullName && (
@@ -152,7 +141,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                             <Tooltip content="Detectamos eventos en tus publicaciones nuevas de Instagram automáticamente.">
                                 <Chip
                                     size="sm"
-                                    variant="flat"
+                                    variant="soft"
                                     color="secondary"
                                     startContent={<SparklesIcon size={14} />}
                                     className="mt-1"
@@ -167,7 +156,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                             <Button
                                 className="rounded-2xl font-medium"
                                 size="md"
-                                color="primary"
+                                color="accent"
                                 onPress={() => navigate(`/publicar`)}
                             >
                                 Crear publicación
@@ -196,7 +185,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                         Eventos detectados
                                     </h3>
                                     {pendingCount > 0 && (
-                                        <Chip size="sm" variant="flat" color="secondary">
+                                        <Chip size="sm" variant="soft" color="secondary">
                                             {pendingCount}
                                         </Chip>
                                     )}
@@ -246,7 +235,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                                             {event.images.length > 1 && (
                                                                 <Chip
                                                                     size="sm"
-                                                                    variant="flat"
+                                                                    variant="soft"
                                                                     className="absolute top-2 right-2 bg-black/50 text-white backdrop-blur-sm"
                                                                 >
                                                                     +{event.images.length - 1}
@@ -263,7 +252,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                                                     const [y, m, day] = d.split("-").map(Number);
                                                                     const date = new Date(y, m - 1, day);
                                                                     return (
-                                                                        <Chip key={i} size="sm" variant="flat" color="primary">
+                                                                        <Chip key={i} size="sm" variant="soft" color="accent">
                                                                             {date.toLocaleDateString("es-MX", {
                                                                                 weekday: "short",
                                                                                 day: "numeric",
@@ -273,7 +262,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                                                     );
                                                                 })}
                                                                 {event.dates.length > 3 && (
-                                                                    <Chip size="sm" variant="flat">
+                                                                    <Chip size="sm" variant="soft">
                                                                         +{event.dates.length - 3}
                                                                     </Chip>
                                                                 )}
@@ -287,7 +276,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                                 <CardFooter className="flex gap-2 pt-0 px-3 pb-3">
                                                     <Button
                                                         size="sm"
-                                                        color="primary"
+                                                        color="accent"
                                                         className="rounded-2xl flex-1 font-medium"
                                                         onPress={() => handlePublish(event.shortCode)}
                                                     >
@@ -297,7 +286,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                                         <Button
                                                             size="sm"
                                                             isIconOnly
-                                                            variant="flat"
+                                                            variant="tertiary"
                                                             className="rounded-2xl"
                                                             onPress={() => handleEdit(event.shortCode)}
                                                         >
@@ -308,7 +297,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                                                         <Button
                                                             size="sm"
                                                             isIconOnly
-                                                            variant="light"
+                                                            variant="tertiary"
                                                             color="danger"
                                                             className="rounded-2xl"
                                                             onPress={() => handleDismiss(event.shortCode)}
@@ -333,7 +322,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-semibold">Tus publicaciones</h3>
                         {!loadingPosts && posts.length > 0 && (
-                            <Chip size="sm" variant="flat">
+                            <Chip size="sm" variant="soft">
                                 {publishedCount}
                             </Chip>
                         )}
@@ -342,7 +331,7 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
 
                 {loadingPosts ? (
                     <div className="flex justify-center items-center py-20">
-                        <Spinner size="lg" color="primary" />
+                        <Spinner size="lg" color="accent" />
                     </div>
                 ) : posts.length > 0 ? (
                     <PortalWall cardsData={posts} onPostUpdated={refreshPosts} readOnly={readOnly} />
@@ -361,8 +350,8 @@ export const Portal = ({ readOnly = false }: PortalProps = {}) => {
                             {!readOnly && (
                             <Button
                                 className="rounded-2xl mt-2"
-                                color="primary"
-                                variant="flat"
+                                color="accent"
+                                variant="tertiary"
                                 onPress={() => navigate(`/publicar`)}
                             >
                                 Crear publicación

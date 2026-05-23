@@ -1,4 +1,5 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@heroui/react'
+import { Button } from "@/compat/heroui";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@/compat/heroui"
 
 export const DeleteEventModal = ({ isOpen, onOpenChange, onDelete }: { isOpen: boolean; onOpenChange: (open: boolean) => void; onDelete: () => void }) => {
     return (
@@ -11,7 +12,7 @@ export const DeleteEventModal = ({ isOpen, onOpenChange, onDelete }: { isOpen: b
                             Esta acción no se puede deshacer. El evento será eliminado permanentemente.
                         </ModalBody>
                         <ModalFooter>
-                            <Button color="default" variant="light" className='rounded-2xl' onPress={onClose}>
+                            <Button color="default" variant="tertiary" className='rounded-2xl' onPress={onClose}>
                                 Cancelar
                             </Button>
                             <Button color="danger" className='rounded-2xl' onPress={() => { onDelete(); onClose(); }}>
