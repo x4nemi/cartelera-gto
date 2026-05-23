@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MonthCalendar } from "@/components/dates/monthCalendar";
 import { EventRowCard } from "@/components/card/eventRowCard";
 import { PostData } from "@/config/apiClient";
+import { XimenasCard } from "@/components/card/ximenasCard";
 
 const MONTH_NAMES = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -182,7 +183,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
     }
 
     return (
-        <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start md:justify-center max-w-5xl mx-auto">
+        <div className="flex flex-col w-full md:flex-row md:gap-6 md:items-start md:justify-center max-w-6xl mx-auto">
             {/* Calendar: sticky on top of the feed on all breakpoints so it stays visible while scrolling. */}
             <div className="md:w-72 md:flex-shrink-0 sticky top-2 md:top-24 z-30 pt-2">
                 <MonthCalendar
@@ -197,13 +198,13 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
             </div>
 
             {/* Right column: month header + day sections. Lower z-index so the sticky calendar above stays visible as content scrolls underneath. */}
-            <div className="flex flex-col gap-3 md:flex-none md:w-[28rem] min-w-0 relative z-10 pt-4 md:pt-0">
+            <div className="flex flex-col gap-3 md:flex-none md:w-[42rem] min-w-0 relative z-10 pt-4 md:pt-0">
                 {visibleDays.length === 0 ? (
                     <p className="text-center text-foreground/60 py-10">
                         No hay eventos a partir de esta fecha.
                     </p>
                 ) : (
-                    <div className="flex flex-col gap-6 max-w-xl mx-auto w-full">
+                    <div className="flex flex-col gap-6 md:max-w-none max-w-xl mx-auto w-full">
                         {visibleDays.map((d) => {
                             const key = toKey(d);
                             const dayPosts = postsByDay.get(key) ?? [];
@@ -235,9 +236,9 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
                                         <div className="flex-1 h-px bg-foreground/10" />
                                     </div>
 
-                                    <div className="flex flex-col items-stretch gap-3 transition-opacity duration-200 max-w-md mx-auto w-full">
+                                    <div className="flex flex-col items-stretch gap-3 transition-opacity duration-200 md:max-w-3xl max-w-lg mx-auto w-full">
                                         {dayPosts.map((p) => (
-                                            <EventRowCard key={`${key}-${p.shortCode}`} {...p} />
+                                            <XimenasCard key={`${key}-${p.shortCode}`} {...p} displayDate={d} />
                                         ))}
                                     </div>
                                 </section>
