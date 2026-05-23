@@ -114,7 +114,7 @@ export const AISuggestionsPanel = ({
 		return () => {
 			cancelled = true;
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		 
 	}, [caption, (imageUrls || []).join(",")]);
 
 	// Auto-apply suggestions to empty fields, exactly once per suggestion payload.
@@ -152,7 +152,7 @@ export const AISuggestionsPanel = ({
 			changed = true;
 		}
 		if (changed) onChange(next);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		 
 	}, [suggestions]);
 
 	const editField = <K extends keyof AIFieldsValue>(field: K, next: AIFieldsValue[K]) => {

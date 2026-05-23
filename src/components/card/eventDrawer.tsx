@@ -29,7 +29,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                 };
             })
             .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [dates]);
 
     const nextDate = parsedDates.find((d) => !d.isPast) ?? parsedDates[parsedDates.length - 1];

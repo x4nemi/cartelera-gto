@@ -1,10 +1,7 @@
 import DefaultLayout from "@/layouts/default";
-import { Wall } from "@/layouts/pinterestWall";
 import { CalendarFeed } from "@/layouts/calendarFeed";
 import { useMemo, useState, useCallback, useRef, useEffect } from "react";
-import { FilterBar } from "@/components/filterBar";
-import { SadIcon } from "@/components/icons";
-import { ViewToggle, HomeViewMode } from "@/components/viewToggle";
+import { HomeViewMode } from "@/components/viewToggle";
 import { useEvents } from "@/hooks/useEvents";
 import { Spinner } from "@heroui/react";
 

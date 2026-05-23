@@ -2,7 +2,7 @@ import DefaultLayout from "@/layouts/default";
 import { Button } from "@/compat/heroui";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { CalendarFilledIcon, CalendarIcon, HeartFilledIcon, Logo, PaletteIcon } from "@/components/icons";
+import { CalendarFilledIcon, HeartFilledIcon, Logo, PaletteIcon } from "@/components/icons";
 import { siteConfig } from "@/config/site";
 
 export default function HeroPage() {

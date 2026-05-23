@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { MonthCalendar } from "@/components/dates/monthCalendar";
-import { EventRowCard } from "@/components/card/eventRowCard";
 import { PostData } from "@/config/apiClient";
 import { XimenasCard } from "@/components/card/ximenasCard";
 
@@ -98,7 +97,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
         setSelectedDate((cur) => (cur.getTime() === today.getTime() ? defaultSelected : cur));
         setAnchorDate((cur) => (cur.getTime() === today.getTime() ? defaultSelected : cur));
         setViewMonth((cur) => (isSameMonth(cur, today) ? defaultSelected : cur));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [defaultSelected.getTime()]);
 
     // Refs for each day section, to enable scroll-into-view + intersection sync.

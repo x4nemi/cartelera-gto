@@ -244,7 +244,7 @@ export const MonthCalendar = ({
             strip.removeEventListener("scroll", onScroll);
             if (timer !== null) window.clearTimeout(timer);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [mobileWeeks, eventDates, selectedDate]);
     useEffect(() => {
         const strip = stripRef.current;

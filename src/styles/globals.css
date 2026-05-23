@@ -99,3 +99,24 @@ body::before {
 [role="gridcell"] [role="button"] {
     border-radius: 9999px !important;
 }
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* Toast styling — restore v2's rounded, blurred, soft look on v3's .toast */
+.toast {
+    border-radius: 1.5rem !important; /* rounded-3xl */
+    background-color: hsl(var(--background) / 0.9) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--default) / 0.4);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.18);
+}
+
+.dark .toast {
+    background-color: hsl(var(--content1) / 0.9) !important;
+    border-color: hsl(var(--default) / 0.25);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.toast__close-button {
+    border-radius: 9999px !important;
+}
