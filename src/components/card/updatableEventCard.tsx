@@ -1,4 +1,5 @@
-import { CardHeader, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@heroui/react";
+import { CardHeader } from "@/compat/heroui";
+import { Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@/compat/heroui";
 import { Card, CardBody, Image, useDisclosure } from "@/compat/heroui"
 import { EventDrawer } from "./eventDrawer"
 import { EditEventModal } from "../modal/editEventModal"

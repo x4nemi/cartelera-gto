@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@/compat/heroui";
 import type { AIVerdict } from "@/components/publish";

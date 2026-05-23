@@ -1,4 +1,4 @@
-import { Link } from "@heroui/react";
+import { Link } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { useLocation, useNavigate } from "react-router-dom";
 

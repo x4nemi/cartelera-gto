@@ -7,7 +7,10 @@ import { inferEventType } from "@/components/dates/smartDatePicker";
 import { useRequireUser } from "@/hooks/useRequireUser";
 import { usePortalSession } from "@/hooks/usePortalSession";
 import DefaultLayout from "@/layouts/default";
-import { Accordion, AccordionItem, Alert, Chip, cn, Spinner } from "@heroui/react";
+import { cn, Spinner } from "@heroui/react";
+import { Accordion, AccordionItem } from "@/compat/heroui";
+import { Alert } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { addToast } from "@/compat/heroui";
 import { useRef, useState } from "react";
@@ -358,7 +361,7 @@ export default function PublishPage() {
 						as={"div"}
 						selectedKeys={selectedKey ? [selectedKey] : []}
 						onSelectionChange={(keys) => {
-							const key = Array.from(keys)[0] as string;
+							const key = Array.from(keys as Set<React.Key>)[0] as string;
 							setSelectedKey(key === selectedKey ? key : key);
 						}}
 						style={{ paddingLeft: 0, paddingRight: 0 }}

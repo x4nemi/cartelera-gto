@@ -1,4 +1,5 @@
-import { CardHeader, Chip } from "@heroui/react";
+import { CardHeader } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Card, CardBody, Image, useDisclosure } from "@/compat/heroui"
 import { EventDrawer } from "./eventDrawer"
 import { PostData } from "@/config/apiClient"

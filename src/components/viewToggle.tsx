@@ -25,7 +25,7 @@ export const ViewToggle = ({
     onChange: (mode: HomeViewMode) => void;
 }) => {
     return (
-        <ButtonGroup variant="soft" radius="full" size="sm">
+        <ButtonGroup variant="tertiary" size="sm">
             <Button
                 isIconOnly
                 aria-label="Vista de muro"

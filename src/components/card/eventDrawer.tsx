@@ -1,4 +1,6 @@
-import { Chip, Link, ScrollShadow } from "@heroui/react";
+import { ScrollShadow } from "@heroui/react";
+import { Link } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Button, Tooltip } from "@/compat/heroui";
 import { User } from "@/compat/heroui";
 import { ImageCarousel } from "../image/imageCarousel";
@@ -89,7 +91,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                                         </svg>
                                     }
                                     size="sm"
-                                    variant="soft"
+                                    variant="tertiary"
                                     as={Link}
                                     href={url}
                                     target="_blank"

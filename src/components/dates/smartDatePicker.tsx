@@ -1,4 +1,5 @@
-import { Calendar, Chip, Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/react";
+import { Calendar, Chip } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { addToast } from "@/compat/heroui";
 import { getLocalTimeZone, today, type DateValue } from "@internationalized/date";
@@ -287,7 +288,7 @@ export const SmartDatePicker = ({
 				{/* Extracting indicator */}
 				{isExtracting && (
 					<div className="flex items-center gap-2 p-3 rounded-xl bg-secondary-50 border border-secondary-200">
-						<Spinner size="sm" color="secondary" />
+						<Spinner size="sm" color="accent" />
 						<p className="text-sm text-secondary-600">Analizando publicación para extraer fechas...</p>
 					</div>
 				)}

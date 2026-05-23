@@ -1,4 +1,4 @@
-import { Link } from "@heroui/react";
+import { Link } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { motion } from "motion/react";
 

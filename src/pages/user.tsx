@@ -2,7 +2,9 @@ import { CheckIcon, ConfettiFilledIcon, IgIcon, MapPinIcon } from '@/components/
 import { createUser, updateUser, UserData } from '@/config/apiClient';
 import { setPortalUsername } from '@/config/portalSession';
 import DefaultLayout from '@/layouts/default'
-import { Card, Form, Input, Link } from "@heroui/react";
+import { Form } from "@heroui/react";
+import { Card, Link } from "@/compat/heroui";
+import { Input } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { addToast, CardBody, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, User } from '@/compat/heroui';
 import { AnimatePresence, LayoutGroup, motion } from 'motion/react';

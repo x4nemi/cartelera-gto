@@ -2,7 +2,9 @@ import { CosmosAPI } from "@/config/apiClient";
 import { useProfiles } from "@/hooks/useProfiles";
 import DefaultLayout from "@/layouts/default"
 import type { PostData } from "@/types";
-import { Chip, Input, Spinner, Switch, Tab, Tabs } from "@heroui/react";
+import { Spinner } from "@heroui/react";
+import { Switch } from "@/compat/heroui";
+import { Chip, Input, Tab, Tabs } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { addToast, Card, Image, User } from "@/compat/heroui";
 import { useEffect, useState } from "react";

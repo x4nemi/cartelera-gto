@@ -2,7 +2,9 @@ import { CalendarIcon, ConfettiFilledIcon, MapPinIcon } from "@/components/icons
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import DefaultLayout from "@/layouts/default";
-import { Card, Chip, ScrollShadow, Spinner } from "@heroui/react";
+import { ScrollShadow, Spinner } from "@heroui/react";
+import { Card } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { CardBody, Divider, User } from "@/compat/heroui";
 import { useEffect, useState } from "react";

@@ -1,6 +1,6 @@
 import { PostData, updatePost } from "@/config/apiClient";
 import { ImageGallery } from "@/components/image/imageGallery";
-import { Chip, Input } from "@heroui/react";
+import { Chip, Input } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import {
 	addToast,

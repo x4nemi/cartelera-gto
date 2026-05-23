@@ -1,6 +1,5 @@
-import { DatePicker, Input, Select } from "@heroui/react";
+import { DatePicker, Input, Select, SelectItem } from "@/compat/heroui";
 import type { DateValue } from "@internationalized/date";
-const SelectItem = Select.Item;
 import { getLocalTimeZone, today } from '@internationalized/date';
 
 export const WorkshopCalendar = ({ days, onChange, until, setUntil, every, setEvery }: { days: string[]; until: DateValue | null; onChange: (days: string[]) => void, setUntil: (date: DateValue | null) => void, every: number, setEvery: (num: number) => void }) => {
@@ -21,7 +20,7 @@ export const WorkshopCalendar = ({ days, onChange, until, setUntil, every, setEv
                 <Select
                     selectedKeys={days}
                     selectionMode="multiple"
-                    onSelectionChange={(keys) => onChange(Array.from(keys) as string[])}
+                    onSelectionChange={(keys) => onChange(Array.from(keys as Set<React.Key>) as string[])}
                     fullWidth
                 >
                     {daysOfWeek.map((day, index) => (

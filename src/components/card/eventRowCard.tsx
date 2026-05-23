@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/compat/heroui";
 import { Avatar, Card, Image, useDisclosure } from "@/compat/heroui";
 import { useNavigate } from "react-router-dom";
 import { EventDrawer } from "./eventDrawer";

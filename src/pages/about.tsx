@@ -1,4 +1,6 @@
-import { Accordion, AccordionItem, Chip, Link } from "@heroui/react";
+import { Accordion, AccordionItem } from "@/compat/heroui";
+import { Link } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { motion } from "motion/react";
 

@@ -1,4 +1,5 @@
-import { RadioGroup, Radio, cn } from "@heroui/react";
+import { cn } from "@heroui/react";
+import { RadioGroup, Radio } from "@/compat/heroui";
 import { CalendarFilledIcon, CalendarIcon, EventFilledIcon, EventIcon, LoopFilledIcon, LoopIcon } from "../icons";
 import { useState } from "react";
 

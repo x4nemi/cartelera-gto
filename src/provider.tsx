@@ -20,7 +20,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
       <RouterProvider navigate={navigate} useHref={useHref}>
         {children}
         <ToastProvider
-          placement={isDesktop ? "bottom-right" : "top-center"}
+          placement={isDesktop ? "bottom" : "top"}
         />
       </RouterProvider>
     </I18nProvider>

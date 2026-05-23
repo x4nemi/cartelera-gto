@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Input } from "@heroui/react";
+import { Input } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { CalendarIcon, SortIconAsc, ViewIcon, XIcon } from "./icons";
-import { Checkbox, cn, RangeCalendar } from "@heroui/react";
+import { cn } from "@heroui/react";
+import { Checkbox, RangeCalendar } from "@/compat/heroui";
 import type { DateValue } from "@internationalized/date";
 import { User } from "@/compat/heroui";
 import { getLocalTimeZone, today } from "@internationalized/date";
@@ -21,7 +22,7 @@ const SortTab = ({setIsAscendingOrder}: { setIsAscendingOrder: (isAscending: boo
     return (
         <div>
             <div className="flex gap-2 items-end">
-                <Input readOnly value="Fecha" size="sm" label="Ordenar por:" labelPlacement="outside-top"/>
+                <Input isReadOnly value="Fecha" size="sm" label="Ordenar por:" labelPlacement="outside-top"/>
                 <Button
                     isIconOnly
                     aria-label={isAscending ? "Ordenar descendente" : "Ordenar ascendente"}

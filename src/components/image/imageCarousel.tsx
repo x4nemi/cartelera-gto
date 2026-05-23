@@ -1,4 +1,4 @@
-import { Image } from "@heroui/react";
+import { Image } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { useState, useRef } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '../icons'

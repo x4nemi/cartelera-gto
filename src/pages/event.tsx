@@ -1,7 +1,9 @@
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Chip, Link, ScrollShadow, Spinner } from "@heroui/react";
+import { ScrollShadow, Spinner } from "@heroui/react";
+import { Link } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { Divider, User } from "@/compat/heroui";
 import { ImageCarousel } from "@/components/image/imageCarousel";
@@ -97,7 +99,7 @@ export const EventPage = () => {
                                 </svg>
                             }
                             size="sm"
-                            variant="soft"
+                            variant="tertiary"
                             as={Link}
                             href={url}
                             target="_blank"

@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/compat/heroui";
 import { CalendarFilledIcon, CalendarIcon, LoopIcon, StarIcon } from "../icons"
 
 type EventType = "event" | "workshop" | "calendar" | undefined;

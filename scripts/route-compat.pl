@@ -4,7 +4,19 @@ use warnings;
 
 my @files = @ARGV;
 my %compat = map { $_ => 1 } qw(
-  Button Tooltip Drawer DrawerContent DrawerHeader DrawerBody DrawerFooter
+  addToast
+  Avatar Image User
+  Alert Link
+  Accordion AccordionItem Switch Radio RadioGroup
+  Card CardBody CardHeader CardFooter
+  Modal ModalContent ModalHeader ModalBody ModalFooter
+  Drawer DrawerContent DrawerHeader DrawerBody DrawerFooter
+  Button Tooltip Divider
+  Chip Input Textarea Checkbox Tabs Tab
+  Dropdown DropdownMenu DropdownItem DropdownTrigger
+  Select SelectItem
+  Calendar DatePicker RangeCalendar DateRangePicker
+  useDisclosure
 );
 
 for my $f (@files) {

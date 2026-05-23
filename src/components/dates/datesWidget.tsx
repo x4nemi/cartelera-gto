@@ -1,4 +1,4 @@
-import { DatePicker } from "@heroui/react";
+import { DatePicker } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { DateValue, getLocalTimeZone, today } from "@internationalized/date";
 import { useState } from "react";
@@ -45,11 +45,11 @@ export const DatesWidget = ({ selectedDays, onChange }: {
                                 showMonthAndYearPickers
                                 variant="soft"
                                 defaultValue={selectedDays?.[index] ?? undefined}
-                                onChange={(date) => addOrRemoveDate(date, widgetId)}
+                                onChange={(date: DateValue | null) => addOrRemoveDate(date as DateValue, widgetId)}
                                 calendarProps={{ minValue: today(getLocalTimeZone()) }}
                                 minValue={today(getLocalTimeZone())}
                                 errorMessage="La fecha seleccionada no es válida."
-                                isDateUnavailable={(date) => {
+                                isDateUnavailable={(date: DateValue) => {
                                     // disable dates that are already selected in other widgets
                                     if (selectedDays) {
                                         return selectedDays.some((d, i) => i !== index && d.year === date.year && d.month === date.month && d.day === date.day);

@@ -1,4 +1,5 @@
-import { Chip, Input, Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/react";
+import { Chip, Input } from "@/compat/heroui";
 import { Button, Tooltip } from "@/compat/heroui";
 import { Textarea } from "@/compat/heroui";
 import { useEffect, useRef, useState } from "react";

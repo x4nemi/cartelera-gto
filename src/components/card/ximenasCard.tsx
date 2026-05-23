@@ -1,4 +1,5 @@
-import { CardHeader, Chip } from "@heroui/react";
+import { CardHeader } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
 import { Avatar, Card, Image } from "@/compat/heroui";
 
 import { CalendarIcon } from '@/components/icons';

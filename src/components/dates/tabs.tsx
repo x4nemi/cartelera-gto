@@ -1,4 +1,4 @@
-import { Tab, Tabs } from "@heroui/react";
+import { Tab, Tabs } from "@/compat/heroui";
 import type { DateValue } from "@internationalized/date";
 import { Card, CardBody } from "@/compat/heroui"
 import { CalendarIcon, EventIcon, LoopIcon } from "../icons";

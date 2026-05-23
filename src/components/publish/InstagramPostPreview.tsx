@@ -1,7 +1,7 @@
 import { SmartDatePicker } from "@/components/dates/smartDatePicker";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { AISuggestions, PostData } from "@/config/apiClient";
-import { Link } from "@heroui/react";
+import { Link } from "@/compat/heroui";
 import { Avatar, Card, Textarea } from "@/compat/heroui";
 import { AISuggestionsPanel, AIFieldsValue, AIVerdict } from "./AISuggestionsPanel"
 interface InstagramPostPreviewProps {

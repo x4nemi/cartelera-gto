@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/compat/heroui";
 import { CalendarIcon } from "@/components/icons";
 import { AIFieldsValue } from "./AISuggestionsPanel";
 

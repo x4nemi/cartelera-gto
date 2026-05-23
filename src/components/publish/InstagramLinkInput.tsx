@@ -1,4 +1,4 @@
-import { Input } from "@heroui/react";
+import { Input } from "@/compat/heroui";
 import { Button } from "@/compat/heroui";
 import { Ref } from "react";
 import { CheckIcon, IgIcon } from "@/components/icons";

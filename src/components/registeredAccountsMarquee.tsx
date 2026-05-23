@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/react";
+import { Link } from "@/compat/heroui";
 import { Avatar } from "@/compat/heroui";
 import { motion } from "motion/react";
 import { CosmosAPI, UserData } from "@/config/apiClient";
