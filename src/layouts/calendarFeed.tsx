@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { MonthCalendar } from "@/components/dates/monthCalendar";
 import { EventRowCard } from "@/components/card/eventRowCard";
 import { PostData } from "@/config/apiClient";
-import { XimenasCard } from "@/components/card/ximenasCard";
 
 const MONTH_NAMES = [
     "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -238,7 +237,8 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
 
                                     <div className="flex flex-col items-stretch gap-3 transition-opacity duration-200 md:max-w-3xl max-w-lg mx-auto w-full">
                                         {dayPosts.map((p) => (
-                                            <XimenasCard key={`${key}-${p.shortCode}`} {...p} displayDate={d} />
+                                            // <XimenasCard key={`${key}-${p.shortCode}`} {...p} displayDate={d} />
+                                            <EventRowCard key={key} {...p}  />
                                         ))}
                                     </div>
                                 </section>

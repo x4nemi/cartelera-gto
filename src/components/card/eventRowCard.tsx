@@ -4,8 +4,8 @@ import { EventDrawer } from "./eventDrawer";
 import { PostData } from "@/config/apiClient";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-// const months = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
-// const weekdays = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+const weekdays = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
 const parseLocalDate = (dateStr: string) => {
     const [y, m, d] = dateStr.split("-").map(Number);
@@ -21,22 +21,22 @@ export const EventRowCard = (props: PostData) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // const eventDate = (() => {
-    //     if (!props.dates?.length) return new Date();
-    //     const future = props.dates
-    //         .map(parseLocalDate)
-    //         .filter((d) => d >= today)
-    //         .sort((a, b) => a.getTime() - b.getTime());
-    //     if (future.length) return future[0];
-    //     const past = props.dates
-    //         .map(parseLocalDate)
-    //         .filter((d) => d < today)
-    //         .sort((a, b) => b.getTime() - a.getTime());
-    //     return past[0] ?? new Date();
-    // })();
-    // const month = months[eventDate.getMonth()];
-    // const day = eventDate.getDate();
-    // const weekday = weekdays[eventDate.getDay()];
+    const eventDate = (() => {
+        if (!props.dates?.length) return new Date();
+        const future = props.dates
+            .map(parseLocalDate)
+            .filter((d) => d >= today)
+            .sort((a, b) => a.getTime() - b.getTime());
+        if (future.length) return future[0];
+        const past = props.dates
+            .map(parseLocalDate)
+            .filter((d) => d < today)
+            .sort((a, b) => b.getTime() - a.getTime());
+        return past[0] ?? new Date();
+    })();
+    const month = months[eventDate.getMonth()];
+    const day = eventDate.getDate();
+    const weekday = weekdays[eventDate.getDay()];
 
     const isPast = props.dates ? props.dates.every((d) => parseLocalDate(d) < today) : false;
 
@@ -52,7 +52,7 @@ export const EventRowCard = (props: PostData) => {
         }
     };
 
-    const { title, summary, location, price, tags, caption, owner, ownerUsername, images } = props;
+    const { title, tags, caption, owner, ownerUsername, images } = props;
 
     // Headline fallback: AI title → first non-empty caption line → "Evento"
     const headline =
@@ -90,36 +90,14 @@ export const EventRowCard = (props: PostData) => {
                         </span>
                     </div>
 
-                    {/* Top-right: date badge */}
-                    {/* Top-right: date badge — colored header strip + bold day */}
-                    {/* <div className="absolute top-3 right-3 z-20 flex flex-col items-center overflow-hidden rounded-[18px] bg-white/95 dark:bg-content1/95 backdrop-blur-md shadow-lg ring-1 ring-black/5 w-12">
-                        <div className="w-full bg-primary text-primary-foreground text-[10px] font-bold tracking-[0.12em] text-center py-0.5">
-                            {month}
-                        </div>
-                        <div className="flex flex-col items-center w-full px-1 pt-0.5 pb-1">
-                            <span className="font-bold leading-none font-mono text-large text-foreground">
-                                {day}
-                            </span>
-                            <span className="text-[10px] leading-tight text-default-500 mt-0.5">
-                                {weekday}
-                            </span>
-                        </div>
-                    </div> */}
-
                     {/* Bottom gradient + metadata overlay */}
                     <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-16 pb-4 px-4 sm:px-5">
-                        <div className="flex flex-col gap-2 text-left">
+                        <div className="flex flex-row justify-between gap-2 text-left">
                             <h3 className="text-large sm:text-xl md:text-2xl font-semibold leading-tight line-clamp-2 tracking-tight text-white">
-                                {headline}
+                                {weekday}, {day} de {month}
                             </h3>
 
-                            {summary && (
-                                <p className="text-small text-white/80 leading-snug line-clamp-2 hidden sm:block">
-                                    {summary}
-                                </p>
-                            )}
-
-                            {(location || price || (tags && tags.length > 0)) && (
+                            { (tags && tags.length > 0) && (
                                 <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                                     {tags?.slice(0, 2).map((t) => (
                                         <Chip
