@@ -63,18 +63,17 @@ export const EventRowCard = (props: PostData) => {
     return (
         <>
             <Card
-                className="relative w-full overflow-hidden rounded-3xl transition-all duration-200 group"
+                className="relative w-full rounded-3xl transition-all duration-200 group"
                 isPressable
                 onClick={handlePress}
                 shadow="none"
             >
-                {/* Poster — fills the entire card. Portrait orientation across breakpoints so the artwork stays the protagonist. */}
-                <div className="relative w-full aspect-[4/5] sm:aspect-[3/4] bg-content2">
+                <div className="relative w-full overflow-hidden rounded-3xl bg-content2">
                     <Image
                         removeWrapper
                         alt={headline}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                        classNames={{ img: "rounded-none" }}
+                        className="block h-auto w-full transition-transform duration-300 group-hover:scale-[1.02]"
+                        classNames={{ img: "block h-auto w-full rounded-none" }}
                         src={images?.[0]}
                     />
 
@@ -91,7 +90,7 @@ export const EventRowCard = (props: PostData) => {
                     </div>
 
                     {/* Bottom gradient + metadata overlay */}
-                    <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/90 via-black/60 to-transparent pt-16 pb-4 px-4 sm:px-5">
+                    <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent pt-3 pb-4 px-4 sm:px-5">
                         <div className="flex flex-row justify-between gap-2 text-left">
                             <h3 className="text-large sm:text-xl md:text-2xl font-semibold leading-tight line-clamp-2 tracking-tight text-white">
                                 {weekday}, {day} de {month}
