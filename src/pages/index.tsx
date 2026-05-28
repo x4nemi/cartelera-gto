@@ -4,6 +4,7 @@ import { useMemo, useState, useCallback, useRef, useEffect } from "react";
 import { HomeViewMode } from "@/components/viewToggle";
 import { useEvents } from "@/hooks/useEvents";
 import { Spinner } from "@heroui/react";
+import { HomeView } from "@/layouts/homeView";
 
 export default function IndexPage() {
 	const { posts, loading, loadingMore, hasMore, loadMore } = useEvents();
@@ -171,40 +172,9 @@ export default function IndexPage() {
 						<Spinner size="lg" />
 					</div>
 				) : (
-					<CalendarFeed posts={calendarEvents} />
+					// <CalendarFeed posts={calendarEvents} />
+					<HomeView />
 				)}
-				{/* Wall view temporarily disabled — re-enable by restoring the ternary above and the toggle.
-				) : viewMode === "calendar" ? (
-					<CalendarFeed posts={calendarEvents} />
-				) : (
-					<>
-						{filteredEvents.length === 0 && areFiltersApplied && (
-							<div className="flex flex-col justify-center items-center py-20 text-foreground/50 gap-2">
-								<SadIcon size={48} />
-								<p className="text-lg">No se encontraron eventos con los filtros seleccionados.</p>
-							</div>
-						)}
-						<Wall cardsData={filteredEvents} />
-
-						{/* Infinite scroll sentinel * /}
-						<div ref={sentinelRef} className="w-full h-1" />
-
-						{loadingMore && (
-							<div className="flex justify-center py-6">
-								<Spinner size="md" />
-							</div>
-						)}
-					</>
-				)}
-				*/}
-
-				{/* Filter widget hidden temporarily.
-				{posts.length > 0 && viewMode === "wall" && (
-					<div className="fixed bottom-4 inset-x-0 z-20 flex justify-center">
-						<FilterBar allUsers={allUsernamesAndPics} selectedUsernames={selectedUsernames ?? new Set()} onToggleUser={toggleUser} setIsAscendingOrder={setIsAscendingOrder} onApplyDateRange={applyDateRange} removeAllFilters={removeAllFilters} setEventTypes={setEventTypes} eventTypes={eventTypes} />
-					</div>
-				)}
-				*/}
 			</section>
 		</DefaultLayout>
 	);

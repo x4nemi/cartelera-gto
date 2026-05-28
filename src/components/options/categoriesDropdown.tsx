@@ -1,26 +1,27 @@
-import { Label, TagGroup, Description, Key, Tag } from "@heroui/react";
+import { Label, TagGroup, Key, Tag } from "@heroui/react";
 import { MaskHappyIcon, MusicNoteIcon, PaletteIcon, PopcornIcon, ScissorsIcon } from "@phosphor-icons/react";
+// import {MusicNote} from '@gravity-ui/icons';
 import { useState } from "react";
 
 const categories = [{
     label: 'musica',
-    icon: <MusicNoteIcon size={24} weight="duotone" />
+    icon: <MusicNoteIcon weight="bold" size={16} />
 },
 {
     label: 'teatro',
-    icon: <MaskHappyIcon size={24} weight="duotone" />
+    icon: <MaskHappyIcon weight="bold" size={16} />
 },
 {
     label: 'taller',
-    icon: <ScissorsIcon size={24} weight="duotone" />
+    icon: <ScissorsIcon weight="bold" size={16} />
 },
 {
     label: 'arte',
-    icon: <PaletteIcon size={24} weight="duotone" />
+    icon: <PaletteIcon weight="bold" size={16} />
 },
 {
     label: 'cine',
-    icon: <PopcornIcon size={24} weight="duotone" />
+    icon: <PopcornIcon weight="bold" size={16} />
 }
 ];
 
@@ -32,17 +33,20 @@ export const CategoriesDropdown = () => {
             selectedKeys={selected}
             selectionMode="multiple"
             onSelectionChange={(keys) => setSelected(keys)}
+            size="lg"
         >
             <Label>¿Qué categorías te interesan?</Label>
             <TagGroup.List>
                 {categories.map((c) => (
-                    <Tag key={c.label}>
+                    <Tag
+                        key={c.label}
+                        className="border border-default-foreground/25 bg-transparent data-[selected=true]:border-transparent data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+                    >
                         {c.icon}
                         {c.label}
                     </Tag>
                 ))}
             </TagGroup.List>
-            <Description>Elige las categorías que desees</Description>
         </TagGroup>
     )
 }
