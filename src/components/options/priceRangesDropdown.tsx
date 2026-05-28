@@ -15,7 +15,7 @@ export const PriceRangesDropdown = () => {
             
         >
             <Label>Rango de precios</Label>
-            <Slider.Track className="relative mt-1 mb-6 h-1 rounded-full bg-content1">
+            <Slider.Track className="relative mt-2 mb-6 h-1 rounded-full bg-content1">
                 {({ state }) => (
                     <>
                         <Slider.Fill className="h-1 rounded-full bg-accent" />
@@ -25,7 +25,7 @@ export const PriceRangesDropdown = () => {
                             <span
                                 key={`tick-${i}`}
                                 aria-hidden
-                                className="absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-default-foreground/30"
+                                className="absolute top-1/2 size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground"
                                 style={{ left: `${(i / maxIndex) * 100}%` }}
                             />
                         ))}
@@ -44,7 +44,7 @@ export const PriceRangesDropdown = () => {
                             <Slider.Thumb
                                 key={i}
                                 index={i}
-                                className="size-4 rounded-full bg-accent shadow ring-2 ring-background"
+                                className="size-4 rounded-full bg-accent shadow ring-2 ring-accent"
                             />
                         ))}
                     </>

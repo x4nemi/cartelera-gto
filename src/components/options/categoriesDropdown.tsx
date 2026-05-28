@@ -35,7 +35,7 @@ export const CategoriesDropdown = () => {
             onSelectionChange={(keys) => setSelected(keys)}
             size="lg"
         >
-            <Label>¿Qué categorías te interesan?</Label>
+            <Label>Categorías</Label>
             <TagGroup.List>
                 {categories.map((c) => (
                     <Tag
