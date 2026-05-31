@@ -33,7 +33,7 @@ export const CategoriesDropdown = () => {
             selectedKeys={selected}
             selectionMode="multiple"
             onSelectionChange={(keys) => setSelected(keys)}
-            size="lg"
+            size="md"
         >
             <Label>Categorías</Label>
             <TagGroup.List>

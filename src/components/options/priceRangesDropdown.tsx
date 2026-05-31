@@ -12,7 +12,6 @@ export const PriceRangesDropdown = () => {
             maxValue={maxIndex}
             minValue={0}
             step={1}
-            
         >
             <Label>Rango de precios</Label>
             <Slider.Track className="relative mt-2 mb-6 h-1 rounded-full bg-content1">
