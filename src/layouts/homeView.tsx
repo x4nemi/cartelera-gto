@@ -90,7 +90,7 @@ export const HomeView = () => {
         <div className="flex flex-col gap-4 pt-6">
             <Card>
                 <Card.Header>
-                    <Typography type="h5">¿Qué te gustaría hacer?</Typography>
+                    <Typography type="h5">¿Qué es lo que buscas?</Typography>
                 </Card.Header>
                 <Card.Content>
                     <CategoriesDropdown />

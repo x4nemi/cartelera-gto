@@ -8,10 +8,11 @@ interface EventModalProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     event: PostData;
+    layoutId: string;
 }
 
-export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => {
-    const { images, title, summary, location, price, tags, owner, ownerUsername, shortCode } = event;
+export const EventModal = ({ isOpen, onOpenChange, event, layoutId }: EventModalProps) => {
+    const { images, title, summary, location, price, tags, owner, ownerUsername } = event;
 
     const [shareLayout, setShareLayout] = useState(isOpen);
 
@@ -73,7 +74,7 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
                             </button>
                             {images?.[0] && (
                                 <motion.img
-                                    layoutId={shareLayout ? `event-image-${shortCode}` : undefined}
+                                    layoutId={shareLayout ? layoutId : undefined}
                                     src={images[0]}
                                     alt={title}
                                     className="w-full h-auto object-contain rounded-2xl"
