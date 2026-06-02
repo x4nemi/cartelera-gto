@@ -99,7 +99,7 @@ export const HomeView = () => {
             </Card>
 
             {/* Date sidebar aligned to each section's divider */}
-            <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-6">
+            <div className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-6">
                 {loading && dayKeys.length === 0 && (
                     <p className="col-span-2 text-sm text-foreground/60">Cargando eventos…</p>
                 )}
@@ -117,7 +117,7 @@ export const HomeView = () => {
                                 type="button"
                                 onClick={() => jumpToDay(key)}
                                 className={[
-                                    "flex flex-col items-center w-14 py-2 rounded-xl border transition-colors self-start",
+                                    "flex flex-col items-center w-12 py-1 rounded-xl border transition-colors self-start",
                                     isActive ? "sticky top-4 z-10" : "",
                                     isActive
                                         ? "bg-accent text-accent-foreground border-transparent"
