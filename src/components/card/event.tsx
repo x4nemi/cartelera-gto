@@ -7,7 +7,7 @@ export const Event = (props: PostData) => {
         <Card className="flex flex-row gap-3 p-2">
             <img
                 alt="Sound Electro event"
-                className=" w-28 shrink-0 rounded-xl object-cover select-none"
+                className="rounded-2xl w-28 shrink-0 object-cover select-none"
                 loading="lazy"
                 src={images?.[0]}
             />
