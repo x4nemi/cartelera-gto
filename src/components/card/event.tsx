@@ -1,19 +1,16 @@
 import { PostData } from "@/types"
 import { Card, Chip, Avatar } from "@heroui/react"
-import { useId, useState } from "react";
-import { motion } from "motion/react";
+import { useState } from "react";
 import { EventModal } from "@/components/modal/eventModal";
 
 export const Event = (props: PostData) => {
     const { images, title, tags, owner } = props;
     const [open, setOpen] = useState(false);
-    const layoutId = useId();
 
     return (
         <>
             <Card className="flex flex-row gap-3 p-2 cursor-pointer" onClick={() => setOpen(true)}>
-                <motion.img
-                    layoutId={open ? layoutId : undefined}
+                <img
                     alt={title}
                     className="rounded-2xl w-28 h-28 shrink-0 object-cover select-none"
                     loading="lazy"
@@ -39,7 +36,7 @@ export const Event = (props: PostData) => {
                 </div>
             </Card>
 
-            <EventModal isOpen={open} onOpenChange={setOpen} event={props} layoutId={layoutId} />
+            <EventModal isOpen={open} onOpenChange={setOpen} event={props} />
         </>
     )
 }

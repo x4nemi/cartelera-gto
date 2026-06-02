@@ -1,26 +1,16 @@
 import { Modal, ModalBody, ModalContent, Chip, User } from "@/compat/heroui";
 import { CalendarIcon, MapPinIcon, MoneyIcon, XIcon } from "@/components/icons";
 import type { PostData } from "@/types";
-import { motion } from "motion/react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 interface EventModalProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     event: PostData;
-    layoutId: string;
 }
 
-export const EventModal = ({ isOpen, onOpenChange, event, layoutId }: EventModalProps) => {
+export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => {
     const { images, title, summary, location, price, tags, owner, ownerUsername } = event;
-
-    const [shareLayout, setShareLayout] = useState(isOpen);
-
-    if (isOpen && !shareLayout) setShareLayout(true);
-
-    useEffect(() => {
-        if (!isOpen) setShareLayout(false);
-    }, [isOpen]);
 
     const today = useMemo(() => {
         const d = new Date();
@@ -73,8 +63,7 @@ export const EventModal = ({ isOpen, onOpenChange, event, layoutId }: EventModal
                                 <XIcon size={18} />
                             </button>
                             {images?.[0] && (
-                                <motion.img
-                                    layoutId={shareLayout ? layoutId : undefined}
+                                <img
                                     src={images[0]}
                                     alt={title}
                                     className="w-full h-auto object-contain rounded-2xl"
