@@ -21,10 +21,10 @@ export const Event = (props: PostData) => {
                 />
                 <div className="flex flex-1 flex-col justify-between gap-1">
                     <div className="flex flex-col gap-1">
-                        <Card.Title className="lg:text-lg text-lg line-clamp-2 pr-2">{title}</Card.Title>
+                        <Card.Title className="font-display lg:text-lg text-lg line-clamp-2 pr-2">{title}</Card.Title>
 
                         <div className="flex flex-row gap-2">
-                            <span className="text-sm text-foreground/60">
+                            <span className="text-xs text-foreground/60">
                                 {price ? price : "Gratis"}
                             </span>
                         </div>

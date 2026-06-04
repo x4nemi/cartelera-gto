@@ -362,7 +362,10 @@ export const SmartDatePicker = ({
  */
 export function inferEventType(dates: string[]): "event" | "workshop" | "calendar" {
 	if (dates.length <= 3) return "event";
-	const days = dates.map((d) => new Date(d).getDay());
+	const days = dates.map((d) => {
+		const [y, m, day] = d.split("-").map(Number);
+		return new Date(y, m - 1, day).getDay();
+	});
 	const uniqueDays = new Set(days);
 	if (uniqueDays.size <= 2 && dates.length >= 4) return "workshop";
 	return "calendar";

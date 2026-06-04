@@ -2,10 +2,11 @@ import { CategoriesDropdown } from "@/components/options/categoriesDropdown"
 import { PriceRangesDropdown } from "@/components/options/priceRangesDropdown"
 import { useEvents } from "@/hooks/useEvents"
 import type { PostData } from "@/types"
-import { Card, Typography } from "@heroui/react"
+import { Card } from "@heroui/react"
 import { useEffect, useMemo, useRef, useState, Fragment } from "react"
 import { Event } from "@/components/card/event"
 import { Divider } from "@/compat/heroui"
+import { FilterIcon, XIcon } from "@/components/icons"
 
 const SHORT_WEEKDAYS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
 const SHORT_MONTHS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
@@ -50,6 +51,18 @@ export const HomeView = () => {
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 3]);
+    const [filtersOpen, setFiltersOpen] = useState(false);
+
+    // Number of active filters, shown as a badge on the collapsed bar.
+    const activeFilterCount = useMemo(() => {
+        const priceActive = priceRange[0] > 0 || priceRange[1] < 3;
+        return selectedCategories.length + (priceActive ? 1 : 0);
+    }, [selectedCategories, priceRange]);
+
+    const clearFilters = () => {
+        setSelectedCategories([]);
+        setPriceRange([0, 3]);
+    };
 
     // Known category labels actually present in the loaded events' tags.
     // Until posts load, leave undefined so the dropdown shows all categories.
@@ -89,7 +102,7 @@ export const HomeView = () => {
 
         for (const post of filteredPosts) {
             for (const raw of post.dates ?? []) {
-                const d = new Date(raw);
+                const d = parseDayKey(raw);
                 if (isNaN(d.getTime())) continue;
                 d.setHours(0, 0, 0, 0);
                 if (d < today) continue;
@@ -144,17 +157,44 @@ export const HomeView = () => {
 
     return (
         <div className="flex flex-col gap-4 pt-6 max-w-5xl mx-auto">
-            <Card className="max-md:sticky max-md:top-4 z-20">
-                <Card.Header>
-                    <Typography type="h5">¿Qué es lo que buscas?</Typography>
-                </Card.Header>
-                <Card.Content className="flex flex-col gap-6">
-                    <CategoriesDropdown
-                        selectedCategories={selectedCategories}
-                        onSelectionChange={setSelectedCategories}
-                        availableCategories={availableCategories}
-                    />
-                    <PriceRangesDropdown value={priceRange} onChange={setPriceRange} />
+            <Card className="sticky top-4 z-20">
+                <Card.Content className="p-3">
+                    <div className="flex items-center justify-between gap-2">
+                        <button
+                            type="button"
+                            onClick={() => setFiltersOpen((o) => !o)}
+                            aria-expanded={filtersOpen}
+                            className="flex items-center gap-2 rounded-full px-2 py-1 text-sm font-medium transition-colors hover:bg-content2"
+                        >
+                            <FilterIcon size={18} />
+                            <span>Filtros</span>
+                            {activeFilterCount > 0 && (
+                                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground">
+                                    {activeFilterCount}
+                                </span>
+                            )}
+                        </button>
+                        {activeFilterCount > 0 && (
+                            <button
+                                type="button"
+                                onClick={clearFilters}
+                                className="flex items-center gap-1 rounded-full px-2 py-1 text-xs text-foreground/60 transition-colors hover:bg-content2 hover:text-foreground"
+                            >
+                                <XIcon size={14} />
+                                <span>Limpiar</span>
+                            </button>
+                        )}
+                    </div>
+                    {filtersOpen && (
+                        <div className="flex flex-col gap-6 pt-4">
+                            <CategoriesDropdown
+                                selectedCategories={selectedCategories}
+                                onSelectionChange={setSelectedCategories}
+                                availableCategories={availableCategories}
+                            />
+                            <PriceRangesDropdown value={priceRange} onChange={setPriceRange} />
+                        </div>
+                    )}
                 </Card.Content>
             </Card>
 

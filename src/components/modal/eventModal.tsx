@@ -23,7 +23,8 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
         if (!event.dates) return [];
         return event.dates
             .map((raw) => {
-                const d = new Date(raw);
+                const [y, m, day] = raw.split("-").map(Number);
+                const d = new Date(y, m - 1, day);
                 if (isNaN(d.getTime())) return null;
                 return {
                     raw,
