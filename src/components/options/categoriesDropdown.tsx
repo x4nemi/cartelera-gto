@@ -35,12 +35,12 @@ export const CategoriesDropdown = () => {
             onSelectionChange={(keys) => setSelected(keys)}
             size="md"
         >
-            <Label>Categorías</Label>
-            <TagGroup.List>
+            <Label className="mb-2 block text-sm font-medium text-foreground/80">Categorías</Label>
+            <TagGroup.List className="flex flex-wrap gap-2">
                 {categories.map((c) => (
                     <Tag
                         key={c.label}
-                        className="border border-default-foreground/25 bg-transparent data-[selected=true]:border-transparent data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground"
+                        className="flex items-center gap-1.5 rounded-full border border-default-foreground/25 bg-transparent px-3 py-1.5 text-sm capitalize transition-colors hover:bg-content2 data-[selected=true]:border-transparent data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[selected=true]:hover:bg-accent"
                     >
                         {c.icon}
                         {c.label}

@@ -22,18 +22,18 @@ export const PriceRangesDropdown = () => {
 
     return (
         <Slider
-            className="w-full max-w-xs"
+            className="w-full max-w-sm"
             value={values}
             onChange={(v) => setValues(v as number[])}
             maxValue={maxIndex}
             minValue={0}
             step={1}
         >
-            <Label>Rango de precios</Label>
-            <Slider.Track className="relative mt-2 mb-6 h-1 rounded-full bg-content1">
+            <Label className="mb-3 block text-sm font-medium text-foreground/80">Rango de precios</Label>
+            <Slider.Track className="relative mt-1 mb-7 h-1.5 rounded-full bg-content1">
                 {({ state }) => (
                     <>
-                        <Slider.Fill className="h-1 rounded-full bg-accent" />
+                        <Slider.Fill className="h-1.5 rounded-full bg-accent" />
 
                         {/* tick marks — clickable */}
                         {priceSteps.map((_, i) => {
@@ -59,7 +59,12 @@ export const PriceRangesDropdown = () => {
                         {priceSteps.map((label, i) => (
                             <span
                                 key={`label-${i}`}
-                                className="absolute top-full mt-2 -translate-x-1/2 text-xs select-none text-default-800"
+                                className={[
+                                    "absolute top-full mt-2.5 -translate-x-1/2 text-xs select-none transition-colors",
+                                    state.values.includes(i)
+                                        ? "font-medium text-foreground"
+                                        : "text-foreground/50",
+                                ].join(" ")}
                                 style={{ left: `${(i / maxIndex) * 100}%` }}
                             >
                                 {label}

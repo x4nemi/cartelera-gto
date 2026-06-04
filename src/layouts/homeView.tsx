@@ -92,7 +92,7 @@ export const HomeView = () => {
                 <Card.Header>
                     <Typography type="h5">¿Qué es lo que buscas?</Typography>
                 </Card.Header>
-                <Card.Content>
+                <Card.Content className="flex flex-col gap-6">
                     <CategoriesDropdown />
                     <PriceRangesDropdown />
                 </Card.Content>
