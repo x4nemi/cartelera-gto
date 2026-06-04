@@ -87,7 +87,7 @@ export const HomeView = () => {
     }, [dayKeys]);
 
     return (
-        <div className="flex flex-col gap-4 pt-6">
+        <div className="flex flex-col gap-4 pt-6 max-w-5xl mx-auto">
             <Card>
                 <Card.Header>
                     <Typography type="h5">¿Qué es lo que buscas?</Typography>
@@ -140,9 +140,11 @@ export const HomeView = () => {
                                 ref={(el) => { sectionRefs.current[key] = el; }}
                                 className="scroll-mt-4 flex flex-col gap-3 min-w-0"
                             >
-                                {events.map((event) => (
-                                    <Event key={`${event.shortCode}-${key}`} {...event} />
-                                ))}
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+                                    {events.map((event) => (
+                                        <Event key={`${event.shortCode}-${key}`} {...event} />
+                                    ))}
+                                </div>
                                 <Divider />
                             </section>
                         </Fragment>
