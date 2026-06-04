@@ -1,5 +1,5 @@
-import { Modal, ModalBody, ModalContent, Chip, User } from "@/compat/heroui";
-import { CalendarIcon, MapPinIcon, MoneyIcon, XIcon } from "@/components/icons";
+import { Modal, Chip, Avatar, Typography } from "@heroui/react";
+import { CalendarIcon, MapPinIcon, MoneyIcon } from "@/components/icons";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import type { PostData } from "@/types";
 import { useMemo } from "react";
@@ -43,98 +43,95 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
     const nextDate = parsedDates.find((d) => !d.isPast) ?? parsedDates[parsedDates.length - 1];
 
     return (
-        <Modal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
-            placement="center"
-            backdrop="blur"
-            scrollBehavior="inside"
-            size="lg"
-        >
-            <ModalContent>
-                {(onClose) => (
-                    <ModalBody className="p-0">
-                        <div className="relative flex flex-col p-0">
-                            <button
-                                type="button"
-                                onClick={onClose}
-                                aria-label="Cerrar"
-                                className="absolute top-3 right-3 z-20 flex items-center justify-center size-9 rounded-full bg-black/60 text-white backdrop-blur-md shadow-lg hover:bg-black/80 transition"
-                            >
-                                <XIcon size={18} />
-                            </button>
+        <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} variant="blur">
+            <Modal.Container placement="center" size="lg" scroll="inside">
+                <Modal.Dialog className="lg:max-w-4xl">
+                    <Modal.CloseTrigger />
+                    <Modal.Body className="p-0">
+                        <div className="flex flex-col lg:flex-row">
                             {images && images.length > 0 && (
-                                <ImageCarousel images={[...images].flat()} />
+                                <div className="lg:w-3/5 rounded-lg overflow-hidden lg:shrink-0 bg-default/40">
+                                    <ImageCarousel images={[...images].flat()} />
+                                </div>
                             )}
 
-                            <div className="flex flex-col gap-3 px-0 py-4">
-                                {title && (
-                                    <h1 className="text-lg md:text-2xl font-semibold leading-tight tracking-tight">
-                                        {title}
-                                    </h1>
-                                )}
-                                {summary && (
-                                    <p className="text-sm text-default-500 leading-snug">{summary}</p>
-                                )}
+                            <div className="flex flex-1 flex-col lg:min-w-0">
+                                <div className="flex flex-col gap-3 p-5">
+                                    {title && (
+                                        <Typography type="h4" className="pr-10">
+                                            {title}
+                                        </Typography>
+                                    )}
+                                    {summary && (
+                                        <Typography type="body-sm" className="text-muted">
+                                            {summary}
+                                        </Typography>
+                                    )}
 
-                                {(nextDate || location || price) && (
-                                    <div className="flex flex-col gap-1">
-                                        {nextDate && (
-                                            <div className="flex items-center gap-1.5">
-                                                <CalendarIcon size={14} className="text-primary shrink-0" />
-                                                <span className="text-sm font-medium capitalize">
-                                                    {nextDate.label}
-                                                </span>
-                                                {parsedDates.length > 1 && (
-                                                    <span className="text-xs text-default-500">
-                                                        · {parsedDates.length} fechas
+                                    {(nextDate || location || price) && (
+                                        <div className="flex flex-col gap-1.5">
+                                            {nextDate && (
+                                                <div className="flex items-center gap-2">
+                                                    <CalendarIcon size={16} className="text-accent shrink-0" />
+                                                    <span className="text-sm font-medium capitalize">
+                                                        {nextDate.label}
                                                     </span>
-                                                )}
-                                            </div>
-                                        )}
-                                        {location && (
-                                            <div className="flex items-center gap-1.5">
-                                                <MapPinIcon size={14} className="text-default-500 shrink-0" />
-                                                <span className="text-sm text-default-600">{location}</span>
-                                            </div>
-                                        )}
-                                        {price && (
-                                            <div className="flex items-center gap-1.5">
-                                                <MoneyIcon size={14} className="text-default-500 shrink-0" />
-                                                <span className="text-sm text-default-600">{price}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                )}
+                                                    {parsedDates.length > 1 && (
+                                                        <span className="text-xs text-muted">
+                                                            · {parsedDates.length} fechas
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            )}
+                                            {location && (
+                                                <div className="flex items-center gap-2">
+                                                    <MapPinIcon size={16} className="text-muted shrink-0" />
+                                                    <span className="text-sm">{location}</span>
+                                                </div>
+                                            )}
+                                            {price && (
+                                                <div className="flex items-center gap-2">
+                                                    <MoneyIcon size={16} className="text-muted shrink-0" />
+                                                    <span className="text-sm">{price}</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
 
-                                {tags && tags.length > 0 && (
-                                    <div className="flex flex-wrap gap-1">
-                                        {tags.map((t) => (
-                                            <Chip
-                                                key={t}
-                                                variant="soft"
-                                                color="accent"
-                                                size="sm"
-                                                className="rounded-lg h-5 text-tiny px-1.5"
-                                            >
-                                                #{t}
-                                            </Chip>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
+                                    {tags && tags.length > 0 && (
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {tags.map((t) => (
+                                                <Chip key={t} variant="soft" color="accent" size="sm">
+                                                    <Chip.Label>#{t}</Chip.Label>
+                                                </Chip>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
 
-                            <div className="border-t border-default-200/50 py-3 flex justify-center bg-content2/60">
-                                <User
-                                    name={owner?.fullName}
-                                    description={"@" + ownerUsername}
-                                    avatarProps={{ src: owner?.profilePicUrl }}
-                                />
+                                <div className="mt-auto flex items-center justify-center gap-3 border-t border-default px-5 py-3">
+                                    <Avatar
+                                        size="sm"
+                                        aria-label={`${ownerUsername}'s profile picture`}
+                                    >
+                                        <Avatar.Image
+                                            alt={`${ownerUsername}'s avatar`}
+                                            src={owner?.profilePicUrl}
+                                        />
+                                        <Avatar.Fallback>
+                                            {ownerUsername?.[0]?.toUpperCase() ?? "?"}
+                                        </Avatar.Fallback>
+                                    </Avatar>
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium">{owner?.fullName}</span>
+                                        <span className="text-xs text-muted">@{ownerUsername}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </ModalBody>
-                )}
-            </ModalContent>
-        </Modal>
+                    </Modal.Body>
+                </Modal.Dialog>
+            </Modal.Container>
+        </Modal.Backdrop>
     );
 };
