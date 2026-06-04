@@ -1,7 +1,8 @@
 import { PostData } from "@/types"
-import { Card, Chip, Avatar } from "@heroui/react"
+import { Card, Chip, Avatar, Button } from "@heroui/react"
 import { useState } from "react";
 import { EventModal } from "@/components/modal/eventModal";
+import {Bookmark} from '@gravity-ui/icons';
 
 export const Event = (props: PostData) => {
     const { images, title, tags, owner } = props;
@@ -18,7 +19,10 @@ export const Event = (props: PostData) => {
                 />
                 <div className="flex flex-1 flex-col justify-between gap-1">
                     <div className="flex flex-col gap-1">
-                        <Card.Title className="lg:text-lg text-lg line-clamp-2">{title}</Card.Title>
+                        <div className="flex flex-row gap-1 ">
+                            <Card.Title className="lg:text-lg text-lg line-clamp-2">{title}</Card.Title>
+                            <Button variant="outline" className="ml-auto" onClick={(e) => { e.stopPropagation(); setOpen(true); }}><Bookmark /></Button>
+                        </div>
                         <div className="flex gap-1 flex-wrap">
                             {tags?.map((tag) => (
                                 <Chip key={tag} className="text-[12px]">{tag}</Chip>
@@ -26,7 +30,7 @@ export const Event = (props: PostData) => {
                         </div>
                     </div>
                     <Card.Footer className="flex gap-2">
-                        <Avatar aria-label={`${owner?.username}'s profile picture`} className="size-5">
+                        <Avatar aria-label={`${owner?.username}'s profile picture`} className="size-8">
                             <Avatar.Image
                                 alt={`${owner?.username}'s avatar`}
                                 src={owner?.profilePicUrl}

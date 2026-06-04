@@ -50,7 +50,7 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
                     <Modal.Body className="p-0">
                         <div className="flex flex-col lg:flex-row">
                             {images && images.length > 0 && (
-                                <div className="lg:w-3/5 rounded-lg overflow-hidden lg:shrink-0 bg-default/40">
+                                <div className="lg:w-3/5 rounded-2xl overflow-hidden lg:shrink-0 bg-default/40">
                                     <ImageCarousel images={[...images].flat()} />
                                 </div>
                             )}
