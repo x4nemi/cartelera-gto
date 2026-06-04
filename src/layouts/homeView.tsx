@@ -22,8 +22,64 @@ const parseDayKey = (key: string) => {
     return new Date(y, m - 1, d);
 };
 
+/**
+ * Bucket a free-text price into a tier matching the price slider:
+ * 0 = Gratis, 1 = $, 2 = $$, 3 = $$$. Returns null when the price is unknown
+ * (such posts are never hidden by the price filter).
+ */
+const priceTier = (price?: string): number | null => {
+    if (!price) return null;
+    const text = price.trim();
+    if (!text) return null;
+
+    const amounts = (text.match(/\$\s?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,2})?/g) ?? [])
+        .map((m) => Number(m.replace(/[^\d]/g, "")))
+        .filter((n) => Number.isFinite(n) && n > 0);
+
+    if (amounts.length === 0) {
+        return /gratis|libre|sin costo|entrada libre/i.test(text) ? 0 : null;
+    }
+    const min = Math.min(...amounts);
+    if (min <= 150) return 1;
+    if (min <= 400) return 2;
+    return 3;
+};
+
 export const HomeView = () => {
     const { posts, loading } = useEvents();
+
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 3]);
+
+    // Known category labels actually present in the loaded events' tags.
+    // Until posts load, leave undefined so the dropdown shows all categories.
+    const availableCategories = useMemo(() => {
+        if (posts.length === 0) return undefined;
+        const present = new Set<string>();
+        for (const post of posts) {
+            for (const tag of post.tags ?? []) present.add(tag.toLowerCase());
+        }
+        return Array.from(present);
+    }, [posts]);
+
+    // Apply category + price filters before grouping.
+    const filteredPosts = useMemo(() => {
+        const [minTier, maxTier] = priceRange;
+        const priceActive = minTier > 0 || maxTier < 3;
+        const cats = selectedCategories.map((c) => c.toLowerCase());
+
+        return posts.filter((post) => {
+            if (cats.length > 0) {
+                const tags = (post.tags ?? []).map((t) => t.toLowerCase());
+                if (!cats.some((c) => tags.includes(c))) return false;
+            }
+            if (priceActive) {
+                const tier = priceTier(post.price);
+                if (tier !== null && (tier < minTier || tier > maxTier)) return false;
+            }
+            return true;
+        });
+    }, [posts, selectedCategories, priceRange]);
 
     // Group posts by day key (YYYY-MM-DD), today and future only
     const grouped = useMemo(() => {
@@ -31,19 +87,19 @@ export const HomeView = () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        for (const post of posts) {
+        for (const post of filteredPosts) {
             for (const raw of post.dates ?? []) {
                 const d = new Date(raw);
                 if (isNaN(d.getTime())) continue;
                 d.setHours(0, 0, 0, 0);
-                // if (d < today) continue;
+                if (d < today) continue;
                 const key = toDayKey(d);
                 if (!map.has(key)) map.set(key, []);
                 map.get(key)!.push(post);
             }
         }
         return new Map([...map.entries()].sort(([a], [b]) => a.localeCompare(b)));
-    }, [posts]);
+    }, [filteredPosts]);
 
     const dayKeys = useMemo(() => [...grouped.keys()], [grouped]);
     const [selectedKey, setSelectedKey] = useState<string | null>(null);
@@ -93,8 +149,12 @@ export const HomeView = () => {
                     <Typography type="h5">¿Qué es lo que buscas?</Typography>
                 </Card.Header>
                 <Card.Content className="flex flex-col gap-6">
-                    <CategoriesDropdown />
-                    <PriceRangesDropdown />
+                    <CategoriesDropdown
+                        selectedCategories={selectedCategories}
+                        onSelectionChange={setSelectedCategories}
+                        availableCategories={availableCategories}
+                    />
+                    <PriceRangesDropdown value={priceRange} onChange={setPriceRange} />
                 </Card.Content>
             </Card>
 

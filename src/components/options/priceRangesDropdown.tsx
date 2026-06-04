@@ -1,30 +1,32 @@
 import { Label, Slider } from "@heroui/react";
-import { useState } from "react";
 
 const priceSteps = ["Gratis", "$", "$$", "$$$"];
 
-export const PriceRangesDropdown = () => {
+interface PriceRangesDropdownProps {
+    value: [number, number];
+    onChange: (range: [number, number]) => void;
+}
+
+export const PriceRangesDropdown = ({ value, onChange }: PriceRangesDropdownProps) => {
     const maxIndex = priceSteps.length - 1;
-    const [values, setValues] = useState<number[]>([0, maxIndex]);
 
     const snapNearestThumb = (target: number) => {
-        setValues((prev) => {
-            const [min, max] = prev;
-            const distMin = Math.abs(target - min);
-            const distMax = Math.abs(target - max);
-            // move whichever thumb is closer; keep order valid
-            if (distMin <= distMax) {
-                return [Math.min(target, max), max];
-            }
-            return [min, Math.max(target, min)];
-        });
+        const [min, max] = value;
+        const distMin = Math.abs(target - min);
+        const distMax = Math.abs(target - max);
+        // move whichever thumb is closer; keep order valid
+        if (distMin <= distMax) {
+            onChange([Math.min(target, max), max]);
+        } else {
+            onChange([min, Math.max(target, min)]);
+        }
     };
 
     return (
         <Slider
             className="w-full max-w-sm"
-            value={values}
-            onChange={(v) => setValues(v as number[])}
+            value={value}
+            onChange={(v) => onChange(v as [number, number])}
             maxValue={maxIndex}
             minValue={0}
             step={1}

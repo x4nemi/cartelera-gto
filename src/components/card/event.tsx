@@ -2,14 +2,13 @@ import { PostData } from "@/types"
 import { Card, Chip, Avatar, Button } from "@heroui/react"
 import { useState } from "react";
 import { EventModal } from "@/components/modal/eventModal";
-import { Bookmark, BookmarkFill, Calendar, Circles4Diamond, SquareHashtag, TagDollar } from '@gravity-ui/icons';
+import { Bookmark, BookmarkFill } from '@gravity-ui/icons';
 
 
 export const Event = (props: PostData) => {
-    const { images, title, tags, owner, price, dates } = props;
+    const { images, title, tags, owner, price } = props;
     const [open, setOpen] = useState(false);
     const [bookmarked, setBookmarked] = useState(false);
-    const isMultiDay = (dates?.length ?? 0) > 1;
 
     return (
         <>
@@ -22,10 +21,14 @@ export const Event = (props: PostData) => {
                 />
                 <div className="flex flex-1 flex-col justify-between gap-1">
                     <div className="flex flex-col gap-1">
-                        <Card.Title className="lg:text-lg text-lg line-clamp-2">{title}</Card.Title>
+                        <Card.Title className="lg:text-lg text-lg line-clamp-2 pr-2">{title}</Card.Title>
 
                         <div className="flex flex-row gap-2">
-                            <Circles4Diamond className="text-foreground/60 mt-1 shrink-0" height={16} width={16} />
+                            <span className="text-sm text-foreground/60">
+                                {price ? price : "Gratis"}
+                            </span>
+                        </div>
+                        <div className="flex flex-row gap-2 mt-1">
                             <div className="flex flex-row flex-wrap gap-1">
                                 {
                                     tags && tags.length > 0 ? (
@@ -39,12 +42,6 @@ export const Event = (props: PostData) => {
                                     )
                                 }
                             </div>
-                        </div>
-                        <div className="flex flex-row gap-2">
-                            <TagDollar className="text-foreground/60 mt-1 shrink-0" height={16} width={16} />
-                            <span className="text-sm text-foreground/60">
-                                {price ? price : "Gratis"}
-                            </span>
                         </div>
                     </div>
                     <Card.Footer className="flex">
