@@ -159,14 +159,6 @@ export default function IndexPage() {
 	return (
 		<DefaultLayout>
 			<section className="flex flex-col items-stretch w-full md:gap-4 gap-2 md:mt-5">
-				{/* Calendar/Wall view toggle — temporarily hidden; calendar is the only view.
-				{!loading && posts.length > 0 && (
-					<div className="flex justify-end">
-						<ViewToggle value={viewMode} onChange={setViewMode} />
-					</div>
-				)}
-				*/}
-
 				{loading ? (
 					<div className="flex justify-center items-center py-20">
 						<Spinner size="lg" />
