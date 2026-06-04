@@ -88,7 +88,7 @@ export const HomeView = () => {
 
     return (
         <div className="flex flex-col gap-4 pt-6 max-w-5xl mx-auto">
-            <Card>
+            <Card className="max-md:sticky max-md:top-4 z-20">
                 <Card.Header>
                     <Typography type="h5">¿Qué es lo que buscas?</Typography>
                 </Card.Header>
