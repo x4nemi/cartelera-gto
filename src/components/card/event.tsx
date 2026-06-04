@@ -41,7 +41,7 @@ export const Event = (props: PostData) => {
                                 </Avatar>
                                 <span className="text-xs">{owner?.fullName}</span>
                             </div>
-                            <Button isIconOnly variant="outline" className="ml-auto" onClick={(e) => { e.stopPropagation(); setBookmarked(!bookmarked); }}>
+                            <Button isIconOnly variant="ghost" size="sm" className="ml-auto" onClick={(e) => { e.stopPropagation(); setBookmarked(!bookmarked); }}>
                                 {bookmarked ? <BookmarkFill /> : <Bookmark />}
                             </Button>
                         </div>
