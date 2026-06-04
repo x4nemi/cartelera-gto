@@ -45,7 +45,7 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
     return (
         <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} variant="blur">
             <Modal.Container placement="center" size="lg" scroll="inside">
-                <Modal.Dialog className="lg:max-w-4xl">
+                <Modal.Dialog className="lg:max-w-4xl p-2">
                     <Modal.CloseTrigger />
                     <Modal.Body className="p-0">
                         <div className="flex flex-col lg:flex-row">
@@ -56,7 +56,7 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
                             )}
 
                             <div className="flex flex-1 flex-col lg:min-w-0">
-                                <div className="flex flex-col gap-3 p-5">
+                                <div className="flex flex-col gap-3 p-2 lg:p-5">
                                     {title && (
                                         <Typography type="h4" className="pr-10">
                                             {title}

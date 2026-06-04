@@ -12,13 +12,13 @@ export const Event = (props: PostData) => {
             <Card className="flex flex-row gap-3 p-2 cursor-pointer" onClick={() => setOpen(true)}>
                 <img
                     alt={title}
-                    className="rounded-2xl w-32 h-auto shrink-0 object-cover select-none"
+                    className="rounded-2xl w-36 h-auto shrink-0 object-cover select-none"
                     loading="lazy"
                     src={images?.[0]}
                 />
                 <div className="flex flex-1 flex-col justify-between gap-1">
                     <div className="flex flex-col gap-1">
-                        <Card.Title className="lg:text-lg text-md line-clamp-2">{title}</Card.Title>
+                        <Card.Title className="lg:text-lg text-lg line-clamp-2">{title}</Card.Title>
                         <div className="flex gap-1 flex-wrap">
                             {tags?.map((tag) => (
                                 <Chip key={tag} className="text-[12px]">{tag}</Chip>

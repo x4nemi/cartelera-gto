@@ -140,7 +140,7 @@ export const HomeView = () => {
                                 ref={(el) => { sectionRefs.current[key] = el; }}
                                 className="scroll-mt-4 flex flex-col gap-3 min-w-0"
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-3">
                                     {events.map((event) => (
                                         <Event key={`${event.shortCode}-${key}`} {...event} />
                                     ))}
