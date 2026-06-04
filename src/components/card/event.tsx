@@ -12,7 +12,7 @@ export const Event = (props: PostData) => {
 
     return (
         <>
-            <Card className="flex flex-row gap-3 p-2 cursor-pointer" onClick={() => setOpen(true)}>
+            <Card className="flex flex-row gap-3 p-2 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-default/60 active:scale-[0.99]" onClick={() => setOpen(true)}>
                 <img
                     alt={title}
                     className="rounded-2xl w-36 h-auto shrink-0 object-cover select-none"

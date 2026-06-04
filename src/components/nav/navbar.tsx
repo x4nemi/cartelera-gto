@@ -35,6 +35,10 @@ const PORTAL_LINK: NavEntry = {
 export const Navbar = () => {
 	const location = useLocation();
 
+	// On the home view the navigation lives inside the combined filter bar,
+	// so the standalone navbar is hidden there to avoid duplication.
+	if (location.pathname === "/") return null;
+
 	return (
 		<div className="fixed bottom-0 inset-x-0 md:fixed md:top-0 md:bottom-auto z-50 flex justify-center pt-1 pb-3 md:pt-3 md:pb-1">
 			<div className="bg-content1/70 backdrop-blur-sm rounded-full border border-default flex items-center gap-1 px-2 py-1.5 shadow-sm">

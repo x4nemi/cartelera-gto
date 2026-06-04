@@ -1,8 +1,9 @@
-import { Modal, Chip, Avatar, Typography } from "@heroui/react";
+import { Modal, Chip, Avatar, Typography, Button } from "@heroui/react";
 import { CalendarIcon, MapPinIcon, MoneyIcon } from "@/components/icons";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import type { PostData } from "@/types";
 import { useMemo } from "react";
+import { InstagramLogoIcon } from "@phosphor-icons/react";
 
 interface EventModalProps {
     isOpen: boolean;
@@ -11,7 +12,7 @@ interface EventModalProps {
 }
 
 export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => {
-    const { images, title, summary, location, price, tags, owner, ownerUsername } = event;
+    const { images, title, summary, location, price, tags, owner, ownerUsername, shortCode } = event;
 
     const today = useMemo(() => {
         const d = new Date();
@@ -110,23 +111,40 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
                                     )}
                                 </div>
 
-                                <div className="mt-auto flex items-center justify-center gap-3 border-t border-default px-5 py-3">
-                                    <Avatar
-                                        size="sm"
-                                        aria-label={`${ownerUsername}'s profile picture`}
-                                    >
-                                        <Avatar.Image
-                                            alt={`${ownerUsername}'s avatar`}
-                                            src={owner?.profilePicUrl}
-                                        />
-                                        <Avatar.Fallback>
-                                            {ownerUsername?.[0]?.toUpperCase() ?? "?"}
-                                        </Avatar.Fallback>
-                                    </Avatar>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-medium">{owner?.fullName}</span>
-                                        <span className="text-xs text-muted">@{ownerUsername}</span>
+                                <div className="mt-auto flex flex-row items-center justify-between gap-3 border-t border-default px-5 py-3 w-full">
+                                    <div className="flex items-center gap-3">
+                                        <Avatar
+                                            size="sm"
+                                            aria-label={`${ownerUsername}'s profile picture`}
+                                        >
+                                            <Avatar.Image
+                                                alt={`${ownerUsername}'s avatar`}
+                                                src={owner?.profilePicUrl}
+                                            />
+                                            <Avatar.Fallback>
+                                                {ownerUsername?.[0]?.toUpperCase() ?? "?"}
+                                            </Avatar.Fallback>
+                                        </Avatar>
+                                        <div className="flex flex-col">
+                                            <span className="text-sm font-medium">{owner?.fullName}</span>
+                                            <span className="text-xs text-muted">@{ownerUsername}</span>
+                                        </div>
                                     </div>
+                                        <Button
+                                            size="lg"
+                                            variant="secondary"
+                                            className=" text-xs text-muted"
+                                            onPress={() =>
+                                                window.open(
+                                                    `https://instagram.com/p/${shortCode}`,
+                                                    "_blank",
+                                                    "noopener,noreferrer"
+                                                )
+                                            }
+                                            isIconOnly
+                                        >
+                                            <InstagramLogoIcon size={24} weight="bold" />
+                                        </Button>
                                 </div>
                             </div>
                         </div>

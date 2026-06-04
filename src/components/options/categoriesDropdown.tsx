@@ -33,6 +33,7 @@ export const CategoriesDropdown = ({ selectedCategories, onSelectionChange, avai
                 {visibleCategories.map((label) => (
                     <Tag
                         key={label}
+                        id={label}
                         className="flex items-center rounded-full border border-default-foreground/25 bg-transparent px-3 py-1.5 text-sm capitalize transition-colors hover:bg-content2 data-[selected=true]:border-transparent data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground data-[selected=true]:hover:bg-accent"
                     >
                         {label}

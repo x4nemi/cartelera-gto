@@ -2,11 +2,20 @@ import { CategoriesDropdown } from "@/components/options/categoriesDropdown"
 import { PriceRangesDropdown } from "@/components/options/priceRangesDropdown"
 import { useEvents } from "@/hooks/useEvents"
 import type { PostData } from "@/types"
-import { Card } from "@heroui/react"
+import { Card, Dropdown } from "@heroui/react"
 import { useEffect, useMemo, useRef, useState, Fragment } from "react"
+import { useNavigate } from "react-router-dom"
+import { motion, AnimatePresence } from "motion/react"
 import { Event } from "@/components/card/event"
 import { Divider } from "@/compat/heroui"
-import { FilterIcon, XIcon } from "@/components/icons"
+import { ThemeSwitch } from "@/components/nav/theme-switch"
+import { CalendarIcon, PlusIcon, QuestionIcon, FilterIcon, XIcon, MenuIcon } from "@/components/icons"
+
+const NAV_ITEMS = [
+    { id: "/", label: "Inicio", icon: <CalendarIcon size={18} /> },
+    { id: "/creacion", label: "Publicar", icon: <PlusIcon size={18} /> },
+    { id: "/faq", label: "Acerca", icon: <QuestionIcon size={18} /> },
+];
 
 const SHORT_WEEKDAYS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
 const SHORT_MONTHS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
@@ -48,6 +57,7 @@ const priceTier = (price?: string): number | null => {
 
 export const HomeView = () => {
     const { posts, loading } = useEvents();
+    const navigate = useNavigate();
 
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 3]);
@@ -156,47 +166,108 @@ export const HomeView = () => {
     }, [dayKeys]);
 
     return (
-        <div className="flex flex-col gap-4 pt-6 max-w-5xl mx-auto">
-            <Card className="sticky top-4 z-20">
-                <Card.Content className="p-3">
-                    <div className="flex items-center justify-between gap-2">
-                        <button
-                            type="button"
-                            onClick={() => setFiltersOpen((o) => !o)}
-                            aria-expanded={filtersOpen}
-                            className="flex items-center gap-2 rounded-full px-2 py-1 text-sm font-medium transition-colors hover:bg-content2"
+        <div className="flex flex-col gap-4  max-w-5xl mx-auto">
+            <motion.div
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="sticky top-4 z-20 flex flex-col gap-2"
+            >
+                <div className="flex items-stretch gap-2">
+                    {/* Left: navigation menu */}
+                    <Dropdown>
+                        <Dropdown.Trigger
+                            aria-label="Menú de navegación"
+                            className="flex size-12 shrink-0 items-center justify-center rounded-2xl border border-default/60 bg-content1/70 text-foreground shadow-sm backdrop-blur-md transition-all hover:bg-content2/70 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                        >
+                            <MenuIcon size={22} />
+                        </Dropdown.Trigger>
+                        <Dropdown.Popover placement="bottom start" className="min-w-52">
+                            <Dropdown.Menu
+                                aria-label="Navegación"
+                                onAction={(key) => navigate(String(key))}
+                            >
+                                {NAV_ITEMS.map((item) => (
+                                    <Dropdown.Item key={item.id} id={item.id} textValue={item.label}>
+                                        <span className="flex items-center gap-2">
+                                            {item.icon}
+                                            <span>{item.label}</span>
+                                        </span>
+                                    </Dropdown.Item>
+                                ))}
+                            </Dropdown.Menu>
+                            <div className="mt-1 flex items-center justify-between gap-2 border-t border-default/40 px-3 py-2">
+                                <span className="text-sm text-foreground/80">Tema</span>
+                                <ThemeSwitch />
+                            </div>
+                        </Dropdown.Popover>
+                    </Dropdown>
+
+                    {/* Right: filter trigger */}
+                    <button
+                        type="button"
+                        onClick={() => setFiltersOpen((o) => !o)}
+                        aria-expanded={filtersOpen}
+                        className="group flex flex-1 items-center justify-between gap-2 rounded-2xl border border-default/60 bg-content1/70 px-5 py-3 text-left shadow-sm backdrop-blur-md transition-all hover:bg-content2/70 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                        <span className="flex items-center gap-2">
+                            <span className="text-base font-medium text-foreground">¿Qué te interesa buscar?</span>
+                            {activeFilterCount > 0 && (
+                                <motion.span
+                                    key={activeFilterCount}
+                                    initial={{ scale: 0.6, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                                    className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground"
+                                >
+                                    {activeFilterCount}
+                                </motion.span>
+                            )}
+                        </span>
+                        <motion.span
+                            animate={{ rotate: filtersOpen ? 180 : 0 }}
+                            transition={{ duration: 0.25, ease: "easeOut" }}
+                            className="text-foreground/70 group-hover:text-foreground"
                         >
                             <FilterIcon size={18} />
-                            <span>Filtros</span>
-                            {activeFilterCount > 0 && (
-                                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-accent px-1.5 text-xs font-semibold text-accent-foreground">
-                                    {activeFilterCount}
-                                </span>
-                            )}
-                        </button>
-                        {activeFilterCount > 0 && (
-                            <button
-                                type="button"
-                                onClick={clearFilters}
-                                className="flex items-center gap-1 rounded-full px-2 py-1 text-xs text-foreground/60 transition-colors hover:bg-content2 hover:text-foreground"
-                            >
-                                <XIcon size={14} />
-                                <span>Limpiar</span>
-                            </button>
-                        )}
-                    </div>
+                        </motion.span>
+                    </button>
+                </div>
+
+                <AnimatePresence initial={false}>
                     {filtersOpen && (
-                        <div className="flex flex-col gap-6 pt-4">
-                            <CategoriesDropdown
-                                selectedCategories={selectedCategories}
-                                onSelectionChange={setSelectedCategories}
-                                availableCategories={availableCategories}
-                            />
-                            <PriceRangesDropdown value={priceRange} onChange={setPriceRange} />
-                        </div>
+                        <motion.div
+                            key="filter-panel"
+                            initial={{ opacity: 0, height: 0, y: -8 }}
+                            animate={{ opacity: 1, height: "auto", y: 0 }}
+                            exit={{ opacity: 0, height: 0, y: -8 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                        >
+                            <Card className="border border-default/60 bg-content1/70 backdrop-blur-md">
+                                <Card.Content className="relative flex flex-col gap-5 p-4">
+                                    {activeFilterCount > 0 && (
+                                        <button
+                                            type="button"
+                                            onClick={clearFilters}
+                                            className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full px-2 py-1 text-xs text-foreground/60 transition-colors hover:bg-content2 hover:text-foreground"
+                                        >
+                                            <XIcon size={14} />
+                                            <span>Limpiar</span>
+                                        </button>
+                                    )}
+                                    <CategoriesDropdown
+                                        selectedCategories={selectedCategories}
+                                        onSelectionChange={setSelectedCategories}
+                                        availableCategories={availableCategories}
+                                    />
+                                    <PriceRangesDropdown value={priceRange} onChange={setPriceRange} />
+                                </Card.Content>
+                            </Card>
+                        </motion.div>
                     )}
-                </Card.Content>
-            </Card>
+                </AnimatePresence>
+            </motion.div>
 
             {/* Date sidebar aligned to each section's divider */}
             <div className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-6">
