@@ -1,5 +1,6 @@
 import { Modal, ModalBody, ModalContent, Chip, User } from "@/compat/heroui";
 import { CalendarIcon, MapPinIcon, MoneyIcon, XIcon } from "@/components/icons";
+import { ImageCarousel } from "@/components/image/imageCarousel";
 import type { PostData } from "@/types";
 import { useMemo } from "react";
 
@@ -62,17 +63,13 @@ export const EventModal = ({ isOpen, onOpenChange, event }: EventModalProps) => 
                             >
                                 <XIcon size={18} />
                             </button>
-                            {images?.[0] && (
-                                <img
-                                    src={images[0]}
-                                    alt={title}
-                                    className="w-full h-auto object-contain rounded-2xl"
-                                />
+                            {images && images.length > 0 && (
+                                <ImageCarousel images={[...images].flat()} />
                             )}
 
                             <div className="flex flex-col gap-3 px-0 py-4">
                                 {title && (
-                                    <h1 className="text-xl sm:text-2xl font-semibold leading-tight tracking-tight">
+                                    <h1 className="text-lg md:text-2xl font-semibold leading-tight tracking-tight">
                                         {title}
                                     </h1>
                                 )}
