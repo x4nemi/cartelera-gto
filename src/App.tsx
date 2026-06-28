@@ -1,10 +1,11 @@
 import { Suspense } from "react";
-import { useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Spinner } from "@heroui/react";
 
 import { addToast } from "@/utils/toast";
 import { isPortalHost } from "@/config/host";
 import { Home } from "./pages";
+import { Favorites } from "./pages/favorites";
 
 
 
@@ -36,7 +37,10 @@ function App() {
 				<Spinner size="lg" />
 			</div>
 		}>
-			<Home />
+			<Routes>
+				<Route path="/favoritos" element={<Favorites />} />
+				<Route path="*" element={<Home />} />
+			</Routes>
 		</Suspense>
 	);
 }

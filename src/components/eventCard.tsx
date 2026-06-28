@@ -1,14 +1,14 @@
 import { PostData } from "@/types"
 import { Card, ToggleButton, Avatar } from "@heroui/react"
 import { Heart, HeartFill } from "@gravity-ui/icons"
-import { useState } from "react";
+import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 
 export const EventCard = ({ event }: { event: PostData }) => {
-    const [isLiked, setIsLiked] = useState(false);
+    const isLiked = useIsLiked(event);
     const { title, images, tags, owner } = event;
     return (
-        <Card className="w-full items-stretch md:flex-row" variant="secondary">
-            <div className="relative h-[140px] w-full shrink-0 overflow-hidden rounded-2xl sm:h-[120px] sm:w-[120px]">
+        <Card className="w-full flex-row" variant="tertiary">
+            <div className="relative h-[140px] w-[140px] shrink-0 overflow-hidden rounded-2xl ">
                 <img
                     alt="Cherries"
                     className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover select-none"
@@ -32,7 +32,7 @@ export const EventCard = ({ event }: { event: PostData }) => {
                         }
                     </Card.Description>
                 </Card.Header>
-                <Card.Footer className="mt-auto flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <Card.Footer className="flex items-center justify-between gap-2 mt-auto">
                     <div className="flex items-center gap-2">
                         <Avatar className="size-8">
                             <Avatar.Image
@@ -44,7 +44,7 @@ export const EventCard = ({ event }: { event: PostData }) => {
                         <span className="text-sm font-medium">{owner?.fullName || owner?.username}</span>
                     </div>
                     <ToggleButton isIconOnly
-                        isSelected={isLiked} onChange={setIsLiked}>
+                        isSelected={isLiked} onChange={() => toggleLike(event)}>
                         {({ isSelected: selected }) => (
                             selected ? <HeartFill /> : <Heart />
                         )}
