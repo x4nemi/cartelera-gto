@@ -1,6 +1,26 @@
+import { Chip } from "@heroui/react"
 
 export const Home = () => {
     return (
-        <div>index</div>
+        <div className="flex flex-col items-center justify-center gap-4 mt-8 mx-12">
+            <Chip>
+                <span
+                    aria-hidden
+                    className="inline-block size-4 rounded-sm bg-current"
+                    style={{
+                        WebkitMaskImage: "url(/favicon.ico)",
+                        maskImage: "url(/favicon.ico)",
+                        WebkitMaskSize: "contain",
+                        maskSize: "contain",
+                        WebkitMaskRepeat: "no-repeat",
+                        maskRepeat: "no-repeat",
+                        WebkitMaskPosition: "center",
+                        maskPosition: "center",
+                    }}
+                />
+                <Chip.Label>Carletera Guanajuato</Chip.Label>
+            </Chip>
+
+        </div>
     )
 }
