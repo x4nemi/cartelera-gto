@@ -1,3 +1,4 @@
+import { EventList } from "@/components/eventList"
 import { Chip } from "@heroui/react"
 
 export const Home = () => {
@@ -20,7 +21,10 @@ export const Home = () => {
                 />
                 <Chip.Label>Carletera Guanajuato</Chip.Label>
             </Chip>
-
+            
+            <div>
+                <EventList />
+            </div>
         </div>
     )
 }
