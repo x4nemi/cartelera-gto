@@ -1,4 +1,5 @@
 import type { NavigateOptions } from "react-router-dom";
+import type {} from "react-aria-components";
 
 import { I18nProvider, RouterProvider, ToastProvider } from "@heroui/react";
 import { useHref, useNavigate } from "react-router-dom";
