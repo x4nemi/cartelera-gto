@@ -1,5 +1,5 @@
 import { SmartDatePicker } from "@/components/dates/smartDatePicker";
-import { Avatar, Card, Image, Textarea } from "@heroui/react";
+import { Avatar, Card, Image, Textarea } from "@/compat/heroui";
 import { useRef, useState } from "react";
 import { AISuggestionsPanel, AIFieldsValue, AIVerdict } from "./AISuggestionsPanel";
 import type { AISuggestions } from "@/config/apiClient";
@@ -76,7 +76,7 @@ export const ManualPostPreview = ({
 						value={caption}
 						onValueChange={setCaption}
 						labelPlacement="outside"
-						variant="bordered"
+						variant="secondary"
 						minRows={6}
 						maxRows={12}
 					/>

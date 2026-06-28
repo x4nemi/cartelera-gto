@@ -1,4 +1,5 @@
-import { DateRangePicker, DateValue, RangeCalendar } from "@heroui/react"
+import { DateRangePicker, RangeCalendar } from "@/compat/heroui";
+import type { DateValue } from "@internationalized/date"
 import { getLocalTimeZone, today } from "@internationalized/date"
 
 

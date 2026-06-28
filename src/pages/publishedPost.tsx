@@ -2,16 +2,11 @@ import { CalendarIcon, ConfettiFilledIcon, MapPinIcon } from "@/components/icons
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import DefaultLayout from "@/layouts/default";
-import {
-	Button,
-	Card,
-	CardBody,
-	Chip,
-	Divider,
-	ScrollShadow,
-	Spinner,
-	User,
-} from "@heroui/react";
+import { ScrollShadow, Spinner } from "@heroui/react";
+import { Card } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
+import { CardBody, Divider, User } from "@/compat/heroui";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -40,7 +35,7 @@ export const PublishedPost = () => {
 		return (
 			<DefaultLayout>
 				<div className="flex justify-center items-center w-full py-20">
-					<Spinner size="lg" color="primary" />
+					<Spinner size="lg" color="accent" />
 				</div>
 			</DefaultLayout>
 		);
@@ -150,7 +145,7 @@ export const PublishedPost = () => {
 							{post.tags && post.tags.length > 0 && (
 								<div className="flex flex-wrap gap-1.5">
 									{post.tags.map((tag) => (
-										<Chip key={tag} size="sm" variant="flat">
+										<Chip key={tag} size="sm" variant="soft">
 											{tag}
 										</Chip>
 									))}
@@ -167,7 +162,7 @@ export const PublishedPost = () => {
 									</p>
 									<div className="flex flex-wrap gap-1.5">
 										{sortedDates.map((date, idx) => (
-											<Chip key={idx} variant="flat" color="primary" size="sm">
+											<Chip key={idx} variant="soft" color="accent" size="sm">
 												{date.toLocaleDateString("es-MX", {
 													weekday: "short",
 													day: "numeric",
@@ -209,7 +204,7 @@ export const PublishedPost = () => {
 				{/* Actions */}
 				<div className="flex flex-col sm:flex-row gap-2 sm:justify-between">
 					<Button
-						variant="bordered"
+						variant="secondary"
 						size="lg"
 						className="rounded-2xl"
 						onPress={() => navigate(`/${post.ownerUsername}`)}
@@ -217,7 +212,7 @@ export const PublishedPost = () => {
 						Regresar al portal
 					</Button>
 					<Button
-						color="primary"
+						color="accent"
 						size="lg"
 						className="rounded-2xl"
 						onPress={() => navigate(`/${post.ownerUsername}/publicar`)}

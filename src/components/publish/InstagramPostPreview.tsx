@@ -1,7 +1,8 @@
 import { SmartDatePicker } from "@/components/dates/smartDatePicker";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { AISuggestions, PostData } from "@/config/apiClient";
-import { Avatar, Card, Link, Textarea } from "@heroui/react";
+import { Link } from "@/compat/heroui";
+import { Avatar, Card, Textarea } from "@/compat/heroui";
 import { AISuggestionsPanel, AIFieldsValue, AIVerdict } from "./AISuggestionsPanel"
 interface InstagramPostPreviewProps {
 	postData: PostData | null;
@@ -55,7 +56,7 @@ export const InstagramPostPreview = ({
 						placeholder="Describe tu evento aquí"
 						value={postData?.caption || ""}
 						labelPlacement="outside"
-						variant="bordered"
+						variant="secondary"
 						minRows={12}
 						maxRows={12}
 						classNames={{

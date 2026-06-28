@@ -97,7 +97,7 @@ export const CalendarFeed = ({ posts }: { posts: PostData[] }) => {
         setSelectedDate((cur) => (cur.getTime() === today.getTime() ? defaultSelected : cur));
         setAnchorDate((cur) => (cur.getTime() === today.getTime() ? defaultSelected : cur));
         setViewMonth((cur) => (isSameMonth(cur, today) ? defaultSelected : cur));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [defaultSelected.getTime()]);
 
     // Refs for each day section, to enable scroll-into-view + intersection sync.

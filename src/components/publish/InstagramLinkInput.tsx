@@ -1,4 +1,5 @@
-import { Button, Input } from "@heroui/react";
+import { Input } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
 import { Ref } from "react";
 import { CheckIcon, IgIcon } from "@/components/icons";
 
@@ -82,8 +83,8 @@ export const InstagramLinkInput = ({
 					ref={inputRef}
 				/>
 				<Button
-					color="primary"
-					variant="flat"
+					color="accent"
+					variant="tertiary"
 					isLoading={loading}
 					isDisabled={link.length === 0}
 					onPress={() => onValidate(link)}

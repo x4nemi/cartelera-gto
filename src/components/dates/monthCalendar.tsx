@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@heroui/react";
+import { Button } from "@/compat/heroui";
 import { motion, animate } from "motion/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "../icons";
 const MONTH_NAMES = [
@@ -244,7 +244,7 @@ export const MonthCalendar = ({
             strip.removeEventListener("scroll", onScroll);
             if (timer !== null) window.clearTimeout(timer);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [mobileWeeks, eventDates, selectedDate]);
     useEffect(() => {
         const strip = stripRef.current;
@@ -296,7 +296,7 @@ export const MonthCalendar = ({
                     <span className="w-20" aria-hidden />
                 ) : (
                     <Button
-                        variant="light"
+                        variant="tertiary"
                         radius="full"
                         size="sm"
                         aria-label={`Ir a ${prevMonthName}`}
@@ -311,7 +311,7 @@ export const MonthCalendar = ({
                     {MONTH_NAMES[viewMonth.getMonth()]} {viewMonth.getFullYear()}
                 </span>
                 <Button
-                    variant="light"
+                    variant="tertiary"
                     radius="full"
                     size="sm"
                     aria-label={`Ir a ${nextMonthName}`}

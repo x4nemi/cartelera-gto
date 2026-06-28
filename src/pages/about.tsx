@@ -1,4 +1,7 @@
-import { Accordion, AccordionItem, Button, Chip, Link } from "@heroui/react";
+import { Accordion, AccordionItem } from "@/compat/heroui";
+import { Link } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
 import { motion } from "motion/react";
 
 import {
@@ -69,7 +72,7 @@ export default function AboutPage() {
 						<Logo size={40} />
 					</div>
 					<div className="flex flex-col gap-2 items-center">
-						<Chip size="sm" variant="flat" color="primary" className="rounded-lg font-medium">
+						<Chip size="sm" variant="soft" color="accent" className="rounded-lg font-medium">
 							Sobre Cartelera GTO
 						</Chip>
 						<h1 className="text-3xl md:text-5xl font-semibold tracking-tight leading-tight">
@@ -175,7 +178,7 @@ export default function AboutPage() {
 								<div className="flex items-center gap-2 px-1">
 									<Chip
 										size="sm"
-										variant="flat"
+										variant="soft"
 										color={categoryColor[cat]}
 										className="font-semibold"
 									>
@@ -187,7 +190,7 @@ export default function AboutPage() {
 								</div>
 								<div className="rounded-3xl bg-content1/60 backdrop-blur-md border border-default p-2 md:p-3">
 									<Accordion
-										variant="light"
+										variant="tertiary"
 										itemClasses={{
 											base: "px-2",
 											title: "font-semibold text-base",
@@ -232,7 +235,7 @@ export default function AboutPage() {
 						isExternal
 						className="md:self-center"
 					>
-						<Button color="primary" startContent={<IgIcon size={18} />}>
+						<Button color="accent" startContent={<IgIcon size={18} />}>
 							@cartelera.gto
 						</Button>
 					</Link>

@@ -1,5 +1,5 @@
-import { Link } from "@heroui/link";
-import { Button } from "@heroui/react";
+import { Link } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { siteConfig } from "@/config/site";
@@ -81,7 +81,7 @@ export const PortalNavbar = () => {
 						<div className="w-px h-6 bg-default/40 mx-1" aria-hidden />
 						<Button
 							size="sm"
-							variant="light"
+							variant="tertiary"
 							onPress={handleLogout}
 							className="rounded-full h-9 px-3 text-sm"
 							aria-label="Cerrar sesión"

@@ -1,4 +1,6 @@
-import { Card, CardBody, CardHeader, Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Image, useDisclosure } from "@heroui/react"
+import { CardHeader } from "@/compat/heroui";
+import { Chip, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from "@/compat/heroui";
+import { Card, CardBody, Image, useDisclosure } from "@/compat/heroui"
 import { EventDrawer } from "./eventDrawer"
 import { EditEventModal } from "../modal/editEventModal"
 import { DeleteEventModal } from "../modal/deleteEventModal"
@@ -95,7 +97,7 @@ export const UpdatableEventCard = ({ onPostUpdated, ...props }: PostData & { onP
 						</CardBody>
 					</Card>
 				</DropdownTrigger>
-				<DropdownMenu aria-label="Acciones del evento" variant="flat">
+				<DropdownMenu aria-label="Acciones del evento" variant="soft">
 					<DropdownItem key="view" startContent={<ViewIcon size={20} />} onPress={onDrawerOpen}>Ver evento</DropdownItem>
 					<DropdownItem key="edit" startContent={<EditIcon size={20} />} onPress={onEditOpen}>Editar evento</DropdownItem>
 					<DropdownItem key="delete" className="text-danger" color="danger" startContent={<TrashIcon size={20} />} onPress={onDeleteOpen}>

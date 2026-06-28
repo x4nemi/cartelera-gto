@@ -1,4 +1,4 @@
-import { Link } from "@heroui/link";
+import { Link } from "@/compat/heroui";
 
 import { siteConfig } from "@/config/site";
 import { PORTAL_DOMAIN } from "@/config/site";
@@ -35,6 +35,10 @@ const PORTAL_LINK: NavEntry = {
 export const Navbar = () => {
 	const location = useLocation();
 
+	// On the home view the navigation lives inside the combined filter bar,
+	// so the standalone navbar is hidden there to avoid duplication.
+	if (location.pathname === "/") return null;
+
 	return (
 		<div className="fixed bottom-0 inset-x-0 md:fixed md:top-0 md:bottom-auto z-50 flex justify-center pt-1 pb-3 md:pt-3 md:pb-1">
 			<div className="bg-content1/70 backdrop-blur-sm rounded-full border border-default flex items-center gap-1 px-2 py-1.5 shadow-sm">
@@ -65,14 +69,14 @@ export const Navbar = () => {
 								href={item.href}
 								color="foreground"
 								aria-label={item.label}
-								className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-sm transition-colors ${
+								className={`flex flex-col sm:flex-row items-center gap-0.5 sm:gap-1.5 px-3 py-1.5 sm:py-2 rounded-full text-sm transition-colors ${
 									isActive
 										? "bg-primary/15 text-primary font-semibold"
 										: "hover:bg-content2"
 								}`}
 							>
 								<span className="shrink-0">{item.icon}</span>
-								<span className="hidden sm:inline">{item.short}</span>
+								<span className="text-[10px] sm:text-sm">{item.short}</span>
 							</Link>
 						);
 					})}

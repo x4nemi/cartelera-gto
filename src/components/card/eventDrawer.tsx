@@ -1,16 +1,8 @@
-import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerBody,
-    DrawerFooter,
-    Button,
-    Chip,
-    Tooltip,
-    User,
-    Link,
-    ScrollShadow,
-} from "@heroui/react";
+import { ScrollShadow } from "@heroui/react";
+import { Link } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
+import { Drawer, DrawerContent, DrawerHeader, DrawerBody, DrawerFooter, Button, Tooltip } from "@/compat/heroui";
+import { User } from "@/compat/heroui";
 import { ImageCarousel } from "../image/imageCarousel";
 import { PostData } from "@/config/apiClient";
 import { CalendarIcon, MapPinIcon, MoneyIcon } from "../icons";
@@ -37,7 +29,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                 };
             })
             .sort((a, b) => a.dateObj.getTime() - b.dateObj.getTime());
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+         
     }, [dates]);
 
     const nextDate = parsedDates.find((d) => !d.isPast) ?? parsedDates[parsedDates.length - 1];
@@ -48,7 +40,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
             hideCloseButton
             backdrop="blur"
             classNames={{
-                base: "sm:data-[placement=right]:m-4 xs:data-[placement=right]:m-10 sm:data-[placement=left]:m-2 rounded-medium",
+                base: "!p-0 overflow-hidden sm:!rounded-3xl sm:!h-[calc(100vh-2rem)] sm:!my-4 sm:!mr-4",
             }}
             isOpen={isOpen}
             onOpenChange={onOpenChange}
@@ -63,7 +55,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                                     isIconOnly
                                     className="text-default-500"
                                     size="sm"
-                                    variant="light"
+                                    variant="tertiary"
                                     onPress={onClose}
                                 >
                                     <svg
@@ -99,7 +91,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                                         </svg>
                                     }
                                     size="sm"
-                                    variant="flat"
+                                    variant="tertiary"
                                     as={Link}
                                     href={url}
                                     target="_blank"
@@ -168,7 +160,7 @@ export const EventDrawer = ({ isOpen, onOpenChange, cardProps }: { isOpen: boole
                             {tags && tags.length > 0 && (
                                 <div className="flex flex-wrap gap-1">
                                     {tags.map((t) => (
-                                        <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
+                                        <Chip key={t} variant="soft" color="accent" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
                                             #{t}
                                         </Chip>
                                     ))}

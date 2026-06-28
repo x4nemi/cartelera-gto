@@ -1,7 +1,11 @@
 import { CosmosAPI, PostData } from "@/config/apiClient";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Button, Chip, Divider, Link, ScrollShadow, Spinner, User } from "@heroui/react";
+import { ScrollShadow, Spinner } from "@heroui/react";
+import { Link } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
+import { Divider, User } from "@/compat/heroui";
 import { ImageCarousel } from "@/components/image/imageCarousel";
 import { CalendarIcon, MapPinIcon, MoneyIcon } from "@/components/icons";
 import DefaultLayout from "@/layouts/default";
@@ -47,7 +51,7 @@ export const EventPage = () => {
         return (
             <DefaultLayout>
                 <div className="flex justify-center items-center w-full flex-grow">
-                    <Spinner size="lg" color="primary" />
+                    <Spinner size="lg" color="accent" />
                 </div>
             </DefaultLayout>
         );
@@ -58,7 +62,7 @@ export const EventPage = () => {
             <DefaultLayout>
                 <div className="flex flex-col justify-center items-center min-h-[60vh] gap-3">
                     <p className="text-foreground-500">Evento no encontrado</p>
-                    <Button variant="flat" color="primary" className="rounded-2xl" onPress={() => navigate("/")}>
+                    <Button variant="tertiary" color="accent" className="rounded-2xl" onPress={() => navigate("/")}>
                         Volver al inicio
                     </Button>
                 </div>
@@ -78,7 +82,7 @@ export const EventPage = () => {
                 <div className="flex items-center justify-between pt-3 px-3 pb-1">
                     <Button
                         isIconOnly
-                        variant="light"
+                        variant="tertiary"
                         className="text-default-500"
                         onPress={() => navigate(-1)}
                     >
@@ -95,7 +99,7 @@ export const EventPage = () => {
                                 </svg>
                             }
                             size="sm"
-                            variant="flat"
+                            variant="tertiary"
                             as={Link}
                             href={url}
                             target="_blank"
@@ -164,7 +168,7 @@ export const EventPage = () => {
                     {tags && tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                             {tags.map((t) => (
-                                <Chip key={t} variant="flat" color="primary" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
+                                <Chip key={t} variant="soft" color="accent" size="sm" className="rounded-lg h-5 text-tiny px-1.5">
                                     #{t}
                                 </Chip>
                             ))}

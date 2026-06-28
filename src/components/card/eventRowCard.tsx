@@ -1,4 +1,5 @@
-import { Avatar, Card, Chip, Image, useDisclosure } from "@heroui/react";
+import { Chip } from "@/compat/heroui";
+import { Avatar, Card, Image, useDisclosure } from "@/compat/heroui";
 import { useNavigate } from "react-router-dom";
 import { EventDrawer } from "./eventDrawer";
 import { PostData } from "@/config/apiClient";
@@ -102,7 +103,7 @@ export const EventRowCard = (props: PostData) => {
                                         <Chip
                                             key={t}
                                             size="sm"
-                                            variant="flat"
+                                            variant="soft"
                                             className="rounded-[10px] bg-primary/80 text-white backdrop-blur-md"
                                         >
                                             #{t}

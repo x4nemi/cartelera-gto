@@ -1,8 +1,8 @@
 import DefaultLayout from "@/layouts/default";
-import { Button } from "@heroui/react";
+import { Button } from "@/compat/heroui";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { CalendarFilledIcon, CalendarIcon, HeartFilledIcon, Logo, PaletteIcon } from "@/components/icons";
+import { CalendarFilledIcon, HeartFilledIcon, Logo, PaletteIcon } from "@/components/icons";
 import { siteConfig } from "@/config/site";
 
 export default function HeroPage() {
@@ -31,7 +31,7 @@ export default function HeroPage() {
             <Button
               as={Link}
               to="/"
-              color="primary"
+              color="accent"
               size="lg"
               radius="full"
               className="font-semibold px-8"
@@ -41,7 +41,7 @@ export default function HeroPage() {
             <Button
               as={Link}
               to="/creacion"
-              variant="bordered"
+              variant="secondary"
               size="lg"
               radius="full"
               className="font-semibold px-8"

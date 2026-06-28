@@ -1,4 +1,5 @@
-import { Image, Button } from '@heroui/react'
+import { Image } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
 import { useState, useRef } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '../icons'
 
@@ -67,7 +68,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps & { clas
                 <>
                     <Button
                         isIconOnly
-                        variant="flat"
+                        variant="tertiary"
                         className="absolute left-2 top-1/2 -translate-y-1/2 text-white/80 bg-black/50 z-10"
                         size="sm"
                         onPress={goToPrevious}
@@ -77,7 +78,7 @@ export const ImageCarousel = ({ images, className }: ImageCarouselProps & { clas
                     </Button>
                     <Button
                         isIconOnly
-                        variant="flat"
+                        variant="tertiary"
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-white/80 bg-black/50 z-10"
                         size="sm"
                         onPress={goToNext}

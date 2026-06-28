@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Input } from "@heroui/input";
-import { Button } from "@heroui/button";
+import { Input } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
 import { CalendarIcon, SortIconAsc, ViewIcon, XIcon } from "./icons";
-import { Checkbox, cn, DateValue, User } from "@heroui/react";
-import { RangeCalendar } from "@heroui/calendar";
+import { cn } from "@heroui/react";
+import { Checkbox, RangeCalendar } from "@/compat/heroui";
+import type { DateValue } from "@internationalized/date";
+import { User } from "@/compat/heroui";
 import { getLocalTimeZone, today } from "@internationalized/date";
 
 interface PostUser {
@@ -20,16 +22,16 @@ const SortTab = ({setIsAscendingOrder}: { setIsAscendingOrder: (isAscending: boo
     return (
         <div>
             <div className="flex gap-2 items-end">
-                <Input readOnly value="Fecha" size="sm" label="Ordenar por:" labelPlacement="outside-top"/>
+                <Input isReadOnly value="Fecha" size="sm" label="Ordenar por:" labelPlacement="outside-top"/>
                 <Button
                     isIconOnly
                     aria-label={isAscending ? "Ordenar descendente" : "Ordenar ascendente"}
                     className="transition-transform duration-300"
-                    variant="flat"
+                    variant="tertiary"
                     size="lg"
                     onPress={() => { setIsAscending(!isAscending); setIsAscendingOrder(!isAscending); }}
                     style={{ transform: isAscending ? 'rotate(0deg)' : 'rotate(180deg)' }}
-                    color="primary"
+                    color="accent"
                 >
                     <SortIconAsc size={24} />
                 </Button></div>
@@ -54,8 +56,8 @@ const ClasificationTab = ({ users, selectedUsernames, onToggleUser, eventTypes, 
         <div className="w-full flex flex-col">
             <p className="text-sm">Mostrar por</p>
             <div className="flex flex-row gap-2 mt-2">
-                <Button size="sm" variant="flat" color={view === "users" ? "primary" : "default"} onPress={() => setview("users")}>Usuarios</Button>
-                <Button size="sm" variant="flat" color={view === "eventType" ? "primary" : "default"} onPress={() => setview("eventType")}>Tipo de evento</Button>
+                <Button size="sm" variant="tertiary" color={view === "users" ? "primary" : "default"} onPress={() => setview("users")}>Usuarios</Button>
+                <Button size="sm" variant="tertiary" color={view === "eventType" ? "primary" : "default"} onPress={() => setview("eventType")}>Tipo de evento</Button>
             </div>
             <div className="flex flex-col w-full items-center mt-3 gap-4 scroll-auto max-h-100">
                 {view === "users" ? users.map((user) => (
@@ -129,7 +131,7 @@ const DateTab = ({ dateRange, setDateRange, applyDateRange }: { dateRange?: { st
                     content: "w-full",
                 }}
             />
-            <Button fullWidth onPress={applyDateRange} color="success" variant="flat" disabled={!dateRange || !dateRange.start || !dateRange.end}>Aplicar cambio</Button>
+            <Button fullWidth onPress={applyDateRange} color="success" variant="tertiary" disabled={!dateRange || !dateRange.start || !dateRange.end}>Aplicar cambio</Button>
         </div>
     );
 }

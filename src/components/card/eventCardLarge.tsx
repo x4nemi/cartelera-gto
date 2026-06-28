@@ -1,4 +1,6 @@
-import { Avatar, Card, CardBody, CardHeader, Chip, Image, useDisclosure } from "@heroui/react";
+import { CardHeader } from "@/compat/heroui";
+import { Chip } from "@/compat/heroui";
+import { Avatar, Card, CardBody, Image, useDisclosure } from "@/compat/heroui";
 import { useNavigate } from "react-router-dom";
 import { EventDrawer } from "./eventDrawer";
 import { PostData } from "@/config/apiClient";

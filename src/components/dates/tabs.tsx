@@ -1,4 +1,6 @@
-import { Card, CardBody, DateValue, Tab, Tabs } from "@heroui/react"
+import { Tab, Tabs } from "@/compat/heroui";
+import type { DateValue } from "@internationalized/date";
+import { Card, CardBody } from "@/compat/heroui"
 import { CalendarIcon, EventIcon, LoopIcon } from "../icons";
 import { WorkshopCalendar } from "./workshopCalendar";
 import { DatesWidget } from "./datesWidget";
@@ -33,7 +35,7 @@ export const EventDates = ({ selectedDays, setSelectedDays, workshopDays, setWor
     return (
         <>
             <p className="text-sm font-medium text-foreground my-2 mt-3">Tipo de publicación:</p>
-            <Tabs title="Elige los días del evento" variant="solid" color="primary" size="lg" classNames={{panel:"p-0"}}
+            <Tabs title="Elige los días del evento" variant="primary" color="accent" size="lg" classNames={{panel:"p-0"}}
                 onSelectionChange={(key) => {
                     const index = Number(key);
                     if (index === 0) setType("event");

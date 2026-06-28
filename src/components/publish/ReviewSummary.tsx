@@ -1,4 +1,4 @@
-import { Chip } from "@heroui/react";
+import { Chip } from "@/compat/heroui";
 import { CalendarIcon } from "@/components/icons";
 import { AIFieldsValue } from "./AISuggestionsPanel";
 
@@ -81,7 +81,7 @@ export const ReviewSummary = ({ fields, dates, imageCount, ownerName }: ReviewSu
 			{fields.tags && fields.tags.length > 0 && (
 				<div className="flex flex-wrap gap-1.5 mt-3">
 					{fields.tags.map((t) => (
-						<Chip key={t} size="sm" variant="flat">
+						<Chip key={t} size="sm" variant="soft">
 							{t}
 						</Chip>
 					))}

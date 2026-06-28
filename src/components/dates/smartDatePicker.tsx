@@ -1,4 +1,7 @@
-import { Button, Calendar, Chip, Spinner, addToast } from "@heroui/react";
+import { Spinner } from "@heroui/react";
+import { Calendar, Chip } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
+import { addToast } from "@/compat/heroui";
 import { getLocalTimeZone, today, type DateValue } from "@internationalized/date";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { SparklesIcon } from "../icons";
@@ -285,7 +288,7 @@ export const SmartDatePicker = ({
 				{/* Extracting indicator */}
 				{isExtracting && (
 					<div className="flex items-center gap-2 p-3 rounded-xl bg-secondary-50 border border-secondary-200">
-						<Spinner size="sm" color="secondary" />
+						<Spinner size="sm" color="accent" />
 						<p className="text-sm text-secondary-600">Analizando publicación para extraer fechas...</p>
 					</div>
 				)}
@@ -322,7 +325,7 @@ export const SmartDatePicker = ({
 						</p>
 						<Button
 							size="sm"
-							variant="light"
+							variant="tertiary"
 							color="danger"
 							onPress={handleClearAll}
 						>
@@ -333,8 +336,8 @@ export const SmartDatePicker = ({
 						{internalDates.map((date, idx) => (
 							<Chip
 								key={idx}
-								variant="flat"
-								color="primary"
+								variant="soft"
+								color="accent"
 								onClose={() => handleRemoveDate(date)}
 							>
 								{date.toLocaleDateString("es-MX", {
@@ -359,7 +362,10 @@ export const SmartDatePicker = ({
  */
 export function inferEventType(dates: string[]): "event" | "workshop" | "calendar" {
 	if (dates.length <= 3) return "event";
-	const days = dates.map((d) => new Date(d).getDay());
+	const days = dates.map((d) => {
+		const [y, m, day] = d.split("-").map(Number);
+		return new Date(y, m - 1, day).getDay();
+	});
 	const uniqueDays = new Set(days);
 	if (uniqueDays.size <= 2 && dates.length >= 4) return "workshop";
 	return "calendar";

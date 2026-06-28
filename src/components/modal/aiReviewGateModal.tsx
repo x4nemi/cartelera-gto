@@ -1,12 +1,6 @@
-import {
-	Button,
-	Chip,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-} from "@heroui/react";
+import { Chip } from "@/compat/heroui";
+import { Button } from "@/compat/heroui";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@/compat/heroui";
 import type { AIVerdict } from "@/components/publish";
 
 interface AIReviewGateModalProps {
@@ -66,7 +60,7 @@ export const AIReviewGateModal = ({
 								</p>
 								{verdict?.isEvent === false && (
 									<div className="flex flex-wrap gap-1.5">
-										<Chip size="sm" variant="flat" color="warning" className="rounded-lg">
+										<Chip size="sm" variant="soft" color="warning" className="rounded-lg">
 											La IA cree que no es un evento
 										</Chip>
 									</div>
@@ -75,14 +69,14 @@ export const AIReviewGateModal = ({
 						</ModalBody>
 						<ModalFooter>
 							<Button
-								variant="light"
+								variant="tertiary"
 								onPress={onClose}
 								isDisabled={isSubmitting}
 							>
 								Cancelar
 							</Button>
 							<Button
-								color="primary"
+								color="accent"
 								onPress={onSubmitForReview}
 								isLoading={isSubmitting}
 								className="rounded-2xl"
