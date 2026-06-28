@@ -55,12 +55,12 @@
 
 html {
     height: 100%;
-    background-color: #ffffff;
+    background-color: #18181b;
 }
 
 .dark html,
 html.dark {
-    background-color: #000000;
+    background-color: #18181b;
 }
 
 body {
@@ -69,23 +69,6 @@ body {
     padding: 0;
     font-family: var(--font-sans);
     background-color: transparent;
-}
-
-body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    background-image:
-        radial-gradient(at 0% 0%, hsla(217, 91%, 60%, 0.22) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, hsla(217, 91%, 60%, 0.18) 0px, transparent 55%);
-}
-
-.dark body::before {
-    background-image:
-        radial-gradient(at 0% 0%, hsla(38, 92%, 50%, 0.22) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, hsla(38, 92%, 50%, 0.15) 0px, transparent 55%);
 }
 
 
