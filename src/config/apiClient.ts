@@ -332,12 +332,14 @@ export const CosmosAPI = {
         limit?: number;
         ownerUsername?: string;
         status?: PostStatus;
+        upcoming?: boolean;
     } = {}): Promise<PaginatedResponse<PostData>> {
         const params = new URLSearchParams();
         if (options.page) params.append("page", options.page.toString());
         if (options.limit) params.append("limit", options.limit.toString());
         if (options.ownerUsername) params.append("ownerUsername", options.ownerUsername);
         if (options.status) params.append("status", options.status);
+        if (options.upcoming) params.append("upcoming", "true");
 
         const response = await fetch(`/api/getEvents?${params.toString()}`, {
             method: "GET",

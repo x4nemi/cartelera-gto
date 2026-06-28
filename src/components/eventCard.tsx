@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export const EventCard = ({ event }: { event: PostData }) => {
     const [isLiked, setIsLiked] = useState(false);
-    const { title, summary, images, tags, owner } = event;
+    const { title, images, tags, owner } = event;
     return (
         <Card className="w-full items-stretch md:flex-row" variant="secondary">
             <div className="relative h-[140px] w-full shrink-0 overflow-hidden rounded-2xl sm:h-[120px] sm:w-[120px]">
@@ -43,7 +43,7 @@ export const EventCard = ({ event }: { event: PostData }) => {
                         </Avatar>
                         <span className="text-sm font-medium">{owner?.fullName || owner?.username}</span>
                     </div>
-                    <ToggleButton
+                    <ToggleButton isIconOnly
                         isSelected={isLiked} onChange={setIsLiked}>
                         {({ isSelected: selected }) => (
                             selected ? <HeartFill /> : <Heart />

@@ -39,7 +39,7 @@ export function useEvents() {
     const fetchPage = useCallback(async (page: number, append: boolean) => {
         try {
             const cached = getCachedPage(page);
-            const response = cached ?? await CosmosAPI.getEvents({ page, limit: PAGE_SIZE });
+            const response = cached ?? await CosmosAPI.getEvents({ page, limit: PAGE_SIZE, upcoming: true });
             if (!cached) setCachedPage(page, response);
 
             const newPosts = response.data;
