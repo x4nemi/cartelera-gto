@@ -4,22 +4,21 @@ import { ArrowLeft } from "@gravity-ui/icons";
 import { PostData } from "@/config/apiClient";
 import { useRecurringEvents } from "@/hooks/useRecurringEvents";
 import {
-    getRecurrenceDays,
     isContinuousRun,
     parseLocalDate,
 } from "@/utils/recurrence";
 import { EventModal } from "@/components/eventModal";
 import { Navbar } from "@/components/navbar";
 
-const WEEKDAYS = [
-    { dow: 1, label: "Lun" },
-    { dow: 2, label: "Mar" },
-    { dow: 3, label: "Mié" },
-    { dow: 4, label: "Jue" },
-    { dow: 5, label: "Vie" },
-    { dow: 6, label: "Sáb" },
-    { dow: 0, label: "Dom" },
-];
+const DOW_LABEL = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+
+/** Local "YYYY-MM-DD" for a Date (matches how event dates are stored). */
+const toISODate = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+};
 
 // Deterministic category colors for the leading dot on each card.
 const CATEGORY_COLOR: Record<string, string> = {
@@ -57,18 +56,6 @@ const hashTag = (tag: string) => {
 const colorForTag = (tag: string) =>
     CATEGORY_COLOR[tag] ?? PALETTE[hashTag(tag) % PALETTE.length];
 
-/** Weekdays (0=Sun..6=Sat) an ongoing event takes place on. */
-const eventWeekdays = (event: PostData): number[] => {
-    const recurring = getRecurrenceDays(event.dates);
-    if (recurring) return recurring;
-    const set = new Set<number>();
-    (event.dates ?? []).forEach((d) => {
-        const date = parseLocalDate(d);
-        if (!Number.isNaN(date.getTime())) set.add(date.getDay());
-    });
-    return [...set];
-};
-
 /** "Cierra <hoy|mañana|el D mmm>" when the event ends within the next week. */
 const closesSoon = (event: PostData): string | null => {
     let end: Date | null = null;
@@ -104,7 +91,21 @@ export const RecurringAll = () => {
     const navigate = useNavigate();
     const [category, setCategory] = useState<string>("todas");
     const [selected, setSelected] = useState<PostData | null>(null);
-    const todayDow = new Date().getDay();
+
+    // Rolling 7-day window starting today; each column is a real date.
+    const days = useMemo(() => {
+        const base = new Date();
+        base.setHours(0, 0, 0, 0);
+        return Array.from({ length: 7 }, (_, i) => {
+            const date = new Date(base);
+            date.setDate(base.getDate() + i);
+            return {
+                iso: toISODate(date),
+                label: DOW_LABEL[date.getDay()],
+                isToday: i === 0,
+            };
+        });
+    }, []);
 
     const categories = useMemo(() => {
         const set = new Set<string>();
@@ -120,18 +121,20 @@ export const RecurringAll = () => {
         [posts, category]
     );
 
-    // Precompute weekday placement once per event set.
-    const byDay = useMemo(() => {
-        const map = new Map<number, PostData[]>();
-        WEEKDAYS.forEach(({ dow }) => map.set(dow, []));
+    // Place each event on the exact upcoming dates it actually occurs on.
+    const eventsByIso = useMemo(() => {
+        const map = new Map<string, PostData[]>();
+        days.forEach((d) => map.set(d.iso, []));
         filtered.forEach((event) => {
-            eventWeekdays(event).forEach((dow) => map.get(dow)?.push(event));
+            (event.dates ?? []).forEach((iso) => {
+                if (map.has(iso)) map.get(iso)!.push(event);
+            });
         });
         return map;
-    }, [filtered]);
+    }, [filtered, days]);
 
     return (
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28">
+        <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28">
             <div className="mx-auto mb-3 flex flex-col w-full max-w-xl justify-start">
                 <button
                     type="button"
@@ -169,14 +172,14 @@ export const RecurringAll = () => {
 
             {loading && <p className="text-muted">Cargando...</p>}
 
-            <div className="overflow-x-auto pb-2">
-                <div className="grid grid-flow-col auto-cols-[190px] gap-3">
-                    {WEEKDAYS.map(({ dow, label }) => {
-                        const isToday = dow === todayDow;
-                        const dayEvents = byDay.get(dow) ?? [];
+            <div className="min-h-0 flex-1 overflow-auto pb-2">
+                <div className="grid h-full grid-flow-col auto-cols-[190px] gap-3">
+                    {days.map((day) => {
+                        const isToday = day.isToday;
+                        const dayEvents = eventsByIso.get(day.iso) ?? [];
                         return (
                             <div
-                                key={dow}
+                                key={day.iso}
                                 className="flex flex-col gap-3 rounded-2xl p-1"
                                 style={
                                     isToday
@@ -190,10 +193,10 @@ export const RecurringAll = () => {
                                 <div className="pb-1 text-center text-sm font-medium">
                                     {isToday ? (
                                         <span style={{ color: "var(--accent)" }}>
-                                            {label} · hoy
+                                            {day.label} · hoy
                                         </span>
                                     ) : (
-                                        <span className="text-muted">{label}</span>
+                                        <span className="text-muted">{day.label}</span>
                                     )}
                                 </div>
 
@@ -206,7 +209,7 @@ export const RecurringAll = () => {
                                         const closes = closesSoon(event);
                                         return (
                                             <button
-                                                key={`${dow}-${event._id}`}
+                                                key={`${day.iso}-${event._id}`}
                                                 type="button"
                                                 onClick={() => setSelected(event)}
                                                 className="flex flex-col items-start gap-1 rounded-2xl border border-default-200 bg-surface p-3 text-left transition-colors hover:border-default-300"
