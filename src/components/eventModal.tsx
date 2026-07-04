@@ -1,7 +1,8 @@
 import { PostData } from "@/config/apiClient";
-import { Modal, Button, Avatar } from "@heroui/react";
-import { ArrowsRotateLeft, Calendar, MapPin, Wallet } from "@gravity-ui/icons";
+import { Modal, Button, Avatar, ToggleButton } from "@heroui/react";
+import { ArrowsRotateLeft, Calendar, MapPin, Wallet, Heart, HeartFill } from "@gravity-ui/icons";
 import { getOngoingLabel, parseLocalDate } from "@/utils/recurrence";
+import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 
 const formatFullDate = (iso: string) =>
     parseLocalDate(iso).toLocaleDateString("es-MX", {
@@ -34,6 +35,7 @@ interface EventModalProps {
 
 export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => {
     const { title, images, tags, location, price, owner, url, caption } = event;
+    const isLiked = useIsLiked(event);
     const dateInfo = getDateText(event);
     const DateIcon = dateInfo?.recurring ? ArrowsRotateLeft : Calendar;
 
@@ -48,18 +50,30 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
                             src={images[0]}
                         />
                         <div className="flex flex-col gap-4 px-4 pb-2">
-                            <div className="flex flex-col gap-2">
-                                <h2 className="text-h3">{title}</h2>
-                                {dateInfo && (
-                                    <span className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-muted">
-                                        <DateIcon className="size-4" />
-                                        {dateInfo.text}
-                                    </span>
-                                )}
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="flex flex-col gap-2">
+                                    <h2 className="text-h3">{title}</h2>
+                                    {dateInfo && (
+                                        <span className="inline-flex w-fit items-center gap-1.5 text-sm font-medium text-muted">
+                                            <DateIcon className="size-4" />
+                                            {dateInfo.text}
+                                        </span>
+                                    )}
+                                </div>
+                                <ToggleButton
+                                    isIconOnly
+                                    aria-label="Me gusta"
+                                    isSelected={isLiked}
+                                    onChange={() => toggleLike(event)}
+                                >
+                                    {({ isSelected: selected }) =>
+                                        selected ? <HeartFill /> : <Heart />
+                                    }
+                                </ToggleButton>
                             </div>
 
                             {caption && (
-                                <p className="text-sm leading-relaxed text-foreground/80">
+                                <p className="whitespace-pre-line text-sm leading-relaxed text-foreground/80">
                                     {caption}
                                 </p>
                             )}

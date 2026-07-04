@@ -6,6 +6,7 @@ import { addToast } from "@/utils/toast";
 import { isPortalHost } from "@/config/host";
 import { Home } from "./pages";
 import { Favorites } from "./pages/favorites";
+import { RecurringAll } from "./pages/recurringAll";
 
 
 
@@ -39,6 +40,7 @@ function App() {
 		}>
 			<Routes>
 				<Route path="/favoritos" element={<Favorites />} />
+				<Route path="/recurrentes" element={<RecurringAll />} />
 				<Route path="*" element={<Home />} />
 			</Routes>
 		</Suspense>

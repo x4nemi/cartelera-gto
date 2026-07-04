@@ -26,7 +26,7 @@ export const AIApi = {
     },
 
     /**
-     * Extract structured event details (title, summary, tags, location, price, type)
+     * Extract structured event details (title, tags, location, price, type)
      * from an Instagram post caption and/or images using Azure OpenAI.
      * Returns null on transport error so callers can degrade gracefully.
      */
@@ -38,7 +38,6 @@ export const AIApi = {
         imageUrls?: string[];
     }): Promise<{
         title: string | null;
-        summary: string | null;
         tags: string[];
         location: string | null;
         price: string | null;
@@ -48,7 +47,6 @@ export const AIApi = {
         isEventReason: string | null;
         confidence: {
             title: number;
-            summary: number;
             tags: number;
             location: number;
             price: number;
