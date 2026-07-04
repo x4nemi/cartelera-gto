@@ -57,13 +57,10 @@ export const EventCard = ({ event, time }: { event: PostData; time?: string | nu
                     ))}
                 </Card.Description>
             </Card.Header>
-
-            {/* <div className="mt-1 border-t border-default-200" /> */}
             <Separator variant="tertiary" />
-
             <Card.Footer className="flex items-center justify-between gap-2 ">
                 <div
-                    className={owner?.username ? "flex items-center gap-2 cursor-pointer" : "flex items-center gap-2"}
+                    className={owner?.username ? "flex items-center gap-2 cursor-pointer bg-border hover:bg-border-secondary transition duration-300 py-2 px-2 rounded-xl" : "flex items-center gap-2"}
                     role={owner?.username ? "button" : undefined}
                     tabIndex={owner?.username ? 0 : undefined}
                     onClick={(e) => {
@@ -94,10 +91,10 @@ export const EventCard = ({ event, time }: { event: PostData; time?: string | nu
                     onKeyDown={(e) => e.stopPropagation()}
                     role="presentation"
                 >
-                    <ToggleButton isIconOnly
+                    <ToggleButton isIconOnly size="lg"
                         isSelected={isLiked} onChange={() => toggleLike(event)}>
                         {({ isSelected: selected }) => (
-                            selected ? <HeartFill /> : <Heart />
+                            selected ? <HeartFill className="size-6" /> : <Heart className="size-6" />
                         )}
                     </ToggleButton>
                 </div>
