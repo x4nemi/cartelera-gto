@@ -1,5 +1,5 @@
 import { PostData } from "@/config/apiClient";
-import { Card, Avatar } from "@heroui/react";
+import { Card, Avatar, Chip } from "@heroui/react";
 import { ArrowsRotateLeft, Calendar } from "@gravity-ui/icons";
 import { getOngoingLabel } from "@/utils/recurrence";
 import { useState } from "react";
@@ -35,10 +35,14 @@ export const RecurringCard = ({ event }: { event: PostData }) => {
                 />
             </div>
             <Card.Header className="gap-2">
-                <span className="inline-flex w-fit items-center gap-1 rounded-full bg-purple-100 px-2 py-0.5 text-xs font-semibold text-purple-700">
-                    <Icon className="size-3" />
-                    {label}
-                </span>
+                <Chip
+                    variant="soft"
+                    color="accent"
+                    className="font-semibold text-indigo-600 bg-indigo-600/10 inline-flex items-center gap-1.5 px-2 py-1 w-fit"
+                >
+                    <Icon className="size-4" />
+                    <Chip.Label className="font-semibold">{label}</Chip.Label>
+                </Chip>
                 <Card.Title className="pr-2">{title}</Card.Title>
             </Card.Header>
             <Card.Footer className="flex items-center gap-2 mt-auto">
