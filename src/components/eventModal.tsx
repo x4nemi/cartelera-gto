@@ -5,6 +5,7 @@ import { getOngoingLabel, parseLocalDate } from "@/utils/recurrence";
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { InstagramLogoIcon } from "@phosphor-icons/react";
 
 const WEEKDAYS = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
@@ -59,6 +60,7 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
     const { title, images, tags, location, price, owner, url, caption } = event;
     const isLiked = useIsLiked(event);
     const isMobile = useMediaQuery("(max-width: 640px)");
+    const navigate = useNavigate();
     const [expanded, setExpanded] = useState(false);
     const captionLong = !!caption && (caption.length > 180 || caption.split("\n").length > 4);
 
@@ -193,7 +195,22 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
                             {/* Organizer */}
                             <Surface
                                 variant="secondary"
-                                className="flex items-center gap-3 rounded-2xl p-3"
+                                role={owner?.username ? "button" : undefined}
+                                tabIndex={owner?.username ? 0 : undefined}
+                                onClick={() => {
+                                    if (!owner?.username) return;
+                                    onOpenChange(false);
+                                    navigate(`/eventos/${owner.username}`);
+                                }}
+                                onKeyDown={(e) => {
+                                    if (!owner?.username) return;
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        onOpenChange(false);
+                                        navigate(`/eventos/${owner.username}`);
+                                    }
+                                }}
+                                className={`flex items-center gap-3 rounded-2xl p-3${owner?.username ? " cursor-pointer" : ""}`}
                             >
                                 <Avatar className="size-11">
                                     <Avatar.Image

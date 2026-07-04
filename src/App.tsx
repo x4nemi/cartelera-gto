@@ -7,6 +7,7 @@ import { isPortalHost } from "@/config/host";
 import { Home } from "./pages";
 import { Favorites } from "./pages/favorites";
 import { RecurringAll } from "./pages/recurringAll";
+import { Organizer } from "./pages/organizer";
 
 
 
@@ -41,6 +42,7 @@ function App() {
 			<Routes>
 				<Route path="/favoritos" element={<Favorites />} />
 				<Route path="/recurrentes" element={<RecurringAll />} />
+				<Route path="/eventos/:username" element={<Organizer />} />
 				<Route path="*" element={<Home />} />
 			</Routes>
 		</Suspense>

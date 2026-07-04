@@ -3,11 +3,13 @@ import { Card, ToggleButton, Avatar, Separator } from "@heroui/react"
 import { Heart, HeartFill } from "@gravity-ui/icons"
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { EventModal } from "./eventModal";
 
 export const EventCard = ({ event, time }: { event: PostData; time?: string | null }) => {
     const isLiked = useIsLiked(event);
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
     const { title, images, tags, owner, price } = event;
     return (
         <Card
@@ -60,7 +62,24 @@ export const EventCard = ({ event, time }: { event: PostData; time?: string | nu
             <Separator variant="tertiary" />
 
             <Card.Footer className="flex items-center justify-between gap-2 ">
-                <div className="flex items-center gap-2">
+                <div
+                    className={owner?.username ? "flex items-center gap-2 cursor-pointer" : "flex items-center gap-2"}
+                    role={owner?.username ? "button" : undefined}
+                    tabIndex={owner?.username ? 0 : undefined}
+                    onClick={(e) => {
+                        if (!owner?.username) return;
+                        e.stopPropagation();
+                        navigate(`/eventos/${owner.username}`);
+                    }}
+                    onKeyDown={(e) => {
+                        if (!owner?.username) return;
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            navigate(`/eventos/${owner.username}`);
+                        }
+                    }}
+                >
                     <Avatar className="size-8">
                         <Avatar.Image
                             alt={owner?.fullName || owner?.username || "User"}
