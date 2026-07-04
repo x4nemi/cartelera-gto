@@ -5,7 +5,7 @@ import { RecurringSection } from "@/components/recurringSection"
 
 export const Home = () => {
     return (
-        <div className="mx-auto flex w-full max-w-xl lg:max-w-5xl flex-col items-center gap-6 mt-4 px-4">
+        <div className="mx-auto flex w-full max-w-xl lg:max-w-5xl flex-col items-center gap-6 mt-4 px-4 overflow-x-hidden">
             <Chip>
                 <span
                     aria-hidden

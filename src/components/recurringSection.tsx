@@ -23,7 +23,7 @@ export const RecurringSection = () => {
             </div>
             <ScrollShadow
                 orientation="horizontal"
-                className="-mx-4 snap-x snap-mandatory px-4 pb-2 sm:mx-0 sm:px-0"
+                className="snap-x snap-mandatory pb-2"
             >
                 <div className="flex gap-4">
                     {loading && <p>Cargando...</p>}

@@ -3,6 +3,7 @@ import { Modal, Button, Avatar, ToggleButton } from "@heroui/react";
 import { ArrowsRotateLeft, Calendar, MapPin, Wallet, Heart, HeartFill } from "@gravity-ui/icons";
 import { getOngoingLabel, parseLocalDate } from "@/utils/recurrence";
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const formatFullDate = (iso: string) =>
     parseLocalDate(iso).toLocaleDateString("es-MX", {
@@ -36,17 +37,18 @@ interface EventModalProps {
 export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => {
     const { title, images, tags, location, price, owner, url, caption } = event;
     const isLiked = useIsLiked(event);
+    const isMobile = useMediaQuery("(max-width: 640px)");
     const dateInfo = getDateText(event);
     const DateIcon = dateInfo?.recurring ? ArrowsRotateLeft : Calendar;
 
     return (
         <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} variant="blur">
-            <Modal.Container placement="auto">
-                <Modal.Dialog className="sm:w-full">
+            <Modal.Container size={isMobile ? "full" : "lg"} placement="auto">
+                <Modal.Dialog>
                     <Modal.Body className="flex flex-col gap-4 p-0">
                         <img
                             alt={title}
-                            className="h-auto w-full rounded-t-2xl"
+                            className={`h-auto w-full ${isMobile ? "" : "rounded-t-2xl"}`}
                             src={images[0]}
                         />
                         <div className="flex flex-col gap-4 px-4 pb-2">
