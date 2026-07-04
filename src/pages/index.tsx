@@ -4,7 +4,7 @@ import { Navbar } from "@/components/navbar"
 
 export const Home = () => {
     return (
-        <div className="flex flex-col items-center justify-center gap-4 mt-4 mx-12">
+        <div className="flex flex-col items-center justify-center gap-4 mt-4 mx-4">
             <Chip>
                 <span
                     aria-hidden
