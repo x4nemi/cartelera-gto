@@ -121,15 +121,23 @@ export const RecurringAll = () => {
         [posts, category]
     );
 
-    // Place each event on the exact upcoming dates it actually occurs on.
-    const eventsByIso = useMemo(() => {
-        const map = new Map<string, PostData[]>();
+    // Place each event's sessions on the exact upcoming dates (with time) it occurs.
+    const sessionsByIso = useMemo(() => {
+        const map = new Map<string, { event: PostData; time: string | null }[]>();
         days.forEach((d) => map.set(d.iso, []));
         filtered.forEach((event) => {
-            (event.dates ?? []).forEach((iso) => {
-                if (map.has(iso)) map.get(iso)!.push(event);
+            (event.dates ?? []).forEach((d) => {
+                const iso = d.slice(0, 10);
+                const arr = map.get(iso);
+                if (arr) {
+                    const time = d.length >= 16 && d[10] === "T" ? d.slice(11, 16) : null;
+                    arr.push({ event, time });
+                }
             });
         });
+        map.forEach((arr) =>
+            arr.sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
+        );
         return map;
     }, [filtered, days]);
 
@@ -176,7 +184,7 @@ export const RecurringAll = () => {
                 <div className="grid h-full grid-flow-col auto-cols-[190px] gap-3">
                     {days.map((day) => {
                         const isToday = day.isToday;
-                        const dayEvents = eventsByIso.get(day.iso) ?? [];
+                        const daySessions = sessionsByIso.get(day.iso) ?? [];
                         return (
                             <div
                                 key={day.iso}
@@ -200,16 +208,16 @@ export const RecurringAll = () => {
                                     )}
                                 </div>
 
-                                {dayEvents.length === 0 ? (
+                                {daySessions.length === 0 ? (
                                     <div className="flex min-h-[92px] items-center justify-center rounded-2xl border border-dashed border-default-200 px-2 text-center text-xs text-muted">
                                         Sin actividades
                                     </div>
                                 ) : (
-                                    dayEvents.map((event) => {
+                                    daySessions.map(({ event, time }) => {
                                         const closes = closesSoon(event);
                                         return (
                                             <button
-                                                key={`${day.iso}-${event._id}`}
+                                                key={`${day.iso}-${event._id}-${time ?? ""}`}
                                                 type="button"
                                                 onClick={() => setSelected(event)}
                                                 className="flex flex-col items-start gap-1 rounded-2xl border border-default-200 bg-surface p-3 text-left transition-colors hover:border-default-300"
@@ -228,6 +236,11 @@ export const RecurringAll = () => {
                                                 <span className="text-sm font-semibold leading-snug">
                                                     {event.title}
                                                 </span>
+                                                {time && (
+                                                    <span className="text-xs font-medium text-muted">
+                                                        {time}
+                                                    </span>
+                                                )}
                                                 {closes && (
                                                     <span
                                                         className="mt-1 rounded-full px-2 py-0.5 text-xs font-medium"

@@ -38,7 +38,7 @@ export const RecurringCard = ({ event }: { event: PostData }) => {
                 <Chip
                     variant="soft"
                     color="accent"
-                    className="font-semibold text-indigo-600 bg-indigo-600/10 inline-flex items-center gap-1.5 px-2 py-1 w-fit"
+                    className="font-semibold text-indigo-500 bg-indigo-600/10 inline-flex items-center gap-1.5 px-2 py-1 w-fit"
                 >
                     <Icon className="size-4" />
                     <Chip.Label className="font-semibold">{label}</Chip.Label>
