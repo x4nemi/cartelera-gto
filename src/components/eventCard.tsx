@@ -5,10 +5,10 @@ import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 import { useState } from "react";
 import { EventModal } from "./eventModal";
 
-export const EventCard = ({ event }: { event: PostData }) => {
+export const EventCard = ({ event, time }: { event: PostData; time?: string | null }) => {
     const isLiked = useIsLiked(event);
     const [isOpen, setIsOpen] = useState(false);
-    const { title, images, tags, owner } = event;
+    const { title, images, tags, owner, price } = event;
     return (
         <Card
             className="w-full flex-row cursor-pointer"
@@ -33,18 +33,24 @@ export const EventCard = ({ event }: { event: PostData }) => {
             </div>
             <div className="flex flex-1 flex-col gap-3">
                 <Card.Header className="gap-1">
-                    <Card.Title className="pr-8">{title}</Card.Title>
-                    <Card.Description className="flex flex-wrap gap-1 text-xs text-muted">
-                        {
-                            tags && tags.map((tag) => (
-                                <span
-                                    key={tag}
-                                    className="inline-block text-xs font-medium"
-                                >
-                                    #{tag}
-                                </span>
-                            ))
-                        }
+                    <div className="flex items-start justify-between gap-2">
+                        <Card.Title>{title}</Card.Title>
+                        {time && (
+                            <span
+                                className="shrink-0 text-sm font-semibold"
+                                style={{ color: "var(--accent)" }}
+                            >
+                                {time}
+                            </span>
+                        )}
+                    </div>
+                    <Card.Description className="flex flex-wrap items-center gap-1 text-xs text-muted">
+                        {tags && tags.map((tag) => (
+                            <span key={tag} className="inline-block text-xs font-medium">
+                                #{tag}
+                            </span>
+                        ))}
+                        {price && <span>· {price}</span>}
                     </Card.Description>
                 </Card.Header>
                 <Card.Footer className="flex items-center justify-between gap-2 mt-auto">
