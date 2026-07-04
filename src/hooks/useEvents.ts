@@ -1,4 +1,5 @@
 import { CosmosAPI, PaginatedResponse, PostData } from "@/config/apiClient";
+import { isOngoing } from "@/utils/recurrence";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const PAGE_SIZE = 20;
@@ -42,7 +43,9 @@ export function useEvents() {
             const response = cached ?? await CosmosAPI.getEvents({ page, limit: PAGE_SIZE, upcoming: true });
             if (!cached) setCachedPage(page, response);
 
-            const newPosts = response.data;
+            // Recurring and long-running events are shown in their own section,
+            // so keep them out of the date-ordered timeline.
+            const newPosts = response.data.filter((post) => !isOngoing(post.dates, post.endsOn));
             setPosts(prev => append ? [...prev, ...newPosts] : newPosts);
             setHasMore(response.pagination.hasNextPage);
             pageRef.current = page;

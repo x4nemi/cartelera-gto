@@ -47,6 +47,8 @@ export interface PostData {
   // event metadata
   dates: string[] | null;        // always present (null if unknown), never undefined
   type: PostType;                // date-pattern only
+  /** Explicit end date (ISO) when the post states one for a recurring schedule; null otherwise. */
+  endsOn?: string | null;
 
   // user-editable AI-assisted fields (any of these may have been suggested by AI then accepted/edited)
   title?: string;

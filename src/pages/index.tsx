@@ -1,10 +1,11 @@
 import { EventList } from "@/components/eventList"
 import { Chip } from "@heroui/react"
 import { Navbar } from "@/components/navbar"
+import { RecurringSection } from "@/components/recurringSection"
 
 export const Home = () => {
     return (
-        <div className="flex flex-col items-center justify-center gap-4 mt-4 mx-4">
+        <div className="mx-auto flex w-full max-w-xl lg:max-w-5xl flex-col items-center gap-6 mt-4 px-4">
             <Chip>
                 <span
                     aria-hidden
@@ -22,9 +23,12 @@ export const Home = () => {
                 />
                 <Chip.Label>Carletera Guanajuato</Chip.Label>
             </Chip>
-            
-            <div>
-                <EventList />
+
+            <div className="flex w-full min-w-0 flex-col gap-8">
+                <RecurringSection />
+                <div className="mx-auto w-full max-w-xl">
+                    <EventList />
+                </div>
             </div>
 
             <Navbar />

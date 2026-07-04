@@ -10,7 +10,7 @@ export const EventCard = ({ event }: { event: PostData }) => {
         <Card className="w-full flex-row" variant="tertiary">
             <div className="relative h-[140px] w-[140px] shrink-0 overflow-hidden rounded-2xl ">
                 <img
-                    alt="Cherries"
+                    alt={title}
                     className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover select-none"
                     loading="lazy"
                     src={images[0]}
