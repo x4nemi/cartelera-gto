@@ -2,12 +2,27 @@ import { PostData } from "@/types"
 import { Card, ToggleButton, Avatar } from "@heroui/react"
 import { Heart, HeartFill } from "@gravity-ui/icons"
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
+import { useState } from "react";
+import { EventModal } from "./eventModal";
 
 export const EventCard = ({ event }: { event: PostData }) => {
     const isLiked = useIsLiked(event);
+    const [isOpen, setIsOpen] = useState(false);
     const { title, images, tags, owner } = event;
     return (
-        <Card className="w-full flex-row" variant="tertiary">
+        <Card
+            className="w-full flex-row cursor-pointer"
+            variant="tertiary"
+            role="button"
+            tabIndex={0}
+            onClick={() => setIsOpen(true)}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setIsOpen(true);
+                }
+            }}
+        >
             <div className="relative h-[140px] w-[140px] shrink-0 overflow-hidden rounded-2xl ">
                 <img
                     alt={title}
@@ -43,14 +58,21 @@ export const EventCard = ({ event }: { event: PostData }) => {
                         </Avatar>
                         <span className="text-sm font-medium">{owner?.fullName || owner?.username}</span>
                     </div>
-                    <ToggleButton isIconOnly
-                        isSelected={isLiked} onChange={() => toggleLike(event)}>
-                        {({ isSelected: selected }) => (
-                            selected ? <HeartFill /> : <Heart />
-                        )}
-                    </ToggleButton>
+                    <div
+                        onClick={(e) => e.stopPropagation()}
+                        onKeyDown={(e) => e.stopPropagation()}
+                        role="presentation"
+                    >
+                        <ToggleButton isIconOnly
+                            isSelected={isLiked} onChange={() => toggleLike(event)}>
+                            {({ isSelected: selected }) => (
+                                selected ? <HeartFill /> : <Heart />
+                            )}
+                        </ToggleButton>
+                    </div>
                 </Card.Footer>
             </div>
+            <EventModal event={event} isOpen={isOpen} onOpenChange={setIsOpen} />
         </Card>
     )
 }

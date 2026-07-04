@@ -2,15 +2,30 @@ import { PostData } from "@/config/apiClient";
 import { Card, Avatar } from "@heroui/react";
 import { ArrowsRotateLeft, Calendar } from "@gravity-ui/icons";
 import { getOngoingLabel } from "@/utils/recurrence";
+import { useState } from "react";
+import { EventModal } from "./eventModal";
 
 export const RecurringCard = ({ event }: { event: PostData }) => {
     const { title, images, owner, dates, endsOn } = event;
+    const [isOpen, setIsOpen] = useState(false);
     const ongoing = getOngoingLabel(dates, endsOn);
     const label = ongoing?.text ?? "Recurrente";
     const Icon = ongoing?.kind === "until" ? Calendar : ArrowsRotateLeft;
 
     return (
-        <Card className="w-56 shrink-0 snap-start md:w-64" variant="tertiary">
+        <Card
+            className="w-56 shrink-0 snap-start md:w-64 cursor-pointer"
+            variant="tertiary"
+            role="button"
+            tabIndex={0}
+            onClick={() => setIsOpen(true)}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setIsOpen(true);
+                }
+            }}
+        >
             <div className="relative h-32 w-full overflow-hidden rounded-2xl md:h-40">
                 <img
                     alt={title}
@@ -38,6 +53,7 @@ export const RecurringCard = ({ event }: { event: PostData }) => {
                     {owner?.fullName || owner?.username}
                 </span>
             </Card.Footer>
+            <EventModal event={event} isOpen={isOpen} onOpenChange={setIsOpen} />
         </Card>
     );
 };

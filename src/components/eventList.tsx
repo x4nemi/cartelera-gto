@@ -1,22 +1,23 @@
 import { useEvents } from "@/hooks/useEvents";
+import { parseLocalDate } from "@/utils/recurrence";
 import { EventCard } from "./eventCard";
 
 const getEventTime = (dates: string[] | null) => {
     if (!dates || dates.length === 0) return Number.POSITIVE_INFINITY;
-    const time = new Date(dates[0]).getTime();
+    const time = parseLocalDate(dates[0]).getTime();
     return Number.isNaN(time) ? Number.POSITIVE_INFINITY : time;
 };
 
 const getDateKey = (dates: string[] | null) => {
     if (!dates || dates.length === 0) return null;
-    const date = new Date(dates[0]);
+    const date = parseLocalDate(dates[0]);
     if (Number.isNaN(date.getTime())) return null;
     return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 };
 
 const formatEventDate = (dates: string[] | null) => {
     if (!dates || dates.length === 0) return null;
-    const date = new Date(dates[0]);
+    const date = parseLocalDate(dates[0]);
     if (Number.isNaN(date.getTime())) return null;
     const day = date.getDate();
     const month = date
@@ -39,7 +40,7 @@ export const EventList = () => {
     return (
         <div className="flex flex-col gap-4">
             {loading && <p>Cargando...</p>}
-            {!loading && sortedPosts.length === 0 && (
+            {!loading && sortedPosts.length > 0 && (
                 <h2 className="text-h3">Agenda</h2>
             )}
             {sortedPosts.map((post, index) => {

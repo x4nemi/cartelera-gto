@@ -24,9 +24,22 @@ const MIN_CONTINUOUS_DAYS = 14;
 /** A run counts as "continuous" when at least this share of the days are present. */
 const CONTINUOUS_FILL_RATIO = 0.9;
 
+/**
+ * Parse a "YYYY-MM-DD" (or ISO) string as a LOCAL-time date. Plain date strings
+ * are otherwise parsed as UTC midnight, which shifts to the previous day in
+ * timezones behind UTC (e.g. Mexico) — causing off-by-one dates and weekdays.
+ */
+export function parseLocalDate(value: string): Date {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    if (match) {
+        return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    }
+    return new Date(value);
+}
+
 const parseDates = (dates: string[] | null): Date[] =>
     (dates ?? [])
-        .map((value) => new Date(value))
+        .map((value) => parseLocalDate(value))
         .filter((date) => !Number.isNaN(date.getTime()));
 
 /** Unique day timestamps (midnight), sorted ascending. */
@@ -135,7 +148,7 @@ export function getOngoingLabel(
     endsOn?: string | null
 ): { kind: "weekly" | "until" | "ongoing"; text: string } | null {
     if (endsOn) {
-        const end = new Date(endsOn);
+        const end = parseLocalDate(endsOn);
         if (!Number.isNaN(end.getTime())) {
             return { kind: "until", text: `Hasta el ${formatDayMonth(end)}` };
         }
