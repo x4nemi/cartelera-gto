@@ -60,6 +60,7 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
     const isLiked = useIsLiked(event);
     const isMobile = useMediaQuery("(max-width: 640px)");
     const [expanded, setExpanded] = useState(false);
+    const captionLong = !!caption && (caption.length > 180 || caption.split("\n").length > 4);
 
     const ongoing = getOngoingLabel(event.dates, event.endsOn);
     const primary = getPrimaryDate(event);
@@ -172,18 +173,20 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
                                 <div className="flex flex-col gap-1.5">
                                     <h3 className="text-sm font-semibold text-muted">De qué va</h3>
                                     <p
-                                        className={`whitespace-pre-line text-sm leading-relaxed text-foreground/85 ${expanded ? "" : "line-clamp-4"}`}
+                                        className={`text-sm leading-relaxed text-foreground/85 ${expanded || !captionLong ? "whitespace-pre-line" : "line-clamp-4 whitespace-pre-line"}`}
                                     >
                                         {caption}
                                     </p>
-                                    <button
-                                        type="button"
-                                        onClick={() => setExpanded((v) => !v)}
-                                        className="w-fit text-sm font-semibold"
-                                        style={{ color: "var(--accent)" }}
-                                    >
-                                        {expanded ? "menos" : "más"}
-                                    </button>
+                                    {captionLong && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setExpanded((v) => !v)}
+                                            className="w-fit text-sm font-semibold"
+                                            style={{ color: "var(--accent)" }}
+                                        >
+                                            {expanded ? "menos" : "más"}
+                                        </button>
+                                    )}
                                 </div>
                             )}
 
