@@ -1,5 +1,5 @@
 import { PostData } from "@/types"
-import { Card, ToggleButton, Avatar } from "@heroui/react"
+import { Card, ToggleButton, Avatar, Separator } from "@heroui/react"
 import { Heart, HeartFill } from "@gravity-ui/icons"
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 import { useState } from "react";
@@ -11,7 +11,7 @@ export const EventCard = ({ event, time }: { event: PostData; time?: string | nu
     const { title, images, tags, owner, price } = event;
     return (
         <Card
-            className="w-full flex-row cursor-pointer"
+            className="w-full flex-col cursor-pointer"
             variant="tertiary"
             role="button"
             tabIndex={0}
@@ -23,61 +23,66 @@ export const EventCard = ({ event, time }: { event: PostData; time?: string | nu
                 }
             }}
         >
-            <div className="relative h-[140px] w-[140px] shrink-0 overflow-hidden rounded-2xl ">
+            <div className="relative h-48 w-full overflow-hidden rounded-2xl">
                 <img
                     alt={title}
-                    className="pointer-events-none absolute inset-0 h-full w-full scale-125 object-cover select-none"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
                     loading="lazy"
                     src={images[0]}
                 />
-            </div>
-            <div className="flex flex-1 flex-col gap-3">
-                <Card.Header className="gap-1">
-                    <div className="flex items-start justify-between gap-2">
-                        <Card.Title>{title}</Card.Title>
-                        {time && (
-                            <span
-                                className="shrink-0 text-sm font-semibold"
-                                style={{ color: "var(--accent)" }}
-                            >
-                                {time}
-                            </span>
-                        )}
-                    </div>
-                    <Card.Description className="flex flex-wrap items-center gap-1 text-xs text-muted">
-                        {tags && tags.map((tag) => (
-                            <span key={tag} className="inline-block text-xs font-medium">
-                                #{tag}
-                            </span>
-                        ))}
-                        {price && <span>· {price}</span>}
-                    </Card.Description>
-                </Card.Header>
-                <Card.Footer className="flex items-center justify-between gap-2 mt-auto">
-                    <div className="flex items-center gap-2">
-                        <Avatar className="size-8">
-                            <Avatar.Image
-                                alt={owner?.fullName || owner?.username || "User"}
-                                src={owner?.profilePicUrl}
-                            />
-                            <Avatar.Fallback>XL</Avatar.Fallback>
-                        </Avatar>
-                        <span className="text-sm font-medium">{owner?.fullName || owner?.username}</span>
-                    </div>
-                    <div
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => e.stopPropagation()}
-                        role="presentation"
+                {time && (
+                    <span
+                        className="absolute right-3 top-3 rounded-full px-3 py-1 text-sm font-bold"
+                        style={{ backgroundColor: "var(--accent)", color: "var(--accent-foreground)" }}
                     >
-                        <ToggleButton isIconOnly
-                            isSelected={isLiked} onChange={() => toggleLike(event)}>
-                            {({ isSelected: selected }) => (
-                                selected ? <HeartFill /> : <Heart />
-                            )}
-                        </ToggleButton>
-                    </div>
-                </Card.Footer>
+                        {time}
+                    </span>
+                )}
+                {price && (
+                    <span className="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-sm font-medium text-white">
+                        {price}
+                    </span>
+                )}
             </div>
+
+            <Card.Header className="gap-1">
+                <Card.Title>{title}</Card.Title>
+                <Card.Description className="flex flex-wrap gap-1.5 text-sm text-muted">
+                    {tags && tags.map((tag) => (
+                        <span key={tag} className="font-medium">
+                            #{tag}
+                        </span>
+                    ))}
+                </Card.Description>
+            </Card.Header>
+
+            {/* <div className="mt-1 border-t border-default-200" /> */}
+            <Separator variant="tertiary" />
+
+            <Card.Footer className="flex items-center justify-between gap-2 ">
+                <div className="flex items-center gap-2">
+                    <Avatar className="size-8">
+                        <Avatar.Image
+                            alt={owner?.fullName || owner?.username || "User"}
+                            src={owner?.profilePicUrl}
+                        />
+                        <Avatar.Fallback>XL</Avatar.Fallback>
+                    </Avatar>
+                    <span className="text-sm font-medium">{owner?.fullName || owner?.username}</span>
+                </div>
+                <div
+                    onClick={(e) => e.stopPropagation()}
+                    onKeyDown={(e) => e.stopPropagation()}
+                    role="presentation"
+                >
+                    <ToggleButton isIconOnly
+                        isSelected={isLiked} onChange={() => toggleLike(event)}>
+                        {({ isSelected: selected }) => (
+                            selected ? <HeartFill /> : <Heart />
+                        )}
+                    </ToggleButton>
+                </div>
+            </Card.Footer>
             <EventModal event={event} isOpen={isOpen} onOpenChange={setIsOpen} />
         </Card>
     )

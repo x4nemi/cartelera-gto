@@ -48,6 +48,10 @@ export interface PostData {
   type: PostType;                // date-pattern only
   /** Explicit end date (ISO) when the post states one for a recurring schedule; null otherwise. */
   endsOn?: string | null;
+  /** When a single IG post yields multiple events, they share this parent shortCode. */
+  parentShortCode?: string;
+  /** 1-based index of this event within its parent post (multi-event posts). */
+  eventIndex?: number;
 
   // user-editable AI-assisted fields (any of these may have been suggested by AI then accepted/edited)
   title?: string;
