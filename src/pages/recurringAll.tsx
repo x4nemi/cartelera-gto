@@ -110,24 +110,6 @@ export const RecurringAll = () => {
 
     return (
         <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28 md:pt-24">
-            <div className="mx-auto mb-3 flex flex-col w-full max-w-6xl justify-start">
-                <button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    className="flex w-fit items-center gap-1 text-sm font-medium text-muted transition-colors hover:text-foreground"
-                >
-                    <ArrowLeft className="size-4" />
-                    Regresar
-                </button>
-
-                <header className="flex flex-col gap-1">
-                    <h1 className="text-h2">Recurrentes</h1>
-                    <p className="text-sm text-muted">
-                        Talleres, clases y actividades fijas
-                    </p>
-                </header>
-            </div>
-
             <div className="flex flex-wrap gap-2">
                 <FilterChip
                     label="Todas"

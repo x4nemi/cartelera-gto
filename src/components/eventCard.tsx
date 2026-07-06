@@ -53,7 +53,7 @@ export const EventCard = ({ event, time, highlighted, highlight }: { event: Post
             </div>
 
             <Card.Header className="gap-1">
-                <Card.Title>{highlightMatch(title, highlight)}</Card.Title>
+                <Card.Title className="line-clamp-1">{highlightMatch(title, highlight)}</Card.Title>
                 <Card.Description className="flex flex-wrap gap-1.5 text-sm text-muted">
                     {tags && tags.map((tag) => (
                         <span key={tag} className="font-medium">
