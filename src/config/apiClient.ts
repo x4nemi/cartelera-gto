@@ -280,6 +280,27 @@ export const CosmosAPI = {
     },
 
     /**
+     * Patch admin-managed user fields (auto-detect toggle + scan frequency).
+     */
+    async updateUser(
+        username: string,
+        patch: { autoDetectEnabled?: boolean; scanIntervalDays?: number }
+    ): Promise<{ success: boolean; username: string }> {
+        const response = await fetch(`/api/updateUser`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, ...patch }),
+        });
+
+        if (!response.ok) {
+            const error = await response.json().catch(() => ({}));
+            throw new Error(error.error || "Failed to update user");
+        }
+
+        return response.json();
+    },
+
+    /**
      * Insert or update an event/post (upsert)
      */
     async insertEvent(eventData: PostData): Promise<{ success: boolean; shortCode: string; isNew?: boolean }> {

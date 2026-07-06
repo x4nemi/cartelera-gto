@@ -194,9 +194,9 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
                                         </div>
                                     )}
                                     {price && (
-                                        <div className="flex items-center gap-2.5 px-4 py-3 text-sm font-medium">
-                                            <Ticket className="size-4 shrink-0" style={{ color: "var(--accent)" }} />
-                                            {price}
+                                        <div className="flex items-start gap-2.5 px-4 py-3 text-sm font-medium">
+                                            <Ticket className="mt-0.5 size-4 shrink-0" style={{ color: "var(--accent)" }} />
+                                            <span className="min-w-0 whitespace-pre-line">{price}</span>
                                         </div>
                                     )}
                                     {location && (

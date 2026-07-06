@@ -101,7 +101,9 @@ export interface UserData {
 
   status: UserStatus;            // replaces isDraft + isApproved
   autoDetectEnabled: boolean;    // always present, default false
+  scanIntervalDays?: number;     // how often to auto-scan this profile (days); default 1 (daily)
   lastScrapedPostId?: string;
+  lastScannedAt?: string;        // ISO; lower bound for the next auto-detect scan
 
   createdAt: string;             // ISO
   updatedAt: string;             // ISO
