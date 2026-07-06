@@ -3,6 +3,7 @@ import { PostData } from "@/config/apiClient";
 import { useRecurringEvents } from "@/hooks/useRecurringEvents";
 import { EventModal } from "@/components/eventModal";
 import { Navbar } from "@/components/navbar";
+import { ChevronLeft, ChevronRight } from "@gravity-ui/icons";
 
 const DOW_LABEL = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -20,11 +21,14 @@ const venueOf = (e: PostData) => e.owner?.fullName || e.owner?.username || "";
 export const RecurringAll = () => {
     const { posts, loading } = useRecurringEvents();
     const [selected, setSelected] = useState<PostData | null>(null);
+    // How many weeks ahead of today the window is shifted (0 = current week).
+    const [weekOffset, setWeekOffset] = useState(0);
 
-    // Rolling 7-day window starting today; each column is a real date.
+    // Rolling 7-day window; each column is a real date, shifted by weekOffset.
     const days = useMemo(() => {
         const base = new Date();
         base.setHours(0, 0, 0, 0);
+        base.setDate(base.getDate() + weekOffset * 7);
         return Array.from({ length: 7 }, (_, i) => {
             const date = new Date(base);
             date.setDate(base.getDate() + i);
@@ -32,10 +36,14 @@ export const RecurringAll = () => {
                 iso: toISODate(date),
                 label: DOW_LABEL[date.getDay()],
                 dateShort: `${date.getDate()}/${date.toLocaleDateString("es-MX", { month: "short" }).replace(".", "")}`,
-                isToday: i === 0,
+                isToday: i === 0 && weekOffset === 0,
             };
         });
-    }, []);
+    }, [weekOffset]);
+
+    // "5/jul - 11/jul" label for the visible window.
+    const weekRange = `${days[0].dateShort} - ${days[6].dateShort}`;
+
 
     // Place each event's sessions on the exact upcoming dates (with time) it occurs.
     const sessionsByIso = useMemo(() => {
@@ -59,9 +67,34 @@ export const RecurringAll = () => {
 
     return (
         <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28 md:pt-24">
-            <header className="flex flex-col gap-1">
-                <h1 className="text-h2">Semanales</h1>
-                <p className="text-sm text-muted">Talleres y clases que se repiten cada semana</p>
+            <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-h2">Semanales</h1>
+                    <p className="text-sm text-muted">Talleres y clases que se repiten cada semana</p>
+                </div>
+                <div
+                    className="flex items-center gap-1 self-start rounded-full border p-1 sm:self-auto"
+                    style={{ borderColor: "var(--border)" }}
+                >
+                    <button
+                        type="button"
+                        aria-label="Semana anterior"
+                        disabled={weekOffset === 0}
+                        onClick={() => setWeekOffset((w) => Math.max(0, w - 1))}
+                        className="rounded-full p-1.5 transition-colors hover:bg-default-100 disabled:cursor-default disabled:opacity-30 disabled:hover:bg-transparent"
+                    >
+                        <ChevronLeft className="size-4" />
+                    </button>
+                    <span className="min-w-[7.5rem] text-center text-sm font-semibold">{weekRange}</span>
+                    <button
+                        type="button"
+                        aria-label="Semana siguiente"
+                        onClick={() => setWeekOffset((w) => w + 1)}
+                        className="rounded-full p-1.5 transition-colors hover:bg-default-100"
+                    >
+                        <ChevronRight className="size-4" />
+                    </button>
+                </div>
             </header>
 
             {loading && <p className="text-muted">Cargando...</p>}
@@ -75,9 +108,11 @@ export const RecurringAll = () => {
                             <div key={day.iso} className="flex flex-col gap-3">
                                 <div
                                     className="sticky top-0 z-10 pt-1 md:top-[4.75rem]"
-                                    // style={{ backgroundColor: "var(--background)" }}
                                 >
-                                    <div className="pb-2">
+                                    <div
+                                        className="-mx-1.5 border-b px-1.5 pb-2"
+                                        style={{ borderColor: "var(--border)" }}
+                                    >
                                         {isToday ? (
                                             <div
                                                 className="rounded-xl px-3 py-2 text-center text-sm font-semibold"
