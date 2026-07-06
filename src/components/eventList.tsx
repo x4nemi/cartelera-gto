@@ -6,6 +6,7 @@ import { colorForTag } from "@/utils/tagColors";
 import { PostData } from "@/types";
 import { EventCard } from "./eventCard";
 import { WeekStrip } from "./weekStrip";
+import { MonthCalendar } from "./monthCalendar";
 
 const toIso = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -130,11 +131,16 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showStrip, groupKey]);
 
+    const monthLabel = capitalize(
+        new Date(`${selectedIso}T00:00`).toLocaleDateString("es-MX", { month: "long", year: "numeric" })
+    );
+
     return (
-        <div className="flex flex-col gap-6">
-            {/* Week strip (full view only): quick nav to a day's events. */}
+        <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
+            {/* Mobile: sticky week strip with the current month label */}
             {showStrip && (
-                <div className="sticky top-0 z-10 -mx-4 bg-default-50/90 px-4 py-2 backdrop-blur md:top-20">
+                <div className="sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-2 backdrop-blur md:hidden">
+                    <div className="mb-2 px-1 text-sm font-semibold">{monthLabel}</div>
                     <WeekStrip
                         weeks={weeks}
                         dotsByIso={dotsByIso}
@@ -146,6 +152,19 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
                 </div>
             )}
 
+            {/* Desktop: month calendar sidebar */}
+            {showStrip && (
+                <div className="hidden md:sticky md:top-[4.75rem] md:block md:w-72 md:shrink-0">
+                    <MonthCalendar
+                        dotsByIso={dotsByIso}
+                        selectedIso={selectedIso}
+                        onSelectDay={goToDay}
+                    />
+                </div>
+            )}
+
+            {/* Right: grouped list */}
+            <div className="flex min-w-0 flex-1 flex-col gap-6">
             {loading && <p>Cargando...</p>}
             {!loading && groups.length > 0 && variant === "home" && (
                 <div className="flex items-baseline justify-between gap-2">
@@ -217,6 +236,7 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
                     {loadingMore ? "Loading..." : "Load More"}
                 </button>
             )}
+            </div>
         </div>
     )
 }

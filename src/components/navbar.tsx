@@ -1,5 +1,4 @@
 import { House, HouseFill, Heart, HeartFill, Sun, Moon, Magnifier, SquareListUl, ArrowsRotateLeft } from "@gravity-ui/icons"
-import { Button } from "@heroui/react"
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
@@ -13,8 +12,6 @@ const applyTheme = (dark: boolean) => {
     const meta = document.getElementById("meta-theme-color")
     if (meta) meta.setAttribute("content", dark ? "#15161d" : "#f4f5fa")
 }
-
-const PUBLISH_URL = "https://www.instagram.com/cartelera.gto"
 
 type IconType = (props: { className?: string }) => React.JSX.Element
 
@@ -59,9 +56,6 @@ export const Navbar = () => {
         const q = query.trim()
         navigate(q ? `/buscar?q=${encodeURIComponent(q)}` : "/buscar")
     }
-
-    const openPublish = () =>
-        window.open(PUBLISH_URL, "_blank", "noopener,noreferrer")
 
     return (
         <>

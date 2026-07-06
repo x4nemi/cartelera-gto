@@ -89,7 +89,7 @@ export const WeekStrip = ({
                                 disabled={!hasEvents}
                                 aria-current={isSelected ? "date" : undefined}
                                 onClick={() => hasEvents && onSelect(iso)}
-                                className="flex min-w-0 flex-col items-center gap-1 rounded-2xl border px-1 py-2 transition-colors disabled:cursor-default"
+                                className="flex min-w-0 flex-col items-center gap-1 rounded-2xl border px-1 py-2 transition-colors disabled:cursor-default md:rounded-xl md:py-1.5 md:hover:border-default-300"
                                 style={{
                                     backgroundColor: isToday ? "var(--accent)" : "var(--surface, transparent)",
                                     borderColor: isToday
