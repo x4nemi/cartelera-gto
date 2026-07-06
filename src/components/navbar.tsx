@@ -61,7 +61,7 @@ export const Navbar = () => {
         <>
             {/* Desktop · sticky top bar */}
             <header className="fixed inset-x-0 top-0 z-50 hidden px-4 pt-3 md:block">
-                <div className="mx-auto flex max-w-6xl items-center gap-3 rounded-full border border-default-200 bg-default-50/90 px-5 py-2.5 shadow-lg backdrop-blur">
+                <div className="mx-auto flex max-w-6xl items-center gap-3 rounded-full border border-default-300 bg-background/85 px-5 py-2.5 shadow-lg backdrop-blur-xl">
                     <button
                         type="button"
                         onClick={() => navigate("/")}
@@ -110,7 +110,7 @@ export const Navbar = () => {
 
             {/* Móvil · tab bar inferior fija */}
             <nav className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden">
-                <ul className="flex items-center gap-1 rounded-3xl border border-default-200 bg-default-50/95 px-2 py-2 shadow-lg backdrop-blur">
+                <ul className="flex items-center gap-1 rounded-3xl border border-default-300 bg-background/90 px-2 py-2 shadow-xl backdrop-blur-xl">
                     {tabs.map(({ icon: Icon, iconActive: IconActive, label, path }) => {
                         const active = isActive(path)
                         return (

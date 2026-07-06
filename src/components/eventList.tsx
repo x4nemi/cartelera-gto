@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEvents } from "@/hooks/useEvents";
 import { parseLocalDate } from "@/utils/recurrence";
-import { colorForTag } from "@/utils/tagColors";
 import { PostData } from "@/types";
 import { EventCard } from "./eventCard";
 import { WeekStrip } from "./weekStrip";
@@ -72,9 +71,7 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
     const dotsByIso = useMemo(() => {
         const map: Record<string, string[]> = {};
         groups.forEach((g) => {
-            map[g.iso] = g.items
-                .slice(0, 3)
-                .map(({ post }) => colorForTag(post.tags?.[0] ?? ""));
+            map[g.iso] = g.items.slice(0, 3).map(() => "var(--accent)");
         });
         return map;
     }, [groups]);

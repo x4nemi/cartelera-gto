@@ -89,22 +89,22 @@ export const WeekStrip = ({
                                 disabled={!hasEvents}
                                 aria-current={isSelected ? "date" : undefined}
                                 onClick={() => hasEvents && onSelect(iso)}
-                                className="flex min-w-0 flex-col items-center gap-1 rounded-2xl border px-1 py-2 transition-colors disabled:cursor-default md:rounded-xl md:py-1.5 md:hover:border-default-300"
+                                className="flex min-w-0 flex-col items-center gap-1 rounded-2xl border px-0.5 py-2.5 transition-colors disabled:cursor-default md:rounded-xl md:py-2 md:hover:border-default-300"
                                 style={{
-                                    backgroundColor: isToday ? "var(--accent)" : "var(--surface, transparent)",
-                                    borderColor: isToday
+                                    backgroundColor: isToday
                                         ? "var(--accent)"
                                         : isSelected
-                                            ? "var(--accent)"
-                                            : "color-mix(in oklch, currentColor 12%, transparent)",
+                                            ? "color-mix(in oklch, var(--accent) 14%, transparent)"
+                                            : "var(--surface-secondary)",
+                                    borderColor: isToday || isSelected ? "var(--accent)" : "var(--border)",
                                     color: isToday ? "var(--accent-foreground)" : undefined,
-                                    opacity: !hasEvents && !isToday ? 0.45 : 1,
+                                    opacity: !hasEvents && !isToday ? 0.5 : 1,
                                 }}
                             >
-                                <span className="text-[11px] font-bold uppercase leading-none">
+                                <span className="text-[10px] font-bold uppercase leading-none">
                                     {isToday ? "HOY" : DOW_LABEL[d.getDay()]}
                                 </span>
-                                <span className="text-xl font-bold leading-none">{d.getDate()}</span>
+                                <span className="text-lg font-bold leading-none">{d.getDate()}</span>
                                 <span className="flex h-1.5 items-center justify-center gap-0.5">
                                     {dots.map((c, i) => (
                                         <span
