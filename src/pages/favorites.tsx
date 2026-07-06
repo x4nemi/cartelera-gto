@@ -18,7 +18,7 @@ export const Favorites = () => {
                     Aún no tienes eventos guardados. Toca el corazón en un evento para guardarlo aquí.
                 </p>
             ) : (
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
                     {likedEvents.map((event) => (
                         <EventCard key={event._id ?? event.shortCode} event={event} />
                     ))}
