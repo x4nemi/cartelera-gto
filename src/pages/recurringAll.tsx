@@ -1,6 +1,4 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "@gravity-ui/icons";
 import { PostData } from "@/config/apiClient";
 import { useRecurringEvents } from "@/hooks/useRecurringEvents";
 import {
@@ -55,7 +53,6 @@ const closesSoon = (event: PostData): string | null => {
 
 export const RecurringAll = () => {
     const { posts, loading } = useRecurringEvents();
-    const navigate = useNavigate();
     const [category, setCategory] = useState<string>("todas");
     const [selected, setSelected] = useState<PostData | null>(null);
 

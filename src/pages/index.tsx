@@ -105,7 +105,7 @@ export const Home = () => {
             </div>
 
             {/* Search */}
-            <form onSubmit={submitSearch} className="relative w-full max-w-xl">
+            <form onSubmit={submitSearch} className="relative w-full max-w-xl md:hidden">
                 <Magnifier className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted" />
                 <input
                     value={query}

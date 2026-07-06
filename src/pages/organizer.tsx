@@ -184,7 +184,7 @@ export const Organizer = () => {
                             className="flex-1 rounded-full px-4 py-2 transition-colors"
                             style={
                                 active
-                                    ? { backgroundColor: "var(--accent)", color: "var(--accent-foreground)" }
+                                    ? { backgroundColor: "var(--accent-fill)", color: "var(--accent-foreground)" }
                                     : undefined
                             }
                         >

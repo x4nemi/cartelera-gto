@@ -20,17 +20,93 @@
     --text-6xl:  3.75rem;   --text-6xl--line-height:  1.05;
 }
 
-/* Brand accent: blue in light, amber in dark (matches v2 design) */
+/* ── Índigo theme ─────────────────────────────────────────────────────── */
+/* Light · "índigo papel" */
 :root,
 [data-theme="light"] {
-    --accent: oklch(0.623 0.214 259.815);            /* blue-500 #3b82f6 */
-    --accent-foreground: oklch(1 0 0);
+    /* --background: #f4f5fa;
+    --foreground: #1e2132;
+
+    --surface: #fdfdff;
+    --surface-foreground: #1e2132;
+    --surface-secondary: #f4f5fa;
+    --surface-secondary-foreground: #1e2132;
+    --surface-tertiary: #e7e9fb;
+    --surface-tertiary-foreground: #1e2132;
+
+    --overlay: #fdfdff;
+    --overlay-foreground: #1e2132;
+
+    --muted: #757a8f;
+
+    --default: #e7e9fb;
+    --default-foreground: #1e2132;
+
+    --border: #e2e4f0;
+    --separator: #e2e4f0;
+
+    --field-background: #fdfdff;
+    --field-foreground: #1e2132;
+    --field-border: #e2e4f0;
+    --field-placeholder: #757a8f; */
+
+    --accent: #4552c7;              /* text & icons */
+    --accent-foreground: #ffffff;   /* text on --accent-fill */
+    --accent-fill: #5661e0;         /* solid buttons / badges / pills */
+    --focus: #5661e0;
 }
 
+/* Dark · "índigo noche" */
 .dark,
 [data-theme="dark"] {
-    --accent: oklch(0.769 0.188 70.08);              /* amber-500 #f59e0b */
-    --accent-foreground: oklch(0.145 0 0);
+    /* --background: #15161d;
+    --foreground: #eeeff6;
+
+    --surface: #1f212c;
+    --surface-foreground: #eeeff6;
+    --surface-secondary: #272b45;
+    --surface-secondary-foreground: #eeeff6;
+    --surface-tertiary: #33364a;
+    --surface-tertiary-foreground: #eeeff6;
+
+    --overlay: #1f212c;
+    --overlay-foreground: #eeeff6;
+
+    --muted: #9ba0b8;
+
+    --default: #272b45;
+    --default-foreground: #eeeff6;
+
+    --border: #33364a;
+    --separator: #33364a;
+
+    --field-background: #1f212c;
+    --field-foreground: #eeeff6;
+    --field-border: #33364a;
+    --field-placeholder: #9ba0b8; */
+
+    --accent: #98a3f5;              /* lightened indigo for text & icons */
+    --accent-foreground: #ffffff;   /* text on --accent-fill */
+    --accent-fill: #5661e0;         /* identical in both themes */
+    --focus: #98a3f5;
+}
+
+/* Numeric default scale used across the app → map onto the indigo tokens.
+   `inline` keeps the utilities theme-switched. */
+@theme inline {
+    --color-default-50: var(--surface-secondary);
+    --color-default-100: var(--default);
+    --color-default-200: var(--border);
+    --color-default-300: var(--border-tertiary);
+    --color-accent-fill: var(--accent-fill);
+}
+
+/* Buttons use the fixed indigo fill (#5661E0) with white text in both themes. */
+.button--primary {
+    --button-bg: var(--accent-fill);
+    --button-bg-hover: color-mix(in oklab, var(--accent-fill) 88%, black);
+    --button-bg-pressed: color-mix(in oklab, var(--accent-fill) 80%, black);
+    --button-fg: #ffffff;
 }
 
 @layer base {
@@ -55,12 +131,12 @@
 
 html {
     height: 100%;
-    background-color: #f5f5f4; /* soft warm off-white (stone-100) for light theme */
+    background-color: #f4f5fa; /* índigo papel */
 }
 
 .dark html,
 html.dark {
-    background-color: #18181b;
+    background-color: #15161d; /* índigo noche */
 }
 
 body {

@@ -11,7 +11,7 @@ const applyTheme = (dark: boolean) => {
     document.documentElement.classList.toggle("dark", dark)
     localStorage.setItem("theme", dark ? "dark" : "light")
     const meta = document.getElementById("meta-theme-color")
-    if (meta) meta.setAttribute("content", dark ? "#18181b" : "#f5f5f4")
+    if (meta) meta.setAttribute("content", dark ? "#15161d" : "#f4f5fa")
 }
 
 const PUBLISH_URL = "https://www.instagram.com/cartelera.gto"
@@ -111,10 +111,6 @@ export const Navbar = () => {
                     >
                         {isDark ? <Sun className="size-5" /> : <Moon className="size-5" />}
                     </button>
-
-                    <Button className="shrink-0" onPress={openPublish}>
-                        Publicar
-                    </Button>
                 </div>
             </header>
 
