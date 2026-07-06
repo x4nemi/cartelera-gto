@@ -54,6 +54,7 @@
     --accent-foreground: #ffffff;   /* text on --accent-fill */
     --accent-fill: #5661e0;         /* solid buttons / badges / pills */
     --focus: #5661e0;
+    --app-bg: #f4f5fa;              /* page background (índigo papel) */
 }
 
 /* Dark · "índigo noche" */
@@ -89,6 +90,7 @@
     --accent-foreground: #ffffff;   /* text on --accent-fill */
     --accent-fill: #5661e0;         /* identical in both themes */
     --focus: #98a3f5;
+    --app-bg: #15161d;              /* page background (índigo noche) */
 }
 
 /* Numeric default scale used across the app → map onto the indigo tokens.
@@ -136,7 +138,11 @@ html {
 
 .dark html,
 html.dark {
-    background-color: #15161d; /* índigo noche */
+    background-color: var(--app-bg); /* índigo noche */
+}
+
+html {
+    background-color: var(--app-bg);
 }
 
 body {
