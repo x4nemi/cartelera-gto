@@ -1,13 +1,8 @@
 import { useMemo, useState } from "react";
 import { PostData } from "@/config/apiClient";
 import { useRecurringEvents } from "@/hooks/useRecurringEvents";
-import {
-    isContinuousRun,
-    parseLocalDate,
-} from "@/utils/recurrence";
 import { EventModal } from "@/components/eventModal";
 import { Navbar } from "@/components/navbar";
-import { colorForTag } from "@/utils/tagColors";
 
 const DOW_LABEL = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -19,41 +14,11 @@ const toISODate = (d: Date) => {
     return `${y}-${m}-${day}`;
 };
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-
-/** "Cierra <hoy|mañana|el D mmm>" when the event ends within the next week. */
-const closesSoon = (event: PostData): string | null => {
-    let end: Date | null = null;
-    if (event.endsOn) {
-        const d = parseLocalDate(event.endsOn);
-        if (!Number.isNaN(d.getTime())) end = d;
-    } else if (isContinuousRun(event.dates)) {
-        const times = (event.dates ?? [])
-            .map((d) => parseLocalDate(d).getTime())
-            .filter((t) => !Number.isNaN(t));
-        if (times.length) end = new Date(Math.max(...times));
-    }
-    if (!end) return null;
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const diff = Math.round((end.getTime() - today.getTime()) / 86400000);
-    if (diff < 0 || diff > 7) return null;
-
-    const rel =
-        diff === 0
-            ? "hoy"
-            : diff === 1
-                ? "mañana"
-                : `el ${end
-                    .toLocaleDateString("es-MX", { day: "numeric", month: "short" })
-                    .replace(".", "")}`;
-    return `Cierra ${rel}`;
-};
+/** The organizer the session belongs to. */
+const venueOf = (e: PostData) => e.owner?.fullName || e.owner?.username || "";
 
 export const RecurringAll = () => {
     const { posts, loading } = useRecurringEvents();
-    const [category, setCategory] = useState<string>("todas");
     const [selected, setSelected] = useState<PostData | null>(null);
 
     // Rolling 7-day window starting today; each column is a real date.
@@ -66,30 +31,17 @@ export const RecurringAll = () => {
             return {
                 iso: toISODate(date),
                 label: DOW_LABEL[date.getDay()],
+                dateShort: `${date.getDate()}/${date.toLocaleDateString("es-MX", { month: "short" }).replace(".", "")}`,
                 isToday: i === 0,
             };
         });
     }, []);
 
-    const categories = useMemo(() => {
-        const set = new Set<string>();
-        posts.forEach((p) => p.tags?.forEach((t) => set.add(t)));
-        return [...set];
-    }, [posts]);
-
-    const filtered = useMemo(
-        () =>
-            category === "todas"
-                ? posts
-                : posts.filter((p) => p.tags?.includes(category)),
-        [posts, category]
-    );
-
     // Place each event's sessions on the exact upcoming dates (with time) it occurs.
     const sessionsByIso = useMemo(() => {
         const map = new Map<string, { event: PostData; time: string | null }[]>();
         days.forEach((d) => map.set(d.iso, []));
-        filtered.forEach((event) => {
+        posts.forEach((event) => {
             (event.dates ?? []).forEach((d) => {
                 const iso = d.slice(0, 10);
                 const arr = map.get(iso);
@@ -103,55 +55,47 @@ export const RecurringAll = () => {
             arr.sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
         );
         return map;
-    }, [filtered, days]);
+    }, [posts, days]);
 
     return (
         <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28 md:pt-24">
-            <div className="flex flex-wrap gap-2">
-                <FilterChip
-                    label="Todas"
-                    active={category === "todas"}
-                    onSelect={() => setCategory("todas")}
-                />
-                {categories.map((cat) => (
-                    <FilterChip
-                        key={cat}
-                        label={capitalize(cat)}
-                        color={colorForTag(cat)}
-                        active={category === cat}
-                        onSelect={() => setCategory(cat)}
-                    />
-                ))}
-            </div>
+            <header className="flex flex-col gap-1">
+                <h1 className="text-h2">Semanales</h1>
+                <p className="text-sm text-muted">Talleres y clases que se repiten cada semana</p>
+            </header>
 
             {loading && <p className="text-muted">Cargando...</p>}
 
-            <div className="min-h-0 flex-1 overflow-auto pb-2">
-                <div className="grid h-full grid-flow-col auto-cols-[190px] gap-3">
+            <div className="overflow-x-auto pb-2 md:overflow-visible">
+                <div className="grid grid-flow-col auto-cols-[minmax(150px,1fr)] gap-3 md:grid-flow-row md:grid-cols-7">
                     {days.map((day) => {
                         const isToday = day.isToday;
                         const daySessions = sessionsByIso.get(day.iso) ?? [];
                         return (
-                            <div
-                                key={day.iso}
-                                className="flex flex-col gap-3 rounded-2xl p-1"
-                                style={
-                                    isToday
-                                        ? {
-                                            backgroundColor:
-                                                "color-mix(in oklch, var(--accent) 8%, transparent)",
-                                        }
-                                        : undefined
-                                }
-                            >
-                                <div className="pb-1 text-center text-sm font-medium">
-                                    {isToday ? (
-                                        <span style={{ color: "var(--accent)" }}>
-                                            {day.label} · hoy
-                                        </span>
-                                    ) : (
-                                        <span className="text-muted">{day.label}</span>
-                                    )}
+                            <div key={day.iso} className="flex flex-col gap-3">
+                                <div
+                                    className="sticky top-0 z-10 pt-1 md:top-[4.75rem]"
+                                    // style={{ backgroundColor: "var(--background)" }}
+                                >
+                                    <div className="pb-2">
+                                        {isToday ? (
+                                            <div
+                                                className="rounded-xl px-3 py-2 text-center text-sm font-semibold"
+                                                style={{
+                                                    color: "var(--accent)",
+                                                    backgroundColor: "color-mix(in oklch, var(--accent) 14%, transparent)",
+                                                }}
+                                            >
+                                                {day.label} · hoy
+                                            </div>
+                                        ) : (
+                                            <div
+                                                className="rounded-xl px-3 py-2 text-center text-sm font-semibold text-muted"
+                                            >
+                                                {day.label} <span className="font-normal">{day.dateShort}</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {daySessions.length === 0 ? (
@@ -159,49 +103,25 @@ export const RecurringAll = () => {
                                         Sin actividades
                                     </div>
                                 ) : (
-                                    daySessions.map(({ event, time }) => {
-                                        const closes = closesSoon(event);
-                                        return (
-                                            <button
-                                                key={`${day.iso}-${event._id}-${time ?? ""}`}
-                                                type="button"
-                                                onClick={() => setSelected(event)}
-                                                className="flex flex-col items-start gap-1 rounded-2xl border border-default-200 bg-surface p-3 text-left transition-colors hover:border-default-300"
-                                            >
-                                                {event.tags && event.tags.length > 0 && (
-                                                    <div className="flex flex-wrap items-center gap-1">
-                                                        {event.tags.map((tag) => (
-                                                            <span
-                                                                key={tag}
-                                                                className="size-2 rounded-full"
-                                                                style={{ backgroundColor: colorForTag(tag) }}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                )}
-                                                <span className="text-sm font-semibold leading-snug">
-                                                    {event.title}
+                                    daySessions.map(({ event, time }) => (
+                                        <button
+                                            key={`${day.iso}-${event._id}-${time ?? ""}`}
+                                            type="button"
+                                            onClick={() => setSelected(event)}
+                                            className="flex w-full flex-col items-start gap-1.5 rounded-2xl p-3 text-left transition-colors hover:brightness-110"
+                                            style={{ backgroundColor: "var(--surface-secondary)" }}
+                                        >
+                                            {time && (
+                                                <span className="text-sm font-bold" style={{ color: "var(--accent)" }}>
+                                                    {time}
                                                 </span>
-                                                {time && (
-                                                    <span className="text-xs font-medium text-muted">
-                                                        {time}
-                                                    </span>
-                                                )}
-                                                {closes && (
-                                                    <span
-                                                        className="mt-1 rounded-full px-2 py-0.5 text-xs font-medium"
-                                                        style={{
-                                                            backgroundColor:
-                                                                "color-mix(in oklch, var(--accent) 15%, transparent)",
-                                                            color: "var(--accent)",
-                                                        }}
-                                                    >
-                                                        {closes}
-                                                    </span>
-                                                )}
-                                            </button>
-                                        );
-                                    })
+                                            )}
+                                            <span className="text-sm font-bold leading-snug">{event.title}</span>
+                                            {venueOf(event) && (
+                                                <span className="text-sm text-muted">{venueOf(event)}</span>
+                                            )}
+                                        </button>
+                                    ))
                                 )}
                             </div>
                         );
@@ -221,30 +141,3 @@ export const RecurringAll = () => {
         </div>
     );
 };
-
-interface FilterChipProps {
-    label: string;
-    active: boolean;
-    color?: string;
-    onSelect: () => void;
-}
-
-const FilterChip = ({ label, active, color, onSelect }: FilterChipProps) => (
-    <button
-        type="button"
-        onClick={onSelect}
-        className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-colors ${active
-            ? "border-transparent text-white"
-            : "border-default-200 text-foreground hover:border-default-300"
-            }`}
-        style={active ? { backgroundColor: "var(--accent)" } : undefined}
-    >
-        {color && (
-            <span
-                className="size-2 rounded-full"
-                style={{ backgroundColor: color }}
-            />
-        )}
-        {label}
-    </button>
-);

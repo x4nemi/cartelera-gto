@@ -1,4 +1,4 @@
-import { House, HouseFill, Heart, HeartFill, Sun, Moon, Magnifier, SquareListUl, ArrowsRotateLeft } from "@gravity-ui/icons"
+import { Heart, HeartFill, Sun, Moon, Magnifier, SquareListUl, ArrowsRotateLeft } from "@gravity-ui/icons"
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 
@@ -15,8 +15,27 @@ const applyTheme = (dark: boolean) => {
 
 type IconType = (props: { className?: string }) => React.JSX.Element
 
+/** App favicon rendered as a currentColor mask (adapts to light/dark + active). */
+const FaviconIcon: IconType = ({ className }) => (
+    <span
+        aria-hidden
+        className={`inline-block ${className ?? ""}`}
+        style={{
+            backgroundColor: "currentColor",
+            WebkitMaskImage: "url(/favicon.ico)",
+            maskImage: "url(/favicon.ico)",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+        }}
+    />
+)
+
 const tabs: { icon: IconType; iconActive: IconType; label: string; path: string }[] = [
-    { icon: House, iconActive: HouseFill, label: "Inicio", path: "/" },
+    { icon: FaviconIcon, iconActive: FaviconIcon, label: "Inicio", path: "/" },
     { icon: SquareListUl, iconActive: SquareListUl, label: "Agenda", path: "/agenda" },
     { icon: ArrowsRotateLeft, iconActive: ArrowsRotateLeft, label: "Semanales", path: "/recurrentes" },
     { icon: Heart, iconActive: HeartFill, label: "Guardados", path: "/favoritos" },
@@ -61,12 +80,13 @@ export const Navbar = () => {
         <>
             {/* Desktop · sticky top bar */}
             <header className="fixed inset-x-0 top-0 z-50 hidden px-4 pt-3 md:block">
-                <div className="mx-auto flex max-w-6xl items-center gap-3 rounded-full border border-default-300 bg-background/85 px-5 py-2.5 shadow-lg backdrop-blur-xl">
+                <div className="mx-auto flex max-w-6xl items-center gap-3 rounded-full border border-surface-tertiary bg-surface-secondary/90 px-5 py-2.5 shadow-lg backdrop-blur-xl">
                     <button
                         type="button"
                         onClick={() => navigate("/")}
-                        className="text-lg font-bold"
+                        className="flex items-center gap-2 text-lg font-bold"
                     >
+                        <FaviconIcon className="size-5" />
                         Cartelera <span style={{ color: "var(--accent)" }}>GTO</span>
                     </button>
 
@@ -110,7 +130,7 @@ export const Navbar = () => {
 
             {/* Móvil · tab bar inferior fija */}
             <nav className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 md:hidden">
-                <ul className="flex items-center gap-1 rounded-3xl border border-default-300 bg-background/90 px-2 py-2 shadow-xl backdrop-blur-xl">
+                <ul className="flex items-center gap-1 rounded-3xl border border-surface-tertiary bg-surface-secondary/90 px-2 py-2 shadow-xl backdrop-blur-xl">
                     {tabs.map(({ icon: Icon, iconActive: IconActive, label, path }) => {
                         const active = isActive(path)
                         return (
