@@ -46,7 +46,7 @@ export const EventCard = ({ event, time, highlighted, highlight }: { event: Post
                     </span>
                 )}
                 {price && (
-                    <span className="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-sm font-medium text-white">
+                    <span className="absolute bottom-3 left-3 rounded-full bg-black/70 px-3 py-1 text-sm font-medium text-white line-clamp-1">
                         {price}
                     </span>
                 )}

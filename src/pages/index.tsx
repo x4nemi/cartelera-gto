@@ -6,6 +6,7 @@ import { InstagramLogoIcon } from "@phosphor-icons/react"
 
 import { Navbar } from "@/components/navbar"
 import { MiniEventCard } from "@/components/miniEventCard"
+import { OrganizersMarquee } from "@/components/organizersMarquee"
 import { useEvents } from "@/hooks/useEvents"
 import { PostData } from "@/types"
 
@@ -87,7 +88,7 @@ export const Home = () => {
     }
 
     return (
-        <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-8 overflow-x-hidden px-4 pb-28 pt-8 text-center md:pt-24 lg:max-w-3xl">
+        <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-12 overflow-x-hidden px-4 pb-28 pt-10 text-center md:gap-16 md:pt-28 lg:max-w-3xl">
             {/* Hero */}
             <div className="flex flex-col items-center gap-4">
                 <span
@@ -165,6 +166,9 @@ export const Home = () => {
                 </section>
             )}
 
+            {/* Organizers marquee */}
+            <OrganizersMarquee />
+
             {/* Organizer banner */}
             <Surface
                 variant="secondary"
@@ -192,7 +196,7 @@ export const Home = () => {
                         )
                     }
                 >
-                    Publicar
+                    Contactar
                 </Button>
             </Surface>
 

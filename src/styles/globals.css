@@ -179,3 +179,35 @@ body {
 .toast__close-button {
     border-radius: 9999px !important;
 }
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* Organizers marquee — seamless auto-scroll with gently floating chips */
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+@keyframes chip-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-5px); }
+}
+
+.marquee-track {
+    animation: marquee 45s linear infinite;
+}
+
+.marquee-chip:hover {
+    animation: chip-float 1.6s ease-in-out infinite;
+}
+
+.marquee-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-track,
+    .marquee-chip {
+        animation: none;
+    }
+}
