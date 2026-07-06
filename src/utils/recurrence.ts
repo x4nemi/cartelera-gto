@@ -10,6 +10,17 @@ const FULL_DAYS = [
 
 const ABBR_DAYS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
 
+/** Plural weekday names for natural-language schedules ("los miércoles y jueves"). */
+const PLURAL_DAYS = [
+    "domingos",
+    "lunes",
+    "martes",
+    "miércoles",
+    "jueves",
+    "viernes",
+    "sábados",
+];
+
 const capitalize = (value: string) =>
     value.charAt(0).toUpperCase() + value.slice(1);
 
@@ -167,6 +178,22 @@ export function getOngoingLabel(
     return null;
 }
 
+/**
+ * End-of-schedule label for a recurring event: the explicit end (`endsOn`) when
+ * present, otherwise the last generated occurrence. Returns "1 sep" or null.
+ */
+export function getRecurrenceEndLabel(
+    dates: string[] | null,
+    endsOn?: string | null
+): string | null {
+    if (endsOn) {
+        const end = parseLocalDate(endsOn);
+        if (!Number.isNaN(end.getTime())) return formatDayMonth(end);
+    }
+    const last = getLastDate(dates);
+    return last ? formatDayMonth(last) : null;
+}
+
 /** Whether an event belongs in the ongoing section. */
 export function isOngoing(
     dates: string[] | null,
@@ -196,4 +223,27 @@ export function formatRecurrence(daysOfWeek: number[]): string {
 
     if (labels.length === 2) return `${labels[0]} y ${labels[1]}`;
     return `${labels.slice(0, -1).join(", ")} y ${labels[labels.length - 1]}`;
+}
+
+/**
+ * Build a full, natural-language Spanish recurrence label from weekday indexes
+ * (0=Sunday..6=Saturday). Examples:
+ *   [4]        -> "Los jueves"
+ *   [3, 4]     -> "Los miércoles y jueves"
+ *   [1, 3, 5]  -> "Los lunes, miércoles y viernes"
+ */
+export function formatRecurrenceLong(daysOfWeek: number[]): string {
+    const days = [...new Set(daysOfWeek)]
+        .filter((day) => day >= 0 && day <= 6)
+        .sort((a, b) => a - b);
+
+    if (days.length === 0) return "Recurrente";
+
+    const names = days.map((day) => PLURAL_DAYS[day]);
+    let list: string;
+    if (names.length === 1) list = names[0];
+    else if (names.length === 2) list = `${names[0]} y ${names[1]}`;
+    else list = `${names.slice(0, -1).join(", ")} y ${names[names.length - 1]}`;
+
+    return `Los ${list}`;
 }

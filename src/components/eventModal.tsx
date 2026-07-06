@@ -1,7 +1,7 @@
 import { PostData } from "@/config/apiClient";
 import { Modal, Button, Avatar, ToggleButton, Surface } from "@heroui/react";
 import { ArrowsRotateLeft, Calendar, MapPin, Ticket, ArrowLeft, Heart, HeartFill } from "@gravity-ui/icons";
-import { getOngoingLabel, parseLocalDate } from "@/utils/recurrence";
+import { getOngoingLabel, getRecurrenceDays, getRecurrenceEndLabel, formatRecurrenceLong, parseLocalDate } from "@/utils/recurrence";
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useState } from "react";
@@ -84,6 +84,12 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
     if (ongoing) {
         dateText = ongoing.text;
         DateIcon = ongoing.kind !== "until" ? ArrowsRotateLeft : Calendar;
+        if (ongoing.kind === "weekly") {
+            const recurrenceDays = getRecurrenceDays(event.dates);
+            if (recurrenceDays) dateText = formatRecurrenceLong(recurrenceDays);
+            const endLabel = getRecurrenceEndLabel(event.dates, event.endsOn);
+            if (endLabel) dateText += ` · hasta el ${endLabel}`;
+        }
     } else if (primary) {
         const d = primary.date;
         const month = d.toLocaleDateString("es-MX", { month: "long" });
