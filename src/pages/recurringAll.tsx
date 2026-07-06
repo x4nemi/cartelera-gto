@@ -108,7 +108,7 @@ export const RecurringAll = () => {
                             <h1 className="text-h2">Semanales</h1>
                             <p className="text-sm text-muted">Talleres y clases que se repiten cada semana</p>
                         </div>
-                        <div className="flex items-center gap-2 self-start sm:self-auto">
+                        <div className="flex items-center gap-2 self-end sm:self-auto">
                             {weekOffset !== 0 && (
                                 <button
                                     type="button"
@@ -119,7 +119,7 @@ export const RecurringAll = () => {
                                         backgroundColor: "color-mix(in oklch, var(--accent) 12%, transparent)",
                                     }}
                                 >
-                                    Semana actual
+                                    Ir a la semana actual
                                 </button>
                             )}
                             <div
