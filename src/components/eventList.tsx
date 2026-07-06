@@ -134,7 +134,7 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
         <div className="flex flex-col gap-6">
             {/* Week strip (full view only): quick nav to a day's events. */}
             {showStrip && (
-                <div className="sticky top-0 z-10 -mx-4 bg-default-50/90 px-4 py-2 backdrop-blur">
+                <div className="sticky top-0 z-10 -mx-4 bg-default-50/90 px-4 py-2 backdrop-blur md:top-20">
                     <WeekStrip
                         weeks={weeks}
                         dotsByIso={dotsByIso}

@@ -2,11 +2,12 @@ import { PostData } from "@/types"
 import { Card, ToggleButton, Avatar, Separator } from "@heroui/react"
 import { Heart, HeartFill } from "@gravity-ui/icons"
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
+import { highlightMatch } from "@/utils/highlight";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EventModal } from "./eventModal";
 
-export const EventCard = ({ event, time, highlighted }: { event: PostData; time?: string | null; highlighted?: boolean }) => {
+export const EventCard = ({ event, time, highlighted, highlight }: { event: PostData; time?: string | null; highlighted?: boolean; highlight?: string }) => {
     const isLiked = useIsLiked(event);
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -52,11 +53,11 @@ export const EventCard = ({ event, time, highlighted }: { event: PostData; time?
             </div>
 
             <Card.Header className="gap-1">
-                <Card.Title>{title}</Card.Title>
+                <Card.Title>{highlightMatch(title, highlight)}</Card.Title>
                 <Card.Description className="flex flex-wrap gap-1.5 text-sm text-muted">
                     {tags && tags.map((tag) => (
                         <span key={tag} className="font-medium">
-                            #{tag}
+                            #{highlightMatch(tag, highlight)}
                         </span>
                     ))}
                 </Card.Description>
@@ -88,7 +89,7 @@ export const EventCard = ({ event, time, highlighted }: { event: PostData; time?
                         />
                         <Avatar.Fallback>XL</Avatar.Fallback>
                     </Avatar>
-                    <span className="text-sm font-medium">{owner?.fullName || owner?.username}</span>
+                    <span className="text-sm font-medium">{highlightMatch(owner?.fullName || owner?.username, highlight)}</span>
                 </div>
                 <div
                     onClick={(e) => e.stopPropagation()}

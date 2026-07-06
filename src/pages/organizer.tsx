@@ -83,7 +83,7 @@ export const Organizer = () => {
     const open = (url: string) => window.open(url, "_blank", "noopener,noreferrer");
 
     return (
-        <div className="mx-auto min-h-dvh max-w-xl px-4 pb-28">
+        <div className="mx-auto min-h-dvh max-w-xl px-4 pb-28 md:pt-20">
             {/* Top bar */}
             <div className="flex items-center py-3">
                 <button

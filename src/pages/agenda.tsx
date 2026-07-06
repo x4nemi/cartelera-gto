@@ -8,7 +8,7 @@ export const Agenda = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="mx-auto min-h-dvh w-full max-w-xl px-4 pt-6 pb-28">
+        <div className="mx-auto min-h-dvh w-full max-w-xl px-4 pt-6 pb-28 md:pt-24">
             <div className="mb-4 flex flex-col gap-1">
                 <button
                     type="button"

@@ -31,20 +31,6 @@ const todayLabel = () => {
     return `${wd} ${d.getDate()} ${mo}`
 }
 
-const matchesQuery = (post: PostData, q: string) => {
-    const haystack = [
-        post.title,
-        post.location,
-        post.owner?.fullName,
-        post.owner?.username,
-        ...(post.tags ?? []),
-    ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-    return haystack.includes(q)
-}
-
 const ShortcutCard = ({
     icon: Icon,
     title,
@@ -94,19 +80,14 @@ export const Home = () => {
         .filter((x) => x.disp.iso === todayIso)
         .sort((a, b) => (a.disp.time || "99:99").localeCompare(b.disp.time || "99:99"))
 
-    const q = query.trim().toLowerCase()
-    const results = q
-        ? withDisplay
-              .filter((x) => matchesQuery(x.post, q))
-              .sort((a, b) =>
-                  a.disp.iso === b.disp.iso
-                      ? (a.disp.time || "99:99").localeCompare(b.disp.time || "99:99")
-                      : a.disp.iso.localeCompare(b.disp.iso)
-              )
-        : []
+    const submitSearch = (e: React.FormEvent) => {
+        e.preventDefault()
+        const next = query.trim()
+        navigate(next ? `/buscar?q=${encodeURIComponent(next)}` : "/buscar")
+    }
 
     return (
-        <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-8 overflow-x-hidden px-4 pb-28 pt-8 text-center lg:max-w-3xl">
+        <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-8 overflow-x-hidden px-4 pb-28 pt-8 text-center md:pt-24 lg:max-w-3xl">
             {/* Hero */}
             <div className="flex flex-col items-center gap-4">
                 <span
@@ -119,13 +100,12 @@ export const Home = () => {
                     Todo lo que pasa en Guanajuato capital, en un solo lugar
                 </h1>
                 <p className="max-w-xl text-muted">
-                    Conciertos, talleres, teatro y más — reunidos directo del Instagram de los
-                    negocios locales. Hecha para la comunidad, no para el turismo.
+                    Conciertos, talleres, teatro y más. Hecha para la comunidad, no para el turismo.
                 </p>
             </div>
 
             {/* Search */}
-            <div className="relative w-full max-w-xl">
+            <form onSubmit={submitSearch} className="relative w-full max-w-xl">
                 <Magnifier className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-muted" />
                 <input
                     value={query}
@@ -134,7 +114,7 @@ export const Home = () => {
                     aria-label="Buscar eventos"
                     className="w-full rounded-full border border-default-200 bg-default-100/40 py-3 pl-12 pr-4 text-sm outline-none transition-colors focus:border-default-300"
                 />
-            </div>
+            </form>
 
             {/* Shortcuts */}
             <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
@@ -152,60 +132,37 @@ export const Home = () => {
                 />
             </div>
 
-            {/* Search results OR today's events */}
-            {q ? (
+            {/* Today's events */}
+            {todays.length > 0 && (
                 <section className="w-full text-left">
-                    <h2 className="mb-3 text-h3">
-                        Resultados <span className="text-muted">· {results.length}</span>
-                    </h2>
-                    {results.length === 0 ? (
-                        <p className="text-sm text-muted">Sin resultados para “{query.trim()}”.</p>
-                    ) : (
-                        <ScrollShadow orientation="horizontal" className="pb-2">
-                            <div className="flex gap-4">
-                                {results.map(({ post, disp }) => (
-                                    <MiniEventCard
-                                        key={post._id ?? post.shortCode}
-                                        event={post}
-                                        time={disp.time}
-                                    />
-                                ))}
-                            </div>
-                        </ScrollShadow>
-                    )}
-                </section>
-            ) : (
-                todays.length > 0 && (
-                    <section className="w-full text-left">
-                        <div className="mb-3 flex items-center justify-between gap-2">
-                            <h2 className="text-h3">
-                                Hoy en Guanajuato{" "}
-                                <span className="text-base font-normal" style={{ color: "var(--accent)" }}>
-                                    · {capitalize(todayLabel())}
-                                </span>
-                            </h2>
-                            <button
-                                type="button"
-                                onClick={() => navigate("/agenda")}
-                                className="shrink-0 text-sm font-semibold"
-                                style={{ color: "var(--accent)" }}
-                            >
-                                Ver agenda
-                            </button>
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                        <h2 className="text-h3">
+                            Hoy en Guanajuato{" "}
+                            <span className="text-base font-normal" style={{ color: "var(--accent)" }}>
+                                · {capitalize(todayLabel())}
+                            </span>
+                        </h2>
+                        <button
+                            type="button"
+                            onClick={() => navigate("/agenda")}
+                            className="shrink-0 text-sm font-semibold"
+                            style={{ color: "var(--accent)" }}
+                        >
+                            Ver agenda
+                        </button>
+                    </div>
+                    <ScrollShadow orientation="horizontal" className="pb-2">
+                        <div className="flex gap-4">
+                            {todays.map(({ post, disp }) => (
+                                <MiniEventCard
+                                    key={post._id ?? post.shortCode}
+                                    event={post}
+                                    time={disp.time}
+                                />
+                            ))}
                         </div>
-                        <ScrollShadow orientation="horizontal" className="pb-2">
-                            <div className="flex gap-4">
-                                {todays.map(({ post, disp }) => (
-                                    <MiniEventCard
-                                        key={post._id ?? post.shortCode}
-                                        event={post}
-                                        time={disp.time}
-                                    />
-                                ))}
-                            </div>
-                        </ScrollShadow>
-                    </section>
-                )
+                    </ScrollShadow>
+                </section>
             )}
 
             {/* Organizer banner */}

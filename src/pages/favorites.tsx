@@ -8,7 +8,7 @@ export const Favorites = () => {
     const likedEvents = useLikedEvents()
 
     return (
-        <div className="flex flex-col items-center justify-center gap-4 mt-4 mx-4 pb-28">
+        <div className="flex flex-col items-center justify-center gap-4 mt-4 mx-4 pb-28 md:pt-20">
             <Chip>
                 <Chip.Label>Favoritos</Chip.Label>
             </Chip>

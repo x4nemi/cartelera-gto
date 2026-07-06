@@ -8,6 +8,7 @@ import { Home } from "./pages";
 import { Favorites } from "./pages/favorites";
 import { RecurringAll } from "./pages/recurringAll";
 import { Agenda } from "./pages/agenda";
+import { Search } from "./pages/search";
 import { Organizer } from "./pages/organizer";
 
 
@@ -44,6 +45,7 @@ function App() {
 				<Route path="/favoritos" element={<Favorites />} />
 				<Route path="/recurrentes" element={<RecurringAll />} />
 				<Route path="/agenda" element={<Agenda />} />
+				<Route path="/buscar" element={<Search />} />
 				<Route path="/eventos/:username" element={<Organizer />} />
 				<Route path="*" element={<Home />} />
 			</Routes>

@@ -109,7 +109,7 @@ export const RecurringAll = () => {
     }, [filtered, days]);
 
     return (
-        <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28">
+        <div className="mx-auto flex min-h-dvh w-full max-w-6xl flex-col gap-6 px-4 pt-6 pb-28 md:pt-24">
             <div className="mx-auto mb-3 flex flex-col w-full max-w-6xl justify-start">
                 <button
                     type="button"
