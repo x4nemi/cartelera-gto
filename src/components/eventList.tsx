@@ -1,7 +1,11 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useEvents } from "@/hooks/useEvents";
 import { parseLocalDate } from "@/utils/recurrence";
+import { colorForTag } from "@/utils/tagColors";
 import { PostData } from "@/types";
 import { EventCard } from "./eventCard";
+import { WeekStrip } from "./weekStrip";
 
 const toIso = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -20,8 +24,15 @@ const getDisplay = (post: PostData) => {
     return { iso: pick.slice(0, 10), date, time };
 };
 
-export const EventList = () => {
+export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) => {
     const { posts, loading, loadingMore, hasMore, loadMore } = useEvents();
+    const navigate = useNavigate();
+    const todayIso = toIso(new Date());
+    const [selectedIso, setSelectedIso] = useState(todayIso);
+    const [activeWeek, setActiveWeek] = useState(0);
+    const [highlightIso, setHighlightIso] = useState<string | null>(null);
+    const highlightTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const showStrip = variant === "full";
 
     // Group posts by day.
     const groupsMap = new Map<
@@ -41,12 +52,114 @@ export const EventList = () => {
         g.items.sort((a, b) => (a.time || "99:99").localeCompare(b.time || "99:99"))
     );
 
-    const todayIso = toIso(new Date());
+    // One entry per week (7 days each), from this week up to the last event's week.
+    const lastGroupIso = groups.length ? groups[groups.length - 1].iso : "";
+    const weeks = useMemo(() => {
+        const base = new Date();
+        base.setHours(0, 0, 0, 0);
+        const last = lastGroupIso ? parseLocalDate(lastGroupIso) : base;
+        const spanDays = Math.max(0, Math.round((last.getTime() - base.getTime()) / 86400000));
+        const count = Math.min(12, Math.floor(spanDays / 7) + 1);
+        return Array.from({ length: count }, (_, w) =>
+            Array.from({ length: 7 }, (_, i) => {
+                const d = new Date(base);
+                d.setDate(base.getDate() + w * 7 + i);
+                return d;
+            })
+        );
+    }, [lastGroupIso]);
+    const dotsByIso = useMemo(() => {
+        const map: Record<string, string[]> = {};
+        groups.forEach((g) => {
+            map[g.iso] = g.items
+                .slice(0, 3)
+                .map(({ post }) => colorForTag(post.tags?.[0] ?? ""));
+        });
+        return map;
+    }, [groups]);
+
+    const goToDay = (iso: string) => {
+        setSelectedIso(iso);
+        document
+            .getElementById(`day-${iso}`)
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Briefly ring the day's cards after navigating via the strip.
+        setHighlightIso(iso);
+        if (highlightTimer.current) clearTimeout(highlightTimer.current);
+        highlightTimer.current = setTimeout(() => setHighlightIso(null), 1200);
+    };
+
+    // When the strip pages to another week, jump the list to that week's first event.
+    const goToWeek = (weekStartIso: string) => {
+        const target = groups.find((g) => g.iso >= weekStartIso);
+        if (target) goToDay(target.iso);
+    };
+
+    // Reverse sync: as the list scrolls vertically, highlight the visible day and
+    // move the strip to its week. Guarded so it doesn't fight the strip → list sync.
+    const groupKey = groups.map((g) => g.iso).join(",");
+    useEffect(() => {
+        if (!showStrip || !groups.length) return;
+        const base = new Date();
+        base.setHours(0, 0, 0, 0);
+        const visible = new Set<string>();
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((e) => {
+                    const iso = (e.target as HTMLElement).dataset.iso;
+                    if (!iso) return;
+                    if (e.isIntersecting) visible.add(iso);
+                    else visible.delete(iso);
+                });
+                const topIso = [...visible].sort()[0];
+                if (!topIso) return;
+                setSelectedIso(topIso);
+                const week = Math.max(
+                    0,
+                    Math.floor((parseLocalDate(topIso).getTime() - base.getTime()) / (7 * 86400000))
+                );
+                setActiveWeek(week);
+            },
+            { rootMargin: "-96px 0px -70% 0px", threshold: 0 }
+        );
+        groups.forEach((g) => {
+            const el = document.getElementById(`day-${g.iso}`);
+            if (el) observer.observe(el);
+        });
+        return () => observer.disconnect();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [showStrip, groupKey]);
 
     return (
         <div className="flex flex-col gap-6">
+            {/* Week strip (full view only): quick nav to a day's events. */}
+            {showStrip && (
+                <div className="sticky top-0 z-10 -mx-4 bg-default-50/90 px-4 py-2 backdrop-blur">
+                    <WeekStrip
+                        weeks={weeks}
+                        dotsByIso={dotsByIso}
+                        selectedIso={selectedIso}
+                        activeWeekIndex={activeWeek}
+                        onSelect={goToDay}
+                        onWeekChange={(_, weekStartIso) => goToWeek(weekStartIso)}
+                    />
+                </div>
+            )}
+
             {loading && <p>Cargando...</p>}
-            {!loading && groups.length > 0 && <h2 className="text-h3">Agenda</h2>}
+            {!loading && groups.length > 0 && variant === "home" && (
+                <div className="flex items-baseline justify-between gap-2">
+                    <h2 className="text-h3">Agenda</h2>
+                    <button
+                        type="button"
+                        onClick={() => navigate("/agenda")}
+                        className="shrink-0 text-sm font-semibold"
+                        style={{ color: "var(--accent)" }}
+                    >
+                        Ver todos
+                    </button>
+                </div>
+            )}
 
             {groups.map((group) => {
                 const isToday = group.iso === todayIso;
@@ -58,7 +171,7 @@ export const EventList = () => {
                 const monthFull = group.date.toLocaleDateString("es-MX", { month: "long" });
                 const count = group.items.length;
                 return (
-                    <div key={group.iso} className="flex flex-col gap-3">
+                    <div key={group.iso} id={`day-${group.iso}`} data-iso={group.iso} className="flex scroll-mt-24 flex-col gap-3">
                         <div className="flex items-baseline justify-between gap-2">
                             <h3 className="text-lg font-bold">
                                 {isToday ? (
@@ -83,7 +196,12 @@ export const EventList = () => {
                         </div>
                         <div className="flex flex-col gap-4">
                             {group.items.map(({ post, time }) => (
-                                <EventCard key={post._id} event={post} time={time} />
+                                <EventCard
+                                    key={post._id}
+                                    event={post}
+                                    time={time}
+                                    highlighted={showStrip && group.iso === highlightIso}
+                                />
                             ))}
                         </div>
                     </div>

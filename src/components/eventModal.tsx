@@ -15,6 +15,16 @@ const isoToday = () => {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
+/** Format one date entry ("YYYY-MM-DD[THH:mm]") as "Lun 6 de julio · 19:00". */
+const formatDateEntry = (s: string) => {
+    const d = parseLocalDate(s);
+    if (Number.isNaN(d.getTime())) return s;
+    const wd = capitalize(d.toLocaleDateString("es-MX", { weekday: "short" }).replace(".", ""));
+    const month = d.toLocaleDateString("es-MX", { month: "long" });
+    const time = s.length >= 16 && s[10] === "T" ? s.slice(11, 16) : null;
+    return `${wd} ${d.getDate()} de ${month}${time ? ` · ${time}` : ""}`;
+};
+
 /** First upcoming date (with optional time) for an event. */
 const getPrimaryDate = (event: PostData) => {
     const dates = [...(event.dates ?? [])].sort();
@@ -62,10 +72,13 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
     const isMobile = useMediaQuery("(max-width: 640px)");
     const navigate = useNavigate();
     const [expanded, setExpanded] = useState(false);
+    const [datesOpen, setDatesOpen] = useState(false);
     const captionLong = !!caption && (caption.length > 180 || caption.split("\n").length > 4);
 
     const ongoing = getOngoingLabel(event.dates, event.endsOn);
     const primary = getPrimaryDate(event);
+    const allDates = [...(event.dates ?? [])].sort();
+    const hasMultipleDates = allDates.length > 1;
     let dateText: string | null = null;
     let DateIcon = Calendar;
     if (ongoing) {
@@ -88,24 +101,27 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
         <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} variant="blur">
             <Modal.Container size={ "lg"} placement="auto">
                 <Modal.Dialog className={isMobile ? "border-2 border-default-200 rounded-3xl m-0 p-0" : " m-0 p-0"}>
-                    <Modal.Body className="flex flex-col gap-5 p-0">
+                    <Modal.Body className="flex flex-col p-0">
+                        {/* Sticky back button: stays pinned while the modal scrolls. */}
+                        <div className="pointer-events-none sticky top-0 z-20 h-0">
+                            <button
+                                type="button"
+                                aria-label="Regresar"
+                                onClick={() => onOpenChange(false)}
+                                className="pointer-events-auto absolute left-3 top-3 flex size-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70"
+                            >
+                                <ArrowLeft className="size-5" />
+                            </button>
+                        </div>
                         <div className="relative">
                             <img
                                 alt={title}
                                 className={`h-auto w-full ${isMobile ? "" : "rounded-t-2xl"}`}
                                 src={images[0]}
                             />
-                            <button
-                                type="button"
-                                aria-label="Regresar"
-                                onClick={() => onOpenChange(false)}
-                                className="absolute left-3 top-3 flex size-9 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70"
-                            >
-                                <ArrowLeft className="size-5" />
-                            </button>
                         </div>
 
-                        <div className="flex flex-col gap-5 px-4 pb-2">
+                        <div className="flex flex-col gap-5 px-4 pb-2 pt-5">
                             <div className="flex flex-col gap-1.5">
                                 <h2 className="text-h3">{title}</h2>
                                 {tags && tags.length > 0 && (
@@ -124,21 +140,50 @@ export const EventModal = ({ event, isOpen, onOpenChange }: EventModalProps) => 
                                     className="divide-y divide-default-200 overflow-hidden rounded-2xl"
                                 >
                                     {dateText && (
-                                        <div className="flex items-center justify-between gap-3 px-4 py-3">
-                                            <span className="flex items-center gap-2.5 text-sm font-medium">
-                                                <DateIcon className="size-4 shrink-0" style={{ color: "var(--accent)" }} />
-                                                {dateText}
-                                            </span>
-                                            {gcalHref && (
-                                                <a
-                                                    href={gcalHref}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="shrink-0 text-sm font-semibold"
-                                                    style={{ color: "var(--accent)" }}
-                                                >
-                                                    + Calendario
-                                                </a>
+                                        <div className="flex flex-col gap-2 px-4 py-3">
+                                            <div className="flex items-center justify-between gap-3">
+                                                <span className="flex items-center gap-2.5 text-sm font-medium">
+                                                    <DateIcon className="size-4 shrink-0" style={{ color: "var(--accent)" }} />
+                                                    {dateText}
+                                                </span>
+                                                {gcalHref && (
+                                                    <a
+                                                        href={gcalHref}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="shrink-0 text-sm font-semibold"
+                                                        style={{ color: "var(--accent)" }}
+                                                    >
+                                                        + Calendario
+                                                    </a>
+                                                )}
+                                            </div>
+                                            {hasMultipleDates && (
+                                                <>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setDatesOpen((v) => !v)}
+                                                        className="w-fit pl-[26px] text-xs font-semibold"
+                                                        style={{ color: "var(--accent)" }}
+                                                    >
+                                                        {datesOpen
+                                                            ? "Ver menos"
+                                                            : `Ver ${allDates.length} fechas`}
+                                                    </button>
+                                                    {datesOpen && (
+                                                        <ul className="flex flex-col gap-1.5 pl-[26px] pt-1 text-sm text-foreground/85">
+                                                            {allDates.map((s) => (
+                                                                <li key={s} className="flex items-center gap-2">
+                                                                    <span
+                                                                        className="size-1.5 shrink-0 rounded-full"
+                                                                        style={{ backgroundColor: "var(--accent)" }}
+                                                                    />
+                                                                    {formatDateEntry(s)}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    )}
+                                                </>
                                             )}
                                         </div>
                                     )}

@@ -6,17 +6,21 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EventModal } from "./eventModal";
 
-export const EventCard = ({ event, time }: { event: PostData; time?: string | null }) => {
+export const EventCard = ({ event, time, highlighted }: { event: PostData; time?: string | null; highlighted?: boolean }) => {
     const isLiked = useIsLiked(event);
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const { title, images, tags, owner, price } = event;
     return (
         <Card
-            className="w-full flex-col cursor-pointer"
+            className="w-full flex-col cursor-pointer transition-[outline] duration-300"
             variant="tertiary"
             role="button"
             tabIndex={0}
+            style={{
+                outline: highlighted ? "2px solid var(--accent)" : "2px solid transparent",
+                outlineOffset: "2px",
+            }}
             onClick={() => setIsOpen(true)}
             onKeyDown={(e) => {
                 if (e.key === "Enter" || e.key === " ") {
