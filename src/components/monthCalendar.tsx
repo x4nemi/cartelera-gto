@@ -59,7 +59,7 @@ export const MonthCalendar = ({ dotsByIso, selectedIso, onSelectDay }: MonthCale
     const title = capitalize(month.toLocaleDateString("es-MX", { month: "long", year: "numeric" }));
 
     return (
-        <div className="rounded-2xl border border-default-200 bg-surface p-4">
+        <div className="rounded-3xl border border-default-200 bg-surface p-4">
             <div className="mb-3 flex items-center justify-between">
                 <h3 className="text-base font-semibold">{title}</h3>
                 <div className="flex items-center gap-1">

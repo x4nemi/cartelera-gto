@@ -155,7 +155,7 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:gap-8">
             {/* Mobile: sticky week strip with the current month label */}
             {showStrip && (
-                <div className="sticky top-0 z-10 -mx-4 bg-background/95 px-4 py-2 backdrop-blur md:hidden">
+                <div className="sticky top-0 z-10 -mx-4 bg-[var(--app-bg)]/85 px-4 py-2 backdrop-blur md:hidden">
                     <div className="mb-2 px-1 text-sm font-semibold">{monthLabel}</div>
                     <WeekStrip
                         weeks={weeks}

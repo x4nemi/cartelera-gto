@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Button, Card, ScrollShadow, Surface } from "@heroui/react"
+import { Button, Card, ScrollShadow, Skeleton, Surface } from "@heroui/react"
 import { Magnifier, SquareListUl, ArrowsRotateLeft } from "@gravity-ui/icons"
 import { InstagramLogoIcon } from "@phosphor-icons/react"
 
@@ -92,10 +92,34 @@ const ShortcutCard = ({
     </Card>
 )
 
+/** Loading placeholder mimicking a horizontal row of event cards. */
+const CardRowSkeleton = ({ withImage = true }: { withImage?: boolean }) => (
+    <section className="w-full text-left">
+        <Skeleton className="mb-3 h-7 w-44 rounded-lg" />
+        <div className="flex gap-4 overflow-hidden">
+            {Array.from({ length: 3 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="w-56 shrink-0 rounded-2xl p-3 md:w-64"
+                    style={{ backgroundColor: "var(--surface-tertiary)" }}
+                >
+                    {withImage ? (
+                        <Skeleton className="h-32 w-full rounded-2xl md:h-36" />
+                    ) : (
+                        <Skeleton className="h-6 w-24 rounded-full" />
+                    )}
+                    <Skeleton className="mt-3 h-4 w-3/4 rounded" />
+                    <Skeleton className="mt-2 h-3 w-1/2 rounded" />
+                </div>
+            ))}
+        </div>
+    </section>
+)
+
 export const Home = () => {
     const navigate = useNavigate()
-    const { posts } = useEvents()
-    const { posts: recurringPosts } = useRecurringEvents()
+    const { posts, loading: loadingEvents } = useEvents()
+    const { posts: recurringPosts, loading: loadingRecurring } = useRecurringEvents()
     const [query, setQuery] = useState("")
     const todayIso = toIso(new Date())
 
@@ -176,7 +200,8 @@ export const Home = () => {
             </div>
 
             {/* Today's events */}
-            {todays.length > 0 && (
+            {loadingEvents && <CardRowSkeleton />}
+            {!loadingEvents && todays.length > 0 && (
                 <section className="w-full text-left">
                     <div className="mb-3 flex items-center justify-between gap-2">
                         <h2 className="text-h3">
@@ -209,7 +234,7 @@ export const Home = () => {
             )}
 
             {/* No events today: show the three nearest upcoming ones */}
-            {todays.length === 0 && upcoming.length > 0 && (
+            {!loadingEvents && todays.length === 0 && upcoming.length > 0 && (
                 <section className="w-full text-left">
                     <div className="mb-3 flex items-center justify-between gap-2">
                         <h2 className="text-h3">Próximos eventos</h2>
@@ -238,7 +263,8 @@ export const Home = () => {
             )}
 
             {/* Recurring events (image-less): three nearest upcoming */}
-            {upcomingRecurring.length > 0 && (
+            {loadingRecurring && <CardRowSkeleton withImage={false} />}
+            {!loadingRecurring && upcomingRecurring.length > 0 && (
                 <section className="w-full text-left">
                     <div className="mb-3 flex items-center justify-between gap-2">
                         <h2 className="text-h3">Recurrentes</h2>
