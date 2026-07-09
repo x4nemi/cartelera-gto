@@ -30,7 +30,7 @@ export const EventCard = ({ event, time, highlighted, highlight }: { event: Post
                 }
             }}
         >
-            <div className="relative h-48 w-full overflow-hidden rounded-2xl">
+            <div className="relative -mx-4 -mt-4 h-48 overflow-hidden rounded-t-[min(32px,var(--radius-3xl))]">
                 <img
                     alt={title}
                     className="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
@@ -62,7 +62,7 @@ export const EventCard = ({ event, time, highlighted, highlight }: { event: Post
                     ))}
                 </Card.Description>
             </Card.Header>
-            <Separator variant="tertiary" />
+            {/* <Separator variant="tertiary" /> */}
             <Card.Footer className="flex items-center justify-between gap-2 ">
                 <div
                     className={owner?.username ? "flex items-center gap-2 cursor-pointer bg-border hover:bg-border-secondary transition duration-300 py-2 px-2 rounded-xl" : "flex items-center gap-2"}
