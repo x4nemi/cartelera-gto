@@ -12,12 +12,31 @@ const toIso = (d: Date) =>
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-/** Pick the display date/time for a post: earliest upcoming, else earliest. */
+/** Keep showing an event until this long after its start time. */
+const GRACE_MS = 2 * 60 * 60 * 1000;
+
+/** Pick the display date/time for a post: the earliest still-relevant date.
+ *  A timed event stays visible until 2h after its start time; a date-only
+ *  event stays visible through the whole day. Returns null once every date has
+ *  passed that window. */
 const getDisplay = (post: PostData) => {
     const dates = [...(post.dates ?? [])].sort();
     if (dates.length === 0) return null;
-    const todayIso = toIso(new Date());
-    const pick = dates.find((d) => d.slice(0, 10) >= todayIso) ?? dates[0];
+    const now = new Date();
+    const todayIso = toIso(now);
+
+    const isShowable = (d: string) => {
+        const dayIso = d.slice(0, 10);
+        if (dayIso > todayIso) return true; // future day
+        if (dayIso < todayIso) return false; // past day
+        // today: date-only shows all day; timed shows until start + 2h
+        const hasTime = d.length >= 16 && d[10] === "T";
+        if (!hasTime) return true;
+        return now.getTime() < parseLocalDate(d).getTime() + GRACE_MS;
+    };
+
+    const pick = dates.find(isShowable);
+    if (!pick) return null;
     const date = parseLocalDate(pick);
     if (Number.isNaN(date.getTime())) return null;
     const time = pick.length >= 16 && pick[10] === "T" ? pick.slice(11, 16) : null;
