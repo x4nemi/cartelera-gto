@@ -7,7 +7,7 @@ import { InstagramLogoIcon } from "@phosphor-icons/react"
 import { Navbar } from "@/components/navbar"
 import { MiniEventCard } from "@/components/miniEventCard"
 import { MiniRecurringCard } from "@/components/miniRecurringCard"
-import { OrganizersMarquee } from "@/components/organizersMarquee"
+import { OrganizersBubbles } from "@/components/organizersBubbles"
 import { useEvents } from "@/hooks/useEvents"
 import { useRecurringEvents } from "@/hooks/useRecurringEvents"
 import { parseLocalDate } from "@/utils/recurrence"
@@ -291,8 +291,8 @@ export const Home = () => {
                 </section>
             )}
 
-            {/* Organizers marquee */}
-            <OrganizersMarquee />
+            {/* Organizers bubbles */}
+            <OrganizersBubbles />
 
             {/* Organizer banner */}
             <Surface

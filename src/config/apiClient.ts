@@ -259,9 +259,11 @@ export const CosmosAPI = {
      * Get all users. By default the backend returns only approved users; pass
      * `status` to filter by another lifecycle state, or `"all"` for everyone.
      */
-    async getUsers(options: { status?: "draft" | "pending" | "approved" | "rejected" | "all" } = {}): Promise<UserData[]> {
+    async getUsers(options: { status?: "draft" | "pending" | "approved" | "rejected" | "all"; limit?: number } = {}): Promise<UserData[]> {
         const params = new URLSearchParams();
         if (options.status) params.append("status", options.status);
+        // The API defaults to 20 per page; request the max so all organizers load.
+        params.append("limit", String(options.limit ?? 100));
         const qs = params.toString();
         const response = await fetch(`/api/getUsers${qs ? `?${qs}` : ""}`, {
             method: "GET",

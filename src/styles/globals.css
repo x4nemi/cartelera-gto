@@ -211,9 +211,20 @@ body {
     mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
 }
 
+/* Organizers bubbles — a tight cluster of avatars that gently float; bubble
+   size encodes how many events each organizer publishes. */
+@keyframes bubbleFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-9px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .marquee-track,
     .marquee-chip {
         animation: none;
     }
+    .bubble {
+        animation: none !important;
+    }
 }
+
