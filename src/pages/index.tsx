@@ -6,23 +6,48 @@ import { InstagramLogoIcon } from "@phosphor-icons/react"
 
 import { Navbar } from "@/components/navbar"
 import { MiniEventCard } from "@/components/miniEventCard"
+import { MiniRecurringCard } from "@/components/miniRecurringCard"
 import { OrganizersMarquee } from "@/components/organizersMarquee"
 import { useEvents } from "@/hooks/useEvents"
+import { useRecurringEvents } from "@/hooks/useRecurringEvents"
+import { parseLocalDate } from "@/utils/recurrence"
 import { PostData } from "@/types"
 
 const toIso = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
 
-/** Earliest upcoming date (iso + time) for a post. */
+/** Keep showing an event until this long after its start time. */
+const GRACE_MS = 2 * 60 * 60 * 1000
+
+/** Earliest still-relevant date (iso + time) for a post: a timed event stays
+ *  until 2h after its start, a date-only event stays through the whole day. */
 const getDisplay = (post: PostData, todayIso: string) => {
     const dates = [...(post.dates ?? [])].sort()
     if (dates.length === 0) return null
-    const pick = dates.find((d) => d.slice(0, 10) >= todayIso) ?? dates[0]
+    const now = new Date()
+    const isShowable = (d: string) => {
+        const dayIso = d.slice(0, 10)
+        if (dayIso > todayIso) return true
+        if (dayIso < todayIso) return false
+        const hasTime = d.length >= 16 && d[10] === "T"
+        if (!hasTime) return true
+        return now.getTime() < parseLocalDate(d).getTime() + GRACE_MS
+    }
+    const pick = dates.find(isShowable)
+    if (!pick) return null
     const time = pick.length >= 16 && pick[10] === "T" ? pick.slice(11, 16) : null
     return { iso: pick.slice(0, 10), time }
 }
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
+/** "Mié 15 jul" label for upcoming cards shown across different days. */
+const shortDate = (iso: string) => {
+    const d = parseLocalDate(iso)
+    const wd = d.toLocaleDateString("es-MX", { weekday: "short" }).replace(".", "")
+    const mo = d.toLocaleDateString("es-MX", { month: "short" }).replace(".", "")
+    return `${capitalize(wd)} ${d.getDate()} ${mo}`
+}
 
 /** "dom 5 jul" for the "Hoy en Guanajuato" header. */
 const todayLabel = () => {
@@ -70,6 +95,7 @@ const ShortcutCard = ({
 export const Home = () => {
     const navigate = useNavigate()
     const { posts } = useEvents()
+    const { posts: recurringPosts } = useRecurringEvents()
     const [query, setQuery] = useState("")
     const todayIso = toIso(new Date())
 
@@ -80,6 +106,22 @@ export const Home = () => {
     const todays = withDisplay
         .filter((x) => x.disp.iso === todayIso)
         .sort((a, b) => (a.disp.time || "99:99").localeCompare(b.disp.time || "99:99"))
+
+    // When there is nothing today, fall back to the three nearest upcoming events.
+    const upcoming = [...withDisplay]
+        .sort((a, b) =>
+            `${a.disp.iso} ${a.disp.time || "99:99"}`.localeCompare(`${b.disp.iso} ${b.disp.time || "99:99"}`)
+        )
+        .slice(0, 3)
+
+    // Three nearest upcoming recurring events (shown without images).
+    const upcomingRecurring = recurringPosts
+        .map((post) => ({ post, disp: getDisplay(post, todayIso) }))
+        .filter((x): x is { post: PostData; disp: { iso: string; time: string | null } } => !!x.disp)
+        .sort((a, b) =>
+            `${a.disp.iso} ${a.disp.time || "99:99"}`.localeCompare(`${b.disp.iso} ${b.disp.time || "99:99"}`)
+        )
+        .slice(0, 3)
 
     const submitSearch = (e: React.FormEvent) => {
         e.preventDefault()
@@ -159,6 +201,63 @@ export const Home = () => {
                                     key={post._id ?? post.shortCode}
                                     event={post}
                                     time={disp.time}
+                                />
+                            ))}
+                        </div>
+                    </ScrollShadow>
+                </section>
+            )}
+
+            {/* No events today: show the three nearest upcoming ones */}
+            {todays.length === 0 && upcoming.length > 0 && (
+                <section className="w-full text-left">
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                        <h2 className="text-h3">Próximos eventos</h2>
+                        <button
+                            type="button"
+                            onClick={() => navigate("/agenda")}
+                            className="shrink-0 text-sm font-semibold"
+                            style={{ color: "var(--accent)" }}
+                        >
+                            Ver agenda
+                        </button>
+                    </div>
+                    <ScrollShadow orientation="horizontal" className="pb-2">
+                        <div className="flex gap-4">
+                            {upcoming.map(({ post, disp }) => (
+                                <MiniEventCard
+                                    key={post._id ?? post.shortCode}
+                                    event={post}
+                                    time={disp.time}
+                                    dateLabel={shortDate(disp.iso)}
+                                />
+                            ))}
+                        </div>
+                    </ScrollShadow>
+                </section>
+            )}
+
+            {/* Recurring events (image-less): three nearest upcoming */}
+            {upcomingRecurring.length > 0 && (
+                <section className="w-full text-left">
+                    <div className="mb-3 flex items-center justify-between gap-2">
+                        <h2 className="text-h3">Recurrentes</h2>
+                        <button
+                            type="button"
+                            onClick={() => navigate("/recurrentes")}
+                            className="shrink-0 text-sm font-semibold"
+                            style={{ color: "var(--accent)" }}
+                        >
+                            Ver todos
+                        </button>
+                    </div>
+                    <ScrollShadow orientation="horizontal" className="pb-2">
+                        <div className="flex gap-4">
+                            {upcomingRecurring.map(({ post, disp }) => (
+                                <MiniRecurringCard
+                                    key={post._id ?? post.shortCode}
+                                    event={post}
+                                    nextLabel={`${shortDate(disp.iso)}${disp.time ? ` · ${disp.time}` : ""}`}
                                 />
                             ))}
                         </div>

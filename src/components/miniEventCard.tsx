@@ -4,7 +4,7 @@ import { useState } from "react";
 import { EventModal } from "./eventModal";
 
 /** Compact event card (image + time + title + "venue · price") for the home rows. */
-export const MiniEventCard = ({ event, time }: { event: PostData; time?: string | null }) => {
+export const MiniEventCard = ({ event, time, dateLabel }: { event: PostData; time?: string | null; dateLabel?: string | null }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { title, images, location, owner, price } = event;
     const venue = location || owner?.fullName || owner?.username;
@@ -31,6 +31,11 @@ export const MiniEventCard = ({ event, time }: { event: PostData; time?: string 
                     loading="lazy"
                     src={images[0]}
                 />
+                {dateLabel && (
+                    <span className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+                        {dateLabel}
+                    </span>
+                )}
                 {time && (
                     <span
                         className="absolute right-3 top-3 rounded-full px-3 py-1 text-sm font-bold"
