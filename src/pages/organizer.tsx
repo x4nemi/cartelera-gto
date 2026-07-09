@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Avatar, Button, Label, Spinner, Surface } from "@heroui/react";
 import { ArrowLeft, MapPin } from "@gravity-ui/icons";
@@ -8,7 +8,7 @@ import type { PostData } from "@/types";
 import { EventCard } from "@/components/eventCard";
 import { Navbar } from "@/components/navbar";
 import { useProfile, useOrganizerEvents } from "@/hooks/useOrganizer";
-import { isOngoing } from "@/utils/recurrence";
+import { parseLocalDate } from "@/utils/recurrence";
 import {
     parseLocations,
     instagramUrl,
@@ -39,22 +39,33 @@ const primaryTime = (event: PostData): string | null => {
 const byDate = (a: PostData, b: PostData) =>
     (primaryDateStr(a) ?? "").localeCompare(primaryDateStr(b) ?? "");
 
+/** Compact date label for a card, e.g. "Sáb 11 jul" (next date when recurring). */
+const shortDateLabel = (event: PostData): string | null => {
+    const s = primaryDateStr(event);
+    if (!s) return null;
+    const d = parseLocalDate(s.slice(0, 10));
+    if (Number.isNaN(d.getTime())) return null;
+    const wd = d.toLocaleDateString("es-MX", { weekday: "short" }).replace(".", "");
+    const mo = d.toLocaleDateString("es-MX", { month: "short" }).replace(".", "");
+    return `${wd.charAt(0).toUpperCase()}${wd.slice(1)} ${d.getDate()} ${mo}`;
+};
+
 export const Organizer = () => {
     const { username = "" } = useParams();
     const navigate = useNavigate();
     const { user, loading } = useProfile(username);
     const { posts, loading: loadingEvents } = useOrganizerEvents(username);
-    const [tab, setTab] = useState<"proximos" | "semana">("proximos");
 
-    const upcoming = useMemo(
-        () => posts.filter((p) => !isOngoing(p.dates, p.endsOn)).sort(byDate),
-        [posts],
-    );
-    const weekly = useMemo(
-        () => posts.filter((p) => isOngoing(p.dates, p.endsOn)).sort(byDate),
-        [posts],
-    );
-    const list = tab === "proximos" ? upcoming : weekly;
+    // One combined list (one-off + recurring), sorted by their next date.
+    const list = useMemo(() => [...posts].sort(byDate), [posts]);
+    const nextDateLabel = useMemo(() => {
+        const s = list[0] ? primaryDateStr(list[0]) : null;
+        if (!s) return null;
+        const d = parseLocalDate(s.slice(0, 10));
+        if (Number.isNaN(d.getTime())) return null;
+        const label = d.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
+        return label.charAt(0).toUpperCase() + label.slice(1);
+    }, [list]);
 
     const locations = useMemo(() => parseLocations(user?.biography), [user]);
     const ig = user ? instagramUrl(user) : null;
@@ -84,8 +95,8 @@ export const Organizer = () => {
 
     return (
         <div className="mx-auto min-h-dvh max-w-xl px-4 pb-28 md:pt-20">
-            {/* Top bar */}
-            <div className="flex items-center py-3">
+            {/* Top bar (mobile only) */}
+            <div className="flex items-center py-3 md:hidden">
                 <button
                     type="button"
                     aria-label="Regresar"
@@ -97,7 +108,7 @@ export const Organizer = () => {
             </div>
 
             {/* Header */}
-            <div className="flex flex-row items-center gap-3 text-center">
+            <div className="flex flex-row items-center gap-3 text-center md:mt-8">
                 <Avatar className="size-24">
                     <Avatar.Image alt={user.fullName || user.username} src={user.profilePicUrl} />
                     <Avatar.Fallback>
@@ -108,18 +119,18 @@ export const Organizer = () => {
                     <h1 className="text-h3">{user.fullName || user.username}</h1>
                     <span className="text-sm text-muted">@{user.username}</span>
                     <span>
-                        <b>{upcoming.length + weekly.length}</b> <span className="text-muted"> eventos activos</span>
+                        <b>{list.length}</b> <span className="text-muted"> eventos activos</span>
                     </span>
                 </div>
             </div>
-            <Surface variant="secondary" className="mt-4 rounded-2xl p-4">
-                <Label className="mb-2 text-sm font-semibold">Biografía</Label>
-                {user.biography && (
+            {user.biography && (
+                <Surface variant="secondary" className="mt-4 rounded-2xl p-4">
+                    <Label className="mb-2 text-sm font-semibold">Biografía</Label>
                     <p className="max-w-md whitespace-pre-line text-sm leading-relaxed text-foreground/85">
                         {user.biography}
                     </p>
-                )}
-            </Surface>
+                </Surface>
+            )}
 
             {/* Social buttons */}
             <div className="mt-4 flex items-center gap-2">
@@ -172,26 +183,9 @@ export const Organizer = () => {
                 </Surface>
             )}
 
-            {/* Tabs */}
-            <div className="mt-6 flex rounded-full bg-default-100 p-1 text-sm font-semibold">
-                {(["proximos", "semana"] as const).map((key) => {
-                    const active = tab === key;
-                    return (
-                        <button
-                            key={key}
-                            type="button"
-                            onClick={() => setTab(key)}
-                            className="flex-1 rounded-full px-4 py-2 transition-colors"
-                            style={
-                                active
-                                    ? { backgroundColor: "var(--accent-fill)", color: "var(--accent-foreground)" }
-                                    : undefined
-                            }
-                        >
-                            {key === "proximos" ? "Próximos" : "Cada semana"}
-                        </button>
-                    );
-                })}
+            {/* Section header with the nearest event's date */}
+            <div className="mt-6 flex items-baseline justify-between gap-2">
+                <h2 className="text-h3">Eventos</h2>
             </div>
 
             {/* Event list */}
@@ -202,9 +196,7 @@ export const Organizer = () => {
                     </div>
                 ) : list.length === 0 ? (
                     <p className="py-10 text-center text-sm text-muted">
-                        {tab === "proximos"
-                            ? "No hay eventos próximos."
-                            : "No hay eventos recurrentes."}
+                        No hay eventos.
                     </p>
                 ) : (
                     list.map((event) => (
@@ -212,6 +204,7 @@ export const Organizer = () => {
                             key={event._id ?? event.shortCode}
                             event={event}
                             time={primaryTime(event)}
+                            dateLabel={shortDateLabel(event)}
                         />
                     ))
                 )}

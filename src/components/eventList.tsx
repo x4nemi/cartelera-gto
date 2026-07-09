@@ -13,7 +13,7 @@ const toIso = (d: Date) =>
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /** Keep showing an event until this long after its start time. */
-const GRACE_MS = 2 * 60 * 60 * 1000;
+const GRACE_MS = 3 * 60 * 60 * 1000;
 
 /** Pick the display date/time for a post: the earliest still-relevant date.
  *  A timed event stays visible until 2h after its start time; a date-only

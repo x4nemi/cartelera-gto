@@ -102,6 +102,7 @@ export interface UserData {
   status: UserStatus;            // replaces isDraft + isApproved
   autoDetectEnabled: boolean;    // always present, default false
   scanIntervalDays?: number;     // how often to auto-scan this profile (days); default 1 (daily)
+  resultsLimit?: number;         // max posts fetched from Apify per scan; default 10
   lastScrapedPostId?: string;
   lastScannedAt?: string;        // ISO; lower bound for the next auto-detect scan
 

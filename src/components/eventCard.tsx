@@ -1,5 +1,5 @@
 import { PostData } from "@/types"
-import { Card, ToggleButton, Avatar, Separator } from "@heroui/react"
+import { Card, ToggleButton, Avatar } from "@heroui/react"
 import { Heart, HeartFill } from "@gravity-ui/icons"
 import { toggleLike, useIsLiked } from "@/hooks/useLikedEvents";
 import { highlightMatch } from "@/utils/highlight";
@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EventModal } from "./eventModal";
 
-export const EventCard = ({ event, time, highlighted, highlight }: { event: PostData; time?: string | null; highlighted?: boolean; highlight?: string }) => {
+export const EventCard = ({ event, time, highlighted, highlight, dateLabel }: { event: PostData; time?: string | null; highlighted?: boolean; highlight?: string; dateLabel?: string | null }) => {
     const isLiked = useIsLiked(event);
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
@@ -37,6 +37,11 @@ export const EventCard = ({ event, time, highlighted, highlight }: { event: Post
                     loading="lazy"
                     src={images[0]}
                 />
+                {dateLabel && (
+                    <span className="absolute left-3 top-3 rounded-full bg-black/70 px-3 py-1 text-sm font-medium text-white">
+                        {dateLabel}
+                    </span>
+                )}
                 {time && (
                     <span
                         className="absolute right-3 top-3 rounded-full px-3 py-1 text-sm font-bold"

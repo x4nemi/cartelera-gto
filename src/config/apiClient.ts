@@ -284,7 +284,7 @@ export const CosmosAPI = {
      */
     async updateUser(
         username: string,
-        patch: { autoDetectEnabled?: boolean; scanIntervalDays?: number }
+        patch: { autoDetectEnabled?: boolean; scanIntervalDays?: number; resultsLimit?: number }
     ): Promise<{ success: boolean; username: string }> {
         const response = await fetch(`/api/updateUser`, {
             method: "PATCH",
