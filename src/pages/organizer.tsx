@@ -6,6 +6,7 @@ import { InstagramLogoIcon, FacebookLogoIcon, WhatsappLogoIcon } from "@phosphor
 
 import type { PostData } from "@/types";
 import { EventCard } from "@/components/eventCard";
+import { EventCardSkeleton } from "@/components/eventCardSkeleton";
 import { Navbar } from "@/components/navbar";
 import { useProfile, useOrganizerEvents } from "@/hooks/useOrganizer";
 import { parseLocalDate } from "@/utils/recurrence";
@@ -191,8 +192,10 @@ export const Organizer = () => {
             {/* Event list */}
             <div className="mt-4 flex flex-col gap-4">
                 {loadingEvents ? (
-                    <div className="flex justify-center py-10">
-                        <Spinner />
+                    <div className="flex flex-col gap-4">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <EventCardSkeleton key={i} />
+                        ))}
                     </div>
                 ) : list.length === 0 ? (
                     <p className="py-10 text-center text-sm text-muted">

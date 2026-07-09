@@ -4,8 +4,10 @@ import { useEvents } from "@/hooks/useEvents";
 import { parseLocalDate } from "@/utils/recurrence";
 import { PostData } from "@/types";
 import { EventCard } from "./eventCard";
+import { EventCardSkeleton } from "./eventCardSkeleton";
 import { WeekStrip } from "./weekStrip";
 import { MonthCalendar } from "./monthCalendar";
+import { Skeleton } from "@heroui/react";
 
 const toIso = (d: Date) =>
     `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -181,7 +183,18 @@ export const EventList = ({ variant = "home" }: { variant?: "home" | "full" }) =
 
             {/* Right: grouped list */}
             <div className="flex min-w-0 flex-1 flex-col gap-6">
-            {loading && <p>Cargando...</p>}
+            {loading && (
+                <div className="flex flex-col gap-6">
+                    {Array.from({ length: 3 }).map((_, g) => (
+                        <div key={g} className="flex flex-col gap-3">
+                            <Skeleton className="h-6 w-40 rounded-lg" />
+                            {Array.from({ length: g === 0 ? 2 : 1 }).map((_, c) => (
+                                <EventCardSkeleton key={c} />
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            )}
             {!loading && groups.length > 0 && variant === "home" && (
                 <div className="flex items-baseline justify-between gap-2">
                     <h2 className="text-h3">Agenda</h2>

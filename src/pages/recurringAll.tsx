@@ -5,6 +5,7 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { EventModal } from "@/components/eventModal";
 import { Navbar } from "@/components/navbar";
 import { ChevronLeft, ChevronRight } from "@gravity-ui/icons";
+import { Skeleton } from "@heroui/react";
 
 const DOW_LABEL = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
 
@@ -95,7 +96,6 @@ export const RecurringAll = () => {
                 className="fixed inset-x-0 top-0 z-40 hidden md:block"
                 style={{ height: navbarOffset, backgroundColor: "var(--app-bg)" }}
             />
-            {loading && <p className="text-muted">Cargando...</p>}
 
             <div className="flex flex-col gap-3">
                 {/* Sticky block: page header + day labels pin together. */}
@@ -189,11 +189,23 @@ export const RecurringAll = () => {
                     className="overflow-x-auto pb-2 md:overflow-visible"
                 >
                     <div className="grid grid-flow-col auto-cols-[minmax(150px,1fr)] gap-3 md:grid-flow-row md:grid-cols-7">
-                        {days.map((day) => {
+                        {days.map((day, i) => {
                             const daySessions = sessionsByIso.get(day.iso) ?? [];
                             return (
                                 <div key={day.iso} className="flex flex-col gap-3">
-                                    {daySessions.length === 0 ? (
+                                    {loading ? (
+                                        Array.from({ length: i % 3 === 0 ? 3 : i % 2 === 0 ? 2 : 1 }).map((_, k) => (
+                                            <div
+                                                key={k}
+                                                className="flex w-full flex-col items-start gap-1.5 rounded-2xl p-3"
+                                                style={{ backgroundColor: "var(--surface-secondary)" }}
+                                            >
+                                                <Skeleton className="h-3 w-10 rounded" />
+                                                <Skeleton className="h-4 w-4/5 rounded" />
+                                                <Skeleton className="h-3 w-1/2 rounded" />
+                                            </div>
+                                        ))
+                                    ) : daySessions.length === 0 ? (
                                         <div className="flex min-h-[92px] items-center justify-center rounded-2xl border border-dashed border-default-200 px-2 text-center text-xs text-muted">
                                             Sin actividades
                                         </div>
