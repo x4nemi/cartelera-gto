@@ -59,16 +59,10 @@ export const Organizer = () => {
 
     // One combined list (one-off + recurring), sorted by their next date.
     const list = useMemo(() => [...posts].sort(byDate), [posts]);
-    const nextDateLabel = useMemo(() => {
-        const s = list[0] ? primaryDateStr(list[0]) : null;
-        if (!s) return null;
-        const d = parseLocalDate(s.slice(0, 10));
-        if (Number.isNaN(d.getTime())) return null;
-        const label = d.toLocaleDateString("es-MX", { weekday: "long", day: "numeric", month: "long" });
-        return label.charAt(0).toUpperCase() + label.slice(1);
-    }, [list]);
 
     const locations = useMemo(() => {
+        // Prefer the clean, AI-extracted address stored on the organizer.
+        if (user?.address) return [user.address];
         const fromBio = parseLocations(user?.biography);
         if (fromBio.length) return fromBio;
         // No address in the bio: fall back to the organizer's most frequent event venue.
@@ -182,7 +176,11 @@ export const Organizer = () => {
                                 {loc}
                             </span>
                             <a
-                                href={mapsUrl(loc)}
+                                href={
+                                    user?.geo && loc === user?.address
+                                        ? `https://www.google.com/maps/search/?api=1&query=${user.geo.lat},${user.geo.lng}`
+                                        : mapsUrl(loc)
+                                }
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="shrink-0 text-sm font-semibold"

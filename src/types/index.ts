@@ -98,6 +98,8 @@ export interface UserData {
   biography?: string;
   externalUrls: string[];        // always present, default []
   private: boolean;              // always present
+  address?: string;              // clean venue address (from IG businessAddress at creation)
+  geo?: { lat: number; lng: number }; // precise coords when the IG account is a business
 
   status: UserStatus;            // replaces isDraft + isApproved
   autoDetectEnabled: boolean;    // always present, default false
