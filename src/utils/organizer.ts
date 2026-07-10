@@ -16,9 +16,9 @@ const extUrls = (user: UserData): string[] =>
 
 /**
  * Location lines pulled from the bio. Prefers lines marked with a 📍 pin
- * (organizers commonly list one line per sede that way). Lines that still carry
- * two or more OTHER emojis after removing the pin are treated as decorative
- * taglines (e.g. "📍Negocios 🛍️ Talleres 🎨 …"), not addresses, and skipped.
+ * (organizers commonly list one line per sede that way). Only the text AFTER
+ * the pin is the address — anything before it is a tagline/description. Lines
+ * whose address part still carries two or more emojis are decorative and skipped.
  */
 export function parseLocations(bio?: string): string[] {
     if (!bio) return [];
@@ -26,7 +26,7 @@ export function parseLocations(bio?: string): string[] {
         .split("\n")
         .map((l) => l.trim())
         .filter((l) => l.includes("📍"))
-        .map((l) => l.replace(/📍/g, "").trim())
+        .map((l) => l.slice(l.indexOf("📍") + "📍".length).replace(/📍/g, "").trim())
         .filter((l) => {
             if (!l) return false;
             const emojiCount = (l.match(/\p{Extended_Pictographic}/gu) || []).length;

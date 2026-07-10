@@ -68,7 +68,18 @@ export const Organizer = () => {
         return label.charAt(0).toUpperCase() + label.slice(1);
     }, [list]);
 
-    const locations = useMemo(() => parseLocations(user?.biography), [user]);
+    const locations = useMemo(() => {
+        const fromBio = parseLocations(user?.biography);
+        if (fromBio.length) return fromBio;
+        // No address in the bio: fall back to the organizer's most frequent event venue.
+        const counts = new Map<string, number>();
+        for (const p of posts) {
+            const loc = p.location?.trim();
+            if (loc) counts.set(loc, (counts.get(loc) || 0) + 1);
+        }
+        const best = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
+        return best ? [best] : [];
+    }, [user, posts]);
     const ig = user ? instagramUrl(user) : null;
     const wa = user ? whatsappUrl(user) : null;
     const fb = user ? facebookUrl(user) : null;
