@@ -16,7 +16,9 @@ const extUrls = (user: UserData): string[] =>
 
 /**
  * Location lines pulled from the bio. Prefers lines marked with a 📍 pin
- * (organizers commonly list one line per sede that way).
+ * (organizers commonly list one line per sede that way). Lines that still carry
+ * two or more OTHER emojis after removing the pin are treated as decorative
+ * taglines (e.g. "📍Negocios 🛍️ Talleres 🎨 …"), not addresses, and skipped.
  */
 export function parseLocations(bio?: string): string[] {
     if (!bio) return [];
@@ -25,7 +27,11 @@ export function parseLocations(bio?: string): string[] {
         .map((l) => l.trim())
         .filter((l) => l.includes("📍"))
         .map((l) => l.replace(/📍/g, "").trim())
-        .filter(Boolean);
+        .filter((l) => {
+            if (!l) return false;
+            const emojiCount = (l.match(/\p{Extended_Pictographic}/gu) || []).length;
+            return emojiCount < 2;
+        });
 }
 
 /** Instagram profile URL (from user.url). */
